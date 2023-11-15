@@ -1,0 +1,71 @@
+﻿using System.Text.Json;
+
+namespace ProjectTools.Core
+{
+    internal class Constants
+    {
+        /// <summary>
+        /// The json serialize options
+        /// </summary>
+        public static readonly JsonSerializerOptions JsonSerializeOptions = new()
+        {
+            WriteIndented = true,
+        };
+
+        /// <summary>
+        /// The name of the application
+        /// </summary>
+        public static readonly string ApplicationName = "ProjectTools";
+
+        /// <summary>
+        /// The file type templates use (actually a zip file though)
+        /// </summary>
+        public static readonly string TemplateFileType = "ptt";
+
+        /// <summary>
+        /// The templater templates information file name
+        /// </summary>
+        public static string TemplaterTemplatesInfoFileName = "template_info.json";
+
+        /// <summary>
+        /// Name of the specialtext project.
+        /// </summary>
+        public static string SpecialTextProjectName = "<SolutionName>";
+
+        /// <summary>
+        /// The maximum git repo template search depth
+        /// </summary>
+        public static int MaxGitRepoTemplateSearchDepth = 1;
+
+        /// <summary>
+        /// The core directory for the program
+        /// </summary>
+        public static readonly string CoreDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ProjectTools");
+
+        /// <summary>
+        /// The settings file
+        /// </summary>
+        public static readonly string SettingsFile = Path.Combine(CoreDirectory, "settings.json");
+
+        /// <summary>
+        /// The directory project templates are stored in
+        /// </summary>
+        public static readonly string TemplatesDirectory = Path.Combine(CoreDirectory, "Templates");
+
+        /// <summary>
+        /// The file used to store the version info for the downloaded templates
+        /// </summary>
+        public static readonly string TemplatesCacheFile = Path.Combine(CoreDirectory, "templates_cache.json");
+
+        /// <summary>
+        /// The working file for storing a project's configuration
+        /// </summary>
+        public static readonly string TemplatesProjectConfigurationFile = Path.Combine(CoreDirectory, "project_configuration.json");
+
+        /// <summary>
+        /// The directory used to store project configuration settings files
+        /// </summary>
+        public static readonly string TemplatesProjectConfigurationDirectory = Path.Combine(TemplatesDirectory, "ProjectConfiguration");
+
+    }
+}

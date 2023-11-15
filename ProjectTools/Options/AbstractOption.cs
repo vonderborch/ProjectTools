@@ -1,7 +1,29 @@
-﻿namespace ProjectTools.Options
+﻿using CommandLine.Text;
+using CommandLine;
+using ProjectTools.Core;
+
+namespace ProjectTools.Options
 {
     internal abstract class AbstractOption
     {
+        [Option('s', "silent", Required = false, Default = false, HelpText = "If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available.")]
+        public bool Silent { get; set; }
+
+        public string ExecuteOption(AbstractOption option)
+        {
+            if (!Manager.Instance.ValidateSettings())
+            {
+                Console.WriteLine("Creating settings file...");
+                new Configure().Execute(new Configure());
+            }
+            if (Manager.Instance.Settings.ShouldUpdateTemplates)
+            {
+                new UpdateTemplates().Execute(new UpdateTemplates());
+            }
+
+            return Execute(option);
+        }
+        
         /// <summary>
         /// Executes what this option represents.
         /// </summary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectTools.Core;
+using System;
 
 namespace MyApp // Note: actual namespace depends on the project name.
 {
@@ -6,6 +7,8 @@ namespace MyApp // Note: actual namespace depends on the project name.
     {
         static void Main(string[] args)
         {
+
+
             Console.WriteLine("Hello World!");
         }
     }
