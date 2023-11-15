@@ -1,4 +1,5 @@
 ﻿using Octokit;
+using ProjectTools.Core.Internal;
 using ProjectTools.Core.Template.Repositories;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,9 @@ namespace ProjectTools.Core
     {
         private static readonly Lazy<Manager> _lazy = new Lazy<Manager>(() => new Manager());
 
-        private Template.Repositories.RepositoryCollection? _repositories;
-
         private Settings? _settings;
+
+        private Templater? _templater;
 
         private GitHubClient? _gitClient;
 
@@ -61,16 +62,15 @@ namespace ProjectTools.Core
             }
         }
 
-        public Template.Repositories.RepositoryCollection Repositories
+        public Templater Templater
         {
             get
             {
-                if (_repositories == null)
+                if (_templater == null)
                 {
-                    _repositories = new(Settings.TemplateRepositories, true);
+                    _templater = new(Settings);
                 }
-
-                return _repositories;
+                return _templater;
             }
         }
 

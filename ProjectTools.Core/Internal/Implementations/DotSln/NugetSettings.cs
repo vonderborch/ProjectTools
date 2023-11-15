@@ -1,4 +1,4 @@
-﻿namespace ProjectTools.Core.Internal.Templaters.DotSln
+﻿namespace ProjectTools.Core.Internal.Implementations.DotSln
 {
     public class NugetSettings
     {

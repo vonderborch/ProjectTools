@@ -1,11 +1,12 @@
 ﻿using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using ProjectTools.Core.Internal.Configuration;
+using ProjectTools.Core.Internal.Implementations.DotSln;
 using ProjectTools.Core.Internal.Repositories;
-using ProjectTools.Core.Internal.Templaters.DotSln;
 using System.Text;
 using System.Text.Json;
 
-namespace ProjectTools.Core.Internal.Configuration
+namespace ProjectTools.Core.Internal.Implementations
 {
     public static class TemplateFactory
     {

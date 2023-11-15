@@ -1,6 +1,6 @@
 ﻿using System.IO.Compression;
 
-namespace ProjectTools.Core.Internal.Templaters
+namespace ProjectTools.Core.Internal
 {
     public abstract class AbstractTemplater
     {
@@ -9,11 +9,14 @@ namespace ProjectTools.Core.Internal.Templaters
         /// </summary>
         /// <param name="longName">The long name.</param>
         /// <param name="shortName">The short name.</param>
-        public AbstractTemplater(string longName, string shortName)
+        public AbstractTemplater(string longName, string shortName, TemplaterImplementations implementation)
         {
             LongName = longName;
             ShortName = shortName;
+            Implementation = implementation;
         }
+
+        public TemplaterImplementations Implementation { get; }
 
         /// <summary>
         /// Gets the long name of the templater.
@@ -21,7 +24,7 @@ namespace ProjectTools.Core.Internal.Templaters
         /// <value>
         /// The long name.
         /// </value>
-        public string LongName { get; private set; }
+        public string LongName { get; }
 
         /// <summary>
         /// Gets the short name of the templater.
@@ -29,7 +32,7 @@ namespace ProjectTools.Core.Internal.Templaters
         /// <value>
         /// The short name.
         /// </value>
-        public string ShortName { get; private set; }
+        public string ShortName { get; }
 
         /// <summary>
         /// Checks whether the directory is valid for this templater.

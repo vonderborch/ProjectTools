@@ -1,6 +1,6 @@
 ﻿using ProjectTools.Core.Internal.Configuration;
 
-namespace ProjectTools.Core.Internal.Templaters.DotSln
+namespace ProjectTools.Core.Internal.Implementations.DotSln
 {
     public class DotSlnTemplate : Template
     {
