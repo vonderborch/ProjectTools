@@ -1,23 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProjectTools.Core.Internal.Configuration
+﻿namespace ProjectTools.Core.Internal.Configuration
 {
+    /// <summary>
+    /// Settings for the solution being generated
+    /// </summary>
     public class SolutionSettings
     {
+        /// <summary>
+        /// The author of the solution
+        /// </summary>
         public string Author;
 
+        /// <summary>
+        /// The company of the solution
+        /// </summary>
         public string Company;
 
-        public string Name;
-
+        /// <summary>
+        /// The description of the solution
+        /// </summary>
         public string Description;
 
-        public string Version;
-
+        /// <summary>
+        /// The git settings for the solution
+        /// </summary>
         public SolutionGitSettings GitSettings;
+
+        /// <summary>
+        /// The name of the solution
+        /// </summary>
+        public string Name;
+
+        /// <summary>
+        /// The starting version of the solution
+        /// </summary>
+        public string Version;
     }
 }

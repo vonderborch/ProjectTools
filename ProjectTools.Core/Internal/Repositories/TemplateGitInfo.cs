@@ -15,6 +15,11 @@ namespace ProjectTools.Core.Internal.Repositories
         public string Name;
 
         /// <summary>
+        /// The repo the template is located in
+        /// </summary>
+        public string Repo;
+
+        /// <summary>
         /// The SHA checksum for the template
         /// </summary>
         public string SHA;
@@ -23,11 +28,6 @@ namespace ProjectTools.Core.Internal.Repositories
         /// The URL for the template
         /// </summary>
         public string Url;
-
-        /// <summary>
-        /// The repo the template is located in
-        /// </summary>
-        public string Repo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateGitInfo"/> class.

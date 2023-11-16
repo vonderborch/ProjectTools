@@ -1,16 +1,21 @@
 ﻿using ProjectTools.Core.Internal.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectTools.Core.Internal.Implementations.DotSln
 {
+    /// <summary>
+    /// Specific additional settings for .sln Templates
+    /// </summary>
+    /// <seealso cref="ProjectTools.Core.Internal.Configuration.SolutionSettings" />
     public class DotSlnSolutionSettings : SolutionSettings
     {
-        public string[] Tags;
-
+        /// <summary>
+        /// The nuget license expression
+        /// </summary>
         public string LicenseExpression;
+
+        /// <summary>
+        /// The nuget tags
+        /// </summary>
+        public string[] Tags;
     }
 }

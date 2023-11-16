@@ -29,15 +29,11 @@ namespace ProjectTools.Core.Internal.Repositories
                 GetTemplateInfoForRepository(true);
             }
         }
+
         /// <summary>
         /// The repository stored/handled
         /// </summary>
         public string Repo { get; }
-
-        /// <summary>
-        /// The owner of the repository
-        /// </summary>
-        public string RepositoryOwner { get; }
 
         /// <summary>
         /// The name of the repository
@@ -45,23 +41,29 @@ namespace ProjectTools.Core.Internal.Repositories
         public string RepositoryName { get; }
 
         /// <summary>
+        /// The owner of the repository
+        /// </summary>
+        public string RepositoryOwner { get; }
+
+        /// <summary>
+        /// A dictionary representing the templates, keyed by template name
+        /// </summary>
+        /// <value>The template map.</value>
+        [JsonIgnore]
+        public Dictionary<string, TemplateGitInfo> TemplateMap => Templates.ToDictionary(t => t.Name, t => t);
+
+        /// <summary>
         /// The list of loaded templates
         /// </summary>
         public List<TemplateGitInfo> Templates { get; private set; }
 
         /// <summary>
-        /// A dictionary representing the templates, keyed by template name
-        /// </summary>
-        /// <value>
-        /// The template map.
-        /// </value>
-        [JsonIgnore]
-        public Dictionary<string, TemplateGitInfo> TemplateMap => Templates.ToDictionary(t => t.Name, t => t);
-
-        /// <summary>
         /// Gets information on templates stored in the repository this instance represents.
         /// </summary>
-        /// <param name="forceLoad">True to scan the repository to templates, false to not scan the repository if we already have templates loaded. Defaults to true.</param>
+        /// <param name="forceLoad">
+        /// True to scan the repository to templates, false to not scan the repository if we already have templates
+        /// loaded. Defaults to true.
+        /// </param>
         /// <returns>A list of templates discovered in the repository.</returns>
         public List<TemplateGitInfo> GetTemplateInfoForRepository(bool forceLoad = true)
         {

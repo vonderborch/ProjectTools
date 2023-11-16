@@ -1,12 +1,5 @@
 ﻿using Octokit;
 using ProjectTools.Core.Internal;
-using ProjectTools.Core.Template.Repositories;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectTools.Core
 {
@@ -14,11 +7,10 @@ namespace ProjectTools.Core
     {
         private static readonly Lazy<Manager> _lazy = new Lazy<Manager>(() => new Manager());
 
+        private GitHubClient? _gitClient;
         private Settings? _settings;
 
         private Templater? _templater;
-
-        private GitHubClient? _gitClient;
 
         private Manager()
         {

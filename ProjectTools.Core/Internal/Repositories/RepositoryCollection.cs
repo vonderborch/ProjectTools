@@ -18,29 +18,39 @@ namespace ProjectTools.Core.Internal.Repositories
         /// </summary>
         private Dictionary<string, TemplateGitInfo> _templateMapCache = new();
 
-        public List<string> RepositoryNames { get; }
-
-        public List<Repository> Repositories { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositoryCollection"/> class.
+        /// </summary>
+        /// <param name="repositories">The repositories.</param>
+        /// <param name="autoLoad">if set to <c>true</c> [automatic load].</param>
         public RepositoryCollection(List<string> repositories, bool autoLoad = true)
         {
             RepositoryNames = repositories;
             Repositories = (from repo in repositories select new Repository(repo, autoLoad)).ToList();
         }
 
-        public List<TemplateGitInfo> TemplatesList
-        {
-            get
-            {
-                if (_templateCache.Count == 0)
-                {
-                    _templateCache = GetTemplateInfoForRepository(true);
-                }
+        /// <summary>
+        /// Gets the repositories.
+        /// </summary>
+        /// <value>
+        /// The repositories.
+        /// </value>
+        public List<Repository> Repositories { get; }
 
-                return _templateCache;
-            }
-        }
+        /// <summary>
+        /// Gets the repository names.
+        /// </summary>
+        /// <value>
+        /// The repository names.
+        /// </value>
+        public List<string> RepositoryNames { get; }
 
+        /// <summary>
+        /// Gets the template map.
+        /// </summary>
+        /// <value>
+        /// The template map.
+        /// </value>
         public Dictionary<string, TemplateGitInfo> TemplateMap
         {
             get
@@ -54,6 +64,30 @@ namespace ProjectTools.Core.Internal.Repositories
             }
         }
 
+        /// <summary>
+        /// Gets the templates list.
+        /// </summary>
+        /// <value>
+        /// The templates list.
+        /// </value>
+        public List<TemplateGitInfo> TemplatesList
+        {
+            get
+            {
+                if (_templateCache.Count == 0)
+                {
+                    _templateCache = GetTemplateInfoForRepository(true);
+                }
+
+                return _templateCache;
+            }
+        }
+
+        /// <summary>
+        /// Gets the template information for repository.
+        /// </summary>
+        /// <param name="forceLoad">if set to <c>true</c> [force load].</param>
+        /// <returns>Template info for the repository</returns>
         public List<TemplateGitInfo> GetTemplateInfoForRepository(bool forceLoad = true)
         {
             var output = new List<TemplateGitInfo>();

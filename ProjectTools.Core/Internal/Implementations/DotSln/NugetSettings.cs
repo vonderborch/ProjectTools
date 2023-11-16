@@ -1,5 +1,8 @@
 ﻿namespace ProjectTools.Core.Internal.Implementations.DotSln
 {
+    /// <summary>
+    /// Settings for nuget packages
+    /// </summary>
     public class NugetSettings
     {
         /// <summary>

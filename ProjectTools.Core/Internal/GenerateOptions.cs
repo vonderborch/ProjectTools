@@ -1,31 +1,26 @@
 ﻿using ProjectTools.Core.Internal.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ProjectTools.Core.Internal
 {
     public class GenerateOptions
     {
-        [JsonIgnore]
-        private Dictionary<string, string> _replacementText = new();
+        public bool CleanSolutionConfigFile;
+
+        public string Directory;
+
+        public bool OverrideExistingDirectory;
 
         public string SolutionConfigFile;
 
         public string SolutionName;
 
-        public bool CleanSolutionConfigFile;
-
-        public bool OverrideExistingDirectory;
-
-        public string Directory;
-
         public SolutionSettings SolutionSettings;
 
         public Template Template;
+
+        [JsonIgnore]
+        private Dictionary<string, string> _replacementText = new();
 
         public string[][] GetSpecialReplacementText => new string[][]
         {

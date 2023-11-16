@@ -10,9 +10,7 @@ namespace ProjectTools.Options
         /// Executes the report issue steps with the specified options.
         /// </summary>
         /// <param name="option">The option.</param>
-        /// <returns>
-        /// The result of the execution.
-        /// </returns>
+        /// <returns>The result of the execution.</returns>
         public override string Execute(AbstractOption option)
         {
             Console.WriteLine("Opening browser to https://github.com/vonderborch/Templater/issues/new ...");

@@ -1,7 +1,10 @@
 ﻿using System.IO.Compression;
 
-namespace ProjectTools.Core.Internal
+namespace ProjectTools.Core.Internal.Implementations
 {
+    /// <summary>
+    /// An abstract templater.
+    /// </summary>
     public abstract class AbstractTemplater
     {
         /// <summary>
@@ -9,6 +12,7 @@ namespace ProjectTools.Core.Internal
         /// </summary>
         /// <param name="longName">The long name.</param>
         /// <param name="shortName">The short name.</param>
+        /// <param name="implementation">The implementation.</param>
         public AbstractTemplater(string longName, string shortName, TemplaterImplementations implementation)
         {
             LongName = longName;
@@ -16,22 +20,24 @@ namespace ProjectTools.Core.Internal
             Implementation = implementation;
         }
 
+        /// <summary>
+        /// Gets the implementation.
+        /// </summary>
+        /// <value>
+        /// The implementation.
+        /// </value>
         public TemplaterImplementations Implementation { get; }
 
         /// <summary>
         /// Gets the long name of the templater.
         /// </summary>
-        /// <value>
-        /// The long name.
-        /// </value>
+        /// <value>The long name.</value>
         public string LongName { get; }
 
         /// <summary>
         /// Gets the short name of the templater.
         /// </summary>
-        /// <value>
-        /// The short name.
-        /// </value>
+        /// <value>The short name.</value>
         public string ShortName { get; }
 
         /// <summary>
@@ -47,6 +53,37 @@ namespace ProjectTools.Core.Internal
         /// <param name="options">The options.</param>
         /// <returns>The preperation result.</returns>
         public abstract string Prepare(PrepareOptions options, Func<string, bool> log);
+
+        /// <summary>
+        /// Archives a directory.
+        /// </summary>
+        /// <param name="directoryToArchive">The directory to archive.</param>
+        /// <param name="archivePath">The archive path.</param>
+        /// <param name="skipCleaning">if set to <c>true</c> [skip cleaning].</param>
+        protected void ArchiveDirectory(string directoryToArchive, string archivePath, bool skipCleaning)
+        {
+            if (File.Exists(archivePath))
+            {
+                File.Delete(archivePath);
+            }
+
+            ZipFile.CreateFromDirectory(directoryToArchive, archivePath);
+            if (!skipCleaning)
+            {
+                for (var i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        Directory.Delete(directoryToArchive, true);
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Copies a directory.
@@ -78,37 +115,6 @@ namespace ProjectTools.Core.Internal
                 {
                     var path = Path.Combine(newPath, dirName);
                     CopyDirectory(directories[i], path, excludedDirectories);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Archives a directory.
-        /// </summary>
-        /// <param name="directoryToArchive">The directory to archive.</param>
-        /// <param name="archivePath">The archive path.</param>
-        /// <param name="skipCleaning">if set to <c>true</c> [skip cleaning].</param>
-        protected void ArchiveDirectory(string directoryToArchive, string archivePath, bool skipCleaning)
-        {
-            if (File.Exists(archivePath))
-            {
-                File.Delete(archivePath);
-            }
-
-            ZipFile.CreateFromDirectory(directoryToArchive, archivePath);
-            if (!skipCleaning)
-            {
-                for (var i = 0; i < 10; i++)
-                {
-                    try
-                    {
-                        Directory.Delete(directoryToArchive, true);
-                        break;
-                    }
-                    catch (Exception)
-                    {
-                        Thread.Sleep(500);
-                    }
                 }
             }
         }

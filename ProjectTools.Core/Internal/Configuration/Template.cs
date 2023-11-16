@@ -9,9 +9,9 @@ namespace ProjectTools.Core.Internal.Configuration
     public class Template
     {
         /// <summary>
-        /// The name of the template
+        /// The author of the template
         /// </summary>
-        public string Name;
+        public string Author;
 
         /// <summary>
         /// The description of the template
@@ -19,14 +19,15 @@ namespace ProjectTools.Core.Internal.Configuration
         public string Description;
 
         /// <summary>
-        /// The author of the template
+        /// The file path
         /// </summary>
-        public string Author;
+        [JsonIgnore]
+        public string FilePath;
 
         /// <summary>
-        /// The version of the template
+        /// The name of the template
         /// </summary>
-        public string Version;
+        public string Name;
 
         /// <summary>
         /// The information on the repo for the template
@@ -40,9 +41,8 @@ namespace ProjectTools.Core.Internal.Configuration
         public TemplateSettings Settings;
 
         /// <summary>
-        /// The file path
+        /// The version of the template
         /// </summary>
-        [JsonIgnore]
-        public string FilePath;
+        public string Version;
     }
 }

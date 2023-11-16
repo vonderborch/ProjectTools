@@ -6,19 +6,9 @@ namespace ProjectTools.Core
     public class Settings
     {
         /// <summary>
-        /// The version of the settings file. This is used to determine if the existing settings file is compatible with the current version of the application.
+        /// The git access token
         /// </summary>
-        public Version SettingsVersion = new("1.1");
-
-        /// <summary>
-        /// A list of repositories templates are pulled from.
-        /// </summary>
-        public List<string> TemplateRepositories;
-
-        /// <summary>
-        /// The last time the template repositories were checked for updates.
-        /// </summary>
-        public DateTime LastTemplatesUpdateCheck;
+        public string GitAccessToken;
 
         /// <summary>
         /// The git web path
@@ -26,15 +16,25 @@ namespace ProjectTools.Core
         public string GitWebPath;
 
         /// <summary>
-        /// The git access token
+        /// The last time the template repositories were checked for updates.
         /// </summary>
-        public string GitAccessToken;
+        public DateTime LastTemplatesUpdateCheck;
 
         /// <summary>
         /// The seconds between template update checks
-        /// 
         /// </summary>
         public int SecondsBetweenTemplateUpdateChecks = 86400;
+
+        /// <summary>
+        /// The version of the settings file. This is used to determine if the existing settings file is compatible with
+        /// the current version of the application.
+        /// </summary>
+        public Version SettingsVersion = new("1.1");
+
+        /// <summary>
+        /// A list of repositories templates are pulled from.
+        /// </summary>
+        public List<string> TemplateRepositories;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Settings"/> class.
@@ -50,34 +50,30 @@ namespace ProjectTools.Core
         /// <summary>
         /// Gets the repositories list text.
         /// </summary>
-        /// <value>
-        /// The repositories list text.
-        /// </value>
+        /// <value>The repositories list text.</value>
         [JsonIgnore]
         public string RepositoriesListText => string.Join(", ", TemplateRepositories);
 
         /// <summary>
         /// Gets the secured access token.
         /// </summary>
-        /// <value>
-        /// The secured access token.
-        /// </value>
+        /// <value>The secured access token.</value>
         [JsonIgnore]
         public string SecuredAccessToken => GitAccessToken == string.Empty ? string.Empty : "?access_token=****";
 
         /// <summary>
         /// Gets a value indicating whether [should update templates].
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [should update templates]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [should update templates]; otherwise, <c>false</c>.</value>
         public bool ShouldUpdateTemplates => (DateTime.Now - LastTemplatesUpdateCheck).TotalSeconds > SecondsBetweenTemplateUpdateChecks;
 
         /// <summary>
         /// Loads the file.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <returns>A Settings object representing the settings stored in the file. Or null if no settings could be loaded.</returns>
+        /// <returns>
+        /// A Settings object representing the settings stored in the file. Or null if no settings could be loaded.
+        /// </returns>
         public static Settings? LoadFile(string fileName)
         {
             if (!File.Exists(fileName))
@@ -115,7 +111,7 @@ namespace ProjectTools.Core
         /// </summary>
         public void RemoveDuplicateRepositories()
         {
-              TemplateRepositories = TemplateRepositories.Distinct().ToList();
+            TemplateRepositories = TemplateRepositories.Distinct().ToList();
         }
 
         /// <summary>

@@ -10,14 +10,14 @@ namespace ProjectTools.Core.Internal.Repositories
     public class GitRepoContents
     {
         /// <summary>
-        /// The repository content at this level
-        /// </summary>
-        public RepositoryContent Info;
-
-        /// <summary>
         /// The child repository content
         /// </summary>
         public List<GitRepoContents> ChildContent;
+
+        /// <summary>
+        /// The repository content at this level
+        /// </summary>
+        public RepositoryContent Info;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GitRepoContents"/> class.
@@ -46,9 +46,7 @@ namespace ProjectTools.Core.Internal.Repositories
         /// <summary>
         /// Converts the contents to a string.
         /// </summary>
-        /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
-        /// </returns>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
         public override string ToString()
         {
             return Info.ToString() ?? string.Empty;
