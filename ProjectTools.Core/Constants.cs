@@ -15,14 +15,34 @@ namespace ProjectTools.Core
         /// <summary>
         /// The core directory for the program
         /// </summary>
-        public static readonly string CoreDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ProjectTools");
+        public static readonly string CoreDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "ProjectTools"
+        );
+
+        /// <summary>
+        /// The unique identifier padding
+        /// </summary>
+        public static readonly string GUID_PADDING = $"D{GUID_PADDING_LENGTH}";
 
         /// <summary>
         /// The json serialize options
         /// </summary>
-        public static readonly JsonSerializerOptions JsonSerializeOptions = new()
+        public static readonly JsonSerializerOptions JsonSerializeOptions =
+            new() { WriteIndented = true, };
+
+        /// <summary>
+        /// The regex tags
+        /// NOTE: Keep in sync with GenerateOptions().UpdateReplacementTextWithTags()
+        /// </summary>
+        public static readonly string[] REGEX_TAGS =
         {
-            WriteIndented = true,
+            "[AUTHOR]",
+            "[COMPANY]",
+            "[TAGS]",
+            "[DESCRIPTION]",
+            "[LICENSE]",
+            "[VERSION]",
         };
 
         /// <summary>
@@ -38,7 +58,10 @@ namespace ProjectTools.Core
         /// <summary>
         /// The file used to store the version info for the downloaded templates
         /// </summary>
-        public static readonly string TemplatesCacheFile = Path.Combine(CoreDirectory, "templates_cache.json");
+        public static readonly string TemplatesCacheFile = Path.Combine(
+            CoreDirectory,
+            "templates_cache.json"
+        );
 
         /// <summary>
         /// The directory project templates are stored in
@@ -48,12 +71,18 @@ namespace ProjectTools.Core
         /// <summary>
         /// The directory used to store project configuration settings files
         /// </summary>
-        public static readonly string TemplatesProjectConfigurationDirectory = Path.Combine(TemplatesDirectory, "ProjectConfiguration");
+        public static readonly string TemplatesProjectConfigurationDirectory = Path.Combine(
+            TemplatesDirectory,
+            "ProjectConfiguration"
+        );
 
         /// <summary>
         /// The working file for storing a project's configuration
         /// </summary>
-        public static readonly string TemplatesProjectConfigurationFile = Path.Combine(CoreDirectory, "project_configuration.json");
+        public static readonly string TemplatesProjectConfigurationFile = Path.Combine(
+            CoreDirectory,
+            "project_configuration.json"
+        );
 
         /// <summary>
         /// The maximum git repo template search depth
@@ -69,5 +98,10 @@ namespace ProjectTools.Core
         /// The templater templates information file name
         /// </summary>
         public static string TemplaterTemplatesInfoFileName = "template_info.json";
+
+        /// <summary>
+        /// The unique identifier padding length
+        /// </summary>
+        private const int GUID_PADDING_LENGTH = 9;
     }
 }

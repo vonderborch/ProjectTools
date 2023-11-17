@@ -14,7 +14,9 @@ namespace ProjectTools.Core.Internal.Implementations
         /// </summary>
         /// <param name="implementation">The implementation.</param>
         /// <returns>A list of fields and types for the solution settings of an implementation</returns>
-        public List<SolutionSettingProperty> GetFieldsAndTypesForImplementation(TemplaterImplementations implementation)
+        public List<SolutionSettingProperty> GetFieldsAndTypesForImplementation(
+            TemplaterImplementations implementation
+        )
         {
             // Get field info for the specific implementation
             FieldInfo[] fields;
@@ -36,23 +38,23 @@ namespace ProjectTools.Core.Internal.Implementations
                 {
                     continue;
                 }
-                output.Add(new SolutionSettingProperty()
-                {
-                    Name = field.Name,
-                    Type = field.FieldType,
-                });
+                output.Add(
+                    new SolutionSettingProperty() { Name = field.Name, Type = field.FieldType, }
+                );
             }
 
             // Get field info for the git settings
             var gitFields = typeof(SolutionGitSettings).GetFields();
             foreach (var field in gitFields)
             {
-                output.Add(new SolutionSettingProperty()
-                {
-                    Name = field.Name,
-                    Type = field.FieldType,
-                    IsGitSetting = true,
-                });
+                output.Add(
+                    new SolutionSettingProperty()
+                    {
+                        Name = field.Name,
+                        Type = field.FieldType,
+                        IsGitSetting = true,
+                    }
+                );
             }
 
             return output;
@@ -63,7 +65,9 @@ namespace ProjectTools.Core.Internal.Implementations
         /// </summary>
         /// <param name="implementation">The implementation.</param>
         /// <returns>A solution settings object for a given implementation</returns>
-        public SolutionSettings GetSettingsForImplementation(TemplaterImplementations implementation)
+        public SolutionSettings GetSettingsForImplementation(
+            TemplaterImplementations implementation
+        )
         {
             switch (implementation)
             {

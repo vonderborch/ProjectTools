@@ -20,14 +20,15 @@ namespace ProjectTools.Core.Internal
         public Template Template;
 
         [JsonIgnore]
-        private Dictionary<string, string> _replacementText = new();
+        protected Dictionary<string, string> _replacementText = new();
 
-        public string[][] GetSpecialReplacementText => new string[][]
-        {
-            new string[] { "<CurrentUserName>", Environment.UserName },
-            new string[] { "<ParentDir>", Path.GetFileName(Directory) },
-            new string[] { "<SolutionName>", SolutionName },
-        };
+        public string[][] GetSpecialReplacementText =>
+            new string[][]
+            {
+                new string[] { "<CurrentUserName>", Environment.UserName },
+                new string[] { "<ParentDir>", Path.GetFileName(Directory) },
+                new string[] { "<SolutionName>", SolutionName },
+            };
 
         public Dictionary<string, string> ReplacementsAndGuids
         {
@@ -56,7 +57,10 @@ namespace ProjectTools.Core.Internal
                         var replacementText = replacement.Item2;
                         for (var i = 0; i < GetSpecialReplacementText.Length; i++)
                         {
-                            replacementText = replacementText.Replace(GetSpecialReplacementText[i][0], GetSpecialReplacementText[i][1]);
+                            replacementText = replacementText.Replace(
+                                GetSpecialReplacementText[i][0],
+                                GetSpecialReplacementText[i][1]
+                            );
                         }
 
                         _replacementText.Add(searchTerm, replacementText);
@@ -67,7 +71,7 @@ namespace ProjectTools.Core.Internal
             }
         }
 
-        public void UpdateReplacementTextWithTags()
+        public virtual void UpdateReplacementTextWithTags()
         {
             /* NOTE: Keep in sync with Constants.REGEX_TAGS
              * 0 = Author
@@ -83,9 +87,7 @@ namespace ProjectTools.Core.Internal
             }
             _replacementText.Add(Constants.REGEX_TAGS[0], SolutionSettings.Author);
             _replacementText.Add(Constants.REGEX_TAGS[1], SolutionSettings.Company);
-            _replacementText.Add(Constants.REGEX_TAGS[2], string.Join(",", SolutionSettings.Tags));
             _replacementText.Add(Constants.REGEX_TAGS[3], SolutionSettings.Description);
-            _replacementText.Add(Constants.REGEX_TAGS[4], SolutionSettings.LicenseExpresion);
             _replacementText.Add(Constants.REGEX_TAGS[5], SolutionSettings.Version);
         }
 

@@ -4,7 +4,7 @@
     /// Information on a property of a solution setting
     /// </summary>
     public class SolutionSettingProperty
-    {
+    { 
         /// <summary>
         /// The is git setting
         /// </summary>

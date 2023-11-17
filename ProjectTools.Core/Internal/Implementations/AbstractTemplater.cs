@@ -13,7 +13,11 @@ namespace ProjectTools.Core.Internal.Implementations
         /// <param name="longName">The long name.</param>
         /// <param name="shortName">The short name.</param>
         /// <param name="implementation">The implementation.</param>
-        public AbstractTemplater(string longName, string shortName, TemplaterImplementations implementation)
+        public AbstractTemplater(
+            string longName,
+            string shortName,
+            TemplaterImplementations implementation
+        )
         {
             LongName = longName;
             ShortName = shortName;
@@ -60,7 +64,11 @@ namespace ProjectTools.Core.Internal.Implementations
         /// <param name="directoryToArchive">The directory to archive.</param>
         /// <param name="archivePath">The archive path.</param>
         /// <param name="skipCleaning">if set to <c>true</c> [skip cleaning].</param>
-        protected void ArchiveDirectory(string directoryToArchive, string archivePath, bool skipCleaning)
+        protected void ArchiveDirectory(
+            string directoryToArchive,
+            string archivePath,
+            bool skipCleaning
+        )
         {
             if (File.Exists(archivePath))
             {
@@ -91,7 +99,11 @@ namespace ProjectTools.Core.Internal.Implementations
         /// <param name="oldPath">The old path.</param>
         /// <param name="newPath">The new path.</param>
         /// <param name="excludedDirectories">The excluded directories.</param>
-        protected void CopyDirectory(string oldPath, string newPath, List<string> excludedDirectories)
+        protected void CopyDirectory(
+            string oldPath,
+            string newPath,
+            List<string> excludedDirectories
+        )
         {
             if (!Directory.Exists(newPath))
             {

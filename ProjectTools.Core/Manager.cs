@@ -25,7 +25,10 @@ namespace ProjectTools.Core
             {
                 if (_gitClient == null)
                 {
-                    _gitClient = new GitHubClient(new ProductHeaderValue(Constants.AppName), new Uri(Settings.GitWebPath));
+                    _gitClient = new GitHubClient(
+                        new ProductHeaderValue(Constants.ApplicationName),
+                        new Uri(Settings.GitWebPath)
+                    );
 
                     if (!string.IsNullOrWhiteSpace(Settings.GitAccessToken))
                     {

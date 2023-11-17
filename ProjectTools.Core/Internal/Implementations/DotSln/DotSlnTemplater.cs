@@ -7,11 +7,36 @@
     public class DotSlnTemplater : AbstractTemplater
     {
         /// <summary>
+        /// The regex tags
+        /// </summary>
+        private static readonly string[][] _regex_tags =
+        {
+            new string[] { "Authors", Constants.REGEX_TAGS[0] },
+            new string[] { "Company", Constants.REGEX_TAGS[1] },
+            new string[] { "PackageTags", Constants.REGEX_TAGS[2] },
+            new string[] { "Description", Constants.REGEX_TAGS[3] },
+            new string[] { "PackageLicenseExpression", Constants.REGEX_TAGS[4] },
+            new string[] { "Version", Constants.REGEX_TAGS[5] },
+            new string[] { "FileVersion", Constants.REGEX_TAGS[5] },
+            new string[] { "AssemblyVersion", Constants.REGEX_TAGS[5] }
+        };
+
+        /// <summary>
+        /// The files to update
+        /// </summary>
+        private static readonly string[] _files_to_update =
+        {
+            ".sln",
+            ".csproj",
+            ".shproj",
+            ".projitems"
+        };
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DotSlnTemplater"/> class.
         /// </summary>
-        public DotSlnTemplater() : base("Visual Studio Solution Templater", "DotSln", TemplaterImplementations.DotSln)
-        {
-        }
+        public DotSlnTemplater()
+            : base("VisualStudio (.sln)", "DotSln", TemplaterImplementations.DotSln) { }
 
         /// <summary>
         /// Checks whether the directory is valid for this templater.

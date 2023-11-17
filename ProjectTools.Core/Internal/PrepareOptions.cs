@@ -6,7 +6,7 @@ namespace ProjectTools.Core.Internal
     /// Options for preparing a project into a template
     /// </summary>
     public class PrepareOptions
-    {
+    { 
         /// <summary>
         /// The directory of the project/solution being prepared as a template
         /// </summary>

@@ -19,7 +19,9 @@ namespace ProjectTools.Core.Internal.Implementations
         /// <param name="implementation">The implementation.</param>
         /// <returns>The templater for the specified implementation</returns>
         /// <exception cref="System.NotImplementedException">General templater is not implemented!</exception>
-        public AbstractTemplater GetTemplaterForImplementation(TemplaterImplementations implementation)
+        public AbstractTemplater GetTemplaterForImplementation(
+            TemplaterImplementations implementation
+        )
         {
             switch (implementation)
             {
@@ -37,7 +39,10 @@ namespace ProjectTools.Core.Internal.Implementations
         /// <param name="contents">The contents.</param>
         /// <param name="implementation">The implementation.</param>
         /// <returns>The template for the implementation</returns>
-        public Template? GetTemplateForContents(string contents, TemplaterImplementations implementation)
+        public Template? GetTemplateForContents(
+            string contents,
+            TemplaterImplementations implementation
+        )
         {
             switch (implementation)
             {
@@ -59,7 +64,11 @@ namespace ProjectTools.Core.Internal.Implementations
         /// <exception cref="System.Exception">
         /// Template {template.Name} is invalid!
         /// </exception>
-        public Template GetTemplateForFile(string file, TemplateGitInfo repoInfo, TemplaterImplementations implementation)
+        public Template GetTemplateForFile(
+            string file,
+            TemplateGitInfo repoInfo,
+            TemplaterImplementations implementation
+        )
         {
             Template? template = null;
             // Get the contents of the file
@@ -69,7 +78,9 @@ namespace ProjectTools.Core.Internal.Implementations
                 {
                     foreach (ZipEntry entry in zip)
                     {
-                        if (Path.GetFileName(entry.Name) == Constants.TemplaterTemplatesInfoFileName)
+                        if (
+                            Path.GetFileName(entry.Name) == Constants.TemplaterTemplatesInfoFileName
+                        )
                         {
                             var contents = "";
                             using (var inputStream = zip.GetInputStream(entry))
@@ -81,7 +92,7 @@ namespace ProjectTools.Core.Internal.Implementations
                                     contents = Encoding.UTF8.GetString(output.ToArray());
                                 }
                             }
-                            
+
                             // Attempt to setup the template with the file contents
                             template = GetTemplateForContents(contents, implementation);
 
@@ -107,12 +118,18 @@ namespace ProjectTools.Core.Internal.Implementations
             }
 
             // Setup some template settings
-            var namesToCheck = new List<string>() { template.Name, Path.GetFileNameWithoutExtension(file) };
+            var namesToCheck = new List<string>()
+            {
+                template.Name,
+                Path.GetFileNameWithoutExtension(file)
+            };
             foreach (var name in namesToCheck)
             {
                 if (!template.Settings.ReplacementText.Any(x => x.Item1 == name))
                 {
-                    template.Settings.ReplacementText.Add(new Tuple<string, string>(name, Constants.SpecialTextProjectName));
+                    template.Settings.ReplacementText.Add(
+                        new Tuple<string, string>(name, Constants.SpecialTextProjectName)
+                    );
                 }
             }
 

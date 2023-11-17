@@ -50,7 +50,8 @@ namespace ProjectTools.Core.Internal.Repositories
         /// </summary>
         /// <value>The template map.</value>
         [JsonIgnore]
-        public Dictionary<string, TemplateGitInfo> TemplateMap => Templates.ToDictionary(t => t.Name, t => t);
+        public Dictionary<string, TemplateGitInfo> TemplateMap =>
+            Templates.ToDictionary(t => t.Name, t => t);
 
         /// <summary>
         /// The list of loaded templates
@@ -69,9 +70,13 @@ namespace ProjectTools.Core.Internal.Repositories
         {
             if (forceLoad || Templates.Count == 0)
             {
-                var rootContents = Manager.Instance.GitClient.Repository.Content.GetAllContents(RepositoryOwner, RepositoryName).Result.ToList();
+                var rootContents = Manager.Instance.GitClient.Repository.Content
+                    .GetAllContents(RepositoryOwner, RepositoryName)
+                    .Result.ToList();
 
-                var repoContents = rootContents.Select(x => new GitRepoContents(x, RepositoryOwner, RepositoryName, x.Path)).ToList();
+                var repoContents = rootContents
+                    .Select(x => new GitRepoContents(x, RepositoryOwner, RepositoryName, x.Path))
+                    .ToList();
 
                 Templates = GetTemplateInfoForContents(repoContents);
             }

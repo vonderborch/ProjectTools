@@ -26,7 +26,10 @@ namespace ProjectTools.Core.Internal.Repositories
         public RepositoryCollection(List<string> repositories, bool autoLoad = true)
         {
             RepositoryNames = repositories;
-            Repositories = (from repo in repositories select new Repository(repo, autoLoad)).ToList();
+            Repositories = (
+                from repo in repositories
+                select new Repository(repo, autoLoad)
+            ).ToList();
         }
 
         /// <summary>

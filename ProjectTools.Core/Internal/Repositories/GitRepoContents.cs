@@ -27,15 +27,28 @@ namespace ProjectTools.Core.Internal.Repositories
         /// <param name="name">The name.</param>
         /// <param name="path">The path.</param>
         /// <param name="currentDepth">The current depth.</param>
-        public GitRepoContents(RepositoryContent info, string owner, string name, string path, int currentDepth = 0)
+        public GitRepoContents(
+            RepositoryContent info,
+            string owner,
+            string name,
+            string path,
+            int currentDepth = 0
+        )
         {
             Info = info;
 
-            if (info.Type == ContentType.Dir && currentDepth < Constants.MaxGitRepoTemplateSearchDepth)
+            if (
+                info.Type == ContentType.Dir
+                && currentDepth < Constants.MaxGitRepoTemplateSearchDepth
+            )
             {
-                var childCOntents = Manager.Instance.GitClient.Repository.Content.GetAllContents(owner, name, path).Result;
+                var childCOntents = Manager.Instance.GitClient.Repository.Content
+                    .GetAllContents(owner, name, path)
+                    .Result;
 
-                ChildContent = childCOntents.Select(c => new GitRepoContents(c, owner, name, c.Path, currentDepth + 1)).ToList();
+                ChildContent = childCOntents
+                    .Select(c => new GitRepoContents(c, owner, name, c.Path, currentDepth + 1))
+                    .ToList();
             }
             else
             {

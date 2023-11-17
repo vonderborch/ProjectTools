@@ -59,13 +59,16 @@ namespace ProjectTools.Core
         /// </summary>
         /// <value>The secured access token.</value>
         [JsonIgnore]
-        public string SecuredAccessToken => GitAccessToken == string.Empty ? string.Empty : "?access_token=****";
+        public string SecuredAccessToken =>
+            GitAccessToken == string.Empty ? string.Empty : "?access_token=****";
 
         /// <summary>
         /// Gets a value indicating whether [should update templates].
         /// </summary>
         /// <value><c>true</c> if [should update templates]; otherwise, <c>false</c>.</value>
-        public bool ShouldUpdateTemplates => (DateTime.Now - LastTemplatesUpdateCheck).TotalSeconds > SecondsBetweenTemplateUpdateChecks;
+        public bool ShouldUpdateTemplates =>
+            (DateTime.Now - LastTemplatesUpdateCheck).TotalSeconds
+            > SecondsBetweenTemplateUpdateChecks;
 
         /// <summary>
         /// Loads the file.
@@ -125,7 +128,10 @@ namespace ProjectTools.Core
             var directory = Path.GetDirectoryName(fileName);
             if (string.IsNullOrWhiteSpace(directory))
             {
-                throw new ArgumentException("The file name must include a directory.", nameof(fileName));
+                throw new ArgumentException(
+                    "The file name must include a directory.",
+                    nameof(fileName)
+                );
             }
 
             // Settings Validations
