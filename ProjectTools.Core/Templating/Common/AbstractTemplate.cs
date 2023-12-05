@@ -15,39 +15,39 @@ namespace ProjectTools.Core.Templating.Common
         /// <summary>
         /// The author of the template
         /// </summary>
-        public string Author;
+        public required string Author;
 
         /// <summary>
         /// The description of the template
         /// </summary>
-        public string Description;
+        public required string Description;
 
         /// <summary>
         /// The file path
         /// </summary>
         [JsonIgnore]
-        public string FilePath;
+        public required string FilePath;
 
         /// <summary>
         /// The name of the template
         /// </summary>
-        public string Name;
+        public required string Name;
 
         /// <summary>
         /// The information on the repo for the template
         /// </summary>
         [JsonIgnore]
-        public TemplateGitMetadata RepoInfo;
+        public required TemplateGitMetadata RepoInfo;
 
         /// <summary>
         /// The settings
         /// </summary>
-        public TemplateSettings Settings;
+        public required TemplateSettings Settings;
 
         /// <summary>
         /// The version of the template
         /// </summary>
-        public string Version;
+        public required string Version;
 
         /// <summary>
         /// Converts the current instance to a JSON string.

@@ -5,12 +5,12 @@ namespace ProjectTools.Core.Implementations.DotSln
     /// <summary>
     /// A template representing a .sln project/solution
     /// </summary>
-    /// <seealso cref="Templating.Common.AbstractTemplate" />
+    /// <seealso cref="Templating.Common.AbstractTemplate"/>
     public class DotSlnTemplate : AbstractTemplate
     {
         /// <summary>
         /// The unique identifier count
         /// </summary>
-        public int GuidCount = -1;
+        public new required int GuidCount;
     }
 }

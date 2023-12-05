@@ -8,9 +8,17 @@ namespace ProjectTools.Options
     [Verb("report-issue", HelpText = "Report an issue with the program")]
     internal class ReportIssue : AbstractOption
     {
+        /// <summary>
+        /// Gets or sets the description of the issue.
+        /// </summary>
+        /// <value>The description.</value>
         [Option('d', "description", Required = false, HelpText = "The description of the issue")]
         public string Description { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the title of the issue.
+        /// </summary>
+        /// <value>The title.</value>
         [Option('t', "title", Required = false, HelpText = "The title of the issue")]
         public string Title { get; set; } = string.Empty;
 
@@ -21,16 +29,16 @@ namespace ProjectTools.Options
         /// <returns>The result of the execution.</returns>
         public override string Execute(AbstractOption option)
         {
-            var actualOption = (ReportIssue)option;
+            var options = (ReportIssue)option;
 
-            var title = actualOption.Title;
-            var description = actualOption.Description;
+            var title = options.Title;
+            var description = options.Description;
 
-            if (actualOption.Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
+            if (options.Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
             {
                 throw new Exception("Error: Title and Description must be specified when running in silent mode!");
             }
-            else if (!actualOption.Silent)
+            else if (!options.Silent)
             {
                 // get issue title and description
                 title = ConsoleHelpers.GetInput("Issue Title", title);

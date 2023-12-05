@@ -36,6 +36,11 @@ namespace ProjectTools
             PossibleCommands["suggestion"].Add("prepopulated_short", "-t MyTitleHere -d MyDescriptionHere");
             PossibleCommands["suggestion"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
             PossibleCommands["suggestion"].Add("silent_bad", "-s");
+
+            // List Template Example Commands
+            PossibleCommands.Add("list-templates", []);
+            PossibleCommands["list-templates"].Add("base", "");
+            PossibleCommands["list-templates"].Add("quick_info", "-q");
         }
     }
 }

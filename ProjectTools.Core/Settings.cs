@@ -85,12 +85,12 @@ namespace ProjectTools.Core
                 return null;
             }
 
-            string rawContents = File.ReadAllText(fileName);
+            var rawContents = File.ReadAllText(fileName);
             if (!string.IsNullOrWhiteSpace(rawContents))
             {
                 try
                 {
-                    Settings? settings = JsonSerializer.Deserialize<Settings>(rawContents, Constants.JsonSerializeOptions);
+                    var settings = JsonSerializer.Deserialize<Settings>(rawContents, Constants.JsonSerializeOptions);
                     if (settings == null)
                     {
                         return null;
@@ -126,7 +126,7 @@ namespace ProjectTools.Core
         public void SaveFile(string fileName)
         {
             // Path Validations
-            string? directory = Path.GetDirectoryName(fileName);
+            var directory = Path.GetDirectoryName(fileName);
             if (string.IsNullOrWhiteSpace(directory))
             {
                 throw new ArgumentException(
@@ -139,7 +139,7 @@ namespace ProjectTools.Core
             RemoveDuplicateRepositories();
 
             // Save the current settings to the settings file
-            string contents = JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
+            var contents = JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
             _ = Directory.CreateDirectory(directory);
             File.WriteAllText(fileName, contents);
         }

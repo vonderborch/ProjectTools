@@ -1,7 +1,7 @@
 # ProjectTools
 Wanting to make a template from a project but frustrated at Visual Studio for making creating templates from complex solutions complicated (especially once you start trying to add custom logic to things...)? So was I. This isn't a perfect solution, but it at least makes things easier!
 
-This is my ~~[second](https://github.com/vonderborch/SolutionCreator)~~ [third](https://github.com/vonderborch/Templater) attempt at this and has been rewritten from the ground up to have much less sphagetti code everywhere.
+This is my ~~[first](https://github.com/vonderborch/SolutionCreator)~~ ~~[second](https://github.com/vonderborch/Templater)~~ third attempt at this and has been rewritten from the ground up to have much less sphagetti code everywhere.
 
 # Default Templates Repo
 

@@ -24,7 +24,8 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
 #if DEBUG
             DebugCommands exampleCommands = new();
 
-            var testCommand = ("suggestion", "silent_ready");
+            // (string?, string?)
+            (string?, string?) testCommand = ("list-templates", null);
 
             // process all commands iteratively
             if (testCommand.Item1 == null && testCommand.Item2 == null)
@@ -65,13 +66,13 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
         private static void ProcessArguments(string[] args)
         {
             // parse command line arguments and execute the appropriate command
-            var parseResults = Parser.Default.ParseArguments<Configure, ReportIssue, MakeSuggestion>(args);
+            var parseResults = Parser.Default.ParseArguments<ListTemplates, Configure, ReportIssue, MakeSuggestion>(args);
 
             var result = parseResults.MapResult(
                 //(AttachProject opts) => new AttachProject().ExecuteOption(opts),
                 //(Prepare opts) => new Prepare().ExecuteOption(opts),
                 //(Generate opts) => new Generate().ExecuteOption(opts),
-                //(ListTemplates opts) => new ListTemplates().ExecuteOption(opts),
+                (ListTemplates opts) => new ListTemplates().ExecuteOption(opts),
                 (Configure opts) => new Configure().ExecuteOption(opts),
                 (ReportIssue opts) => new ReportIssue().ExecuteOption(opts),
                 (MakeSuggestion opts) => new MakeSuggestion().ExecuteOption(opts),
@@ -98,7 +99,14 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
             {
                 arg = $"{suite} {arg}";
                 var args = arg.Split(" ");
+                Console.WriteLine($"COMMAND: {arg}");
+                Console.WriteLine(" ");
+                Console.WriteLine("----------------------------");
+                Console.WriteLine(" ");
                 ProcessArguments(args);
+                Console.WriteLine(" ");
+                Console.WriteLine("----------------------------");
+                Console.WriteLine(" ");
             }
             catch (Exception ex)
             {
