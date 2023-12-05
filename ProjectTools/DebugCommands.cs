@@ -1,9 +1,20 @@
-﻿namespace ProjectTools
+﻿#if DEBUG
+
+namespace ProjectTools
 {
+    /// <summary>
+    /// A class used during development to test the command line arguments.
+    /// </summary>
     internal class DebugCommands
     {
+        /// <summary>
+        /// The possible commands
+        /// </summary>
         public Dictionary<string, Dictionary<string, string>> PossibleCommands;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DebugCommands"/> class.
+        /// </summary>
         public DebugCommands()
         {
             PossibleCommands = [];
@@ -28,3 +39,5 @@
         }
     }
 }
+
+#endif

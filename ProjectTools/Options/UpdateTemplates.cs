@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProjectTools.Options
+﻿namespace ProjectTools.Options
 {
     internal class UpdateTemplates : AbstractOption
     {
+        public UpdateTemplates()
+        {
+            AllowTemplateUpdates = false;
+        }
+
         public override string Execute(AbstractOption option)
         {
             throw new NotImplementedException();

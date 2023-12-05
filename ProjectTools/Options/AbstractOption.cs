@@ -14,8 +14,16 @@ namespace ProjectTools.Options
                )]
         public bool Silent { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow automatic configuration].
+        /// </summary>
+        /// <value><c>true</c> if [allow automatic configuration]; otherwise, <c>false</c>.</value>
         protected bool AllowAutoConfiguration { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow template updates].
+        /// </summary>
+        /// <value><c>true</c> if [allow template updates]; otherwise, <c>false</c>.</value>
         protected bool AllowTemplateUpdates { get; set; } = true;
 
         /// <summary>
@@ -25,6 +33,11 @@ namespace ProjectTools.Options
         /// <returns>The result of the execution.</returns>
         public abstract string Execute(AbstractOption option);
 
+        /// <summary>
+        /// Executes the option.
+        /// </summary>
+        /// <param name="option">The option.</param>
+        /// <returns></returns>
         public string ExecuteOption(AbstractOption option)
         {
             if (!Manager.Instance.ValidateSettings())
@@ -40,6 +53,11 @@ namespace ProjectTools.Options
             return Execute(option);
         }
 
+        /// <summary>
+        /// Logs the message.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>True to indicate a message was wrwitten.</returns>
         protected bool LogMessage(string value)
         {
             Console.WriteLine(value);

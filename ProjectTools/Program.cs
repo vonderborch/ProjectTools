@@ -14,6 +14,11 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
             return "\0";
         }
 
+        /// <summary>
+        /// Defines the entry point of the application.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <exception cref="System.ArgumentException">Invalid test command!</exception>
         private static void Main(string[] args)
         {
 #if DEBUG
@@ -53,23 +58,40 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
 #endif
         }
 
+        /// <summary>
+        /// Processes the arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
         private static void ProcessArguments(string[] args)
         {
             // parse command line arguments and execute the appropriate command
             var parseResults = Parser.Default.ParseArguments<Configure, ReportIssue, MakeSuggestion>(args);
 
-            _ = parseResults.MapResult(
-                //(Prepare opts) => new Prepare().Execute(opts),
-                //(Generate opts) => new Generate().Execute(opts),
-                //(ListTemplates opts) => new ListTemplates().Execute(opts),
-                (Configure opts) => new Configure().Execute(opts),
-                (ReportIssue opts) => new ReportIssue().Execute(opts),
-                (MakeSuggestion opts) => new MakeSuggestion().Execute(opts),
-                //(UpdateTemplates opts) => new UpdateTemplates().Execute(opts),
+            var result = parseResults.MapResult(
+                //(AttachProject opts) => new AttachProject().ExecuteOption(opts),
+                //(Prepare opts) => new Prepare().ExecuteOption(opts),
+                //(Generate opts) => new Generate().ExecuteOption(opts),
+                //(ListTemplates opts) => new ListTemplates().ExecuteOption(opts),
+                (Configure opts) => new Configure().ExecuteOption(opts),
+                (ReportIssue opts) => new ReportIssue().ExecuteOption(opts),
+                (MakeSuggestion opts) => new MakeSuggestion().ExecuteOption(opts),
+                //(UpdateTemplates opts) => new UpdateTemplates().ExecuteOption(opts),
                 _ => MakeError()
-                                      );
+                                               );
+
+            // print the result if there is one
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                Console.WriteLine(result);
+            }
         }
 
+        /// <summary>
+        /// Processes the test argument.
+        /// </summary>
+        /// <param name="suite">The suite.</param>
+        /// <param name="arg">The argument.</param>
+        /// <param name="hideExceptions">if set to <c>true</c> [hide exceptions].</param>
         private static void ProcessTestArgument(string suite, string arg, bool hideExceptions = false)
         {
             try

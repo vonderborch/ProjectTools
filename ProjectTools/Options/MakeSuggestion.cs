@@ -21,10 +21,10 @@ namespace ProjectTools.Options
         /// <returns>The result of the execution.</returns>
         public override string Execute(AbstractOption option)
         {
-            MakeSuggestion actualOption = (MakeSuggestion)option;
+            var actualOption = (MakeSuggestion)option;
 
-            string title = actualOption.Title;
-            string description = actualOption.Description;
+            var title = actualOption.Title;
+            var description = actualOption.Description;
 
             if (actualOption.Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
             {
@@ -47,13 +47,13 @@ namespace ProjectTools.Options
             title = HttpUtility.UrlEncode(title);
             description = HttpUtility.UrlEncode(description);
 
-            string baseUrl = $"{Constants.ApplicationRepositoryUrl}/issues/new";
-            string url = $"{baseUrl}?title={title}&body={description}&labels=bug";
+            var baseUrl = $"{Constants.ApplicationRepositoryUrl}/issues/new";
+            var url = $"{baseUrl}?title={title}&body={description}&labels=bug";
             // Report issue
             Console.WriteLine("Opening browser to make suggestion ...");
             UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} tomake a suggestion!");
 
-            return "Success";
+            return string.Empty;
         }
     }
 }

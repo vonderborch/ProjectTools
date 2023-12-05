@@ -39,7 +39,6 @@ namespace ProjectTools.Options
 
             settings.SaveFile(Constants.SettingsFile);
 
-            _ = LogMessage("Settings Saved!");
             return "Settings Saved!";
         }
     }

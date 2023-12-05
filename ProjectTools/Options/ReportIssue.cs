@@ -21,10 +21,10 @@ namespace ProjectTools.Options
         /// <returns>The result of the execution.</returns>
         public override string Execute(AbstractOption option)
         {
-            ReportIssue actualOption = (ReportIssue)option;
+            var actualOption = (ReportIssue)option;
 
-            string title = actualOption.Title;
-            string description = actualOption.Description;
+            var title = actualOption.Title;
+            var description = actualOption.Description;
 
             if (actualOption.Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
             {
@@ -47,14 +47,14 @@ namespace ProjectTools.Options
             title = HttpUtility.UrlEncode(title);
             description = HttpUtility.UrlEncode(description);
 
-            string baseUrl = $"{Constants.ApplicationRepositoryUrl}/issues/new";
-            string url = $"{baseUrl}?title={title}&body={description}&labels=bug";
+            var baseUrl = $"{Constants.ApplicationRepositoryUrl}/issues/new";
+            var url = $"{baseUrl}?title={title}&body={description}&labels=bug";
 
             // Report issue
             Console.WriteLine("Opening browser to report issue ...");
             UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} to file a bug!");
 
-            return "Success";
+            return string.Empty;
         }
     }
 }
