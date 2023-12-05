@@ -3,7 +3,7 @@
     /// <summary>
     /// A templater for .sln projects
     /// </summary>
-    /// <seealso cref="Implementations.AbstractTemplater" />
+    /// <seealso cref="Internal.Implementations.AbstractTemplater" />
     public class DotSlnTemplater : AbstractTemplater
     {
         /// <summary>

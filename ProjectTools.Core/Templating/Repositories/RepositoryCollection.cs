@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ProjectTools.Core.Internal.Repositories
+namespace ProjectTools.Core.Templating.Repositories
 {
     /// <summary>
     /// A collection of git template repositories
@@ -11,12 +11,12 @@ namespace ProjectTools.Core.Internal.Repositories
         /// <summary>
         /// The most recent list of templates for the monitored repositories
         /// </summary>
-        private List<TemplateGitInfo> _templateCache = new();
+        private List<TemplateGitMetadata> _templateCache = new();
 
         /// <summary>
         /// The most recent template map cache for for the monitored repositories
         /// </summary>
-        private Dictionary<string, TemplateGitInfo> _templateMapCache = new();
+        private Dictionary<string, TemplateGitMetadata> _templateMapCache = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositoryCollection"/> class.
@@ -54,7 +54,7 @@ namespace ProjectTools.Core.Internal.Repositories
         /// <value>
         /// The template map.
         /// </value>
-        public Dictionary<string, TemplateGitInfo> TemplateMap
+        public Dictionary<string, TemplateGitMetadata> TemplateMap
         {
             get
             {
@@ -73,7 +73,7 @@ namespace ProjectTools.Core.Internal.Repositories
         /// <value>
         /// The templates list.
         /// </value>
-        public List<TemplateGitInfo> TemplatesList
+        public List<TemplateGitMetadata> TemplatesList
         {
             get
             {
@@ -91,9 +91,9 @@ namespace ProjectTools.Core.Internal.Repositories
         /// </summary>
         /// <param name="forceLoad">if set to <c>true</c> [force load].</param>
         /// <returns>Template info for the repository</returns>
-        public List<TemplateGitInfo> GetTemplateInfoForRepository(bool forceLoad = true)
+        public List<TemplateGitMetadata> GetTemplateInfoForRepository(bool forceLoad = true)
         {
-            var output = new List<TemplateGitInfo>();
+            var output = new List<TemplateGitMetadata>();
             foreach (var repo in Repositories)
             {
                 output.AddRange(repo.GetTemplateInfoForRepository(forceLoad));

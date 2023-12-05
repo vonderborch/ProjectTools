@@ -46,7 +46,7 @@ namespace ProjectTools.Core.Internal.Implementations
         {
             switch (implementation)
             {
-                case Implementations.TemplaterImplementations.DotSln:
+                case Internal.Implementations.TemplaterImplementations.DotSln:
                     return JsonSerializer.Deserialize<DotSlnTemplate>(contents);
 
                 default:
@@ -66,7 +66,7 @@ namespace ProjectTools.Core.Internal.Implementations
         /// </exception>
         public Template GetTemplateForFile(
             string file,
-            TemplateGitInfo repoInfo,
+            TemplateGitMetadata repoInfo,
             TemplaterImplementations implementation
         )
         {

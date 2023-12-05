@@ -5,8 +5,18 @@ namespace ProjectTools.Options
 {
     internal abstract class AbstractOption
     {
-        [Option('s', "silent", Required = false, Default = false, HelpText = "If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available.")]
+        [Option(
+            's',
+            "silent",
+            Required = false,
+            Default = false,
+            HelpText = "If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available."
+               )]
         public bool Silent { get; set; }
+
+        protected bool AllowAutoConfiguration { get; set; } = true;
+
+        protected bool AllowTemplateUpdates { get; set; } = true;
 
         /// <summary>
         /// Executes what this option represents.
@@ -20,14 +30,20 @@ namespace ProjectTools.Options
             if (!Manager.Instance.ValidateSettings())
             {
                 Console.WriteLine("Creating settings file...");
-                new Configure().Execute(new Configure());
+                _ = new Configure().Execute(new Configure());
             }
-            if (Manager.Instance.Settings.ShouldUpdateTemplates)
+            if (AllowTemplateUpdates && Manager.Instance.Settings.ShouldUpdateTemplates)
             {
-                new UpdateTemplates().Execute(new UpdateTemplates());
+                //new UpdateTemplates().Execute(new UpdateTemplates());
             }
 
             return Execute(option);
+        }
+
+        protected bool LogMessage(string value)
+        {
+            Console.WriteLine(value);
+            return true;
         }
     }
 }

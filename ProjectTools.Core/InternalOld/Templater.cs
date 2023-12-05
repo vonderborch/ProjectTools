@@ -1,6 +1,7 @@
 ﻿using ProjectTools.Core.Internal.Configuration;
 using ProjectTools.Core.Internal.Implementations;
 using ProjectTools.Core.Internal.Repositories;
+using ProjectTools.Core.Templating.Repositories;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -53,12 +54,12 @@ namespace ProjectTools.Core.Internal
 
         public void RefreshLocalTemplatesList()
         {
-            List<TemplateGitInfo> localTemplates = new();
+            List<TemplateGitMetadata> localTemplates = new();
 
             // load the local templatesinfo file to see current template status
             if (File.Exists(Constants.TemplatesCacheFile))
             {
-                var localTemplatesFromCache = JsonSerializer.Deserialize<List<TemplateGitInfo>>(
+                var localTemplatesFromCache = JsonSerializer.Deserialize<List<TemplateGitMetadata>>(
                     File.ReadAllText(Constants.TemplatesCacheFile)
                 );
                 if (localTemplatesFromCache != null)

@@ -1,13 +1,13 @@
 ﻿using Octokit;
 using System.Diagnostics;
 
-namespace ProjectTools.Core.Internal.Repositories
+namespace ProjectTools.Core.Templating.Repositories
 {
     /// <summary>
-    /// Information on the template's git copy
+    /// Metadata about a template in a git repository
     /// </summary>
-    [DebuggerDisplay("{Name}")]
-    public class TemplateGitInfo
+    [DebuggerDisplay("{Name} | {Repo}")]
+    public class TemplateGitMetadata
     {
         /// <summary>
         /// The name of the template
@@ -30,9 +30,9 @@ namespace ProjectTools.Core.Internal.Repositories
         public string Url;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TemplateGitInfo"/> class.
+        /// Initializes a new instance of the <see cref="TemplateGitMetadata"/> class.
         /// </summary>
-        public TemplateGitInfo()
+        public TemplateGitMetadata()
         {
             Name = string.Empty;
             SHA = string.Empty;
@@ -41,11 +41,11 @@ namespace ProjectTools.Core.Internal.Repositories
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TemplateGitInfo"/> class.
+        /// Initializes a new instance of the <see cref="TemplateGitMetadata"/> class.
         /// </summary>
         /// <param name="info">The git content information.</param>
         /// <param name="repo">The repo the template is located in.</param>
-        public TemplateGitInfo(RepositoryContent info, string repo)
+        public TemplateGitMetadata(RepositoryContent info, string repo)
         {
             Name = info.Name;
             SHA = info.Sha;

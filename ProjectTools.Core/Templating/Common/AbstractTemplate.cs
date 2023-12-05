@@ -1,12 +1,16 @@
-﻿using ProjectTools.Core.Internal.Repositories;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using ProjectTools.Core.Implementations.DotSln;
+using ProjectTools.Core.Templating.Repositories;
 
-namespace ProjectTools.Core.Internal.Configuration
+namespace ProjectTools.Core.Templating.Common
 {
     /// <summary>
     /// Defines a Project/Solution Template
     /// </summary>
-    public class Template
+    [JsonDerivedType(typeof(AbstractTemplate), typeDiscriminator: "base")]
+    [JsonDerivedType(typeof(DotSlnTemplate), typeDiscriminator: "dotsln")]
+    public class AbstractTemplate
     {
         /// <summary>
         /// The author of the template
@@ -33,7 +37,7 @@ namespace ProjectTools.Core.Internal.Configuration
         /// The information on the repo for the template
         /// </summary>
         [JsonIgnore]
-        public TemplateGitInfo RepoInfo;
+        public TemplateGitMetadata RepoInfo;
 
         /// <summary>
         /// The settings
@@ -44,5 +48,14 @@ namespace ProjectTools.Core.Internal.Configuration
         /// The version of the template
         /// </summary>
         public string Version;
+
+        /// <summary>
+        /// Converts the current instance to a JSON string.
+        /// </summary>
+        /// <returns>The JSON string.</returns>
+        public string ToJson()
+        {
+            return JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
+        }
     }
 }

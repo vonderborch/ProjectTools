@@ -1,7 +1,7 @@
 ﻿using Octokit;
 using System.Diagnostics;
 
-namespace ProjectTools.Core.Internal.Repositories
+namespace ProjectTools.Core.Templating.Repositories
 {
     /// <summary>
     /// Represents the contents of a git repo

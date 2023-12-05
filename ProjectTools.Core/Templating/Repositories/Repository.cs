@@ -1,8 +1,13 @@
 ﻿using Octokit;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace ProjectTools.Core.Internal.Repositories
+namespace ProjectTools.Core.Templating.Repositories
 {
     /// <summary>
     /// Handles storing and downloading info on templates in a given repository.
@@ -50,13 +55,13 @@ namespace ProjectTools.Core.Internal.Repositories
         /// </summary>
         /// <value>The template map.</value>
         [JsonIgnore]
-        public Dictionary<string, TemplateGitInfo> TemplateMap =>
+        public Dictionary<string, TemplateGitMetadata> TemplateMap =>
             Templates.ToDictionary(t => t.Name, t => t);
 
         /// <summary>
         /// The list of loaded templates
         /// </summary>
-        public List<TemplateGitInfo> Templates { get; private set; }
+        public List<TemplateGitMetadata> Templates { get; private set; }
 
         /// <summary>
         /// Gets information on templates stored in the repository this instance represents.
@@ -66,7 +71,7 @@ namespace ProjectTools.Core.Internal.Repositories
         /// loaded. Defaults to true.
         /// </param>
         /// <returns>A list of templates discovered in the repository.</returns>
-        public List<TemplateGitInfo> GetTemplateInfoForRepository(bool forceLoad = true)
+        public List<TemplateGitMetadata> GetTemplateInfoForRepository(bool forceLoad = true)
         {
             if (forceLoad || Templates.Count == 0)
             {
@@ -89,9 +94,9 @@ namespace ProjectTools.Core.Internal.Repositories
         /// </summary>
         /// <param name="contents">The contents to check for templates</param>
         /// <returns>A list of templates the git contents store</returns>
-        private List<TemplateGitInfo> GetTemplateInfoForContents(List<GitRepoContents> contents)
+        private List<TemplateGitMetadata> GetTemplateInfoForContents(List<GitRepoContents> contents)
         {
-            var output = new List<TemplateGitInfo>();
+            var output = new List<TemplateGitMetadata>();
 
             foreach (var content in contents)
             {
@@ -102,7 +107,7 @@ namespace ProjectTools.Core.Internal.Repositories
                 }
                 else if (content.Info.Name.EndsWith(Constants.TemplateFileType))
                 {
-                    var templateInfo = new TemplateGitInfo(content.Info, Repo);
+                    var templateInfo = new TemplateGitMetadata(content.Info, Repo);
                     output.Add(templateInfo);
                 }
             }

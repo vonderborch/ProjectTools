@@ -3,7 +3,7 @@
     /// <summary>
     /// Available Templater Implementations
     /// </summary>
-    public enum TemplaterImplementations
+    public enum Implementations
     {
         /// <summary>
         /// An implementation is available for Visual Studio .sln Projects

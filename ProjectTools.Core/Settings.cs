@@ -41,7 +41,7 @@ namespace ProjectTools.Core
         /// </summary>
         public Settings()
         {
-            TemplateRepositories = new();
+            TemplateRepositories = [];
             LastTemplatesUpdateCheck = DateTime.MinValue;
             GitWebPath = "https://github.com/";
             GitAccessToken = string.Empty;
@@ -66,6 +66,7 @@ namespace ProjectTools.Core
         /// Gets a value indicating whether [should update templates].
         /// </summary>
         /// <value><c>true</c> if [should update templates]; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
         public bool ShouldUpdateTemplates =>
             (DateTime.Now - LastTemplatesUpdateCheck).TotalSeconds
             > SecondsBetweenTemplateUpdateChecks;
@@ -84,19 +85,19 @@ namespace ProjectTools.Core
                 return null;
             }
 
-            var rawContents = File.ReadAllText(fileName);
+            string rawContents = File.ReadAllText(fileName);
             if (!string.IsNullOrWhiteSpace(rawContents))
             {
                 try
                 {
-                    var settings = JsonSerializer.Deserialize<Settings>(rawContents);
+                    Settings? settings = JsonSerializer.Deserialize<Settings>(rawContents, Constants.JsonSerializeOptions);
                     if (settings == null)
                     {
                         return null;
                     }
                     // TODO: Long term, we should change what we do depending on the SettingsVersion stored in the file (upgrade, etc.)
 
-                    settings.SaveFile(fileName);
+                    //settings.SaveFile(fileName);
                     return settings;
                 }
                 catch
@@ -125,21 +126,21 @@ namespace ProjectTools.Core
         public void SaveFile(string fileName)
         {
             // Path Validations
-            var directory = Path.GetDirectoryName(fileName);
+            string? directory = Path.GetDirectoryName(fileName);
             if (string.IsNullOrWhiteSpace(directory))
             {
                 throw new ArgumentException(
                     "The file name must include a directory.",
                     nameof(fileName)
-                );
+                                           );
             }
 
             // Settings Validations
             RemoveDuplicateRepositories();
 
             // Save the current settings to the settings file
-            var contents = JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
-            Directory.CreateDirectory(directory);
+            string contents = JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
+            _ = Directory.CreateDirectory(directory);
             File.WriteAllText(fileName, contents);
         }
     }

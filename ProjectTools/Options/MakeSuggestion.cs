@@ -5,13 +5,13 @@ using ProjectTools.Helpers;
 
 namespace ProjectTools.Options
 {
-    [Verb("report-issue", HelpText = "Report an issue with the program")]
-    internal class ReportIssue : AbstractOption
+    [Verb("suggestion", HelpText = "Make a suggestion for the program")]
+    internal class MakeSuggestion : AbstractOption
     {
-        [Option('d', "description", Required = false, HelpText = "The description of the issue")]
+        [Option('d', "description", Required = false, HelpText = "The description of the new feature or functionality")]
         public string Description { get; set; } = string.Empty;
 
-        [Option('t', "title", Required = false, HelpText = "The title of the issue")]
+        [Option('t', "title", Required = false, HelpText = "The title of the new feature or functionality")]
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace ProjectTools.Options
         /// <returns>The result of the execution.</returns>
         public override string Execute(AbstractOption option)
         {
-            ReportIssue actualOption = (ReportIssue)option;
+            MakeSuggestion actualOption = (MakeSuggestion)option;
 
             string title = actualOption.Title;
             string description = actualOption.Description;
@@ -33,8 +33,8 @@ namespace ProjectTools.Options
             else if (!actualOption.Silent)
             {
                 // get issue title and description
-                title = ConsoleHelpers.GetInput("Issue Title", title);
-                description = ConsoleHelpers.GetInput("Issue Description", description);
+                title = ConsoleHelpers.GetInput("Suggestion Title", title);
+                description = ConsoleHelpers.GetInput("Suggestion Description", description);
 
                 if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description))
                 {
@@ -43,16 +43,15 @@ namespace ProjectTools.Options
             }
 
             // Construct Urls
-            title = $"BUG: {title}";
+            title = $"FEATURE: {title}";
             title = HttpUtility.UrlEncode(title);
             description = HttpUtility.UrlEncode(description);
 
             string baseUrl = $"{Constants.ApplicationRepositoryUrl}/issues/new";
             string url = $"{baseUrl}?title={title}&body={description}&labels=bug";
-
             // Report issue
-            Console.WriteLine("Opening browser to report issue ...");
-            UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} to file a bug!");
+            Console.WriteLine("Opening browser to make suggestion ...");
+            UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} tomake a suggestion!");
 
             return "Success";
         }

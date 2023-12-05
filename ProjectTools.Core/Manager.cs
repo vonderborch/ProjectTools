@@ -1,5 +1,5 @@
 ﻿using Octokit;
-using ProjectTools.Core.Internal;
+using ProjectTools.Core.Templating;
 
 namespace ProjectTools.Core
 {

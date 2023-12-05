@@ -1,11 +1,12 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ProjectTools.Core
 {
     /// <summary>
     /// Constants used throughout the program
     /// </summary>
-    internal class Constants
+    public class Constants
     {
         /// <summary>
         /// The name of the application
@@ -18,7 +19,7 @@ namespace ProjectTools.Core
         public static readonly string CoreDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "ProjectTools"
-        );
+                                                                  );
 
         /// <summary>
         /// The unique identifier padding
@@ -29,7 +30,7 @@ namespace ProjectTools.Core
         /// The json serialize options
         /// </summary>
         public static readonly JsonSerializerOptions JsonSerializeOptions =
-            new() { WriteIndented = true, };
+            new() { WriteIndented = true, Converters = { new JsonStringEnumConverter() }, IncludeFields = true };
 
         /// <summary>
         /// The regex tags
@@ -61,7 +62,7 @@ namespace ProjectTools.Core
         public static readonly string TemplatesCacheFile = Path.Combine(
             CoreDirectory,
             "templates_cache.json"
-        );
+                                                                       );
 
         /// <summary>
         /// The directory project templates are stored in
@@ -74,7 +75,7 @@ namespace ProjectTools.Core
         public static readonly string TemplatesProjectConfigurationDirectory = Path.Combine(
             TemplatesDirectory,
             "ProjectConfiguration"
-        );
+                                                                                           );
 
         /// <summary>
         /// The working file for storing a project's configuration
@@ -82,7 +83,17 @@ namespace ProjectTools.Core
         public static readonly string TemplatesProjectConfigurationFile = Path.Combine(
             CoreDirectory,
             "project_configuration.json"
-        );
+                                                                                      );
+
+        /// <summary>
+        /// The application repository URL
+        /// </summary>
+        public static string ApplicationRepositoryUrl = "https://github.com/vonderborch/ProjectTools";
+
+        /// <summary>
+        /// The default template repository
+        /// </summary>
+        public static string DefaultTemplateRepository = "https://github.com/vonderborch/Templater-Templates";
 
         /// <summary>
         /// The maximum git repo template search depth
