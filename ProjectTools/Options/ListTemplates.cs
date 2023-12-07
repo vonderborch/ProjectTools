@@ -4,6 +4,10 @@ using ProjectTools.Core;
 
 namespace ProjectTools.Options
 {
+    /// <summary>
+    /// A command to list available templates
+    /// </summary>
+    /// <seealso cref="ProjectTools.Options.AbstractOption"/>
     [Verb("list-templates", HelpText = "List all available templates")]
     internal class ListTemplates : AbstractOption
     {
@@ -23,12 +27,9 @@ namespace ProjectTools.Options
         /// <summary>
         /// Executes the list templates steps with the specified options.
         /// </summary>
-        /// <param name="option">The option.</param>
         /// <returns>The result of the execution.</returns>
-        public override string Execute(AbstractOption option)
+        public override string Execute()
         {
-            var options = (ListTemplates)option;
-
             Console.WriteLine("Gathering available templates...");
             Manager.Instance.Templater.RefreshLocalTemplates();
 
@@ -45,7 +46,7 @@ namespace ProjectTools.Options
             for (var i = 0; i < sortedTemplates.Count; i++)
             {
                 _ = output.AppendLine($" - {sortedTemplates[i]}");
-                if (!options.QuickInfo)
+                if (!QuickInfo)
                 {
                     _ = output.AppendLine($"     Author: {Manager.Instance.Templater.Templates[sortedTemplates[i]].Author}");
                     _ = output.AppendLine($"     Description: {Manager.Instance.Templater.Templates[sortedTemplates[i]].Description}");
@@ -57,6 +58,17 @@ namespace ProjectTools.Options
             Console.WriteLine(output.ToString());
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the options.
+        /// </summary>
+        /// <param name="option">The option.</param>
+        protected override void SetOptions(AbstractOption option)
+        {
+            var options = (ListTemplates)option;
+            QuickInfo = options.QuickInfo;
+            Silent = options.Silent;
         }
     }
 }

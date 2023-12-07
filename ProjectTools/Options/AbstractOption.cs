@@ -3,8 +3,15 @@ using ProjectTools.Core;
 
 namespace ProjectTools.Options
 {
+    /// <summary>
+    /// An abstract command line option
+    /// </summary>
     internal abstract class AbstractOption
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="AbstractOption"/> is silent.
+        /// </summary>
+        /// <value><c>true</c> if silent; otherwise, <c>false</c>.</value>
         [Option(
             's',
             "silent",
@@ -31,7 +38,7 @@ namespace ProjectTools.Options
         /// </summary>
         /// <param name="option">The option.</param>
         /// <returns>The result of the execution.</returns>
-        public abstract string Execute(AbstractOption option);
+        public abstract string Execute();
 
         /// <summary>
         /// Executes the option.
@@ -43,14 +50,16 @@ namespace ProjectTools.Options
             if (!Manager.Instance.ValidateSettings())
             {
                 Console.WriteLine("Creating settings file...");
-                _ = new Configure().Execute(new Configure());
+                var configure = new Configure() { Silent = Silent };
+                _ = configure.Execute();
             }
             if (AllowTemplateUpdates && Manager.Instance.Settings.ShouldUpdateTemplates)
             {
                 //new UpdateTemplates().Execute(new UpdateTemplates());
             }
 
-            return Execute(option);
+            SetOptions(option);
+            return Execute();
         }
 
         /// <summary>
@@ -63,5 +72,11 @@ namespace ProjectTools.Options
             Console.WriteLine(value);
             return true;
         }
+
+        /// <summary>
+        /// Sets the options.
+        /// </summary>
+        /// <param name="option">The option.</param>
+        protected abstract void SetOptions(AbstractOption option);
     }
 }

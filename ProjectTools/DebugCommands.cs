@@ -41,6 +41,11 @@ namespace ProjectTools
             PossibleCommands.Add("list-templates", []);
             PossibleCommands["list-templates"].Add("base", "");
             PossibleCommands["list-templates"].Add("quick_info", "-q");
+
+            // Prepare Template Example Commands
+            PossibleCommands.Add("prepare", []);
+            PossibleCommands["prepare"].Add("base", "");
+            PossibleCommands["prepare"].Add("quick_info", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\Templater-Templates\\TEMPLATES_BASE\\Velentr.BASE -o C:\\Users\\ricky\\Dropbox\\Projects\\Templater-Templates\\TEMPLATES");
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.IO.Compression;
+using System.Reflection;
+using System.Text.Json;
 using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Options;
 using ProjectTools.Core.Templating.Common;
@@ -50,37 +52,66 @@ namespace ProjectTools.Core.Templating.Preparation
         /// Gets a list of settings that need to be set to generate a template of this type.
         /// </summary>
         /// <returns>The list of needed settings.</returns>
-        public List<SettingProperty> GetSettingProperties()
+        public (List<SettingProperty>, bool) GetSettingProperties(string file)
         {
-            var type = GetTemplateSettingsClass();
+            var foundValidSettings = false;
+            TemplateSettings? existingSettings = null;
 
-            if (type == null)
+            if (File.Exists(file))
             {
-                throw new Exception("Template settings class not defined for this templater.");
+                var rawContents = File.ReadAllText(file);
+                var settings = JsonSerializer.Deserialize<TemplateSettings>(rawContents, Constants.JsonSerializeOptions);
+                if (settings != null)
+                {
+                    existingSettings = settings;
+                    foundValidSettings = true;
+                }
             }
 
-            var fields = type.GetFields();
+            existingSettings ??= (TemplateSettings)Activator.CreateInstance(GetTemplateSettingsClass());
+            if (existingSettings == null)
+            {
+                throw new Exception($"Could not create instance of {GetTemplateSettingsClass().Name}!");
+            }
+
+            var fields = existingSettings.GetType().GetFields();
             var output = new List<SettingProperty>();
 
             foreach (var field in fields)
             {
-                output.Add(new SettingProperty() { Name = field.Name, Type = field.FieldType, });
+                var currentValue = field.GetValue(existingSettings);
+                var metadata = (SettingMetaAttribute?)field.GetCustomAttribute(typeof(SettingMetaAttribute), false);
+                if (metadata == null)
+                {
+                    throw new Exception($"Field {field.Name} does not have a SettingMetaAttribute!");
+                }
+                output.Add(new SettingProperty() { Name = field.Name, Type = metadata.Type, DisplayName = metadata.DisplayName, CurrentValue = currentValue });
             }
 
-            return output;
+            return (output, foundValidSettings);
         }
 
         /// <summary>
         /// Gets a list of settings that need to be set to generate a template of this type.
         /// </summary>
         /// <returns>The list of needed settings.</returns>
-        public abstract TemplateSettings GetSettingsClassForProperties(Dictionary<SettingProperty, object> settings);
+        public TemplateSettings GetSettingsClassForProperties(Dictionary<SettingProperty, object> settings)
+        {
+            var output = (TemplateSettings)Activator.CreateInstance(GetTemplateSettingsClass());
+
+            foreach (var setting in settings)
+            {
+                output.GetType().GetField(setting.Key.Name)?.SetValue(output, setting.Value);
+            }
+
+            return output;
+        }
 
         /// <summary>
         /// Gets the template settings class.
         /// </summary>
         /// <returns>The template settings class defined for this preparer.</returns>
-        public abstract Type? GetTemplateSettingsClass();
+        public abstract Type GetTemplateSettingsClass();
 
         /// <summary>
         /// Prepares the template.
@@ -135,7 +166,7 @@ namespace ProjectTools.Core.Templating.Preparation
         {
             if (!Directory.Exists(newPath))
             {
-                Directory.CreateDirectory(newPath);
+                _ = Directory.CreateDirectory(newPath);
             }
 
             // Copy over items

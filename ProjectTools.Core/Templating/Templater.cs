@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
-using ProjectTools.Core.Helpers;
+﻿using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Templating.Common;
 using ProjectTools.Core.Templating.Preparation;
 using ProjectTools.Core.Templating.Repositories;
+using System.Text.Json;
 
 namespace ProjectTools.Core.Templating
 {
@@ -59,6 +59,27 @@ namespace ProjectTools.Core.Templating
         /// </summary>
         /// <value>The sorted template names.</value>
         public List<string> SortedTemplateNames => Templates.Keys.OrderBy(x => x).ToList();
+
+        /// <summary>
+        /// Detects the valid implementation.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns>A valid implementation for the specified directory, or null if none is found.</returns>
+        public Implementation? DetectValidImplementation(string directory)
+        {
+            foreach (var imp in Enum.GetValues(typeof(Implementation)))
+            {
+                var implementation = (Implementation)imp;
+
+                var preparer = TemplatePreperationFactory.GetTemplatePreparer(implementation);
+                if (preparer.DirectoryValidForTemplater(directory))
+                {
+                    return implementation;
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Gets the template preparer.

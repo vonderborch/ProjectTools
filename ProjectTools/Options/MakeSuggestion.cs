@@ -5,6 +5,10 @@ using ProjectTools.Helpers;
 
 namespace ProjectTools.Options
 {
+    /// <summary>
+    /// A command to make a suggestion for the program.
+    /// </summary>
+    /// <seealso cref="ProjectTools.Options.AbstractOption"/>
     [Verb("suggestion", HelpText = "Make a suggestion for the program")]
     internal class MakeSuggestion : AbstractOption
     {
@@ -25,20 +29,17 @@ namespace ProjectTools.Options
         /// <summary>
         /// Executes the make suggestion steps with the specified options.
         /// </summary>
-        /// <param name="option">The option.</param>
         /// <returns>The result of the execution.</returns>
-        public override string Execute(AbstractOption option)
+        public override string Execute()
         {
-            var options = (MakeSuggestion)option;
+            var title = Title;
+            var description = Description;
 
-            var title = options.Title;
-            var description = options.Description;
-
-            if (options.Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
+            if (Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
             {
                 throw new Exception("Error: Title and Description must be specified when running in silent mode!");
             }
-            else if (!options.Silent)
+            else if (!Silent)
             {
                 // get issue title and description
                 title = ConsoleHelpers.GetInput("Suggestion Title", title);
@@ -62,6 +63,18 @@ namespace ProjectTools.Options
             UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} tomake a suggestion!");
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the options.
+        /// </summary>
+        /// <param name="option">The option.</param>
+        protected override void SetOptions(AbstractOption option)
+        {
+            var options = (MakeSuggestion)option;
+            Description = options.Description;
+            Title = options.Title;
+            Silent = options.Silent;
         }
     }
 }

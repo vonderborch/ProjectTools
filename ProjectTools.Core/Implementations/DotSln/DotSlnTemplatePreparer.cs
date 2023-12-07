@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using ProjectTools.Core.Options;
-using ProjectTools.Core.Templating.Common;
 using ProjectTools.Core.Templating.Preparation;
 
 namespace ProjectTools.Core.Implementations.DotSln
@@ -78,7 +77,7 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <returns>All guids for all .sln files in the directory we're templating.</returns>
         public Dictionary<string, string> GetGuids(string directory, int guidCount = 0)
         {
-            Dictionary<string, string> output = new();
+            Dictionary<string, string> output = [];
 
             // try to find .sln files
             var files = Directory.GetFiles(directory);
@@ -90,14 +89,12 @@ namespace ProjectTools.Core.Implementations.DotSln
 
                     foreach (var line in lines)
                     {
-                        if (
-                            line.StartsWith("Project(", StringComparison.InvariantCultureIgnoreCase)
-                           )
+                        if (line.StartsWith("Project(", StringComparison.InvariantCultureIgnoreCase))
                         {
                             var splitByComma = line.Split(",");
-                            var last = splitByComma[splitByComma.Length - 1];
+                            var last = splitByComma[^1];
 
-                            var guid = last.Substring(3, last.Length - 5);
+                            var guid = last[3..^2];
                             output.Add(guid, $"GUID{guidCount.ToString(Constants.GUID_PADDING)}");
                             guidCount++;
                         }
@@ -119,16 +116,11 @@ namespace ProjectTools.Core.Implementations.DotSln
             return output;
         }
 
-        public override TemplateSettings GetSettingsClassForProperties(Dictionary<SettingProperty, object> settings)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Gets the template settings class.
         /// </summary>
         /// <returns>The template settings class defined for this preparer.</returns>
-        public override Type? GetTemplateSettingsClass()
+        public override Type GetTemplateSettingsClass()
         {
             return typeof(DotSlnTemplateSettings);
         }
@@ -151,45 +143,38 @@ namespace ProjectTools.Core.Implementations.DotSln
                                           );
 
             // Step 1 - Create a template_info.json file if one doesn't exist. Or update it
-            log("Generating/updating template_info.json file...");
+            _ = log("Generating/updating template_info.json file...");
             var baseTemplateInfoFile = Path.Combine(
                 options.Directory,
                 Constants.TemplaterTemplatesInfoFileName
                                                    );
-            DeleteFileIfExists(baseTemplateInfoFile);
+            _ = DeleteFileIfExists(baseTemplateInfoFile);
             var serialized = templateSettings.ToJson();
             File.WriteAllText(baseTemplateInfoFile, serialized);
-            log("  template_info.json file generated/updated!");
+            _ = log("  template_info.json file generated/updated!");
 
             // Step 2 - Delete the working directory if it already exists
-            log($"Checking if working directory '{workingDirectory}' exists...");
-            if (DeleteDirectoryIfExists(workingDirectory))
-            {
-                log("  Deleted existing directory!");
-            }
-            else
-            {
-                log("  Directory does not exist!");
-            }
+            _ = log($"Checking if working directory '{workingDirectory}' exists...");
+            _ = DeleteDirectoryIfExists(workingDirectory) ? log("  Deleted existing directory!") : log("  Directory does not exist!");
 
             // Step 3 - Copy the source directory to the working directory
-            log(
+            _ = log(
                 $"Copying base solution '{options.Directory}' to working direcotry '{workingDirectory}'..."
-               );
+                   );
             CopyDirectory(
                 options.Directory,
                 workingDirectory,
                 options.TemplateSettings.Settings.DirectoriesExcludedInPrepare
                          );
-            log("  Base solution copied!");
+            _ = log("  Base solution copied!");
 
             // Step 4 - Get Guids
-            log("Getting GUIDs in solution...");
+            _ = log("Getting GUIDs in solution...");
             var guids = GetGuids(workingDirectory);
-            log($"  Found {guids.Count} GUIDs!");
+            _ = log($"  Found {guids.Count} GUIDs!");
 
             // Step 5 - Update template_info.json
-            log("Updating template_info.json with GUID count...");
+            _ = log("Updating template_info.json with GUID count...");
             var templateSettingsFile = Path.Combine(
                 workingDirectory,
                 Constants.TemplaterTemplatesInfoFileName
@@ -197,22 +182,22 @@ namespace ProjectTools.Core.Implementations.DotSln
             templateSettings.GuidCount = guids.Count;
             serialized = templateSettings.ToJson();
             File.WriteAllText(templateSettingsFile, serialized);
-            log("  template_info.json updated!");
+            _ = log("  template_info.json updated!");
 
             // Step 6 - Update any solutions in the working directory
-            log("Updating template with generic replacement text...");
+            _ = log("Updating template with generic replacement text...");
             PrepDirectory(workingDirectory, templateSettings, guids);
-            log("  Template updated!");
+            _ = log("  Template updated!");
 
             // Step 7 - Archive the Directory and Delete the working directory
-            log("Packaging template...");
+            _ = log("Packaging template...");
             ArchiveDirectory(workingDirectory, archivePath, options.SkipCleaning);
-            log("  Template packaged!");
+            _ = log("  Template packaged!");
 
             // Step 8 - DONE!
-            log("Work complete!");
+            _ = log("Work complete!");
             var totalTime = DateTime.Now - startTime; // dpesn't have to be perfect, this should be fine!
-            return $"Successfully prepared the template in {totalTime.TotalSeconds.ToString("0.00")} second(s): {archivePath}";
+            return $"Successfully prepared the template in {totalTime.TotalSeconds:0.00} second(s): {archivePath}";
         }
 
         /// <summary>
@@ -251,7 +236,7 @@ namespace ProjectTools.Core.Implementations.DotSln
             }
 
             // Other file replacements
-            Dictionary<Regex, string> otherReplacements = new();
+            Dictionary<Regex, string> otherReplacements = [];
             for (var i = 0; i < _regex_tags.Length; i++)
             {
                 otherReplacements.Add(
@@ -334,7 +319,7 @@ namespace ProjectTools.Core.Implementations.DotSln
                     textLine = replacement.Key.Replace(textLine, replacement.Value);
                 }
 
-                output.AppendLine(textLine);
+                _ = output.AppendLine(textLine);
             }
 
             return output.ToString();

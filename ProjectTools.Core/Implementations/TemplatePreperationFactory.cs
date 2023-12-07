@@ -1,4 +1,5 @@
 ﻿using ProjectTools.Core.Implementations.DotSln;
+using ProjectTools.Core.Templating.Common;
 using ProjectTools.Core.Templating.Preparation;
 
 namespace ProjectTools.Core.Implementations
@@ -8,6 +9,15 @@ namespace ProjectTools.Core.Implementations
     /// </summary>
     public static class TemplatePreperationFactory
     {
+        public static AbstractTemplate GetTemplate(Implementation implementation)
+        {
+            return implementation switch
+            {
+                Implementation.DotSln => new DotSlnTemplate(),
+                _ => throw new NotImplementedException(),
+            };
+        }
+
         /// <summary>
         /// Gets the template preparer.
         /// </summary>
@@ -16,13 +26,11 @@ namespace ProjectTools.Core.Implementations
         /// <exception cref="System.NotImplementedException"></exception>
         public static AbstractTemplatePreparer GetTemplatePreparer(Implementation implementation)
         {
-            switch (implementation)
+            return implementation switch
             {
-                case Implementation.DotSln:
-                    return new DotSlnTemplatePreparer();
-                default:
-                    throw new NotImplementedException();
-            }
+                Implementation.DotSln => new DotSlnTemplatePreparer(),
+                _ => throw new NotImplementedException(),
+            };
         }
     }
 }

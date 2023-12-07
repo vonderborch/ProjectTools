@@ -11,6 +11,6 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <summary>
         /// The unique identifier count
         /// </summary>
-        public new required int GuidCount;
+        public int GuidCount;
     }
 }

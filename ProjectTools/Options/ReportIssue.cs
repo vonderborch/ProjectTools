@@ -5,6 +5,10 @@ using ProjectTools.Helpers;
 
 namespace ProjectTools.Options
 {
+    /// <summary>
+    /// A command to report an issue with the program
+    /// </summary>
+    /// <seealso cref="ProjectTools.Options.AbstractOption"/>
     [Verb("report-issue", HelpText = "Report an issue with the program")]
     internal class ReportIssue : AbstractOption
     {
@@ -25,20 +29,17 @@ namespace ProjectTools.Options
         /// <summary>
         /// Executes the report issue steps with the specified options.
         /// </summary>
-        /// <param name="option">The option.</param>
         /// <returns>The result of the execution.</returns>
-        public override string Execute(AbstractOption option)
+        public override string Execute()
         {
-            var options = (ReportIssue)option;
+            var title = Title;
+            var description = Description;
 
-            var title = options.Title;
-            var description = options.Description;
-
-            if (options.Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
+            if (Silent && (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description)))
             {
                 throw new Exception("Error: Title and Description must be specified when running in silent mode!");
             }
-            else if (!options.Silent)
+            else if (!Silent)
             {
                 // get issue title and description
                 title = ConsoleHelpers.GetInput("Issue Title", title);
@@ -63,6 +64,18 @@ namespace ProjectTools.Options
             UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} to file a bug!");
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the options.
+        /// </summary>
+        /// <param name="option">The option.</param>
+        protected override void SetOptions(AbstractOption option)
+        {
+            var options = (ReportIssue)option;
+            Description = options.Description;
+            Title = options.Title;
+            Silent = options.Silent;
         }
     }
 }

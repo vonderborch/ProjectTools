@@ -1,10 +1,23 @@
-﻿namespace ProjectTools.Core.Templating.Common
+﻿using System.Diagnostics;
+
+namespace ProjectTools.Core.Templating.Common
 {
     /// <summary>
     /// Represents the setting for a template.
     /// </summary>
+    [DebuggerDisplay("{Name}")]
     public class SettingProperty
     {
+        /// <summary>
+        /// The current value
+        /// </summary>
+        public required object? CurrentValue;
+
+        /// <summary>
+        /// The display name
+        /// </summary>
+        public required string DisplayName;
+
         /// <summary>
         /// The name
         /// </summary>
@@ -13,6 +26,6 @@
         /// <summary>
         /// The type
         /// </summary>
-        public required Type Type;
+        public required SettingType Type;
     }
 }
