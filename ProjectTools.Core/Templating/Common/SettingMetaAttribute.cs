@@ -1,6 +1,6 @@
 ﻿namespace ProjectTools.Core.Templating.Common
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class SettingMetaAttribute : Attribute
     {
         /// <summary>
