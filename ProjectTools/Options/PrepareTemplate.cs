@@ -1,9 +1,9 @@
-﻿using CommandLine;
+﻿using System.Text;
+using CommandLine;
 using ProjectTools.Core;
 using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Templating.Common;
 using ProjectTools.Helpers;
-using System.Text;
 
 namespace ProjectTools.Options
 {
@@ -32,21 +32,39 @@ namespace ProjectTools.Options
         /// Gets or sets a value indicating whether [skip cleaning].
         /// </summary>
         /// <value><c>true</c> if [skip cleaning]; otherwise, <c>false</c>.</value>
-        [Option('s', "skip-cleaning", Required = false, Default = false, HelpText = "If flag is provided, the working directory won't be deleted at the end of the prepare process.")]
+        [Option(
+            's',
+            "skip-cleaning",
+            Required = false,
+            Default = false,
+            HelpText = "If flag is provided, the working directory won't be deleted at the end of the prepare process."
+        )]
         public bool SkipCleaning { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the type of the solution.
         /// </summary>
         /// <value>The type of the solution.</value>
-        [Option('t', "type", Required = false, Default = "auto", HelpText = "The type of the solution to prepare. Defaults to auto.")]
+        [Option(
+            't',
+            "type",
+            Required = false,
+            Default = "auto",
+            HelpText = "The type of the solution to prepare. Defaults to auto."
+        )]
         public string SolutionType { get; set; } = "auto";
 
         /// <summary>
         /// Gets or sets a value indicating whether [what if].
         /// </summary>
         /// <value><c>true</c> if [what if]; otherwise, <c>false</c>.</value>
-        [Option('i', "what-if", Required = false, Default = false, HelpText = "If flag is provided, the template will not be prepared, but the user will be guided through all settings.")]
+        [Option(
+            'i',
+            "what-if",
+            Required = false,
+            Default = false,
+            HelpText = "If flag is provided, the template will not be prepared, but the user will be guided through all settings."
+        )]
         public bool WhatIf { get; set; } = false;
 
         /// <summary>
@@ -83,7 +101,9 @@ namespace ProjectTools.Options
             }
             else
             {
-                throw new Exception($"Invalid solution type! Valid solution types are: auto, {string.Join(", ", validSolutionTypes)}");
+                throw new Exception(
+                    $"Invalid solution type! Valid solution types are: auto, {string.Join(", ", validSolutionTypes)}"
+                );
             }
             if (implementation == null)
             {
@@ -96,9 +116,9 @@ namespace ProjectTools.Options
             // Determine the settings for the template
             var templateSettingsFile = Path.Combine(Directory, Core.Constants.TemplaterTemplatesInfoFileName);
             (var settingsNeeded, var hadFile) = templatePreparer.GetSettingProperties(templateSettingsFile);
-            var settings = RequestTemplateSettings(settingsNeeded, hadFile);
+            var rawSettings = RequestTemplateSettings(settingsNeeded, hadFile);
 
-            _ = templatePreparer.GetSettingsClassForProperties(settings);
+            var settings = templatePreparer.GetSettingsClassForProperties(rawSettings);
 
             throw new NotImplementedException();
         }
@@ -125,14 +145,19 @@ namespace ProjectTools.Options
         /// <returns>True to edit, False to finish editing</returns>
         private bool ContinueEditingSettings(Dictionary<SettingProperty, object> settings)
         {
-            var displayedSettings = settings.Select(x => $"{x.Key.DisplayName}: {GetDisplayValue(x.Value, x.Key.Type)}{Environment.NewLine}").ToList();
+            var displayedSettings = settings
+                .Select(x => $"{x.Key.DisplayName}: {GetDisplayValue(x.Value, x.Key.Type)}{Environment.NewLine}")
+                .ToList();
             var sb = new StringBuilder();
             foreach (var setting in displayedSettings)
             {
                 _ = sb.Append($"    {setting}");
             }
 
-            var result = ConsoleHelpers.GetYesNo($"Edit Settings?{Environment.NewLine}{sb}{Environment.NewLine}", false);
+            var result = ConsoleHelpers.GetYesNo(
+                $"Edit Settings?{Environment.NewLine}{sb}{Environment.NewLine}",
+                false
+            );
             return !result;
         }
 
@@ -148,9 +173,15 @@ namespace ProjectTools.Options
             {
                 SettingType.Bool => (bool?)value ?? false ? "Yes" : "No",
                 SettingType.String => (value ?? string.Empty).ToString(),
-                SettingType.StringListComma => string.Join(", ", (value as List<string>) ?? []),
-                SettingType.StringListSemiColan => string.Join("; ", (value as List<string>) ?? []),
-                SettingType.TupleStringString => string.Join(", ", ((value as Dictionary<string, string>) ?? []).Select(x => string.Join(": ", x.Key, x.Value)).ToList()),
+                SettingType.StringListComma => string.Join(", ", (value as List<string>) ?? [ ]),
+                SettingType.StringListSemiColan => string.Join("; ", (value as List<string>) ?? [ ]),
+                SettingType.DictionaryStringString
+                    => string.Join(
+                        ", ",
+                        ((value as Dictionary<string, string>) ?? [ ])
+                            .Select(x => string.Join(": ", x.Key, x.Value))
+                            .ToList()
+                    ),
                 _ => throw new Exception($"Unknown setting type {type}!"),
             };
         }
@@ -160,10 +191,13 @@ namespace ProjectTools.Options
         /// </summary>
         /// <param name="settingsNeeded">The settings needed.</param>
         /// <returns>A list of settings for this template</returns>
-        private Dictionary<SettingProperty, object> RequestTemplateSettings(List<SettingProperty> settingsNeeded, bool hadFile)
+        private Dictionary<SettingProperty, object> RequestTemplateSettings(
+            List<SettingProperty> settingsNeeded,
+            bool hadFile
+        )
         {
             // populate settings dict with defaults
-            Dictionary<SettingProperty, object> output = [];
+            Dictionary<SettingProperty, object> output =  [ ];
             foreach (var setting in settingsNeeded)
             {
                 output.Add(setting, setting.CurrentValue);
@@ -207,9 +241,12 @@ namespace ProjectTools.Options
                             response = tempResponse.Split(";").Select(x => x.Trim()).ToList();
                             break;
 
-                        case SettingType.TupleStringString:
+                        case SettingType.DictionaryStringString:
                             tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                            response = tempResponse.Split(",").Select(x => x.Trim()).ToDictionary(x => x.Split(":")[0].Trim(), x => x.Split(":")[1].Trim());
+                            response = tempResponse
+                                .Split(",")
+                                .Select(x => x.Trim())
+                                .ToDictionary(x => x.Split(":")[0].Trim(), x => x.Split(":")[1].Trim());
                             break;
 
                         default:

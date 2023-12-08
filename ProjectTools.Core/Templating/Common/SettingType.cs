@@ -9,6 +9,6 @@
         String,
         StringListComma,
         StringListSemiColan,
-        TupleStringString,
+        DictionaryStringString,
     }
 }

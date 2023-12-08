@@ -14,33 +14,28 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <summary>
         /// The files to update
         /// </summary>
-        private static readonly string[] _files_to_update =
-        {
-            ".sln",
-            ".csproj",
-            ".shproj",
-            ".projitems"
-        };
+        private static readonly string[] _files_to_update = { ".sln", ".csproj", ".shproj", ".projitems" };
 
         /// <summary>
         /// The regex tags
         /// </summary>
         private static readonly string[][] _regex_tags =
         {
-            ["Authors", DotSlnConstants.REGEX_TAGS[0]],
-            ["Company", DotSlnConstants.REGEX_TAGS[1]],
-            ["PackageTags", DotSlnConstants.REGEX_TAGS[2]],
-            ["Description", DotSlnConstants.REGEX_TAGS[3]],
-            ["PackageLicenseExpression", DotSlnConstants.REGEX_TAGS[4]],
-            ["Version", DotSlnConstants.REGEX_TAGS[5]],
-            ["FileVersion", DotSlnConstants.REGEX_TAGS[5]],
-            ["AssemblyVersion", DotSlnConstants.REGEX_TAGS[5]]
+            [ "Authors", DotSlnConstants.REGEX_TAGS[0] ],
+            [ "Company", DotSlnConstants.REGEX_TAGS[1] ],
+            [ "PackageTags", DotSlnConstants.REGEX_TAGS[2] ],
+            [ "Description", DotSlnConstants.REGEX_TAGS[3] ],
+            [ "PackageLicenseExpression", DotSlnConstants.REGEX_TAGS[4] ],
+            [ "Version", DotSlnConstants.REGEX_TAGS[5] ],
+            [ "FileVersion", DotSlnConstants.REGEX_TAGS[5] ],
+            [ "AssemblyVersion", DotSlnConstants.REGEX_TAGS[5] ]
         };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DotSlnTemplatePreparer"/> class.
         /// </summary>
-        public DotSlnTemplatePreparer() : base("VisualStudio (.sln)", Implementation.DotSln) { }
+        public DotSlnTemplatePreparer()
+            : base("VisualStudio (.sln)", Implementation.DotSln) { }
 
         /// <summary>
         /// Checks whether the directory is valid for this templater.
@@ -77,7 +72,7 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <returns>All guids for all .sln files in the directory we're templating.</returns>
         public Dictionary<string, string> GetGuids(string directory, int guidCount = 0)
         {
-            Dictionary<string, string> output = [];
+            Dictionary<string, string> output =  [ ];
 
             // try to find .sln files
             var files = Directory.GetFiles(directory);
@@ -137,17 +132,11 @@ namespace ProjectTools.Core.Implementations.DotSln
             var startTime = DateTime.Now;
             var directoryName = options.TemplateSettings.Name.Replace(" ", "_");
             var workingDirectory = Path.Combine(options.OutputDirectory, directoryName);
-            var archivePath = Path.Combine(
-                options.OutputDirectory,
-                $"{directoryName}.{Constants.TemplateFileType}"
-                                          );
+            var archivePath = Path.Combine(options.OutputDirectory, $"{directoryName}.{Constants.TemplateFileType}");
 
             // Step 1 - Create a template_info.json file if one doesn't exist. Or update it
             _ = log("Generating/updating template_info.json file...");
-            var baseTemplateInfoFile = Path.Combine(
-                options.Directory,
-                Constants.TemplaterTemplatesInfoFileName
-                                                   );
+            var baseTemplateInfoFile = Path.Combine(options.Directory, Constants.TemplaterTemplatesInfoFileName);
             _ = DeleteFileIfExists(baseTemplateInfoFile);
             var serialized = templateSettings.ToJson();
             File.WriteAllText(baseTemplateInfoFile, serialized);
@@ -155,17 +144,17 @@ namespace ProjectTools.Core.Implementations.DotSln
 
             // Step 2 - Delete the working directory if it already exists
             _ = log($"Checking if working directory '{workingDirectory}' exists...");
-            _ = DeleteDirectoryIfExists(workingDirectory) ? log("  Deleted existing directory!") : log("  Directory does not exist!");
+            _ = DeleteDirectoryIfExists(workingDirectory)
+                ? log("  Deleted existing directory!")
+                : log("  Directory does not exist!");
 
             // Step 3 - Copy the source directory to the working directory
-            _ = log(
-                $"Copying base solution '{options.Directory}' to working direcotry '{workingDirectory}'..."
-                   );
+            _ = log($"Copying base solution '{options.Directory}' to working direcotry '{workingDirectory}'...");
             CopyDirectory(
                 options.Directory,
                 workingDirectory,
                 options.TemplateSettings.Settings.DirectoriesExcludedInPrepare
-                         );
+            );
             _ = log("  Base solution copied!");
 
             // Step 4 - Get Guids
@@ -175,10 +164,7 @@ namespace ProjectTools.Core.Implementations.DotSln
 
             // Step 5 - Update template_info.json
             _ = log("Updating template_info.json with GUID count...");
-            var templateSettingsFile = Path.Combine(
-                workingDirectory,
-                Constants.TemplaterTemplatesInfoFileName
-                                                   );
+            var templateSettingsFile = Path.Combine(workingDirectory, Constants.TemplaterTemplatesInfoFileName);
             templateSettings.GuidCount = guids.Count;
             serialized = templateSettings.ToJson();
             File.WriteAllText(templateSettingsFile, serialized);
@@ -206,11 +192,7 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <param name="directory">The directory.</param>
         /// <param name="settings">The settings.</param>
         /// <param name="guids">The guids.</param>
-        public void PrepDirectory(
-            string directory,
-            DotSlnTemplate settings,
-            Dictionary<string, string> guids
-                                 )
+        public void PrepDirectory(string directory, DotSlnTemplate settings, Dictionary<string, string> guids)
         {
             // Get Replacement Text for the Template and Update the Files
             var replacements = GetReplacementText(guids, settings);
@@ -226,28 +208,28 @@ namespace ProjectTools.Core.Implementations.DotSln
         private (Dictionary<string, string>, Dictionary<Regex, string>) GetReplacementText(
             Dictionary<string, string> guids,
             DotSlnTemplate settings
-                                                                                          )
+        )
         {
             // Solution File Text Replacements
             var slnReplacements = new Dictionary<string, string>(guids);
             foreach (var replacement in settings.Settings.ReplacementText)
             {
-                slnReplacements.Add(replacement.Item1, replacement.Item2);
+                slnReplacements.Add(replacement.Key, replacement.Value);
             }
 
             // Other file replacements
-            Dictionary<Regex, string> otherReplacements = [];
+            Dictionary<Regex, string> otherReplacements =  [ ];
             for (var i = 0; i < _regex_tags.Length; i++)
             {
                 otherReplacements.Add(
                     new Regex($"<{_regex_tags[i][0]}>.*<\\/{_regex_tags[i][0]}>"),
                     $"<{_regex_tags[i][0]}>{_regex_tags[i][1]}</{_regex_tags[i][0]}>"
-                                     );
+                );
             }
 
             foreach (var replacement in settings.Settings.ReplacementText)
             {
-                otherReplacements.Add(new Regex(replacement.Item1), replacement.Item2);
+                otherReplacements.Add(new Regex(replacement.Key), replacement.Value);
             }
 
             // return! (just in case someone needed help here)
@@ -264,7 +246,7 @@ namespace ProjectTools.Core.Implementations.DotSln
             string directory,
             Dictionary<string, string> slnReplacements,
             Dictionary<Regex, string> otherReplacements
-                                )
+        )
         {
             var files = Directory
                 .GetFiles(directory)
@@ -272,7 +254,7 @@ namespace ProjectTools.Core.Implementations.DotSln
                     f =>
                         _files_to_update.Contains(Path.GetExtension(f))
                         && Path.GetFileName(f) != Constants.TemplaterTemplatesInfoFileName
-                      )
+                )
                 .ToList();
 
             for (var i = 0; i < files.Count; i++)
@@ -304,10 +286,7 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <param name="fileContents">The file contents.</param>
         /// <param name="replacements">The replacements.</param>
         /// <returns>The updated file contents.</returns>
-        private string UpdateOtherFile(
-            string[] fileContents,
-            Dictionary<Regex, string> replacements
-                                      )
+        private string UpdateOtherFile(string[] fileContents, Dictionary<Regex, string> replacements)
         {
             var output = new StringBuilder();
 
@@ -331,10 +310,7 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <param name="fileContents">The file contents.</param>
         /// <param name="replacements">The replacements.</param>
         /// <returns>The updted file contents.</returns>
-        private string UpdateSolutionFile(
-            string[] fileContents,
-            Dictionary<string, string> replacements
-                                         )
+        private string UpdateSolutionFile(string[] fileContents, Dictionary<string, string> replacements)
         {
             var mergedContents = string.Join(Environment.NewLine, fileContents);
 
