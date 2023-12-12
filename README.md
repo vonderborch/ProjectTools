@@ -3,9 +3,11 @@ Wanting to make a template from a project but frustrated at Visual Studio for ma
 
 This is my ~~[first](https://github.com/vonderborch/SolutionCreator)~~ ~~[second](https://github.com/vonderborch/Templater)~~ third attempt at this and has been rewritten from the ground up to have much less sphagetti code everywhere.
 
-# Default Templates Repo
+# Default Templates
 
-The default repo storing templates is: https://github.com/vonderborch/Templater-Templates
+The default location templates are stored is: https://github.com/vonderborch/ProjectTools/tree/main/Templates/TEMPLATES
+
+Other repos can be configured to be used as well by updating the config to point to the repo(s). Templates must be fairly close to the root of the repo (< 3 subfolders deep) for the app to find them, and the repo must be public (or you must have access to it).
 
 # Download
 The latest release is available on the releases page: https://github.com/vonderborch/ProjectTools/releases/latest
@@ -13,35 +15,21 @@ The latest release is available on the releases page: https://github.com/vonderb
 # Execution
 
 ## App/GUI Version
-Coming soon!
+
+Coming eventually!
 
 ## Command Prompt/Terminal Version
-- Creating a new Solution: `./Templater.exe generate`
-    - Available Parameters: `./Templater.exe help generate`
-- Create a new Template: `./Templater.exe prepare`
-    - Available Parameters: `./Templater.exe help prepare`
-- List Available Templates: `./Templater.exe list-templates`
-    - Available Parameters: `./Templater.exe help -list-templates`
-- Update or Download New Templates: `./Templater.exe update-templates`
-    - Available Parameters: `./Templater.exe help update-templates`
-- Update/set Git Settings: `./Templater.exe configure`
-    - Available Parameters: `./Templater.exe help configure`
-    - NOTE: Right now the code saves this data in a plaintext. This is not good, but at some point I hope to rework it to be better.
-- Check for App Updates: `./Templater.exe update`
-    - Available Parameters: `./Templater.exe help update`
-- Report an Issue: `./Templater.exe report-issue`
-    - Available Parameters: `./Templater.exe help report-issue`
-- Get Help: `./Templater.exe help`
-- Display Current Version: `./Templeter.exe version`
+
+Coming soon!
 
 # Existing Templates
-The application will automatically download templates from the [Template Repository](https://github.com/vonderborch/Templater-Templates). Currently available templates are:
+The application will automatically download templates from the [Template Repository](https://github.com/vonderborch/ProjectTools/tree/main/Templates/TEMPLATES) by default. Currently available templates are:
 - Velentr.BASE: A simple library that isn't tied to anything XNA related
 - Velentr.BASE_DUAL_SUPPORT: A library that has two different implementations: one for FNA and one for Monogame
 - Velentr.GENERIC_DUAL_SUPPORT: A library that has one generic implementation (not tied to FNA or Monogame) and then either extensions or custom implementations for FNA and Monogame
 
 # Creating a New Template
-Create a solution, then run `./Templater.exe prepare` against the solution!
+Create a solution, then run `./ProjectTools.exe prepare` against the solution!
 
 # Known Issues
 - Brittle, not a lot of validation checking means it can crash easily and won't tell you what went wrong too well...
