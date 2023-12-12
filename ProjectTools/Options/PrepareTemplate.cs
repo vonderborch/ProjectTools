@@ -167,7 +167,7 @@ namespace ProjectTools.Options
                 $"{editText}?{Environment.NewLine}{sb}{Environment.NewLine}",
                 false
                                                 );
-            Console.WriteLine(" ");
+            LogMessage(" ");
             return !result;
         }
 
@@ -307,7 +307,7 @@ namespace ProjectTools.Options
             // if we had a file, first ask if the existing settings look fine
             if (hadFile)
             {
-                Console.WriteLine($" {Environment.NewLine}{categoryText}");
+                LogMessage($" {Environment.NewLine}{categoryText}");
                 if (ContinueEditingSettings(output, editText))
                 {
                     return output;
@@ -318,17 +318,17 @@ namespace ProjectTools.Options
             // loop through getting settings as needed
             do
             {
-                Console.WriteLine($" {Environment.NewLine}{categoryText}");
+                LogMessage($" {Environment.NewLine}{categoryText}");
                 if (displaySpecialText)
                 {
-                    Console.WriteLine("Special Text: <CurrentUserName>, <ParentDir>, <ProjectName>");
+                    LogMessage("Special Text: <CurrentUserName>, <ParentDir>, <ProjectName>");
                 }
                 for (var i = 0; i < output.Count; i++)
                 {
                     (var setting, var currentValue) = output.Where(x => x.Key.Order == i).First();
                     output[setting] = GetInputForProperty(setting, currentValue);
                 }
-                Console.WriteLine(" ");
+                LogMessage(" ");
                 continueEditing = ContinueEditingSettings(output, editText);
             } while (!continueEditing);
 

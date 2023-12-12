@@ -1,5 +1,6 @@
-﻿using Octokit;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
+using Octokit;
 
 namespace ProjectTools.Core.Templating.Repositories
 {
@@ -52,5 +53,12 @@ namespace ProjectTools.Core.Templating.Repositories
             Url = info.DownloadUrl;
             Repo = repo;
         }
+
+        /// <summary>
+        /// Gets the display name.
+        /// </summary>
+        /// <value>The display name.</value>
+        [JsonIgnore]
+        public string DisplayName => Path.GetFileNameWithoutExtension(Name);
     }
 }

@@ -98,7 +98,7 @@ namespace ProjectTools.Core
         /// <summary>
         /// The maximum git repo template search depth
         /// </summary>
-        public static int MaxGitRepoTemplateSearchDepth = 1;
+        public static int MaxGitRepoTemplateSearchDepth = 3;
 
         /// <summary>
         /// Name of the specialtext project.

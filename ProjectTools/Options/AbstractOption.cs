@@ -44,18 +44,23 @@ namespace ProjectTools.Options
         /// Executes the option.
         /// </summary>
         /// <param name="option">The option.</param>
-        /// <returns></returns>
+        /// <returns>The result.</returns>
         public string ExecuteOption(AbstractOption option)
         {
             if (!Manager.Instance.ValidateSettings())
             {
-                Console.WriteLine("Creating settings file...");
+                _ = LogMessage("Creating settings file...");
                 var configure = new Configure() { Silent = Silent };
                 _ = configure.Execute();
             }
             if (AllowTemplateUpdates && Manager.Instance.Settings.ShouldUpdateTemplates)
             {
-                //new UpdateTemplates().Execute(new UpdateTemplates());
+                var updateTemplates = new UpdateTemplates() { Silent = Silent };
+                if (Silent)
+                {
+                    updateTemplates.ForceUpdate = true;
+                }
+                _ = updateTemplates.Execute();
             }
 
             SetOptions(option);

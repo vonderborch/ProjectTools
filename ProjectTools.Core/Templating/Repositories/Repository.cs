@@ -1,11 +1,6 @@
-﻿using Octokit;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+using Octokit;
 
 namespace ProjectTools.Core.Templating.Repositories
 {
@@ -24,14 +19,14 @@ namespace ProjectTools.Core.Templating.Repositories
         {
             Repo = repository;
             var splitRepositoryName = repository.Split('/');
-            RepositoryOwner = splitRepositoryName[splitRepositoryName.Length - 2];
-            RepositoryName = splitRepositoryName[splitRepositoryName.Length - 1];
+            RepositoryOwner = splitRepositoryName[^2];
+            RepositoryName = splitRepositoryName[^1];
 
-            Templates = new();
+            Templates = [];
 
             if (autoLoad)
             {
-                GetTemplateInfoForRepository(true);
+                _ = GetTemplateInfoForRepository(true);
             }
         }
 

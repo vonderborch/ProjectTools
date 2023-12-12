@@ -1,9 +1,9 @@
-﻿using ProjectTools.Core.Helpers;
+﻿using System.Text.Json;
+using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Templating.Common;
 using ProjectTools.Core.Templating.Preparation;
 using ProjectTools.Core.Templating.Repositories;
-using System.Text.Json;
 
 namespace ProjectTools.Core.Templating
 {
@@ -48,7 +48,7 @@ namespace ProjectTools.Core.Templating
         {
             get
             {
-                _repositories ??= new RepositoryCollection(_settings.TemplateRepositories, true);
+                _repositories ??= new RepositoryCollection(_settings.TemplateRepositories, false);
 
                 return _repositories;
             }
@@ -59,6 +59,42 @@ namespace ProjectTools.Core.Templating
         /// </summary>
         /// <value>The sorted template names.</value>
         public List<string> SortedTemplateNames => Templates.Keys.OrderBy(x => x).ToList();
+
+        /// <summary>
+        /// Checks for template updates.
+        /// </summary>
+        /// <param name="forceUpdate">if set to <c>true</c> [force update].</param>
+        /// <returns>
+        /// Item 1 - total found templates, Item 2 - new templates, Item 3 - templates to update, Item 4 - Templates
+        /// only in local
+        /// </returns>
+        public (int, List<TemplateGitMetadata>, List<TemplateGitMetadata>, List<string>) CheckForTemplateUpdates(bool forceUpdate = false)
+        {
+            // Check if templates directory exists
+            if (!Directory.Exists(Constants.TemplatesDirectory))
+            {
+                _ = Directory.CreateDirectory(Constants.TemplatesDirectory);
+            }
+
+            if (!forceUpdate && !Manager.Instance.Settings.ShouldUpdateTemplates)
+            {
+                return (-1, [], [], []);
+            }
+
+            // Grab the remote and local templates
+            var remoteTemplates = Repositories.GetTemplateInfoForRepositories(true);
+            RefreshLocalTemplates();
+
+            // Determine which templates we need to download
+            var newTemplates = remoteTemplates.Where(x => !Templates.ContainsKey(x.DisplayName)).ToList();
+            var updateableTemplates = remoteTemplates.Where(x => Templates.ContainsKey(x.DisplayName) && (Templates[x.DisplayName].RepoInfo?.SHA != x.SHA)).ToList();
+            var onlyInLocalTemplates = Templates.Keys.Where(x => !remoteTemplates.Any(y => y.DisplayName == x)).ToList();
+
+            // update settings and return
+            Manager.Instance.Settings.LastTemplatesUpdateCheck = DateTime.Now;
+            Manager.Instance.Settings.SaveFile(Constants.SettingsFile);
+            return (remoteTemplates.Count, newTemplates, updateableTemplates, onlyInLocalTemplates);
+        }
 
         /// <summary>
         /// Detects the valid implementation.
@@ -79,6 +115,47 @@ namespace ProjectTools.Core.Templating
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Downloads the templates.
+        /// </summary>
+        /// <param name="templates">The templates.</param>
+        public void DownloadTemplates(List<TemplateGitMetadata> templates)
+        {
+            RefreshLocalTemplates();
+
+            var updatedNames = templates.Select(x => x.Name).ToList();
+            var newTemplateCache = Templates.Values.Where(x => updatedNames.Contains(x.Name)).Select(x => x.RepoInfo).ToList();
+
+            foreach (var template in templates)
+            {
+                // delete the local copy of the template if it exists
+                if (Templates.ContainsKey(template.Name))
+                {
+                    var localInfo = Templates[template.Name];
+                    if (File.Exists(localInfo.FilePath))
+                    {
+                        File.Delete(localInfo.FilePath);
+                    }
+                }
+
+                // Update template cache
+                newTemplateCache.Add(template);
+
+                // download the remote copy of the template
+                var filePath = Path.Combine(Constants.TemplatesDirectory, template.Name);
+
+                using var client = new HttpClient();
+                using var s = client.GetStreamAsync(template.Url);
+                using var fs = new FileStream(filePath, FileMode.Create);
+                s.Result.CopyTo(fs);
+            }
+
+            // update the template cache file
+            var newFileContents = JsonSerializer.Serialize(newTemplateCache, Constants.JsonSerializeOptions);
+            File.WriteAllText(Constants.TemplatesCacheFile, newFileContents);
+            RefreshLocalTemplates();
         }
 
         /// <summary>
@@ -116,9 +193,10 @@ namespace ProjectTools.Core.Templating
                 _ = Directory.CreateDirectory(Constants.TemplatesDirectory);
             }
 
+            // update the in-memory cache of templates
             var templatesFiles = Directory.GetFiles(Constants.TemplatesDirectory, $"*.{Constants.TemplateFileType}", SearchOption.AllDirectories);
             templatesFiles ??= [];
-
+            List<TemplateGitMetadata> newTemplateCache = [];
             foreach (var file in templatesFiles)
             {
                 var fileName = Path.GetFileName(file);
@@ -132,8 +210,14 @@ namespace ProjectTools.Core.Templating
                     template.RepoInfo = gitInfo;
                     template.FilePath = file;
                     Templates.Add(template.Name, template);
+
+                    newTemplateCache.Add(gitInfo ?? new TemplateGitMetadata() { Name = template.Name });
                 }
             }
+
+            // Update the local template cache file
+            var newFileContents = JsonSerializer.Serialize(newTemplateCache, Constants.JsonSerializeOptions);
+            File.WriteAllText(Constants.TemplatesCacheFile, newFileContents);
         }
     }
 }

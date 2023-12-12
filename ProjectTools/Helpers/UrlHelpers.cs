@@ -14,7 +14,7 @@ namespace ProjectTools.Helpers
             try
             {
                 var ps = new ProcessStartInfo(url) { UseShellExecute = true, Verb = "open" };
-                Process.Start(ps);
+                _ = Process.Start(ps);
             }
             catch
             {

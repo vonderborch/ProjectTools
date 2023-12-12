@@ -25,7 +25,7 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
             DebugCommands exampleCommands = new();
 
             // (string?, string?)
-            var testCommand = ("prepare", "v_dual_gen");
+            var testCommand = ("update-templates", "base");
 
             // process all commands iteratively
             if (testCommand.Item1 == null && testCommand.Item2 == null)
@@ -66,7 +66,7 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
         private static void ProcessArguments(string[] args)
         {
             // parse command line arguments and execute the appropriate command
-            var parseResults = Parser.Default.ParseArguments<PrepareTemplate, ListTemplates, Configure, ReportIssue, MakeSuggestion>(args);
+            var parseResults = Parser.Default.ParseArguments<PrepareTemplate, ListTemplates, UpdateTemplates, Configure, ReportIssue, MakeSuggestion>(args);
 
             var result = parseResults.MapResult(
                 //(AttachProject opts) => new AttachProject().ExecuteOption(opts),
@@ -77,7 +77,7 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
                 (Configure opts) => new Configure().ExecuteOption(opts),
                 (ReportIssue opts) => new ReportIssue().ExecuteOption(opts),
                 (MakeSuggestion opts) => new MakeSuggestion().ExecuteOption(opts),
-                //(UpdateTemplates opts) => new UpdateTemplates().ExecuteOption(opts),
+                (UpdateTemplates opts) => new UpdateTemplates().ExecuteOption(opts),
                 _ => MakeError()
                                                );
 

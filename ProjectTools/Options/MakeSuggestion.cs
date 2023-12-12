@@ -59,7 +59,7 @@ namespace ProjectTools.Options
             var baseUrl = $"{Constants.ApplicationRepositoryUrl}/issues/new";
             var url = $"{baseUrl}?title={title}&body={description}&labels=bug";
             // Report issue
-            Console.WriteLine("Opening browser to make suggestion ...");
+            LogMessage("Opening browser to make suggestion ...");
             UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} tomake a suggestion!");
 
             return string.Empty;

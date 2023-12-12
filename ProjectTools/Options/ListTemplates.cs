@@ -30,7 +30,7 @@ namespace ProjectTools.Options
         /// <returns>The result of the execution.</returns>
         public override string Execute()
         {
-            Console.WriteLine("Gathering available templates...");
+            _ = LogMessage("Gathering available templates...");
             Manager.Instance.Templater.RefreshLocalTemplates();
 
             var output = new StringBuilder();
@@ -38,7 +38,7 @@ namespace ProjectTools.Options
 
             if (sortedTemplates.Count == 0)
             {
-                Console.WriteLine("No templates found!");
+                _ = LogMessage("No templates found!");
                 return string.Empty;
             }
 
@@ -54,8 +54,8 @@ namespace ProjectTools.Options
                 }
             }
 
-            Console.WriteLine($"Available Templates ({sortedTemplates.Count}):");
-            Console.WriteLine(output.ToString());
+            _ = LogMessage($"Available Templates ({sortedTemplates.Count}):");
+            _ = LogMessage(output.ToString());
 
             return string.Empty;
         }

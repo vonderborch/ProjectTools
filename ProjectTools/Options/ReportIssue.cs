@@ -60,7 +60,7 @@ namespace ProjectTools.Options
             var url = $"{baseUrl}?title={title}&body={description}&labels=bug";
 
             // Report issue
-            Console.WriteLine("Opening browser to report issue ...");
+            LogMessage("Opening browser to report issue ...");
             UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} to file a bug!");
 
             return string.Empty;
