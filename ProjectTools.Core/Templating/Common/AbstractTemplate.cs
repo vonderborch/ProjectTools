@@ -15,11 +15,13 @@ namespace ProjectTools.Core.Templating.Common
         /// <summary>
         /// The author of the template
         /// </summary>
+        [SettingMetaAttribute("Template Author", SettingType.String, order: 1)]
         public string Author = string.Empty;
 
         /// <summary>
         /// The description of the template
         /// </summary>
+        [SettingMetaAttribute("Template Description", SettingType.String, order: 3)]
         public string Description = string.Empty;
 
         /// <summary>
@@ -31,6 +33,7 @@ namespace ProjectTools.Core.Templating.Common
         /// <summary>
         /// The name of the template
         /// </summary>
+        [SettingMetaAttribute("Template Name", SettingType.String, order: 0)]
         public string Name = string.Empty;
 
         /// <summary>
@@ -42,11 +45,13 @@ namespace ProjectTools.Core.Templating.Common
         /// <summary>
         /// The settings
         /// </summary>
+        [JsonIgnore]
         public TemplateSettings? Settings = null;
 
         /// <summary>
         /// The version of the template
         /// </summary>
+        [SettingMetaAttribute("Template Version", SettingType.String, order: 2)]
         public string Version = string.Empty;
 
         /// <summary>

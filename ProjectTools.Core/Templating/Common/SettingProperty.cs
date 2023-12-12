@@ -27,5 +27,10 @@ namespace ProjectTools.Core.Templating.Common
         /// The type
         /// </summary>
         public required SettingType Type;
+
+        /// <summary>
+        /// The order
+        /// </summary>
+        public required int Order;
     }
 }

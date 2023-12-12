@@ -49,6 +49,12 @@ namespace ProjectTools.Core.Templating.Preparation
         public abstract bool DirectoryValidForTemplater(string directory);
 
         /// <summary>
+        /// Gets the abstract template class.
+        /// </summary>
+        /// <returns>The abstract template class defined for this preparer.</returns>
+        public abstract Type GetAbstractTemplateClass();
+
+        /// <summary>
         /// Gets a list of settings that need to be set to generate a template of this type.
         /// </summary>
         /// <returns>The list of needed settings.</returns>
@@ -74,7 +80,7 @@ namespace ProjectTools.Core.Templating.Preparation
                 throw new Exception($"Could not create instance of {GetTemplateSettingsClass().Name}!");
             }
 
-            var fields = existingSettings.GetType().GetFields();
+            var fields = existingSettings.GetType().GetFields().Where(x => x.CustomAttributes.Any(y => y.AttributeType == typeof(SettingMetaAttribute))).ToList();
             var output = new List<SettingProperty>();
 
             foreach (var field in fields)
@@ -85,7 +91,7 @@ namespace ProjectTools.Core.Templating.Preparation
                 {
                     throw new Exception($"Field {field.Name} does not have a SettingMetaAttribute!");
                 }
-                output.Add(new SettingProperty() { Name = field.Name, Type = metadata.Type, DisplayName = metadata.DisplayName, CurrentValue = currentValue });
+                output.Add(new SettingProperty() { Name = field.Name, Type = metadata.Type, DisplayName = metadata.DisplayName, CurrentValue = currentValue, Order = metadata.Order });
             }
 
             return (output, foundValidSettings);
@@ -105,6 +111,65 @@ namespace ProjectTools.Core.Templating.Preparation
             }
 
             return output;
+        }
+
+        /// <summary>
+        /// Gets a list of settings that need to be set to generate a template of this type.
+        /// </summary>
+        /// <returns>The list of needed settings.</returns>
+        public AbstractTemplate GetTemplateInstance(Dictionary<SettingProperty, object> coreSettings)
+        {
+            var output = (AbstractTemplate)Activator.CreateInstance(GetAbstractTemplateClass());
+
+            foreach (var setting in coreSettings)
+            {
+                output.GetType().GetField(setting.Key.Name)?.SetValue(output, setting.Value);
+            }
+
+            return output;
+        }
+
+        /// <summary>
+        /// Gets a list of core settings that need to be set to generate a template of this type.
+        /// </summary>
+        /// <returns>The list of needed settings.</returns>
+        public (List<SettingProperty>, bool) GetTemplateProperties(string file)
+        {
+            var foundValidSettings = false;
+            AbstractTemplate? existingSettings = null;
+
+            if (File.Exists(file))
+            {
+                var rawContents = File.ReadAllText(file);
+                var settings = JsonSerializer.Deserialize<AbstractTemplate>(rawContents, Constants.JsonSerializeOptions);
+                if (settings != null)
+                {
+                    existingSettings = settings;
+                    foundValidSettings = true;
+                }
+            }
+
+            existingSettings ??= (AbstractTemplate)Activator.CreateInstance(GetAbstractTemplateClass());
+            if (existingSettings == null)
+            {
+                throw new Exception($"Could not create instance of {GetAbstractTemplateClass().Name}!");
+            }
+
+            var fields = existingSettings.GetType().GetFields().Where(x => x.CustomAttributes.Any(y => y.AttributeType == typeof(SettingMetaAttribute))).ToList();
+            var output = new List<SettingProperty>();
+
+            foreach (var field in fields)
+            {
+                var currentValue = field.GetValue(existingSettings);
+                var metadata = (SettingMetaAttribute?)field.GetCustomAttribute(typeof(SettingMetaAttribute), false);
+                if (metadata == null)
+                {
+                    throw new Exception($"Field {field.Name} does not have a SettingMetaAttribute!");
+                }
+                output.Add(new SettingProperty() { Name = field.Name, Type = metadata.Type, DisplayName = metadata.DisplayName, CurrentValue = currentValue, Order = metadata.Order });
+            }
+
+            return (output, foundValidSettings);
         }
 
         /// <summary>
@@ -140,6 +205,7 @@ namespace ProjectTools.Core.Templating.Preparation
             // Delete the base directory to archive if requested
             if (!skipCleaning)
             {
+                Thread.Sleep(500);
                 for (var i = 0; i < 10; i++)
                 {
                     try

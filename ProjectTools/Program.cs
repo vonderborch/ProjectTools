@@ -25,7 +25,7 @@ namespace ProjectTools // Note: actual namespace depends on the project name.
             DebugCommands exampleCommands = new();
 
             // (string?, string?)
-            var testCommand = ("prepare", "quick_info");
+            var testCommand = ("prepare", "v_dual_gen");
 
             // process all commands iteratively
             if (testCommand.Item1 == null && testCommand.Item2 == null)

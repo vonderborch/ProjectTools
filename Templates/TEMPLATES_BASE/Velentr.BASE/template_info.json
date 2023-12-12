@@ -1,0 +1,8 @@
+{
+  "$type": "dotsln",
+  "GuidCount": 0,
+  "Author": "Christian Webber",
+  "Description": "A generic library for an FNA/Monogame program that doesn\u0027t require any specific support for FNA or Monogame.",
+  "Name": "Velentr.BASE",
+  "Version": "2023-12-11"
+}

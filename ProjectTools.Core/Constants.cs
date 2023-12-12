@@ -93,7 +93,7 @@ namespace ProjectTools.Core
         /// <summary>
         /// The default template repository
         /// </summary>
-        public static string DefaultTemplateRepository = "https://github.com/vonderborch/Templater-Templates";
+        public static string DefaultTemplateRepository = "https://github.com/vonderborch/ProjectTools";
 
         /// <summary>
         /// The maximum git repo template search depth
@@ -109,6 +109,11 @@ namespace ProjectTools.Core
         /// The templater templates information file name
         /// </summary>
         public static string TemplaterTemplatesInfoFileName = "template_info.json";
+
+        /// <summary>
+        /// The templater templates information file name
+        /// </summary>
+        public static string TemplaterTemplatesSettingsFileName = "template_settings.json";
 
         /// <summary>
         /// The unique identifier padding length

@@ -45,7 +45,9 @@ namespace ProjectTools
             // Prepare Template Example Commands
             PossibleCommands.Add("prepare", []);
             PossibleCommands["prepare"].Add("base", "");
-            PossibleCommands["prepare"].Add("quick_info", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\Templater-Templates\\TEMPLATES_BASE\\Velentr.BASE -o C:\\Users\\ricky\\Dropbox\\Projects\\Templater-Templates\\TEMPLATES");
+            PossibleCommands["prepare"].Add("v_base", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES_BASE\\Velentr.BASE -o C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES");
+            PossibleCommands["prepare"].Add("v_dual", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES_BASE\\Velentr.DUAL_SUPPORT -o C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES");
+            PossibleCommands["prepare"].Add("v_dual_gen", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES_BASE\\Velentr.DUAL_SUPPORT_WITH_GENERIC -o C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES");
         }
     }
 }

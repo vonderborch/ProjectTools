@@ -66,13 +66,22 @@ namespace ProjectTools.Core.Implementations.DotSln
         }
 
         /// <summary>
+        /// Gets the abstract template class.
+        /// </summary>
+        /// <returns>The abstract template class defined for this preparer.</returns>
+        public override Type GetAbstractTemplateClass()
+        {
+            return typeof(DotSlnTemplate);
+        }
+
+        /// <summary>
         /// Gets the guids.
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <returns>All guids for all .sln files in the directory we're templating.</returns>
         public Dictionary<string, string> GetGuids(string directory, int guidCount = 0)
         {
-            Dictionary<string, string> output =  [ ];
+            Dictionary<string, string> output = [];
 
             // try to find .sln files
             var files = Directory.GetFiles(directory);
@@ -154,7 +163,7 @@ namespace ProjectTools.Core.Implementations.DotSln
                 options.Directory,
                 workingDirectory,
                 options.TemplateSettings.Settings.DirectoriesExcludedInPrepare
-            );
+                         );
             _ = log("  Base solution copied!");
 
             // Step 4 - Get Guids
@@ -208,7 +217,7 @@ namespace ProjectTools.Core.Implementations.DotSln
         private (Dictionary<string, string>, Dictionary<Regex, string>) GetReplacementText(
             Dictionary<string, string> guids,
             DotSlnTemplate settings
-        )
+                                                                                          )
         {
             // Solution File Text Replacements
             var slnReplacements = new Dictionary<string, string>(guids);
@@ -218,13 +227,13 @@ namespace ProjectTools.Core.Implementations.DotSln
             }
 
             // Other file replacements
-            Dictionary<Regex, string> otherReplacements =  [ ];
+            Dictionary<Regex, string> otherReplacements = [];
             for (var i = 0; i < _regex_tags.Length; i++)
             {
                 otherReplacements.Add(
                     new Regex($"<{_regex_tags[i][0]}>.*<\\/{_regex_tags[i][0]}>"),
                     $"<{_regex_tags[i][0]}>{_regex_tags[i][1]}</{_regex_tags[i][0]}>"
-                );
+                                     );
             }
 
             foreach (var replacement in settings.Settings.ReplacementText)
@@ -246,7 +255,7 @@ namespace ProjectTools.Core.Implementations.DotSln
             string directory,
             Dictionary<string, string> slnReplacements,
             Dictionary<Regex, string> otherReplacements
-        )
+                                )
         {
             var files = Directory
                 .GetFiles(directory)
@@ -254,7 +263,7 @@ namespace ProjectTools.Core.Implementations.DotSln
                     f =>
                         _files_to_update.Contains(Path.GetExtension(f))
                         && Path.GetFileName(f) != Constants.TemplaterTemplatesInfoFileName
-                )
+                      )
                 .ToList();
 
             for (var i = 0; i < files.Count; i++)

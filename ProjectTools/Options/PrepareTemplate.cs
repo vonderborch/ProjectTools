@@ -1,8 +1,11 @@
 ﻿using System.Text;
+using System.Text.Json;
 using CommandLine;
 using ProjectTools.Core;
 using ProjectTools.Core.Implementations;
+using ProjectTools.Core.Options;
 using ProjectTools.Core.Templating.Common;
+using ProjectTools.Core.Templating.Preparation;
 using ProjectTools.Helpers;
 
 namespace ProjectTools.Options
@@ -38,7 +41,7 @@ namespace ProjectTools.Options
             Required = false,
             Default = false,
             HelpText = "If flag is provided, the working directory won't be deleted at the end of the prepare process."
-        )]
+               )]
         public bool SkipCleaning { get; set; } = false;
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace ProjectTools.Options
             Required = false,
             Default = "auto",
             HelpText = "The type of the solution to prepare. Defaults to auto."
-        )]
+               )]
         public string SolutionType { get; set; } = "auto";
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace ProjectTools.Options
             Required = false,
             Default = false,
             HelpText = "If flag is provided, the template will not be prepared, but the user will be guided through all settings."
-        )]
+               )]
         public bool WhatIf { get; set; } = false;
 
         /// <summary>
@@ -103,7 +106,7 @@ namespace ProjectTools.Options
             {
                 throw new Exception(
                     $"Invalid solution type! Valid solution types are: auto, {string.Join(", ", validSolutionTypes)}"
-                );
+                                   );
             }
             if (implementation == null)
             {
@@ -113,14 +116,21 @@ namespace ProjectTools.Options
             // Get the template preparer
             var templatePreparer = Manager.Instance.Templater.GetTemplatePreparer(implementation.Value);
 
-            // Determine the settings for the template
-            var templateSettingsFile = Path.Combine(Directory, Core.Constants.TemplaterTemplatesInfoFileName);
-            (var settingsNeeded, var hadFile) = templatePreparer.GetSettingProperties(templateSettingsFile);
-            var rawSettings = RequestTemplateSettings(settingsNeeded, hadFile);
+            // setup the template + default settings
+            var coreSettings = GetCoreSettings(templatePreparer);
+            var settings = GetSettings(templatePreparer);
+            coreSettings.Settings = settings;
 
-            var settings = templatePreparer.GetSettingsClassForProperties(rawSettings);
+            // Prepare the template if not in what-if mode
+            if (WhatIf)
+            {
+                return "Template not prepared, but configuration settings saved!";
+            }
 
-            throw new NotImplementedException();
+            var prepareSettings = new PrepareOptions() { Directory = Directory, OutputDirectory = OutputDirectory, SkipCleaning = SkipCleaning, TemplateSettings = coreSettings };
+            var results = templatePreparer.Prepare(prepareSettings, LogMessage);
+
+            return results;
         }
 
         /// <summary>
@@ -143,22 +153,44 @@ namespace ProjectTools.Options
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>True to edit, False to finish editing</returns>
-        private bool ContinueEditingSettings(Dictionary<SettingProperty, object> settings)
+        private bool ContinueEditingSettings(Dictionary<SettingProperty, object> settings, string editText)
         {
-            var displayedSettings = settings
-                .Select(x => $"{x.Key.DisplayName}: {GetDisplayValue(x.Value, x.Key.Type)}{Environment.NewLine}")
-                .ToList();
+            var displayedSettings = settings.Select(x => (x.Key.Order, $"{x.Key.DisplayName}: {GetDisplayValue(x.Value, x.Key.Type)}{Environment.NewLine}")).OrderBy(x => x.Order).ToList();
+
             var sb = new StringBuilder();
             foreach (var setting in displayedSettings)
             {
-                _ = sb.Append($"    {setting}");
+                _ = sb.Append($"    {setting.Item2}");
             }
 
             var result = ConsoleHelpers.GetYesNo(
-                $"Edit Settings?{Environment.NewLine}{sb}{Environment.NewLine}",
+                $"{editText}?{Environment.NewLine}{sb}{Environment.NewLine}",
                 false
-            );
+                                                );
+            Console.WriteLine(" ");
             return !result;
+        }
+
+        /// <summary>
+        /// Gets core template information
+        /// </summary>
+        /// <param name="templatePreparer">The template preparer.</param>
+        /// <returns>An abstract template instance with core info populated</returns>
+        /// <exception cref="Exception">No template instance could be created</exception>
+        private AbstractTemplate GetCoreSettings(AbstractTemplatePreparer templatePreparer)
+        {
+            var templateSettingsFile = Path.Combine(Directory, Core.Constants.TemplaterTemplatesInfoFileName);
+            (var settingsNeeded, var hadFile) = templatePreparer.GetTemplateProperties(templateSettingsFile);
+            var rawSettings = RequestTemplateSettings(settingsNeeded, hadFile, "TEMPLATE INFORMATION", "Edit Core Template Information", false);
+
+            var settings = templatePreparer.GetTemplateInstance(rawSettings);
+            if (settings == null)
+            {
+                throw new Exception("No template found!");
+            }
+
+            SaveFile(templateSettingsFile, settings);
+            return settings;
         }
 
         /// <summary>
@@ -173,17 +205,83 @@ namespace ProjectTools.Options
             {
                 SettingType.Bool => (bool?)value ?? false ? "Yes" : "No",
                 SettingType.String => (value ?? string.Empty).ToString(),
-                SettingType.StringListComma => string.Join(", ", (value as List<string>) ?? [ ]),
-                SettingType.StringListSemiColan => string.Join("; ", (value as List<string>) ?? [ ]),
+                SettingType.StringListComma => string.Join(", ", (value as List<string>) ?? []),
+                SettingType.StringListSemiColan => string.Join("; ", (value as List<string>) ?? []),
                 SettingType.DictionaryStringString
                     => string.Join(
                         ", ",
-                        ((value as Dictionary<string, string>) ?? [ ])
+                        ((value as Dictionary<string, string>) ?? [])
                             .Select(x => string.Join(": ", x.Key, x.Value))
                             .ToList()
-                    ),
+                                  ),
                 _ => throw new Exception($"Unknown setting type {type}!"),
             };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="setting"></param>
+        /// <param name="currentValue"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private object GetInputForProperty(SettingProperty setting, object currentValue)
+        {
+            object response;
+            string tempResponse;
+            List<string> tempListResponse;
+            var defaultValue = GetDisplayValue(currentValue, setting.Type);
+            switch (setting.Type)
+            {
+                case SettingType.Bool:
+                    response = ConsoleHelpers.GetYesNo(setting.DisplayName, (bool)currentValue);
+                    break;
+
+                case SettingType.String:
+                    response = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
+                    break;
+
+                case SettingType.StringListComma:
+                    tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
+                    tempListResponse = tempResponse.Split(",").Select(x => x.Trim()).ToList();
+                    response = tempListResponse.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                    break;
+
+                case SettingType.StringListSemiColan:
+                    tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
+                    tempListResponse = tempResponse.Split(";").Select(x => x.Trim()).ToList();
+                    response = tempListResponse.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                    break;
+
+                case SettingType.DictionaryStringString:
+                    tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
+                    tempListResponse = tempResponse.Split(",").Select(x => x.Trim()).ToList();
+                    response = tempListResponse.Where(x => !string.IsNullOrWhiteSpace(x)).ToDictionary(x => x.Split(":")[0].Trim(), x => x.Split(":")[1].Trim());
+                    break;
+
+                default:
+                    throw new Exception($"Unknown setting type {setting.Type}!");
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        private TemplateSettings GetSettings(AbstractTemplatePreparer templatePreparer)
+        {
+            var templateSettingsFile = Path.Combine(Directory, Core.Constants.TemplaterTemplatesSettingsFileName);
+            (var settingsNeeded, var hadFile) = templatePreparer.GetSettingProperties(templateSettingsFile);
+            var rawSettings = RequestTemplateSettings(settingsNeeded, hadFile, "TEMPLATE SETTINGS", "Edit Settings");
+
+            var settings = templatePreparer.GetSettingsClassForProperties(rawSettings);
+            if (settings == null)
+            {
+                throw new Exception("No settings found!");
+            }
+
+            SaveFile(templateSettingsFile, settings);
+            return settings;
         }
 
         /// <summary>
@@ -193,11 +291,14 @@ namespace ProjectTools.Options
         /// <returns>A list of settings for this template</returns>
         private Dictionary<SettingProperty, object> RequestTemplateSettings(
             List<SettingProperty> settingsNeeded,
-            bool hadFile
-        )
+            bool hadFile,
+            string categoryText,
+            string editText,
+            bool displaySpecialText = true
+                                                                           )
         {
             // populate settings dict with defaults
-            Dictionary<SettingProperty, object> output =  [ ];
+            Dictionary<SettingProperty, object> output = [];
             foreach (var setting in settingsNeeded)
             {
                 output.Add(setting, setting.CurrentValue);
@@ -206,58 +307,43 @@ namespace ProjectTools.Options
             // if we had a file, first ask if the existing settings look fine
             if (hadFile)
             {
-                if (!ContinueEditingSettings(output))
+                Console.WriteLine($" {Environment.NewLine}{categoryText}");
+                if (ContinueEditingSettings(output, editText))
                 {
                     return output;
                 }
             }
 
-            // If we need to edit the settings or we had no existing file to load...
-            object response;
-            string tempResponse;
+            var continueEditing = false;
+            // loop through getting settings as needed
             do
             {
-                Console.WriteLine("Special Text: <CurrentUserName>, <ParentDir>, <ProjectName>");
-                foreach ((var setting, var currentValue) in output)
+                Console.WriteLine($" {Environment.NewLine}{categoryText}");
+                if (displaySpecialText)
                 {
-                    var defaultValue = GetDisplayValue(currentValue, setting.Type);
-                    switch (setting.Type)
-                    {
-                        case SettingType.Bool:
-                            response = ConsoleHelpers.GetYesNo(setting.DisplayName, (bool)currentValue);
-                            break;
-
-                        case SettingType.String:
-                            response = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                            break;
-
-                        case SettingType.StringListComma:
-                            tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                            response = tempResponse.Split(",").Select(x => x.Trim()).ToList();
-                            break;
-
-                        case SettingType.StringListSemiColan:
-                            tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                            response = tempResponse.Split(";").Select(x => x.Trim()).ToList();
-                            break;
-
-                        case SettingType.DictionaryStringString:
-                            tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                            response = tempResponse
-                                .Split(",")
-                                .Select(x => x.Trim())
-                                .ToDictionary(x => x.Split(":")[0].Trim(), x => x.Split(":")[1].Trim());
-                            break;
-
-                        default:
-                            throw new Exception($"Unknown setting type {setting.Type}!");
-                    }
-                    output[setting] = response;
+                    Console.WriteLine("Special Text: <CurrentUserName>, <ParentDir>, <ProjectName>");
                 }
-                Console.WriteLine();
-            } while (!ContinueEditingSettings(output));
+                for (var i = 0; i < output.Count; i++)
+                {
+                    (var setting, var currentValue) = output.Where(x => x.Key.Order == i).First();
+                    output[setting] = GetInputForProperty(setting, currentValue);
+                }
+                Console.WriteLine(" ");
+                continueEditing = ContinueEditingSettings(output, editText);
+            } while (!continueEditing);
 
             return output;
+        }
+
+        /// <summary>
+        /// Saves the file with the contents.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="obj"></param>
+        private void SaveFile(string file, object obj)
+        {
+            var contents = JsonSerializer.Serialize(obj, Constants.JsonSerializeOptions);
+            File.WriteAllText(file, contents);
         }
     }
 }

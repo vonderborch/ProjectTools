@@ -7,48 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="InternalOld\Configuration\GitRepoMode.cs" />
-    <Compile Remove="InternalOld\Configuration\SolutionGitSettings.cs" />
-    <Compile Remove="InternalOld\Configuration\SolutionSettings.cs" />
-    <Compile Remove="InternalOld\Configuration\Template.cs" />
-    <Compile Remove="InternalOld\Configuration\TemplateSettings.cs" />
-    <Compile Remove="InternalOld\GenerateOptions.cs" />
-    <Compile Remove="InternalOld\Implementations\AbstractTemplater.cs" />
-    <Compile Remove="InternalOld\Implementations\DotSln\DotSlnGenerateOptions.cs" />
-    <Compile Remove="InternalOld\Implementations\DotSln\DotSlnSolutionSettings.cs" />
-    <Compile Remove="InternalOld\Implementations\DotSln\DotSlnTemplate.cs" />
-    <Compile Remove="InternalOld\Implementations\DotSln\DotSlnTemplater.cs" />
-    <Compile Remove="InternalOld\Implementations\DotSln\NugetSettings.cs" />
-    <Compile Remove="InternalOld\Implementations\SolutionSettingProperty.cs" />
-    <Compile Remove="InternalOld\Implementations\SolutionSettingsFactory.cs" />
-    <Compile Remove="InternalOld\Implementations\TemplateFactory.cs" />
-    <Compile Remove="InternalOld\Implementations\TemplaterImplementations.cs" />
-    <Compile Remove="InternalOld\PrepareOptions.cs" />
-    <Compile Remove="InternalOld\Templater.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="InternalOld\Configuration\GitRepoMode.cs" />
-    <None Include="InternalOld\Configuration\SolutionGitSettings.cs" />
-    <None Include="InternalOld\Configuration\SolutionSettings.cs" />
-    <None Include="InternalOld\Configuration\Template.cs" />
-    <None Include="InternalOld\Configuration\TemplateSettings.cs" />
-    <None Include="InternalOld\GenerateOptions.cs" />
-    <None Include="InternalOld\Implementations\AbstractTemplater.cs" />
-    <None Include="InternalOld\Implementations\DotSln\DotSlnGenerateOptions.cs" />
-    <None Include="InternalOld\Implementations\DotSln\DotSlnSolutionSettings.cs" />
-    <None Include="InternalOld\Implementations\DotSln\DotSlnTemplate.cs" />
-    <None Include="InternalOld\Implementations\DotSln\DotSlnTemplater.cs" />
-    <None Include="InternalOld\Implementations\DotSln\NugetSettings.cs" />
-    <None Include="InternalOld\Implementations\SolutionSettingProperty.cs" />
-    <None Include="InternalOld\Implementations\SolutionSettingsFactory.cs" />
-    <None Include="InternalOld\Implementations\TemplateFactory.cs" />
-    <None Include="InternalOld\Implementations\TemplaterImplementations.cs" />
-    <None Include="InternalOld\PrepareOptions.cs" />
-    <None Include="InternalOld\Templater.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CrossCommands" Version="1.1.2" />
     <PackageReference Include="Octokit" Version="9.0.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
