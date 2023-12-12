@@ -31,7 +31,7 @@ namespace ProjectTools.Options
         {
             _ = LogMessage("Checking for new or updated templates...");
             var startTime = DateTime.Now;
-            (var totalTemplates, var newTemplates, var updateableTemplates, var onlyLocalTemplates) = Manager.Instance.Templater.CheckForTemplateUpdates();
+            (var totalTemplates, var newTemplates, var updateableTemplates, var orphanedTemplates) = Manager.Instance.Templater.CheckForTemplateUpdates();
             var totalTime = DateTime.Now - startTime;
             var totalSeconds = totalTime.TotalSeconds.ToString("0.00");
 
@@ -42,12 +42,12 @@ namespace ProjectTools.Options
             }
 
             _ = LogMessage($"Discovered remote {totalTemplates} template(s) in {totalSeconds} second(s)...");
-            if (newTemplates.Count == 0 && updateableTemplates.Count == 0 && onlyLocalTemplates.Count == 0)
+            if (newTemplates.Count == 0 && updateableTemplates.Count == 0 && orphanedTemplates.Count == 0)
             {
                 return "No templates to update!";
             }
 
-            if (onlyLocalTemplates.Count > 0)
+            if (orphanedTemplates.Count > 0)
             {
                 // TODO: Allow action to be taken on local-only templates? (delete?)
             }

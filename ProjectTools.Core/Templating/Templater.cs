@@ -65,8 +65,7 @@ namespace ProjectTools.Core.Templating
         /// </summary>
         /// <param name="forceUpdate">if set to <c>true</c> [force update].</param>
         /// <returns>
-        /// Item 1 - total found templates, Item 2 - new templates, Item 3 - templates to update, Item 4 - Templates
-        /// only in local
+        /// Item 1 - total found templates, Item 2 - new templates, Item 3 - templates to update, Item 4 - orphaned templates
         /// </returns>
         public (int, List<TemplateGitMetadata>, List<TemplateGitMetadata>, List<string>) CheckForTemplateUpdates(bool forceUpdate = false)
         {
@@ -88,12 +87,12 @@ namespace ProjectTools.Core.Templating
             // Determine which templates we need to download
             var newTemplates = remoteTemplates.Where(x => !Templates.ContainsKey(x.DisplayName)).ToList();
             var updateableTemplates = remoteTemplates.Where(x => Templates.ContainsKey(x.DisplayName) && (Templates[x.DisplayName].RepoInfo?.SHA != x.SHA)).ToList();
-            var onlyInLocalTemplates = Templates.Keys.Where(x => !remoteTemplates.Any(y => y.DisplayName == x)).ToList();
+            var orphanedTemplates = Templates.Keys.Where(x => !remoteTemplates.Any(y => y.DisplayName == x)).ToList();
 
             // update settings and return
             Manager.Instance.Settings.LastTemplatesUpdateCheck = DateTime.Now;
             Manager.Instance.Settings.SaveFile(Constants.SettingsFile);
-            return (remoteTemplates.Count, newTemplates, updateableTemplates, onlyInLocalTemplates);
+            return (remoteTemplates.Count, newTemplates, updateableTemplates, orphanedTemplates);
         }
 
         /// <summary>
