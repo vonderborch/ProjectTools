@@ -42,15 +42,16 @@ namespace ProjectTools.Core.Templating
         /// <summary>
         /// Checks for template updates.
         /// </summary>
-        /// <param name="forceCheckUpdate">if set to <c>true</c> [force the update check].</param>
+        /// <param name="forceUpdates">if set to <c>true</c> [force redownload all templates].</param>
+        /// <param name="ignoreCache">if set to <c>true</c> [override the update check].</param>
         /// <param name="autoUpdate">if set to <c>true</c> [auto update].</param>
         /// <returns>The results of the update check</returns>
-        public TemplateUpdateResult CheckForTemplateUpdates(bool forceCheckUpdate = false, bool autoUpdate = false)
+        public TemplateUpdateResult CheckForTemplateUpdates(bool forceUpdates = false, bool ignoreCache = false, bool autoUpdate = false)
         {
             IOHelpers.CreateDirectoryIfNotExists(Constants.TemplatesDirectory);
 
             // Exit early if we shouldn't bother checking for updates...
-            if (!forceCheckUpdate && !Manager.Instance.Settings.ShouldUpdateTemplates)
+            if (!ignoreCache && !Manager.Instance.Settings.ShouldUpdateTemplates)
             {
                 return new TemplateUpdateResult(-1, [], [], []);
             }
@@ -72,7 +73,7 @@ namespace ProjectTools.Core.Templating
                 var localTemplateNames = localTemplates.Select(x => x.Template.Information.Name).ToList();
 
                 var newTemplates = remoteTemplates.Where(x => !localTemplateNames.Contains(x.DisplayName)).ToList();
-                var updateableTemplates = remoteTemplates.Where(x => localTemplateNames.Contains(x.DisplayName) && GetTemplateForName(x.DisplayName)?.RepoInfo?.SHA != x.SHA).ToList();
+                var updateableTemplates = remoteTemplates.Where(x => localTemplateNames.Contains(x.DisplayName) && (GetTemplateForName(x.DisplayName)?.RepoInfo?.SHA != x.SHA || forceUpdates)).ToList();
                 var orphanedTemplates = localTemplateNames.Where(x => !remoteTemplates.Any(y => y.DisplayName == x)).ToList();
 
                 // update settings and return

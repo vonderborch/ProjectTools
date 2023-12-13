@@ -45,6 +45,9 @@ namespace ProjectTools
             // Check for Updated Templates Commands
             PossibleCommands.Add("update-templates", []);
             PossibleCommands["update-templates"].Add("base", "");
+            PossibleCommands["update-templates"].Add("ignore_cache", "-i");
+            PossibleCommands["update-templates"].Add("force_updates", "-f");
+            PossibleCommands["update-templates"].Add("force_updates_silent", "-f -s");
 
             // Prepare Template Example Commands
             PossibleCommands.Add("prepare", []);

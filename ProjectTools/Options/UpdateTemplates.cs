@@ -17,11 +17,18 @@ namespace ProjectTools.Options
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [force update].
+        /// Gets or sets a value indicating whether tp force an update check.
         /// </summary>
         /// <value><c>true</c> if [force update]; otherwise, <c>false</c>.</value>
         [Option('f', "force", Required = false, Default = false, HelpText = "If flag is provided, the program will force all templates to redownload.")]
         public bool ForceUpdate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether tp force an update check.
+        /// </summary>
+        /// <value><c>true</c> if [force update]; otherwise, <c>false</c>.</value>
+        [Option('i', "ignore-cache", Required = false, Default = true, HelpText = "If flag is provided, the program will force-check for new templates and ignore the cached data.")]
+        public bool IgnoreCache { get; set; }
 
         /// <summary>
         /// Executes what this option represents.
@@ -31,7 +38,7 @@ namespace ProjectTools.Options
         {
             _ = LogMessage("Checking for new or updated templates...");
             var startTime = DateTime.Now;
-            var updateResults = Manager.Instance.Templater.CheckForTemplateUpdates();
+            var updateResults = Manager.Instance.Templater.CheckForTemplateUpdates(ForceUpdate, IgnoreCache);
             var totalTime = DateTime.Now - startTime;
             var totalSeconds = totalTime.TotalSeconds.ToString("0.00");
 
@@ -54,12 +61,14 @@ namespace ProjectTools.Options
 
             var totalTemplatesToDownload = new List<TemplateGitMetadata>();
 
+            var totalDownloadingSize = 0UL;
             if (updateResults.NewTemplates.Count > 0)
             {
                 var sizeAsMegabytes = updateResults.NewTemplateSize / 1024f / 1024f;
                 if (Silent || ConsoleHelpers.GetYesNo($"Found {updateResults.NewTemplates.Count} new templates ({sizeAsMegabytes:0.000} megabyte(s))! Queue them for download?", true))
                 {
                     totalTemplatesToDownload.AddRange(updateResults.NewTemplates);
+                    totalDownloadingSize = updateResults.NewTemplateSize;
                 }
             }
             if (updateResults.UpdateableTemplates.Count > 0)
@@ -68,6 +77,7 @@ namespace ProjectTools.Options
                 if (Silent || ConsoleHelpers.GetYesNo($"Found {updateResults.UpdateableTemplates.Count} out-of-date templates ({sizeAsMegabytes:0.000} megabyte(s))! Queue them for download?", true))
                 {
                     totalTemplatesToDownload.AddRange(updateResults.UpdateableTemplates);
+                    totalDownloadingSize = updateResults.UpdateableTemplateSize;
                 }
             }
 
@@ -77,7 +87,8 @@ namespace ProjectTools.Options
             }
 
             // Download requested templates
-            _ = LogMessage($"Downloading {totalTemplatesToDownload.Count} template(s)...");
+            var totalSizeMb = totalDownloadingSize / 1024f / 1024f;
+            _ = LogMessage($"Downloading {totalTemplatesToDownload.Count} template(s) ({totalSizeMb:0.000} megabyte(s))...");
             startTime = DateTime.Now;
             Manager.Instance.Templater.DownloadTemplates(totalTemplatesToDownload);
             totalTime = DateTime.Now - startTime;
@@ -93,6 +104,7 @@ namespace ProjectTools.Options
         {
             var options = (UpdateTemplates)option;
             ForceUpdate = options.ForceUpdate;
+            IgnoreCache = options.IgnoreCache;
             Silent = options.Silent;
         }
     }

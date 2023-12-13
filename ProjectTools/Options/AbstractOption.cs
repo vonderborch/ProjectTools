@@ -49,10 +49,10 @@ namespace ProjectTools.Options
             }
             if (AllowTemplateUpdates && Manager.Instance.Settings.ShouldUpdateTemplates)
             {
-                var updateTemplates = new UpdateTemplates() { Silent = Silent };
+                var updateTemplates = new UpdateTemplates() { Silent = Silent, ForceUpdate = false, IgnoreCache = false };
                 if (Silent)
                 {
-                    updateTemplates.ForceUpdate = true;
+                    updateTemplates.IgnoreCache = true;
                 }
                 _ = updateTemplates.Execute();
             }
