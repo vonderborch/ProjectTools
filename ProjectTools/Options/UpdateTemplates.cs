@@ -31,41 +31,43 @@ namespace ProjectTools.Options
         {
             _ = LogMessage("Checking for new or updated templates...");
             var startTime = DateTime.Now;
-            (var totalTemplates, var newTemplates, var updateableTemplates, var orphanedTemplates) = Manager.Instance.Templater.CheckForTemplateUpdates();
+            var updateResults = Manager.Instance.Templater.CheckForTemplateUpdates();
             var totalTime = DateTime.Now - startTime;
             var totalSeconds = totalTime.TotalSeconds.ToString("0.00");
 
             // Request what to do based on the results
-            if (totalTemplates == -1)
+            if (updateResults.TotalRemoteTemplatesProcessed == -1)
             {
                 return "Skipped template update check, rerun command with force flag enabled to force update!";
             }
 
-            _ = LogMessage($"Discovered remote {totalTemplates} template(s) in {totalSeconds} second(s)...");
-            if (newTemplates.Count == 0 && updateableTemplates.Count == 0 && orphanedTemplates.Count == 0)
+            _ = LogMessage($"Discovered {updateResults.TotalRemoteTemplatesProcessed} remote template(s) in {totalSeconds} second(s)...");
+            if (updateResults.NewTemplates.Count == 0 && updateResults.UpdateableTemplates.Count == 0 && updateResults.OrphanedTemplates.Count == 0)
             {
                 return "No templates to update!";
             }
 
-            if (orphanedTemplates.Count > 0)
+            if (updateResults.OrphanedTemplates.Count > 0)
             {
                 // TODO: Allow action to be taken on local-only templates? (delete?)
             }
 
             var totalTemplatesToDownload = new List<TemplateGitMetadata>();
 
-            if (newTemplates.Count > 0)
+            if (updateResults.NewTemplates.Count > 0)
             {
-                if (Silent || ConsoleHelpers.GetYesNo($"Found {newTemplates.Count} new templates! Queue them for download?", true))
+                var sizeAsMegabytes = updateResults.NewTemplateSize / 1024f / 1024f;
+                if (Silent || ConsoleHelpers.GetYesNo($"Found {updateResults.NewTemplates.Count} new templates ({sizeAsMegabytes:0.000} megabyte(s))! Queue them for download?", true))
                 {
-                    totalTemplatesToDownload.AddRange(newTemplates);
+                    totalTemplatesToDownload.AddRange(updateResults.NewTemplates);
                 }
             }
-            if (updateableTemplates.Count > 0)
+            if (updateResults.UpdateableTemplates.Count > 0)
             {
-                if (Silent || ConsoleHelpers.GetYesNo($"Found {updateableTemplates.Count} out-of-date templates! Queue them for download?", true))
+                var sizeAsMegabytes = updateResults.UpdateableTemplateSize / 1024f / 1024f;
+                if (Silent || ConsoleHelpers.GetYesNo($"Found {updateResults.UpdateableTemplates.Count} out-of-date templates ({sizeAsMegabytes:0.000} megabyte(s))! Queue them for download?", true))
                 {
-                    totalTemplatesToDownload.AddRange(updateableTemplates);
+                    totalTemplatesToDownload.AddRange(updateResults.UpdateableTemplates);
                 }
             }
 

@@ -111,11 +111,6 @@ namespace ProjectTools.Core
         public static string TemplaterTemplatesInfoFileName = "template_info.json";
 
         /// <summary>
-        /// The templater templates information file name
-        /// </summary>
-        public static string TemplaterTemplatesSettingsFileName = "template_settings.json";
-
-        /// <summary>
         /// The unique identifier padding length
         /// </summary>
         private const int GUID_PADDING_LENGTH = 9;

@@ -22,6 +22,6 @@ namespace ProjectTools.Core.Options
         /// <summary>
         /// The template settings
         /// </summary>
-        public required AbstractTemplate TemplateSettings;
+        public required Template Template;
     }
 }

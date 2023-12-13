@@ -1,8 +1,47 @@
 {
-  "$type": "dotsln",
-  "GuidCount": 0,
-  "Author": "Christian Webber",
-  "Description": "A library with individual implementations for FNA and Monogame.",
-  "Name": "Velentr.DUAL_SUPPORT",
-  "Version": "2023-12-11"
+  "Information": {
+    "$type": "base",
+    "Author": "Christian Webber",
+    "Description": "A library with individual implementations for FNA and Monogame.",
+    "Name": "Velentr.DUAL_SUPPORT",
+    "Version": "2023-12-12"
+  },
+  "Settings": {
+    "$type": "dotsln",
+    "AskForNugetInfo": true,
+    "DefaultCompanyName": "\u003CCurrentUserName\u003E",
+    "DefaultNugetLicense": "MIT",
+    "DefaultNugetTags": "Velentr,",
+    "CleanupFilesAndDirectories": [],
+    "Commands": [
+      ".\\\\install_fna.bat"
+    ],
+    "DefaultAuthor": "\u003CCurrentUserName\u003E",
+    "DefaultDescription": "A library",
+    "DefaultSolutionName": "GenericLibrary",
+    "DefaultSolutionNameFormat": "\u003CParentDir\u003E.",
+    "DirectoriesExcludedInPrepare": [
+      "bin",
+      "obj",
+      ".vs",
+      ".git",
+      "release",
+      "FNA"
+    ],
+    "Instructions": [
+      "The Velentr.DevEnv.FNA and Velentr.DevEnv.Monogame projects have not been linked fully due to unresolved issues automating this step. Please do so when opening the solution for the first time!",
+      "To update FNA, run the \u0060update_fna.bat\u0060 script"
+    ],
+    "RenameOnlyFilesAndDirectories": [
+      "logo.png",
+      "install_fna.bat",
+      "update_fna.bat",
+      "Velentr.DevEnv.FNA",
+      "Velentr.DevEnv.Monogame",
+      "fna_updater"
+    ],
+    "ReplacementText": {
+      "Velentr.DUAL_SUPPORT": "\u003CSolutionName\u003E"
+    }
+  }
 }

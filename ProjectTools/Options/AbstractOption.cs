@@ -12,13 +12,7 @@ namespace ProjectTools.Options
         /// Gets or sets a value indicating whether this <see cref="AbstractOption"/> is silent.
         /// </summary>
         /// <value><c>true</c> if silent; otherwise, <c>false</c>.</value>
-        [Option(
-            's',
-            "silent",
-            Required = false,
-            Default = false,
-            HelpText = "If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available."
-               )]
+        [Option('s', "silent", Required = false, Default = false, HelpText = "If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available.")]
         public bool Silent { get; set; }
 
         /// <summary>

@@ -1,8 +1,36 @@
 {
-  "$type": "dotsln",
-  "GuidCount": 0,
-  "Author": "Christian Webber",
-  "Description": "A generic library for an FNA/Monogame program that doesn\u0027t require any specific support for FNA or Monogame.",
-  "Name": "Velentr.BASE",
-  "Version": "2023-12-11"
+  "Information": {
+    "$type": "base",
+    "Author": "Christian Webber",
+    "Description": "A generic library for an FNA/Monogame program that doesn\u0027t require any specific support for FNA or Monogame.",
+    "Name": "Velentr.BASE",
+    "Version": "2023-12-12"
+  },
+  "Settings": {
+    "$type": "dotsln",
+    "AskForNugetInfo": true,
+    "DefaultCompanyName": "\u003CCurrentUserName\u003E",
+    "DefaultNugetLicense": "MIT",
+    "DefaultNugetTags": "Velentr,",
+    "CleanupFilesAndDirectories": [],
+    "Commands": [],
+    "DefaultAuthor": "\u003CCurrentUserName\u003E",
+    "DefaultDescription": "A library",
+    "DefaultSolutionName": "GenericLibrary",
+    "DefaultSolutionNameFormat": "\u003CParentDir\u003E.",
+    "DirectoriesExcludedInPrepare": [
+      "bin",
+      "obj",
+      ".vs",
+      ".git",
+      "release"
+    ],
+    "Instructions": [],
+    "RenameOnlyFilesAndDirectories": [
+      "logo.png"
+    ],
+    "ReplacementText": {
+      "Velentr.BASE": "\u003CSolutionName\u003E"
+    }
+  }
 }

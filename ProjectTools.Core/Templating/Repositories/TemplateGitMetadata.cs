@@ -7,7 +7,7 @@ namespace ProjectTools.Core.Templating.Repositories
     /// <summary>
     /// Metadata about a template in a git repository
     /// </summary>
-    [DebuggerDisplay("{Name} | {Repo}")]
+    [DebuggerDisplay("{DisplayName} | {Repo}")]
     public class TemplateGitMetadata
     {
         /// <summary>
@@ -26,6 +26,11 @@ namespace ProjectTools.Core.Templating.Repositories
         public string SHA;
 
         /// <summary>
+        /// The size
+        /// </summary>
+        public int Size;
+
+        /// <summary>
         /// The URL for the template
         /// </summary>
         public string Url;
@@ -39,6 +44,7 @@ namespace ProjectTools.Core.Templating.Repositories
             SHA = string.Empty;
             Url = string.Empty;
             Repo = string.Empty;
+            Size = 0;
         }
 
         /// <summary>
@@ -52,6 +58,7 @@ namespace ProjectTools.Core.Templating.Repositories
             SHA = info.Sha;
             Url = info.DownloadUrl;
             Repo = repo;
+            Size = info.Size;
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace ProjectTools.Core.Templating.Common
+﻿namespace ProjectTools.Core.Helpers
 {
     /// <summary>
     /// Types available for Template Settings

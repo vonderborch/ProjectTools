@@ -15,13 +15,7 @@ namespace ProjectTools.Options
         /// Gets or sets a value indicating whether [quick information].
         /// </summary>
         /// <value><c>true</c> if [quick information]; otherwise, <c>false</c>.</value>
-        [Option(
-            'q',
-            "quick-info",
-            Required = false,
-            Default = false,
-            HelpText = "If flag is provided, the program will just list the template names and not details on the templates."
-               )]
+        [Option('q', "quick-info", Required = false, Default = false, HelpText = "If flag is provided, the program will just list the template names and not details on the templates.")]
         public bool QuickInfo { get; set; }
 
         /// <summary>
@@ -34,7 +28,8 @@ namespace ProjectTools.Options
             Manager.Instance.Templater.RefreshLocalTemplates();
 
             var output = new StringBuilder();
-            var sortedTemplates = Manager.Instance.Templater.SortedTemplateNames;
+            Manager.Instance.Templater.RefreshLocalTemplates();
+            var sortedTemplates = Manager.Instance.Templater.SortedLocalTemplateNames;
 
             if (sortedTemplates.Count == 0)
             {
@@ -42,15 +37,16 @@ namespace ProjectTools.Options
                 return string.Empty;
             }
 
-            _ = Manager.Instance.Templater.Templates;
-            for (var i = 0; i < sortedTemplates.Count; i++)
+            // list each template
+            foreach (var name in sortedTemplates)
             {
-                _ = output.AppendLine($" - {sortedTemplates[i]}");
+                var template = Manager.Instance.Templater.GetTemplateForName(name);
+                _ = output.AppendLine($" - {template.Template.Information.Name}");
                 if (!QuickInfo)
                 {
-                    _ = output.AppendLine($"     Author: {Manager.Instance.Templater.Templates[sortedTemplates[i]].Author}");
-                    _ = output.AppendLine($"     Description: {Manager.Instance.Templater.Templates[sortedTemplates[i]].Description}");
-                    _ = output.AppendLine($"     Version: {Manager.Instance.Templater.Templates[sortedTemplates[i]].Version}");
+                    _ = output.AppendLine($"     Author: {template.Template.Information.Author}");
+                    _ = output.AppendLine($"     Description: {template.Template.Information.Description}");
+                    _ = output.AppendLine($"     Version: {template.Template.Information.Version}");
                 }
             }
 

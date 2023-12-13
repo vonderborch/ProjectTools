@@ -129,10 +129,7 @@ namespace ProjectTools.Core
             var directory = Path.GetDirectoryName(fileName);
             if (string.IsNullOrWhiteSpace(directory))
             {
-                throw new ArgumentException(
-                    "The file name must include a directory.",
-                    nameof(fileName)
-                                           );
+                throw new ArgumentException("The file name must include a directory.", nameof(fileName));
             }
 
             // Settings Validations

@@ -1,7 +1,14 @@
-﻿namespace ProjectTools.Core.Templating.Common
+﻿using System.Diagnostics;
+
+namespace ProjectTools.Core.Helpers
 {
+    /// <summary>
+    /// An attribute to describe the metadata of a user-configurable template field.
+    /// </summary>
+    /// <seealso cref="System.Attribute"/>
+    [DebuggerDisplay("{DisplayName}")]
     [AttributeUsage(AttributeTargets.Field)]
-    public class SettingMetaAttribute : Attribute
+    public class SettingMetadata : Attribute
     {
         /// <summary>
         /// The display name
@@ -19,11 +26,11 @@
         public readonly SettingType Type;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SettingMetaAttribute"/> class.
+        /// Initializes a new instance of the <see cref="SettingMetadata"/> class.
         /// </summary>
         /// <param name="displayName">The display name.</param>
         /// <param name="type">The type.</param>
-        public SettingMetaAttribute(string displayName, SettingType type, int order)
+        public SettingMetadata(string displayName, SettingType type, int order)
         {
             DisplayName = displayName;
             Type = type;

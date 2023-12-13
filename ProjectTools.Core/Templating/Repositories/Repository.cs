@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
 using Octokit;
+using ProjectTools.Core.Templating.Repositories;
 
-namespace ProjectTools.Core.Templating.Repositories
+namespace ProjectTools.Core.Templating.LocalRepository
 {
     /// <summary>
     /// Handles storing and downloading info on templates in a given repository.
@@ -50,8 +51,7 @@ namespace ProjectTools.Core.Templating.Repositories
         /// </summary>
         /// <value>The template map.</value>
         [JsonIgnore]
-        public Dictionary<string, TemplateGitMetadata> TemplateMap =>
-            Templates.ToDictionary(t => t.Name, t => t);
+        public Dictionary<string, TemplateGitMetadata> TemplateMap => Templates.ToDictionary(t => t.Name, t => t);
 
         /// <summary>
         /// The list of loaded templates
@@ -70,13 +70,8 @@ namespace ProjectTools.Core.Templating.Repositories
         {
             if (forceLoad || Templates.Count == 0)
             {
-                var rootContents = Manager.Instance.GitClient.Repository.Content
-                    .GetAllContents(RepositoryOwner, RepositoryName)
-                    .Result.ToList();
-
-                var repoContents = rootContents
-                    .Select(x => new GitRepoContents(x, RepositoryOwner, RepositoryName, x.Path))
-                    .ToList();
+                var rootContents = Manager.Instance.GitClient.Repository.Content.GetAllContents(RepositoryOwner, RepositoryName).Result.ToList();
+                var repoContents = rootContents.Select(x => new GitRepoContents(x, RepositoryOwner, RepositoryName, x.Path)).ToList();
 
                 Templates = GetTemplateInfoForContents(repoContents);
             }

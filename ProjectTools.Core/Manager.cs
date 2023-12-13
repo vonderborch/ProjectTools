@@ -3,22 +3,49 @@ using ProjectTools.Core.Templating;
 
 namespace ProjectTools.Core
 {
+    /// <summary>
+    /// The core of the ProjectTools library
+    /// </summary>
     public sealed class Manager
     {
-        private static readonly Lazy<Manager> _lazy = new Lazy<Manager>(() => new Manager());
+        /// <summary>
+        /// The instance of this Manager singleton
+        /// </summary>
+        private static readonly Lazy<Manager> _lazy = new(() => new Manager());
 
+        /// <summary>
+        /// The git client
+        /// </summary>
         private GitHubClient? _gitClient;
+
+        /// <summary>
+        /// The settings
+        /// </summary>
         private Settings? _settings;
 
-        private Templater? _templater;
+        /// <summary>
+        /// The templater
+        /// </summary>
+        private TemplateManager? _templater;
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="Manager"/> class from being created.
+        /// </summary>
         private Manager()
         {
             _settings = null;
         }
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>The instance.</value>
         public static Manager Instance => _lazy.Value;
 
+        /// <summary>
+        /// Gets the git client.
+        /// </summary>
+        /// <value>The git client.</value>
         public GitHubClient GitClient
         {
             get
@@ -28,7 +55,7 @@ namespace ProjectTools.Core
                     _gitClient = new GitHubClient(
                         new ProductHeaderValue(Constants.ApplicationName),
                         new Uri(Settings.GitWebPath)
-                    );
+                                                 );
 
                     if (!string.IsNullOrWhiteSpace(Settings.GitAccessToken))
                     {
@@ -41,6 +68,10 @@ namespace ProjectTools.Core
             }
         }
 
+        /// <summary>
+        /// Gets the settings.
+        /// </summary>
+        /// <value>The settings.</value>
         public Settings Settings
         {
             get
@@ -48,27 +79,29 @@ namespace ProjectTools.Core
                 if (_settings == null)
                 {
                     _settings = Settings.LoadFile(Constants.SettingsFile);
-                    if (_settings == null)
-                    {
-                        _settings = new();
-                    }
+                    _settings ??= new();
                 }
                 return _settings;
             }
         }
 
-        public Templater Templater
+        /// <summary>
+        /// Gets the templater.
+        /// </summary>
+        /// <value>The templater.</value>
+        public TemplateManager Templater
         {
             get
             {
-                if (_templater == null)
-                {
-                    _templater = new(Settings);
-                }
+                _templater ??= new();
                 return _templater;
             }
         }
 
+        /// <summary>
+        /// Validates the settings.
+        /// </summary>
+        /// <returns></returns>
         public bool ValidateSettings()
         {
             return File.Exists(Constants.SettingsFile);

@@ -1,15 +1,15 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Options;
-using ProjectTools.Core.Templating.Preparation;
+using ProjectTools.Core.Templating.Preperation;
 
 namespace ProjectTools.Core.Implementations.DotSln
 {
     /// <summary>
-    /// Defines a template preparer for .sln projects/solutions
+    /// A helper class to store logic for preparing a Visual Studio (.sln) solution for templating
     /// </summary>
-    /// <seealso cref="ProjectTools.Core.Templating.Preparation.AbstractTemplatePreparer"/>
-    public class DotSlnTemplatePreparer : AbstractTemplatePreparer
+    internal class DotSlnSolutionPreparer : AbstractPreparer
     {
         /// <summary>
         /// The files to update
@@ -32,46 +32,89 @@ namespace ProjectTools.Core.Implementations.DotSln
         };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DotSlnTemplatePreparer"/> class.
+        /// Initializes a new instance of the <see cref="DotSlnSolutionPreparer"/> class.
         /// </summary>
-        public DotSlnTemplatePreparer()
-            : base("VisualStudio (.sln)", Implementation.DotSln) { }
-
-        /// <summary>
-        /// Checks whether the directory is valid for this templater.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        /// <returns>True if valid, False otherwise.</returns>
-        public override bool DirectoryValidForTemplater(string directory)
+        /// <param name="templater">The templater.</param>
+        /// <param name="log">The log.</param>
+        public DotSlnSolutionPreparer(Func<string, bool> log) : base(log)
         {
-            // check if any file is a .sln file...
-            foreach (var file in System.IO.Directory.GetFiles(directory))
-            {
-                if (file.EndsWith(".sln"))
-                {
-                    return true;
-                }
-            }
-
-            foreach (var subDirectory in System.IO.Directory.GetDirectories(directory))
-            {
-                var result = DirectoryValidForTemplater(subDirectory);
-                if (result)
-                {
-                    return result;
-                }
-            }
-
-            return false;
         }
 
         /// <summary>
-        /// Gets the abstract template class.
+        /// Prepares the template.
         /// </summary>
-        /// <returns>The abstract template class defined for this preparer.</returns>
-        public override Type GetAbstractTemplateClass()
+        /// <param name="options">The options.</param>
+        /// <returns>The result of the preperation</returns>
+        public override string PrepareTemplate(PrepareOptions options)
         {
-            return typeof(DotSlnTemplate);
+            // setup some variables...
+            var startTime = DateTime.Now;
+
+            var initialSize = GetDirectorySize(options.Directory) / 1000000f; // get size in MB
+            var templateInformation = options.Template.Information;
+            var templateSettings = (DotSlnTemplateSettings)options.Template.Settings;
+
+            var directoryName = templateInformation.Name.Replace(" ", "_");
+            var workingDirectory = Path.Combine(options.OutputDirectory, directoryName);
+            var archivePath = Path.Combine(options.OutputDirectory, $"{directoryName}.{Constants.TemplateFileType}");
+
+            // Step 1 - Delete the working directory if it already exists
+            Logger.Log($"Step 1/5: Checking if working directory '{workingDirectory}' exists...");
+            var exists = Directory.Exists(workingDirectory);
+            IOHelpers.DeleteDirectoryIfExists(workingDirectory);
+            Logger.Log(exists ? "Deleted existing directory!" : "Directory does not exist!", 1);
+
+            // Step 2 - Copy the source directory to the working directory
+            Logger.Log($"Step 2/5: Copying base solution '{options.Directory}' to working direcotry '{workingDirectory}'...");
+            IOHelpers.CopyDirectory(options.Directory, workingDirectory, templateSettings.DirectoriesExcludedInPrepare);
+            Logger.Log("Base solution copied!", 1);
+
+            // Step 3 - Get Guids
+            // NOTE: we aren't going to be storing these anymore. Instead, GUIDs will be automatically generated
+            // on-the-fly by the templater as required on generation
+            Logger.Log("Step 3/5: Getting GUIDs in solution...");
+            var guids = GetGuids(workingDirectory);
+            Logger.Log($"Found {guids.Count} GUIDs!", 1);
+
+            // Step 4 - Update any solutions in the working directory
+            Logger.Log("Step 4/5: Updating template with generic replacement text...");
+            PrepDirectory(workingDirectory, templateSettings, guids);
+            Logger.Log("Template updated!", 1);
+
+            // Step 5 - Archive the Directory and Delete the working directory
+            Logger.Log("Step 5/5: Packaging template...");
+            IOHelpers.ArchiveDirectory(workingDirectory, archivePath, options.SkipCleaning);
+            Logger.Log("Template packaged!", 1);
+
+            // DONE!!!
+            Logger.Log("Work complete!");
+            var fileSize = new FileInfo(archivePath).Length / 1000000f; // get size in MB
+            Logger.Log($"Original Solution Size: {initialSize:0.000} mb", 1);
+            Logger.Log($"Template Size: {fileSize:0.000} mb", 1);
+            var totalTime = DateTime.Now - startTime; // dpesn't have to be perfect, this should be fine!
+            return $"Successfully prepared the template in {totalTime.TotalSeconds:0.00} second(s): {archivePath}";
+        }
+
+        /// <summary>
+        /// Gets the size of the directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>The size in bytes</returns>
+        private static ulong GetDirectorySize(string path)
+        {
+            var size = 0UL;
+
+            var baseDir = new DirectoryInfo(path);
+            foreach (var file in baseDir.GetFiles())
+            {
+                size += (ulong)file.Length;
+            }
+            foreach (var dir in baseDir.GetDirectories())
+            {
+                size += GetDirectorySize(dir.FullName);
+            }
+
+            return size;
         }
 
         /// <summary>
@@ -79,7 +122,7 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <returns>All guids for all .sln files in the directory we're templating.</returns>
-        public Dictionary<string, string> GetGuids(string directory, int guidCount = 0)
+        private Dictionary<string, string> GetGuids(string directory, int guidCount = 0)
         {
             Dictionary<string, string> output = [];
 
@@ -121,107 +164,16 @@ namespace ProjectTools.Core.Implementations.DotSln
         }
 
         /// <summary>
-        /// Gets the template settings class.
-        /// </summary>
-        /// <returns>The template settings class defined for this preparer.</returns>
-        public override Type GetTemplateSettingsClass()
-        {
-            return typeof(DotSlnTemplateSettings);
-        }
-
-        /// <summary>
-        /// Prepares the template.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        /// <param name="log"></param>
-        /// <returns>The preperation result.</returns>
-        public override string Prepare(PrepareOptions options, Func<string, bool> log)
-        {
-            var templateSettings = (DotSlnTemplate)options.TemplateSettings;
-            var startTime = DateTime.Now;
-            var directoryName = options.TemplateSettings.Name.Replace(" ", "_");
-            var workingDirectory = Path.Combine(options.OutputDirectory, directoryName);
-            var archivePath = Path.Combine(options.OutputDirectory, $"{directoryName}.{Constants.TemplateFileType}");
-
-            // Step 1 - Create a template_info.json file if one doesn't exist. Or update it
-            _ = log("Generating/updating template_info.json file...");
-            var baseTemplateInfoFile = Path.Combine(options.Directory, Constants.TemplaterTemplatesInfoFileName);
-            _ = DeleteFileIfExists(baseTemplateInfoFile);
-            var serialized = templateSettings.ToJson();
-            File.WriteAllText(baseTemplateInfoFile, serialized);
-            _ = log("  template_info.json file generated/updated!");
-
-            // Step 2 - Delete the working directory if it already exists
-            _ = log($"Checking if working directory '{workingDirectory}' exists...");
-            _ = DeleteDirectoryIfExists(workingDirectory)
-                ? log("  Deleted existing directory!")
-                : log("  Directory does not exist!");
-
-            // Step 3 - Copy the source directory to the working directory
-            _ = log($"Copying base solution '{options.Directory}' to working direcotry '{workingDirectory}'...");
-            CopyDirectory(
-                options.Directory,
-                workingDirectory,
-                options.TemplateSettings.Settings.DirectoriesExcludedInPrepare
-                         );
-            _ = log("  Base solution copied!");
-
-            // Step 4 - Get Guids
-            _ = log("Getting GUIDs in solution...");
-            var guids = GetGuids(workingDirectory);
-            _ = log($"  Found {guids.Count} GUIDs!");
-
-            // Step 5 - Update template_info.json
-            _ = log("Updating template_info.json with GUID count...");
-            var templateSettingsFile = Path.Combine(workingDirectory, Constants.TemplaterTemplatesInfoFileName);
-            templateSettings.GuidCount = guids.Count;
-            serialized = templateSettings.ToJson();
-            File.WriteAllText(templateSettingsFile, serialized);
-            _ = log("  template_info.json updated!");
-
-            // Step 6 - Update any solutions in the working directory
-            _ = log("Updating template with generic replacement text...");
-            PrepDirectory(workingDirectory, templateSettings, guids);
-            _ = log("  Template updated!");
-
-            // Step 7 - Archive the Directory and Delete the working directory
-            _ = log("Packaging template...");
-            ArchiveDirectory(workingDirectory, archivePath, options.SkipCleaning);
-            _ = log("  Template packaged!");
-
-            // Step 8 - DONE!
-            _ = log("Work complete!");
-            var totalTime = DateTime.Now - startTime; // dpesn't have to be perfect, this should be fine!
-            return $"Successfully prepared the template in {totalTime.TotalSeconds:0.00} second(s): {archivePath}";
-        }
-
-        /// <summary>
-        /// Preps the directory to be a template.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        /// <param name="settings">The settings.</param>
-        /// <param name="guids">The guids.</param>
-        public void PrepDirectory(string directory, DotSlnTemplate settings, Dictionary<string, string> guids)
-        {
-            // Get Replacement Text for the Template and Update the Files
-            var replacements = GetReplacementText(guids, settings);
-            UpdateFiles(directory, replacements.Item1, replacements.Item2);
-        }
-
-        /// <summary>
         /// Gets the replacement text for files.
         /// </summary>
         /// <param name="guids">The guids.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>Item 1- Solution File Replacements | Item 2- Other File Replacements</returns>
-        private (Dictionary<string, string>, Dictionary<Regex, string>) GetReplacementText(
-            Dictionary<string, string> guids,
-            DotSlnTemplate settings
-                                                                                          )
+        private (Dictionary<string, string>, Dictionary<Regex, string>) GetReplacementText(Dictionary<string, string> guids, DotSlnTemplateSettings settings)
         {
             // Solution File Text Replacements
             var slnReplacements = new Dictionary<string, string>(guids);
-            foreach (var replacement in settings.Settings.ReplacementText)
+            foreach (var replacement in settings.ReplacementText)
             {
                 slnReplacements.Add(replacement.Key, replacement.Value);
             }
@@ -236,7 +188,7 @@ namespace ProjectTools.Core.Implementations.DotSln
                                      );
             }
 
-            foreach (var replacement in settings.Settings.ReplacementText)
+            foreach (var replacement in settings.ReplacementText)
             {
                 otherReplacements.Add(new Regex(replacement.Key), replacement.Value);
             }
@@ -246,16 +198,25 @@ namespace ProjectTools.Core.Implementations.DotSln
         }
 
         /// <summary>
+        /// Preps the directory to be a template.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="guids">The guids.</param>
+        private void PrepDirectory(string directory, DotSlnTemplateSettings settings, Dictionary<string, string> guids)
+        {
+            // Get Replacement Text for the Template and Update the Files
+            var replacements = GetReplacementText(guids, settings);
+            UpdateFiles(directory, replacements.Item1, replacements.Item2);
+        }
+
+        /// <summary>
         /// Updates the files.
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <param name="slnReplacements">The SLN replacements.</param>
         /// <param name="otherReplacements">The other replacements.</param>
-        private void UpdateFiles(
-            string directory,
-            Dictionary<string, string> slnReplacements,
-            Dictionary<Regex, string> otherReplacements
-                                )
+        private void UpdateFiles(string directory, Dictionary<string, string> slnReplacements, Dictionary<Regex, string> otherReplacements)
         {
             var files = Directory
                 .GetFiles(directory)
