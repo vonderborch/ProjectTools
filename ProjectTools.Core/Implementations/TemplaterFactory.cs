@@ -54,5 +54,22 @@ namespace ProjectTools.Core.Implementations
                 ? templater.Instance
                 : throw new ArgumentException($"No templater found for implementation {implementation}");
         }
+
+        /// <summary>
+        /// Gets all registered templaters.
+        /// </summary>
+        /// <returns>A list of all registered templaters.</returns>
+        internal static List<AbstractTemplater> GetAllRegisteredTemplaters()
+        {
+            var implementations = GetImplementations();
+            var output = new List<AbstractTemplater>();
+
+            foreach (var implementation in implementations)
+            {
+                output.Add(GetTemplater(implementation));
+            }
+
+            return output;
+        }
     }
 }

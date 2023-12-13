@@ -4,7 +4,7 @@
     "Author": "Christian Webber",
     "Description": "A library with individual implementations for FNA and Monogame.",
     "Name": "Velentr.DUAL_SUPPORT",
-    "Version": "2023-12-12"
+    "Version": "2023-12-13"
   },
   "Settings": {
     "$type": "dotsln",
@@ -18,8 +18,8 @@
     ],
     "DefaultAuthor": "\u003CCurrentUserName\u003E",
     "DefaultDescription": "A library",
-    "DefaultSolutionName": "GenericLibrary",
-    "DefaultSolutionNameFormat": "\u003CParentDir\u003E.",
+    "DefaultSolutionName": "\u003CParentDir\u003E.",
+    "DefaultStartingVersion": "1.0.0",
     "DirectoriesExcludedInPrepare": [
       "bin",
       "obj",

@@ -1,8 +1,9 @@
-﻿using ProjectTools.Core.Helpers;
+﻿using System.Diagnostics;
+using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Options;
 using ProjectTools.Core.Templating.Common;
-using System.Diagnostics;
+using ProjectTools.Core.Templating.Generation;
 
 namespace ProjectTools.Core.Templating
 {
@@ -58,6 +59,12 @@ namespace ProjectTools.Core.Templating
         public string Name => Implementation.ToString().ToLowerInvariant();
 
         /// <summary>
+        /// Gets the type of the solution settings.
+        /// </summary>
+        /// <value>The type of the solution settings.</value>
+        public abstract Type SolutionSettingsType { get; }
+
+        /// <summary>
         /// Gets the type of the template information class for this implementation.
         /// </summary>
         /// <value>The type of the template information.</value>
@@ -76,14 +83,38 @@ namespace ProjectTools.Core.Templating
         /// <returns>True if valid, False otherwise.</returns>
         public abstract bool DirectoryValidForTemplatePreperation(string directory);
 
+        public (List<Property> Properties, bool HadFile) GetGenerationSolutionSettingProperties(string templateName, string solutionConfigFile)
+        {
+            SolutionSettings? existingSettings = null;
+            if (File.Exists(solutionConfigFile))
+            {
+                try
+                {
+                    // First, lets see if there is an existing solution config file
+                    existingSettings = JsonHelpers.DeserializeFile<SolutionSettings>(solutionConfigFile);
+                }
+                catch
+                {
+                    var backupFile = $"{solutionConfigFile}.bak";
+                    File.Move(solutionConfigFile, backupFile);
+                }
+            }
+
+            // Next, let's get the properties for the classes for this config file
+            var properties = GetPropertiesForClass(SolutionSettingsType, 0, PropertySource.SolutionSettings, existingSettings);
+            var output = ModifySolutionSettingProperties(templateName, properties);
+            var finalOutput = output.OrderBy(x => x.Order).ToList();
+            return (finalOutput, existingSettings != null);
+        }
+
         /// <summary>
         /// Gets the preperation user settings.
         /// </summary>
         /// <returns>Item 1: The properties we need user information on. Item 2: Whether an existing file was loaded</returns>
-        public (List<SettingProperty> Properties, bool HadFile) GetPreperationUserSettings(string file)
+        public (List<Property> Properties, bool HadFile) GetPreperationUserSettings(string file)
         {
+            // First, lets see if there is an existing template file
             Template? existingTemplate = null;
-
             if (File.Exists(file))
             {
                 try
@@ -100,11 +131,11 @@ namespace ProjectTools.Core.Templating
             }
 
             // Next, lets get the properties for the information and settings classes for this Templater
-            var informationProperties = GetPropertiesForClass(TemplateInformationType, 0, true, existingTemplate?.Information);
-            var settingsProperties = GetPropertiesForClass(TemplateSettingsType, informationProperties.Count, false, existingTemplate?.Settings);
+            var informationProperties = GetPropertiesForClass(TemplateInformationType, 0, PropertySource.TemplateInformation, existingTemplate?.Information);
+            var settingsProperties = GetPropertiesForClass(TemplateSettingsType, informationProperties.Count, PropertySource.TemplateSettings, existingTemplate?.Settings);
 
             // Combine the properties, sort, and return
-            var output = new List<SettingProperty>();
+            var output = new List<Property>();
             output.AddRange(informationProperties);
             output.AddRange(settingsProperties);
             output = output.OrderBy(x => x.Order).ToList();
@@ -118,13 +149,13 @@ namespace ProjectTools.Core.Templating
         /// <param name="directory">The directory.</param>
         /// <param name="createTemplateFile">if set to <c>true</c> [create template file].</param>
         /// <returns>A template with the provided properties.</returns>
-        public Template GetTemplateForProperties(List<SettingProperty> properties, string directory, bool createTemplateFile = true)
+        public Template GetTemplateForProperties(List<Property> properties, string directory, bool createTemplateFile = true)
         {
             // Populate the child classes
-            var informationProperties = properties.Where(x => x.FromTemplateInformationClass).ToList();
+            var informationProperties = properties.Where(x => x.SettingSource == PropertySource.TemplateInformation).ToList();
             var informationClass = PopulateNewInstanceWithProperties<TemplateInformation>(informationProperties, TemplateInformationType);
 
-            var settingsProperties = properties.Where(x => !x.FromTemplateInformationClass).ToList();
+            var settingsProperties = properties.Where(x => x.SettingSource == PropertySource.TemplateSettings).ToList();
             var settingsClass = PopulateNewInstanceWithProperties<TemplateSettings>(settingsProperties, TemplateSettingsType);
 
             // Create the template class
@@ -149,6 +180,22 @@ namespace ProjectTools.Core.Templating
         public abstract string PrepareTemplate(PrepareOptions options, Func<string, bool> log);
 
         /// <summary>
+        /// Determines if the templater is valid for the template.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <returns>True if the templater is valid for the template, False otherwise.</returns>
+        public bool TemplaterValidForTemplate(Template template)
+        {
+            var infoType = template.Information.GetType();
+            var settingsType = template.Settings.GetType();
+
+            var infoValid = infoType == TemplateInformationType;
+            var settingsValid = settingsType == TemplateSettingsType;
+
+            return infoValid && settingsValid;
+        }
+
+        /// <summary>
         /// Populates the new instance with properties.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -158,7 +205,7 @@ namespace ProjectTools.Core.Templating
         /// <exception cref="Exception">
         /// Unable to instantiate an instance of class {actualType} or Unable to find field {property.Name} in class {actualType}
         /// </exception>
-        protected static T PopulateNewInstanceWithProperties<T>(List<SettingProperty> properties, Type actualType)
+        protected static T PopulateNewInstanceWithProperties<T>(List<Property> properties, Type actualType)
         {
             // create an instance and populate it with the properties
             var instance = (T)(Activator.CreateInstance(actualType) ?? throw new Exception($"Unable to instantiate an instance of class {actualType}"));
@@ -181,38 +228,47 @@ namespace ProjectTools.Core.Templating
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="orderOffset">The order offset.</param>
-        /// <param name="isTemplateInformationClass">if set to <c>true</c> [is template information class].</param>
+        /// <param name="source">The source of the properties.</param>
         /// <param name="existingInstance">The existing instance.</param>
         /// <returns>A list of propertied fields for the type provided.</returns>
         /// <exception cref="Exception">Field {field.Name} does not have a SettingMetadata Attribute!</exception>
-        protected List<SettingProperty> GetPropertiesForClass(Type type, int orderOffset, bool isTemplateInformationClass, object? existingInstance = null)
+        protected List<Property> GetPropertiesForClass(Type type, int orderOffset, PropertySource source, object? existingInstance = null)
         {
-            var output = new List<SettingProperty>();
+            var output = new List<Property>();
 
             // Fetch the properties for the class
-            var fields = type.GetFields().Where(x => x.CustomAttributes.Any(y => y.AttributeType == typeof(SettingMetadata))).ToList();
+            var fields = type.GetFields().Where(x => x.CustomAttributes.Any(y => y.AttributeType == typeof(TemplateFieldMetadata))).ToList();
             foreach (var field in fields)
             {
-                var metadata = (SettingMetadata?)field.GetCustomAttributes(typeof(SettingMetadata), false)[0];
+                var metadata = (TemplateFieldMetadata?)field.GetCustomAttributes(typeof(TemplateFieldMetadata), false)[0];
                 if (metadata == null)
                 {
                     throw new Exception($"Field {field.Name} does not have a SettingMetadata Attribute!");
                 }
 
                 var currentValue = existingInstance != null ? field.GetValue(existingInstance) : null;
-                var propertyData = new SettingProperty()
+                var propertyData = new Property()
                 {
                     CurrentValue = currentValue,
                     DisplayName = metadata.DisplayName,
                     Name = field.Name,
                     Order = metadata.Order + orderOffset,
                     Type = metadata.Type,
-                    FromTemplateInformationClass = isTemplateInformationClass
+                    SettingSource = source,
+                    Metadata = metadata,
                 };
                 output.Add(propertyData);
             }
 
             return output;
         }
+
+        /// <summary>
+        /// Modifies the solution setting properties.
+        /// </summary>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="properties">The properties.</param>
+        /// <returns></returns>
+        protected abstract List<Property> ModifySolutionSettingProperties(string templateName, List<Property> properties);
     }
 }

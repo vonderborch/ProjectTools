@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Templating.Common;
 
 namespace ProjectTools.Core.Templating.Repositories
@@ -13,6 +14,11 @@ namespace ProjectTools.Core.Templating.Repositories
         /// The local file path
         /// </summary>
         public required string FilePath = string.Empty;
+
+        /// <summary>
+        /// The implementation for this template
+        /// </summary>
+        public required Implementation Implementation;
 
         /// <summary>
         /// The repo information

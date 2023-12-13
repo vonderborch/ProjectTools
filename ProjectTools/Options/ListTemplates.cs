@@ -40,7 +40,7 @@ namespace ProjectTools.Options
             // list each template
             foreach (var name in sortedTemplates)
             {
-                var template = Manager.Instance.Templater.GetTemplateForName(name);
+                var template = Manager.Instance.Templater.GetTemplateByName(name);
                 _ = output.AppendLine($" - {template.Template.Information.Name}");
                 if (!QuickInfo)
                 {

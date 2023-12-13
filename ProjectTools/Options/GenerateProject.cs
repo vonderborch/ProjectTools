@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using ProjectTools.Core;
 
 namespace ProjectTools.Options
 {
@@ -57,6 +58,21 @@ namespace ProjectTools.Options
         /// <returns>The result of the execution.</returns>
         public override string Execute()
         {
+            if (Silent)
+            {
+                throw new Exception("Silent is not a valid option for this command!");
+            }
+
+            // Validate that the template exists
+            Manager.Instance.Templater.RefreshLocalTemplates();
+            if (!Manager.Instance.Templater.TemplateExists(Template))
+            {
+                return $"Template {Template} does not exist! Please run list-templates to view all available templates.";
+            }
+
+            // Get the templater for the template
+            var templater = Manager.Instance.Templater.GetTemplaterForTemplate(Template);
+
             throw new NotImplementedException();
         }
 

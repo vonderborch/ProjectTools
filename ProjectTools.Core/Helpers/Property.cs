@@ -6,7 +6,7 @@ namespace ProjectTools.Core.Helpers
     /// Represents the setting for a template.
     /// </summary>
     [DebuggerDisplay("{Name}")]
-    public class SettingProperty
+    public class Property
     {
         /// <summary>
         /// The current value
@@ -17,6 +17,11 @@ namespace ProjectTools.Core.Helpers
         /// The display name
         /// </summary>
         public required string DisplayName;
+
+        /// <summary>
+        /// Metadata on the property
+        /// </summary>
+        public required TemplateFieldMetadata Metadata;
 
         /// <summary>
         /// The name
@@ -31,12 +36,12 @@ namespace ProjectTools.Core.Helpers
         /// <summary>
         /// The type
         /// </summary>
-        public required SettingType Type;
+        public required PropertyType Type;
 
         /// <summary>
-        /// Gets a value indicating whether [from template information class].
+        /// Gets the setting source.
         /// </summary>
-        /// <value><c>true</c> if [from template information class]; otherwise, <c>false</c>.</value>
-        public bool FromTemplateInformationClass { get; internal set; }
+        /// <value>The setting source.</value>
+        public PropertySource SettingSource { get; internal set; }
     }
 }

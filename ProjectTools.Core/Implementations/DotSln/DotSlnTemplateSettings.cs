@@ -12,25 +12,25 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// <summary>
         /// Whether the solution using this template creates any nuget packages
         /// </summary>
-        [SettingMetadata("Ask for Nuget Info", SettingType.Bool, order: 11)]
+        [TemplateFieldMetadata("Ask for Nuget Info", PropertyType.Bool, order: 100)]
         public bool AskForNugetInfo = false;
 
         /// <summary>
         /// The default company name for a new solution using this template
         /// </summary>
-        [SettingMetadata("Default Company Name", SettingType.String, order: 10)]
+        [TemplateFieldMetadata("Default Company Name", PropertyType.String, order: 3)]
         public string DefaultCompanyName = string.Empty;
 
         /// <summary>
         /// The default nuget license for a new solution using this template
         /// </summary>
-        [SettingMetadata("Default Nuget License", SettingType.String, order: 12)]
+        [TemplateFieldMetadata("Default Nuget License", PropertyType.String, order: 101, requiredFieldName: "AskForNugetInfo", requiredFieldValue: true)]
         public string DefaultNugetLicense = string.Empty;
 
         /// <summary>
         /// The default nuget tags for a new solution using this template
         /// </summary>
-        [SettingMetadata("Default Nuget Tags", SettingType.String, order: 13)]
+        [TemplateFieldMetadata("Default Nuget Tags", PropertyType.String, order: 102, requiredFieldName: "AskForNugetInfo", requiredFieldValue: true)]
         public string DefaultNugetTags = string.Empty;
     }
 }

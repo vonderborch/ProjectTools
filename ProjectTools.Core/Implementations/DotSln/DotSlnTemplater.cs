@@ -13,6 +13,12 @@ namespace ProjectTools.Core.Implementations.DotSln
     internal class DotSlnTemplater : AbstractTemplater
     {
         /// <summary>
+        /// Gets the type of the solution settings.
+        /// </summary>
+        /// <value>The type of the solution settings.</value>
+        public override Type SolutionSettingsType => typeof(DotSlnSolutionSettings);
+
+        /// <summary>
         /// Gets the type of the template information class for this implementation.
         /// </summary>
         /// <value>The type of the template information.</value>
@@ -63,6 +69,42 @@ namespace ProjectTools.Core.Implementations.DotSln
         {
             var preparer = new DotSlnSolutionPreparer(log);
             return preparer.PrepareTemplate(options);
+        }
+
+        /// <summary>
+        /// Modifies the solution setting properties.
+        /// </summary>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="properties">The properties.</param>
+        /// <returns></returns>
+        protected override List<Property> ModifySolutionSettingProperties(string templateName, List<Property> properties)
+        {
+            var template = Manager.Instance.Templater.GetTemplateByName(templateName);
+            var templateInformation = template.Template.Information;
+            var templateSettings = (DotSlnTemplateSettings)template.Template.Settings;
+
+            var output = new List<Property>();
+
+            foreach (var property in properties)
+            {
+                // skip the license expression and tags if we don't ask for nuget info
+                if ((property.Name == nameof(DotSlnSolutionSettings.LicenseExpression) || property.Name == nameof(DotSlnSolutionSettings.Tags)) && !templateSettings.AskForNugetInfo)
+                {
+                    continue;
+                }
+
+                // If we don't have a default value, let's populate one from settings...
+                if (property.CurrentValue == null)
+                {
+                    var metadata = (SolutionSettingFieldMetadata)property.Metadata;
+                    var defaultField = metadata.TemplateSettingFieldName;
+                    var defaultFromTemplate = template.GetType()?.GetProperty(defaultField)?.GetValue(template);
+                    property.CurrentValue = defaultFromTemplate;
+                }
+                output.Add(property);
+            }
+
+            return output;
         }
     }
 }

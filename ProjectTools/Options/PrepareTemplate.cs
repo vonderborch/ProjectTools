@@ -1,7 +1,5 @@
-﻿using System.Text;
-using CommandLine;
+﻿using CommandLine;
 using ProjectTools.Core;
-using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Options;
 using ProjectTools.Core.Templating;
@@ -125,108 +123,11 @@ namespace ProjectTools.Options
         }
 
         /// <summary>
-        /// Continues the editing settings.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>True to edit, False to finish editing</returns>
-        private bool ContinueEditingSettings(List<SettingProperty> settings)
-        {
-            var displayedSettings = settings.Select(x => (x.Order, $"{x.DisplayName}: {GetDisplayValue(x.CurrentValue, x.Type)}{Environment.NewLine}")).OrderBy(x => x.Order).ToList();
-
-            var sb = new StringBuilder();
-            foreach (var setting in displayedSettings)
-            {
-                _ = sb.Append($"    {setting.Item2}");
-            }
-
-            var result = ConsoleHelpers.GetYesNo($"Edit settings?{Environment.NewLine}{sb}{Environment.NewLine}", false);
-            _ = LogMessage(" ");
-            return result;
-        }
-
-        /// <summary>
-        /// Gets the display value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="type">The type.</param>
-        /// <returns>The string representation of the value.</returns>
-        private string GetDisplayValue(object? value, SettingType type)
-        {
-            switch (type)
-            {
-                case SettingType.Bool:
-                    return (bool)(value ?? false) ? "Yes" : "No";
-
-                case SettingType.String:
-                    return (string)(value ?? string.Empty);
-
-                case SettingType.StringListComma:
-                    return string.Join(", ", (value as List<string>) ?? []);
-
-                case SettingType.StringListSemiColan:
-                    return string.Join("; ", (value as List<string>) ?? []);
-                case SettingType.DictionaryStringString:
-                    var tempDSS = (value as Dictionary<string, string>) ?? [];
-                    var tempDSS2 = tempDSS.Select(x => string.Join(": ", x.Key, x.Value));
-                    return string.Join(", ", tempDSS2);
-
-                default:
-                    throw new Exception($"Unknown setting type {type}!");
-            }
-        }
-
-        /// <summary>
-        /// Gets the input for property.
-        /// </summary>
-        /// <param name="setting">The setting.</param>
-        /// <returns>The user-entered value for the property</returns>
-        /// <exception cref="Exception">$"Unknown setting type {setting.Type}!</exception>
-        private object GetInputForProperty(SettingProperty setting)
-        {
-            object response;
-            string tempResponse;
-            List<string> tempListResponse;
-            var defaultValue = GetDisplayValue(setting.CurrentValue, setting.Type);
-            switch (setting.Type)
-            {
-                case SettingType.Bool:
-                    response = ConsoleHelpers.GetYesNo(setting.DisplayName, defaultValue == "Yes");
-                    break;
-
-                case SettingType.String:
-                    response = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                    break;
-
-                case SettingType.StringListComma:
-                    tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                    tempListResponse = tempResponse.Split(",").Select(x => x.Trim()).ToList();
-                    response = tempListResponse.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-                    break;
-
-                case SettingType.StringListSemiColan:
-                    tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                    tempListResponse = tempResponse.Split(";").Select(x => x.Trim()).ToList();
-                    response = tempListResponse.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-                    break;
-
-                case SettingType.DictionaryStringString:
-                    tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
-                    tempListResponse = tempResponse.Split(",").Select(x => x.Trim()).ToList();
-                    response = tempListResponse.Where(x => !string.IsNullOrWhiteSpace(x)).ToDictionary(x => x.Split(":")[0].Trim(), x => x.Split(":")[1].Trim());
-                    break;
-
-                default:
-                    throw new Exception($"Unknown setting type {setting.Type}!");
-            }
-
-            return response;
-        }
-
-        /// <summary>
-        /// Gets the user input.
+        /// Gets the template for preparation.
         /// </summary>
         /// <param name="templater">The templater.</param>
-        /// <returns>A template prepared with user input.</returns>
+        /// <returns>The template the user is building.</returns>
+        /// <exception cref="System.Exception">Could not find a value for field {setting.Metadata.RequiredFieldName}!</exception>
         private Template GetTemplateForPreparation(AbstractTemplater templater)
         {
             Template template;
@@ -238,7 +139,7 @@ namespace ProjectTools.Options
             if (hadFile)
             {
                 _ = LogMessage($" {Environment.NewLine}TEMPLATE INFORMATION");
-                if (!ContinueEditingSettings(settingsNeeded))
+                if (!PropertyHelpers.ContinueEditingSettings(settingsNeeded, LogMessage))
                 {
                     template = templater.GetTemplateForProperties(settingsNeeded, Directory, true);
                     return template;
@@ -255,12 +156,32 @@ namespace ProjectTools.Options
                 // loop through each setting we need and ask what it should be
                 foreach (var setting in settingsNeeded)
                 {
-                    var result = GetInputForProperty(setting);
+                    // if this setting requires another setting to be a certain value, check that value
+                    if (!string.IsNullOrWhiteSpace(setting.Metadata.RequiredFieldName))
+                    {
+                        var otherField = settingsNeeded.Where(x => x.Name == setting.Metadata.RequiredFieldName).FirstOrDefault();
+                        var otherFieldValue = otherField?.CurrentValue;
+
+                        if (otherFieldValue == null)
+                        {
+                            throw new Exception($"Could not find a value for field {setting.Metadata.RequiredFieldName}!");
+                        }
+
+                        var actualOtherValue = PropertyHelpers.GetDisplayValue(otherFieldValue, otherField.Type);
+                        var requiredOtherValue = PropertyHelpers.GetDisplayValue(setting.Metadata.RequiredFieldValue, otherField.Type);
+                        if (actualOtherValue != requiredOtherValue)
+                        {
+                            continue;
+                        }
+                    }
+
+                    // otherwise, get the user input for the setting
+                    var result = PropertyHelpers.GetInputForProperty(setting);
                     setting.CurrentValue = result;
                 }
 
                 _ = LogMessage(" ");
-                continueEditing = ContinueEditingSettings(settingsNeeded);
+                continueEditing = PropertyHelpers.ContinueEditingSettings(settingsNeeded, LogMessage);
             } while (continueEditing);
 
             template = templater.GetTemplateForProperties(settingsNeeded, Directory, true);

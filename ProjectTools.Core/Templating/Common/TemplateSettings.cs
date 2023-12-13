@@ -17,63 +17,63 @@ namespace ProjectTools.Core.Templating.Common
         /// <summary>
         /// The files and directories to remove from a new solution using this template
         /// </summary>
-        [SettingMetadata("Cleanup Files And Directories (comma-separated)", SettingType.StringListComma, order: 6)]
+        [TemplateFieldMetadata("Cleanup Files And Directories (comma-separated)", PropertyType.StringListComma, order: 301)]
         public List<string> CleanupFilesAndDirectories = [];
 
         /// <summary>
         /// The commands to run after a new solution using this template has been created
         /// </summary>
-        [SettingMetadata("Commands (semi-colan-separated)", SettingType.StringListSemiColan, order: 8)]
+        [TemplateFieldMetadata("Commands (semi-colan-separated)", PropertyType.StringListSemiColan, order: 400)]
         public List<string> Commands = [];
 
         /// <summary>
         /// The default author for a new solution using this template
         /// </summary>
-        [SettingMetadata("Default Author", SettingType.String, order: 2)]
+        [TemplateFieldMetadata("Default Author", PropertyType.String, order: 2)]
         public string DefaultAuthor = string.Empty;
 
         /// <summary>
         /// The default description for a new solution using this template
         /// </summary>
-        [SettingMetadata("Default Description", SettingType.String, order: 3)]
+        [TemplateFieldMetadata("Default Description", PropertyType.String, order: 10)]
         public string DefaultDescription = string.Empty;
 
         /// <summary>
         /// The default solution name for a new solution using this template. If this is set, DefaultSolutionNameFormat
         /// is ignored.
         /// </summary>
-        [SettingMetadata("Default Solution Name", SettingType.String, order: 0)]
+        [TemplateFieldMetadata("Default Solution Name", PropertyType.String, order: 0)]
         public string DefaultSolutionName = string.Empty;
 
         /// <summary>
-        /// The default solution name format for a new solution using this template
+        /// The default author for a new solution using this template
         /// </summary>
-        [SettingMetadata("Default Solution Name Format", SettingType.String, order: 1)]
-        public string DefaultSolutionNameFormat = string.Empty;
+        [TemplateFieldMetadata("Default Starting Version", PropertyType.String, order: 1)]
+        public string DefaultStartingVersion = string.Empty;
 
         /// <summary>
         /// The directories excluded in prepare
         /// </summary>
-        [SettingMetadata("Prepare-excluded Directories (comma-separated)", SettingType.StringListComma, order: 4)]
+        [TemplateFieldMetadata("Prepare-excluded Directories (comma-separated)", PropertyType.StringListComma, order: 300)]
         public List<string> DirectoriesExcludedInPrepare = [];
 
         /// <summary>
         /// Manual instructions to display after a new solution using this template has been created
         /// </summary>
-        [SettingMetadata("Instructions (semi-colan-separated)", SettingType.StringListSemiColan, order: 9)]
+        [TemplateFieldMetadata("Instructions (semi-colan-separated)", PropertyType.StringListSemiColan, order: 401)]
         public List<string> Instructions = [];
 
         /// <summary>
         /// Files and directories we only rename if need, not edit the contents of, when creating a new solution using
         /// this template
         /// </summary>
-        [SettingMetadata("Rename-only Files and Directories (comma-separated)", SettingType.StringListComma, order: 5)]
+        [TemplateFieldMetadata("Rename-only Files and Directories (comma-separated)", PropertyType.StringListComma, order: 302)]
         public List<string> RenameOnlyFilesAndDirectories = [];
 
         /// <summary>
         /// Text to replace in the solution's files and directories after a new solution using this template has been created
         /// </summary>
-        [SettingMetadata("Replacement Text (Format: key: value, key: value, etc.)", SettingType.DictionaryStringString, order: 7)]
+        [TemplateFieldMetadata("Replacement Text (Format: key: value, key: value, etc.)", PropertyType.DictionaryStringString, order: 200)]
         public Dictionary<string, string> ReplacementText = [];
 
         /// <summary>

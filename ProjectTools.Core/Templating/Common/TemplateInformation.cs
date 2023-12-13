@@ -15,25 +15,25 @@ namespace ProjectTools.Core.Templating.Common
         /// <summary>
         /// The author of the template
         /// </summary>
-        [SettingMetadata("Template Author", SettingType.String, order: 1)]
+        [TemplateFieldMetadata("Template Author", PropertyType.String, order: 1)]
         public string Author = string.Empty;
 
         /// <summary>
         /// The description of the template
         /// </summary>
-        [SettingMetadata("Template Description", SettingType.String, order: 3)]
+        [TemplateFieldMetadata("Template Description", PropertyType.String, order: 3)]
         public string Description = string.Empty;
 
         /// <summary>
         /// The name of the template
         /// </summary>
-        [SettingMetadata("Template Name", SettingType.String, order: 0)]
+        [TemplateFieldMetadata("Template Name", PropertyType.String, order: 0)]
         public string Name = string.Empty;
 
         /// <summary>
         /// The version of the template
         /// </summary>
-        [SettingMetadata("Template Version", SettingType.String, order: 2)]
+        [TemplateFieldMetadata("Template Version", PropertyType.String, order: 2)]
         public string Version = string.Empty;
 
         /// <summary>

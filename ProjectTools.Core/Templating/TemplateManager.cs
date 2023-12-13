@@ -73,7 +73,7 @@ namespace ProjectTools.Core.Templating
                 var localTemplateNames = localTemplates.Select(x => x.Template.Information.Name).ToList();
 
                 var newTemplates = remoteTemplates.Where(x => !localTemplateNames.Contains(x.DisplayName)).ToList();
-                var updateableTemplates = remoteTemplates.Where(x => localTemplateNames.Contains(x.DisplayName) && (GetTemplateForName(x.DisplayName)?.RepoInfo?.SHA != x.SHA || forceUpdates)).ToList();
+                var updateableTemplates = remoteTemplates.Where(x => localTemplateNames.Contains(x.DisplayName) && (GetTemplateByName(x.DisplayName)?.RepoInfo?.SHA != x.SHA || forceUpdates)).ToList();
                 var orphanedTemplates = localTemplateNames.Where(x => !remoteTemplates.Any(y => y.DisplayName == x)).ToList();
 
                 // update settings and return
@@ -164,16 +164,39 @@ namespace ProjectTools.Core.Templating
         }
 
         /// <summary>
-        /// Gets the name of the template for.
+        /// Gets the template for the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>The template.</returns>
         /// <exception cref="ArgumentOutOfRangeException">nameof(name), $"No template found for name {name}</exception>
-        public MetaTemplate GetTemplateForName(string name)
+        public MetaTemplate GetTemplateByName(string name)
         {
             return _localTemplates.TryGetValue(name, out var template)
                 ? template
                 : throw new ArgumentOutOfRangeException(nameof(name), $"No template found for name {name}");
+        }
+
+        /// <summary>
+        /// Gets the templater for template.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>The templater for the template.</returns>
+        public AbstractTemplater GetTemplaterForTemplate(string name)
+        {
+            var template = GetTemplateByName(name);
+            var templater = TemplaterFactory.GetTemplater(template.Implementation);
+            return templater;
+        }
+
+        /// <summary>
+        /// Gets the templater for template.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <returns>The templater for the template.</returns>
+        public AbstractTemplater GetTemplaterForTemplate(MetaTemplate template)
+        {
+            var templater = TemplaterFactory.GetTemplater(template.Implementation);
+            return templater;
         }
 
         /// <summary>
@@ -196,6 +219,8 @@ namespace ProjectTools.Core.Templating
                 return;
             }
 
+            var templaters = TemplaterFactory.GetAllRegisteredTemplaters();
+
             // load the templates into memory
             foreach (var file in templatesFiles)
             {
@@ -211,8 +236,21 @@ namespace ProjectTools.Core.Templating
                     }
 
                     var gitInfo = gitTemplateMetadata.FirstOrDefault(x => x.Name == fileName);
+                    AbstractTemplater? validTemplater = null;
+                    foreach (var templater in templaters)
+                    {
+                        if (templater.TemplaterValidForTemplate(templateCoreInfo))
+                        {
+                            validTemplater = templater;
+                            break;
+                        }
+                    }
+                    if (validTemplater == null)
+                    {
+                        throw new Exception($"No valid templater found for template {fileName}");
+                    }
 
-                    var template = new MetaTemplate() { FilePath = file, RepoInfo = gitInfo, Template = templateCoreInfo };
+                    var template = new MetaTemplate() { FilePath = file, RepoInfo = gitInfo, Template = templateCoreInfo, Implementation = validTemplater.Implementation };
                     _localTemplates.Add(template.Template.Information.Name, template);
                 }
                 catch
@@ -222,6 +260,16 @@ namespace ProjectTools.Core.Templating
                     File.Delete(file);
                 }
             }
+        }
+
+        /// <summary>
+        /// Templates the exists.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>True if the template exists, False otherwise.</returns>
+        public bool TemplateExists(string name)
+        {
+            return _localTemplates.ContainsKey(name);
         }
 
         /// <summary>
