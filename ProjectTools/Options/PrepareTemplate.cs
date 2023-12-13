@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Text;
+using CommandLine;
 using ProjectTools.Core;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations;
@@ -6,7 +7,6 @@ using ProjectTools.Core.Options;
 using ProjectTools.Core.Templating;
 using ProjectTools.Core.Templating.Common;
 using ProjectTools.Helpers;
-using System.Text;
 
 namespace ProjectTools.Options
 {
@@ -21,21 +21,21 @@ namespace ProjectTools.Options
         /// Gets or sets the directory.
         /// </summary>
         /// <value>The directory.</value>
-        [Option('d', "directory", Required = true, HelpText = "The directory to prepare as a template")]
+        [Option('d', "directory", Required = true, HelpText = "The directory to prepare as a template.")]
         public string Directory { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
         /// <value>The output directory.</value>
-        [Option('o', "output-directory", Required = true, HelpText = "The output directory to place the template into")]
+        [Option('o', "output-directory", Required = true, HelpText = "The output directory to place the template into.")]
         public string OutputDirectory { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets a value indicating whether [skip cleaning].
         /// </summary>
         /// <value><c>true</c> if [skip cleaning]; otherwise, <c>false</c>.</value>
-        [Option('s', "skip-cleaning", Required = false, Default = false, HelpText = "If flag is provided, the working directory won't be deleted at the end of the prepare process.")]
+        [Option('c', "skip-cleaning", Required = false, Default = false, HelpText = "If flag is provided, the working directory won't be deleted at the end of the prepare process.")]
         public bool SkipCleaning { get; set; } = false;
 
         /// <summary>

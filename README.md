@@ -20,7 +20,7 @@ Coming eventually!
 
 ## Command Prompt/Terminal Version
 
-Coming soon!
+See the [Console Commands](https://github.com/vonderborch/ProjectTools/blob/main/ConsoleCommands.md) file for available commands.
 
 # Existing Templates
 The application will automatically download templates from the [Template Repository](https://github.com/vonderborch/ProjectTools/tree/main/Templates/TEMPLATES) by default. Currently available templates are:
