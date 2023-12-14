@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using ProjectTools.Core.PropertyHelpers;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
-using ProjectTools.Core.Helpers;
 
 namespace ProjectTools.Core.Templating.Common
 {
@@ -35,14 +34,5 @@ namespace ProjectTools.Core.Templating.Common
         /// </summary>
         [TemplateFieldMetadata("Template Version", PropertyType.String, order: 2)]
         public string Version = string.Empty;
-
-        /// <summary>
-        /// Converts the current instance to a JSON string.
-        /// </summary>
-        /// <returns>The JSON string.</returns>
-        public string ToJson()
-        {
-            return JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
-        }
     }
 }

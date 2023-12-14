@@ -32,7 +32,7 @@ namespace ProjectTools.Core.Helpers
                     try
                     {
                         Directory.Delete(directoryToArchive, true);
-                        break;
+                        return;
                     }
                     catch (Exception)
                     {
@@ -40,6 +40,7 @@ namespace ProjectTools.Core.Helpers
                         Thread.Sleep(500);
                     }
                 }
+                throw new Exception($"Could not delete directory: {directoryToArchive}");
             }
         }
 
@@ -91,7 +92,22 @@ namespace ProjectTools.Core.Helpers
         {
             if (Directory.Exists(directory))
             {
-                Directory.Delete(directory, true);
+                var deleted = false;
+                for (var i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        Directory.Delete(directory, true);
+                        deleted = true;
+                        break;
+                    }
+                    catch { }
+                }
+
+                if (!deleted)
+                {
+                    throw new Exception($"Could not delete directory: {directory}");
+                }
             }
 
             if (createDirectory)
@@ -107,9 +123,9 @@ namespace ProjectTools.Core.Helpers
         /// <param name="createFile">if set to <c>true</c> [create file].</param>
         public static void DeleteFileIfExists(string file, bool createFile = false)
         {
-            if (Directory.Exists(file))
+            if (File.Exists(file))
             {
-                Directory.Delete(file, true);
+                File.Delete(file);
             }
 
             if (createFile)
@@ -149,6 +165,58 @@ namespace ProjectTools.Core.Helpers
             }
 
             return contents;
+        }
+
+        /// <summary>
+        /// Unzips the directory.
+        /// </summary>
+        /// <param name="outputDirectory">The output directory.</param>
+        /// <param name="archiveFile">The archive file.</param>
+        /// <param name="excludedFiles">The excluded files.</param>
+        /// <param name="overrideDirectory">if set to <c>true</c> [override directory].</param>
+        public static void UnzipDirectory(string outputDirectory, string archiveFile, List<string> excludedFiles, bool overrideDirectory = true)
+        {
+            if (overrideDirectory)
+            {
+                DeleteDirectoryIfExists(outputDirectory, true);
+            }
+
+            using var file = File.OpenRead(archiveFile);
+            using var zip = new ZipFile(file);
+            foreach (ZipEntry entry in zip)
+            {
+                var path = Path.Combine(outputDirectory, entry.Name.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                var directoryPath = Path.GetDirectoryName(path);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    if (entry.IsDirectory)
+                    {
+                        _ = Directory.CreateDirectory(path);
+                    }
+                    else
+                    {
+                        if (excludedFiles.Contains(Path.GetFileName(entry.Name)))
+                        {
+                            continue;
+                        }
+
+                        if (directoryPath is { Length: > 0 })
+                        {
+                            _ = Directory.CreateDirectory(directoryPath);
+                        }
+
+                        var buffer = new byte[4096];
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+
+                        using var inputStream = zip.GetInputStream(entry);
+                        using var output = File.Create(path);
+                        StreamUtils.Copy(inputStream, output, buffer);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -208,12 +276,14 @@ namespace ProjectTools.Core.Helpers
                     }
 
                     File.Copy(source, destination, true);
+                    return;
                 }
                 catch
                 {
                     Thread.Sleep(sleepTime);
                 }
             }
+            throw new Exception($"Could not copy directory '{source}' to destination '{destination}'");
         }
     }
 }

@@ -10,13 +10,11 @@
     "$type": "dotsln",
     "AskForNugetInfo": true,
     "DefaultCompanyName": "\u003CCurrentUserName\u003E",
-    "DefaultNugetLicense": "MIT",
     "DefaultNugetTags": "Velentr,",
     "CleanupFilesAndDirectories": [],
-    "Commands": [],
     "DefaultAuthor": "\u003CCurrentUserName\u003E",
     "DefaultDescription": "A library",
-    "DefaultSolutionName": "\u003CParentDir\u003E.",
+    "DefaultSolutionName": "\u003CCurrentDir\u003E.\u003CSolutionName\u003E",
     "DefaultStartingVersion": "1.0.0",
     "DirectoriesExcludedInPrepare": [
       "bin",
@@ -26,11 +24,13 @@
       "release"
     ],
     "Instructions": [],
+    "LicenseExpression": "MIT",
     "RenameOnlyFilesAndDirectories": [
       "logo.png"
     ],
     "ReplacementText": {
-      "Velentr.BASE": "\u003CSolutionName\u003E"
-    }
+      "Velentr.BASE": "\u003CProjectFullName\u003E"
+    },
+    "Scripts": []
   }
 }

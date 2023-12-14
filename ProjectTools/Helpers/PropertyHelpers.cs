@@ -1,5 +1,5 @@
-﻿using System.Text;
-using ProjectTools.Core.Helpers;
+﻿using ProjectTools.Core.PropertyHelpers;
+using System.Text;
 
 namespace ProjectTools.Helpers
 {
@@ -49,10 +49,14 @@ namespace ProjectTools.Helpers
 
                 case PropertyType.StringListSemiColan:
                     return string.Join("; ", (value as List<string>) ?? []);
+
                 case PropertyType.DictionaryStringString:
                     var tempDSS = (value as Dictionary<string, string>) ?? [];
                     var tempDSS2 = tempDSS.Select(x => string.Join(": ", x.Key, x.Value));
                     return string.Join(", ", tempDSS2);
+
+                case PropertyType.Enum:
+                    return (value as Enum)?.ToString() ?? string.Empty;
 
                 default:
                     throw new Exception($"Unknown setting type {type}!");
@@ -78,7 +82,14 @@ namespace ProjectTools.Helpers
                     break;
 
                 case PropertyType.String:
-                    response = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
+                    if (setting.AllowedValues.Count > 0)
+                    {
+                        response = ConsoleHelpers.GetInputWithLimit(setting.DisplayName, setting.AllowedValues, defaultValue);
+                    }
+                    else
+                    {
+                        response = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
+                    }
                     break;
 
                 case PropertyType.StringListComma:
@@ -97,6 +108,12 @@ namespace ProjectTools.Helpers
                     tempResponse = ConsoleHelpers.GetInput(setting.DisplayName, defaultValue);
                     tempListResponse = tempResponse.Split(",").Select(x => x.Trim()).ToList();
                     response = tempListResponse.Where(x => !string.IsNullOrWhiteSpace(x)).ToDictionary(x => x.Split(":")[0].Trim(), x => x.Split(":")[1].Trim());
+                    break;
+
+                case PropertyType.Enum:
+                    tempListResponse = Enum.GetNames(setting.ActualType).ToList();
+                    tempResponse = ConsoleHelpers.GetInputWithLimit(setting.DisplayName, tempListResponse, defaultValue);
+                    response = Enum.Parse(setting.ActualType, tempResponse);
                     break;
 
                 default:

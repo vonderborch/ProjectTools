@@ -1,4 +1,4 @@
-﻿namespace ProjectTools.Core.Helpers
+﻿namespace ProjectTools.Core.PropertyHelpers
 {
     /// <summary>
     /// Sources available for Template Settings

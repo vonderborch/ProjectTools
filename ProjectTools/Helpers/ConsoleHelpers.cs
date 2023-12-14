@@ -8,7 +8,7 @@
         /// <param name="message">The message.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <param name="displayValue">The display value.</param>
-        /// <returns></returns>
+        /// <returns>The user's input.</returns>
         public static string GetInput(string message, string defaultValue = "", string displayValue = "")
         {
             // determine the message to the user
@@ -24,6 +24,38 @@
             var input = Console.ReadLine();
 
             var output = string.IsNullOrWhiteSpace(input) ? defaultValue : input;
+            return output;
+        }
+
+        /// <summary>
+        /// Gets the input for an enum.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="allowedValues">The list of allowed values.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <param name="displayValue">The display value.</param>
+        /// <returns>The user's input.</returns>
+        public static string GetInputWithLimit(string message, List<string> allowedValues, string defaultValue = "", string displayValue = "")
+        {
+            // determine the message to the user
+            var actualDisplayValue = string.IsNullOrWhiteSpace(displayValue) ? defaultValue : displayValue;
+            if (!string.IsNullOrWhiteSpace(actualDisplayValue))
+            {
+                actualDisplayValue = $" ({actualDisplayValue})";
+            }
+            var allowedValuesDisplay = string.Join(", ", allowedValues);
+            message = $"{message} (Allowed Values: {allowedValuesDisplay}){actualDisplayValue}: ";
+
+            // get the user's input for the message
+            string output;
+            do
+            {
+                Console.Write(message);
+                var input = Console.ReadLine();
+
+                output = string.IsNullOrWhiteSpace(input) ? defaultValue : input;
+            } while (!allowedValues.Contains(output));
+
             return output;
         }
 

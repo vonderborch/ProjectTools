@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations.DotSln;
+using ProjectTools.Core.PropertyHelpers;
 
 namespace ProjectTools.Core.Templating.Common
 {
@@ -19,12 +18,6 @@ namespace ProjectTools.Core.Templating.Common
         /// </summary>
         [TemplateFieldMetadata("Cleanup Files And Directories (comma-separated)", PropertyType.StringListComma, order: 301)]
         public List<string> CleanupFilesAndDirectories = [];
-
-        /// <summary>
-        /// The commands to run after a new solution using this template has been created
-        /// </summary>
-        [TemplateFieldMetadata("Commands (semi-colan-separated)", PropertyType.StringListSemiColan, order: 400)]
-        public List<string> Commands = [];
 
         /// <summary>
         /// The default author for a new solution using this template
@@ -64,6 +57,13 @@ namespace ProjectTools.Core.Templating.Common
         public List<string> Instructions = [];
 
         /// <summary>
+        /// The license expression
+        /// </summary>
+        [TemplateFieldMetadata("License Expression", PropertyType.String, order: 5)]
+        [AllowedValue(Constants.LICENSE_EXPRESSIONS, PropertyType.StringListComma)]
+        public string LicenseExpression = string.Empty;
+
+        /// <summary>
         /// Files and directories we only rename if need, not edit the contents of, when creating a new solution using
         /// this template
         /// </summary>
@@ -77,12 +77,9 @@ namespace ProjectTools.Core.Templating.Common
         public Dictionary<string, string> ReplacementText = [];
 
         /// <summary>
-        /// Converts the current instance to a JSON string.
+        /// The Python scripts to run after a new solution using this template has been created
         /// </summary>
-        /// <returns>The JSON string.</returns>
-        public string ToJson()
-        {
-            return JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
-        }
+        [TemplateFieldMetadata("Python Script Files (semi-colan-separated)", PropertyType.StringListSemiColan, order: 400)]
+        public List<string> Scripts = [];
     }
 }

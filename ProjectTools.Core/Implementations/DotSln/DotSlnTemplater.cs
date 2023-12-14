@@ -1,5 +1,6 @@
 ﻿using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Options;
+using ProjectTools.Core.PropertyHelpers;
 using ProjectTools.Core.Templating;
 using ProjectTools.Core.Templating.Common;
 
@@ -59,12 +60,26 @@ namespace ProjectTools.Core.Implementations.DotSln
         }
 
         /// <summary>
+        /// Generates the project.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="instructionLog"></param>
+        /// <param name="commandLog"></param>
+        /// <returns>The result of the generation</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override string GenerateProject(GenerateOptions options, Func<string, bool> log, Func<string, bool> instructionLog, Func<string, bool> commandLog)
+        {
+            var generator = new DotSlnGenerator(log, instructionLog, commandLog);
+            return generator.GenerateProject(options);
+        }
+
+        /// <summary>
         /// Prepares the template.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="log">The log.</param>
         /// <returns>The result of the preperation</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override string PrepareTemplate(PrepareOptions options, Func<string, bool> log)
         {
             var preparer = new DotSlnSolutionPreparer(log);
@@ -75,20 +90,22 @@ namespace ProjectTools.Core.Implementations.DotSln
         /// Modifies the solution setting properties.
         /// </summary>
         /// <param name="templateName">Name of the template.</param>
+        /// <param name="outputDir">The output directory.</param>
         /// <param name="properties">The properties.</param>
-        /// <returns></returns>
-        protected override List<Property> ModifySolutionSettingProperties(string templateName, List<Property> properties)
+        /// <param name="solutionName">The solution name.</param>
+        /// <returns>The corrected solution setting properties.</returns>
+        protected override List<Property> ModifySolutionSettingProperties(string templateName, string outputDir, List<Property> properties, string solutionName)
         {
             var template = Manager.Instance.Templater.GetTemplateByName(templateName);
             var templateInformation = template.Template.Information;
             var templateSettings = (DotSlnTemplateSettings)template.Template.Settings;
 
             var output = new List<Property>();
-
+            var nugetFields = new List<string>() { nameof(DotSlnSolutionSettings.LicenseExpression), nameof(DotSlnSolutionSettings.Tags) };
             foreach (var property in properties)
             {
                 // skip the license expression and tags if we don't ask for nuget info
-                if ((property.Name == nameof(DotSlnSolutionSettings.LicenseExpression) || property.Name == nameof(DotSlnSolutionSettings.Tags)) && !templateSettings.AskForNugetInfo)
+                if (nugetFields.Contains(property.Name) && !templateSettings.AskForNugetInfo)
                 {
                     continue;
                 }
@@ -98,9 +115,20 @@ namespace ProjectTools.Core.Implementations.DotSln
                 {
                     var metadata = (SolutionSettingFieldMetadata)property.Metadata;
                     var defaultField = metadata.TemplateSettingFieldName;
-                    var defaultFromTemplate = template.GetType()?.GetProperty(defaultField)?.GetValue(template);
-                    property.CurrentValue = defaultFromTemplate;
+                    var defaultFromTemplateSettings = templateSettings.GetType()?.GetField(defaultField)?.GetValue(templateSettings);
+
+                    if (metadata.Type != PropertyType.String)
+                    {
+                        property.CurrentValue = defaultFromTemplateSettings;
+                    }
+                    else
+                    {
+                        var actualDefault = (string)defaultFromTemplateSettings;
+                        actualDefault = UpdateSimpleReplacementTextDuringSettingsRequest(actualDefault, outputDir, solutionName);
+                        property.CurrentValue = actualDefault;
+                    }
                 }
+
                 output.Add(property);
             }
 

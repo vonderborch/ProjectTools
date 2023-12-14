@@ -1,4 +1,4 @@
-﻿using ProjectTools.Core.Helpers;
+﻿using ProjectTools.Core.PropertyHelpers;
 using ProjectTools.Core.Templating.Common;
 
 namespace ProjectTools.Core.Implementations.DotSln
@@ -22,15 +22,9 @@ namespace ProjectTools.Core.Implementations.DotSln
         public string DefaultCompanyName = string.Empty;
 
         /// <summary>
-        /// The default nuget license for a new solution using this template
-        /// </summary>
-        [TemplateFieldMetadata("Default Nuget License", PropertyType.String, order: 101, requiredFieldName: "AskForNugetInfo", requiredFieldValue: true)]
-        public string DefaultNugetLicense = string.Empty;
-
-        /// <summary>
         /// The default nuget tags for a new solution using this template
         /// </summary>
-        [TemplateFieldMetadata("Default Nuget Tags", PropertyType.String, order: 102, requiredFieldName: "AskForNugetInfo", requiredFieldValue: true)]
+        [TemplateFieldMetadata("Default Nuget Tags", PropertyType.String, order: 101, requiredFieldName: "AskForNugetInfo", requiredFieldValue: true)]
         public string DefaultNugetTags = string.Empty;
     }
 }

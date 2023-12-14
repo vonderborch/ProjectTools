@@ -112,6 +112,7 @@ Prepares a directory by creating a new template from it.
 | -o  | -output-directory | The output directory to place the template into. | False |
 | -c  | -skip-cleaning | If flag is provided, the working directory won't be deleted at the end of the prepare process. | False |
 | -t  | -type | The type of the solution to prepare. Defaults to auto. | False |
+| -i  | -what-if | If flag is provided, the program will not actually generate the project, but will instead just show what would be generated. | False |
 
 ##### Available Options for `-t`/`-type`
 
@@ -126,7 +127,27 @@ Prepares a directory by creating a new template from it.
 
 ### `generate`
 
-Coming Soon!
+Generates a new project from a template.
+
+#### Available Parameters
+
+| Short Name | Long Name | Description | Required |
+| --- | --- | --- | --- |
+| -n  | -name | The name of the project to generate. | True |
+| -o  | -output-directory | The output directory to place the template into. | True |
+| -t  | -template | The template to use to generate the project. | True |
+| -f  | -force | If flag is provided, the program will force the generation of the project, even if the output directory is not empty. | False |
+| -c  | -solution-config | The configuration to use when generating the solution. If not provided, will use a default-named file. | False |
+| -p  | -preserve-default-solution-config | If flag is provided, the program will not cleanup the default solution configuration file. | False |
+| -i  | -what-if | If flag is provided, the program will not actually generate the project, but will instead just show what would be generated. | False |
+
+##### Available Options for `-t`/`-template`
+
+`-t`/`-template` supports any template that is available locally. To see a list of available templates, run `./ProjectTools.exe list-templates`.
+
+#### Example Usage
+
+- Minimal Parameters: `./ProjectTools.exe generate -n "My Solution Name" -t "My Template To Use" -o "Template Output Path"`
 
 ## Tooling Commands
 

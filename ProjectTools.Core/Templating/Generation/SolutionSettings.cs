@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations.DotSln;
+using ProjectTools.Core.PropertyHelpers;
 using ProjectTools.Core.Templating.Common;
 
 namespace ProjectTools.Core.Templating.Generation
@@ -33,6 +33,11 @@ namespace ProjectTools.Core.Templating.Generation
         public const string FieldSpecialTextGitRepoOwner = "GIT_REPO_OWNER";
 
         /// <summary>
+        /// The field special text for the GitRepoName field
+        /// </summary>
+        public const string FieldSpecialTextGitRepoPrivate = "GIT_REPO_PRIVATE";
+
+        /// <summary>
         /// The author of the solution
         /// </summary>
         [SolutionSettingFieldMetadata("Author", nameof(TemplateSettings.DefaultAuthor), PropertyType.String, order: 2)]
@@ -41,26 +46,39 @@ namespace ProjectTools.Core.Templating.Generation
         /// <summary>
         /// The description of the solution
         /// </summary>
-        [SolutionSettingFieldMetadata("Description", nameof(TemplateSettings.DefaultDescription), PropertyType.String, order: 10)]
+        [SolutionSettingFieldMetadata("Description", nameof(TemplateSettings.DefaultDescription), PropertyType.String, order: 20)]
         public required string Description;
 
         /// <summary>
         /// The git repo mode
         /// </summary>
-        [SolutionSettingFieldMetadata("Git Repo Mode", FieldSpecialTextGitRepoMode, PropertyType.Enum, order: 100)]
+        [SolutionSettingFieldMetadata("Git Repo Mode", FieldSpecialTextGitRepoMode, PropertyType.Enum, defaultValue: GitRepoMode.NoRepo, order: 100)]
         public GitRepoMode GitRepoMode = GitRepoMode.NoRepo;
 
         /// <summary>
         /// The git repo name
         /// </summary>
-        [SolutionSettingFieldMetadata("Git Repo Name", FieldSpecialTextGitRepoName, PropertyType.String, order: 101, requiredFieldName: "GitRepoMode", requiredFieldValue: GitRepoMode.NoRepo)]
+        [SolutionSettingFieldMetadata("Git Repo Name", FieldSpecialTextGitRepoName, PropertyType.String, defaultValue: "", order: 101, requiredFieldName: "GitRepoMode", disallowedFieldValue: GitRepoMode.NoRepo)]
         public string GitRepoName = string.Empty;
 
         /// <summary>
         /// The git repo owner
         /// </summary>
-        [SolutionSettingFieldMetadata("Git Repo Owner", FieldSpecialTextGitRepoOwner, PropertyType.String, order: 102, requiredFieldName: "GitRepoMode", requiredFieldValue: GitRepoMode.NoRepo)]
+        [SolutionSettingFieldMetadata("Git Repo Owner", FieldSpecialTextGitRepoOwner, PropertyType.String, defaultValue: "", order: 102, requiredFieldName: "GitRepoMode", disallowedFieldValue: GitRepoMode.NoRepo)]
         public string GitRepoOwner = string.Empty;
+
+        /// <summary>
+        /// The git repo owner
+        /// </summary>
+        [SolutionSettingFieldMetadata("Private Git Repo", FieldSpecialTextGitRepoOwner, PropertyType.Bool, defaultValue: false, order: 103, requiredFieldName: "GitRepoMode", disallowedFieldValue: GitRepoMode.NoRepo)]
+        public bool GitRepoPrivate = false;
+
+        /// <summary>
+        /// The nuget license expression
+        /// </summary>
+        [SolutionSettingFieldMetadata("License Expression", nameof(TemplateSettings.LicenseExpression), PropertyType.String, order: 10)]
+        [AllowedValue(Constants.LICENSE_EXPRESSIONS, PropertyType.StringListComma)]
+        public required string LicenseExpression;
 
         /// <summary>
         /// The name of the solution

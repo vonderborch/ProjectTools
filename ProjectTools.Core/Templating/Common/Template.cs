@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
 
 namespace ProjectTools.Core.Templating.Common
 {
@@ -18,14 +17,5 @@ namespace ProjectTools.Core.Templating.Common
         /// The settings
         /// </summary>
         public required TemplateSettings Settings;
-
-        /// <summary>
-        /// Converts the current instance to a JSON string.
-        /// </summary>
-        /// <returns>The JSON string.</returns>
-        public string ToJson()
-        {
-            return JsonSerializer.Serialize(this, Constants.JsonSerializeOptions);
-        }
     }
 }

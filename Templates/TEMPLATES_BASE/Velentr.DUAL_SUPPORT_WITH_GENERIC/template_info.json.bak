@@ -1,8 +1,0 @@
-{
-  "$type": "dotsln",
-  "GuidCount": 0,
-  "Author": "Christian Webber",
-  "Description": "A library with individual implementations for FNA and Monogame, as well as a generic implementation.",
-  "Name": "Velentr.DUAL_SUPPORT_WITH_GENERIC",
-  "Version": "2023-12-11"
-}

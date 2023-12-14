@@ -2,6 +2,7 @@
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Implementations;
 using ProjectTools.Core.Options;
+using ProjectTools.Core.PropertyHelpers;
 using ProjectTools.Core.Templating.Common;
 using ProjectTools.Core.Templating.Generation;
 
@@ -83,7 +84,22 @@ namespace ProjectTools.Core.Templating
         /// <returns>True if valid, False otherwise.</returns>
         public abstract bool DirectoryValidForTemplatePreperation(string directory);
 
-        public (List<Property> Properties, bool HadFile) GetGenerationSolutionSettingProperties(string templateName, string solutionConfigFile)
+        /// <summary>
+        /// Generates the project.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="log">The log.</param>
+        /// <returns>The result of the generation</returns>
+        public abstract string GenerateProject(GenerateOptions options, Func<string, bool> log, Func<string, bool> instructionLog, Func<string, bool> commandLog);
+
+        /// <summary>
+        /// Gets the generation solution setting properties.
+        /// </summary>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="outputDir">The output dir.</param>
+        /// <param name="solutionConfigFile">The solution configuration file.</param>
+        /// <returns>Item 1: The properties we need user information on. Item 2: Whether an existing file was loaded</returns>
+        public (List<Property> Properties, bool HadFile) GetGenerationSolutionSettingProperties(string templateName, string outputDir, string solutionConfigFile, string solutionName)
         {
             SolutionSettings? existingSettings = null;
             if (File.Exists(solutionConfigFile))
@@ -101,8 +117,8 @@ namespace ProjectTools.Core.Templating
             }
 
             // Next, let's get the properties for the classes for this config file
-            var properties = GetPropertiesForClass(SolutionSettingsType, 0, PropertySource.SolutionSettings, existingSettings);
-            var output = ModifySolutionSettingProperties(templateName, properties);
+            var properties = GetPropertiesForClass(SolutionSettingsType, typeof(SolutionSettingFieldMetadata), 0, PropertySource.SolutionSettings, existingSettings);
+            var output = ModifySolutionSettingProperties(templateName, outputDir, properties, solutionName);
             var finalOutput = output.OrderBy(x => x.Order).ToList();
             return (finalOutput, existingSettings != null);
         }
@@ -110,6 +126,8 @@ namespace ProjectTools.Core.Templating
         /// <summary>
         /// Gets the preperation user settings.
         /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="solutionName">Name of the solution.</param>
         /// <returns>Item 1: The properties we need user information on. Item 2: Whether an existing file was loaded</returns>
         public (List<Property> Properties, bool HadFile) GetPreperationUserSettings(string file)
         {
@@ -131,8 +149,8 @@ namespace ProjectTools.Core.Templating
             }
 
             // Next, lets get the properties for the information and settings classes for this Templater
-            var informationProperties = GetPropertiesForClass(TemplateInformationType, 0, PropertySource.TemplateInformation, existingTemplate?.Information);
-            var settingsProperties = GetPropertiesForClass(TemplateSettingsType, informationProperties.Count, PropertySource.TemplateSettings, existingTemplate?.Settings);
+            var informationProperties = GetPropertiesForClass(TemplateInformationType, typeof(TemplateFieldMetadata), 0, PropertySource.TemplateInformation, existingTemplate?.Information);
+            var settingsProperties = GetPropertiesForClass(TemplateSettingsType, typeof(TemplateFieldMetadata), informationProperties.Count, PropertySource.TemplateSettings, existingTemplate?.Settings);
 
             // Combine the properties, sort, and return
             var output = new List<Property>();
@@ -140,6 +158,45 @@ namespace ProjectTools.Core.Templating
             output.AddRange(settingsProperties);
             output = output.OrderBy(x => x.Order).ToList();
             return (output, existingTemplate != null);
+        }
+
+        /// <summary>
+        /// Gets the solution settings for properties.
+        /// </summary>
+        /// <param name="properties">The properties.</param>
+        /// <param name="configName">Name of the configuration.</param>
+        /// <param name="preserveDefaultSolutionConfig">
+        /// If flag is provided, the solution config will be preserved as the default value, if no specific config is set.
+        /// </param>
+        /// <returns>The solution settings instance for the properties specified.</returns>
+        public (SolutionSettings, string) GetSolutionSettingsForProperties(List<Property> properties, string configName, bool preserveDefaultSolutionConfig)
+        {
+            IOHelpers.CreateDirectoryIfNotExists(Constants.TemplatesProjectConfigurationDirectory);
+            var solutionSettings = PopulateNewInstanceWithProperties<SolutionSettings>(properties, SolutionSettingsType);
+
+            var backupFile = string.Empty;
+            // if the config name is the default one, back up the config
+            if (configName == Constants.TemplatesProjectConfigurationFile)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(configName);
+                var extension = Path.GetExtension(configName);
+
+                var backupFileName = $"{fileName}_{DateTime.Now:yyyyMMddHHmmss}{extension}";
+                backupFile = Path.Combine(Constants.TemplatesProjectConfigurationDirectory, backupFileName);
+
+                JsonHelpers.WriteObjectToFile(solutionSettings, configName);
+                if (preserveDefaultSolutionConfig)
+                {
+                    File.Copy(configName, backupFile, true);
+                }
+                else
+                {
+                    File.Move(configName, backupFile);
+                }
+            }
+            // otherwise, do nothing to the file...
+
+            return (solutionSettings, backupFile);
         }
 
         /// <summary>
@@ -227,26 +284,67 @@ namespace ProjectTools.Core.Templating
         /// Gets the properties for class.
         /// </summary>
         /// <param name="type">The type.</param>
+        /// <param name="attributeType">The attribute type.</param>
         /// <param name="orderOffset">The order offset.</param>
         /// <param name="source">The source of the properties.</param>
         /// <param name="existingInstance">The existing instance.</param>
         /// <returns>A list of propertied fields for the type provided.</returns>
         /// <exception cref="Exception">Field {field.Name} does not have a SettingMetadata Attribute!</exception>
-        protected List<Property> GetPropertiesForClass(Type type, int orderOffset, PropertySource source, object? existingInstance = null)
+        protected List<Property> GetPropertiesForClass(Type type, Type attributeType, int orderOffset, PropertySource source, object? existingInstance = null)
         {
             var output = new List<Property>();
 
             // Fetch the properties for the class
-            var fields = type.GetFields().Where(x => x.CustomAttributes.Any(y => y.AttributeType == typeof(TemplateFieldMetadata))).ToList();
+            var fields = type.GetFields().Where(x => x.CustomAttributes.Any(y => y.AttributeType == attributeType)).ToList();
             foreach (var field in fields)
             {
-                var metadata = (TemplateFieldMetadata?)field.GetCustomAttributes(typeof(TemplateFieldMetadata), false)[0];
+                // get the metadata attribute
+                var metadata = (TemplateFieldMetadata?)field.GetCustomAttributes(attributeType, false)[0];
                 if (metadata == null)
                 {
                     throw new Exception($"Field {field.Name} does not have a SettingMetadata Attribute!");
                 }
 
+                // check if we have any allowed values
+                List<string> allowedValues = [];
+                var allowedValuesData = field.GetCustomAttributes(typeof(AllowedValue), false).Cast<AllowedValue>().ToList();
+                if (allowedValuesData != null && allowedValuesData.Count > 0)
+                {
+                    foreach (var value in allowedValuesData)
+                    {
+                        List<string> temp;
+                        switch (value.Type)
+                        {
+                            case PropertyType.Bool:
+                            case PropertyType.Enum:
+                                throw new Exception($"Unsupported allowed value type {value.Type}!");
+
+                            case PropertyType.String:
+                                allowedValues.Add(value.Value.ToString());
+                                break;
+
+                            case PropertyType.StringListComma:
+                                temp = value.Value.ToString().Split(',').Select(x => x.Trim()).ToList();
+                                allowedValues.AddRange(temp);
+                                break;
+
+                            case PropertyType.StringListSemiColan:
+                                temp = value.Value.ToString().Split(';').Select(x => x.Trim()).ToList();
+                                allowedValues.AddRange(temp);
+                                break;
+
+                            default:
+                                throw new Exception($"Unknown or unsupported allowed value type {value.Type}!");
+                        }
+                    }
+                }
+
+                // determine the current value for the property and create it
                 var currentValue = existingInstance != null ? field.GetValue(existingInstance) : null;
+                if (currentValue == null && attributeType == typeof(SolutionSettingFieldMetadata))
+                {
+                    currentValue = ((SolutionSettingFieldMetadata)metadata).DefaultValue;
+                }
                 var propertyData = new Property()
                 {
                     CurrentValue = currentValue,
@@ -256,6 +354,8 @@ namespace ProjectTools.Core.Templating
                     Type = metadata.Type,
                     SettingSource = source,
                     Metadata = metadata,
+                    ActualType = field.FieldType,
+                    AllowedValues = allowedValues,
                 };
                 output.Add(propertyData);
             }
@@ -267,8 +367,38 @@ namespace ProjectTools.Core.Templating
         /// Modifies the solution setting properties.
         /// </summary>
         /// <param name="templateName">Name of the template.</param>
+        /// <param name="outputDir">The output directory.</param>
         /// <param name="properties">The properties.</param>
-        /// <returns></returns>
-        protected abstract List<Property> ModifySolutionSettingProperties(string templateName, List<Property> properties);
+        /// <param name="solutionName">The solution name.</param>
+        /// <returns>The corrected solution setting properties.</returns>
+        protected abstract List<Property> ModifySolutionSettingProperties(string templateName, string outputDir, List<Property> properties, string solutionName);
+
+        /// <summary>
+        /// Updates the simple replacement text during settings request.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="outputDir">The output dir.</param>
+        /// <returns>The updated string.</returns>
+        protected string UpdateSimpleReplacementTextDuringSettingsRequest(string value, string outputDir, string solutionName)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+            // TODO: Keep in Sync with Constants.SPECIAL_TEXT
+            var replacers = new Dictionary<string, string>
+            {
+                { Constants.SPECIAL_TEXT[0], Environment.UserName },
+                { Constants.SPECIAL_TEXT[1], Path.GetFileName(outputDir) },
+                { Constants.SPECIAL_TEXT[2], solutionName }
+            };
+
+            foreach (var replacer in replacers)
+            {
+                value = value.Replace(replacer.Key, replacer.Value);
+            }
+
+            return value;
+        }
     }
 }

@@ -146,12 +146,13 @@ namespace ProjectTools.Options
                 }
             }
 
+            var specialOptions = string.Join(", ", Constants.SPECIAL_TEXT);
             // if we didn't have an existing file, or the user wants to edit the settings, get the user input
             bool continueEditing;
             do
             {
                 _ = LogMessage($" {Environment.NewLine}TEMPLATE INFORMATION");
-                _ = LogMessage("Special Text: <CurrentUserName>, <ParentDir>, <ProjectName>");
+                _ = LogMessage($"Special Text: {specialOptions}");
 
                 // loop through each setting we need and ask what it should be
                 foreach (var setting in settingsNeeded)
@@ -169,7 +170,8 @@ namespace ProjectTools.Options
 
                         var actualOtherValue = PropertyHelpers.GetDisplayValue(otherFieldValue, otherField.Type);
                         var requiredOtherValue = PropertyHelpers.GetDisplayValue(setting.Metadata.RequiredFieldValue, otherField.Type);
-                        if (actualOtherValue != requiredOtherValue)
+                        var disallowedOtherValue = PropertyHelpers.GetDisplayValue(setting.Metadata.DisallowedFieldValue, otherField.Type);
+                        if ((actualOtherValue != requiredOtherValue) || (actualOtherValue == disallowedOtherValue))
                         {
                             continue;
                         }

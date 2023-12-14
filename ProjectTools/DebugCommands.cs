@@ -19,41 +19,62 @@ namespace ProjectTools
         {
             PossibleCommands = [];
 
-            // Add Configure Example Commands
+            //// Add Configure Example Commands
             PossibleCommands.Add("configure", []);
             PossibleCommands["configure"].Add("base", "");
 
-            // Add Report Issue Example Commands
+            //// Add Report Issue Example Commands
             PossibleCommands.Add("report-issue", []);
             PossibleCommands["report-issue"].Add("base", "");
             PossibleCommands["report-issue"].Add("prepopulated_short", "-t MyTitleHere -d MyDescriptionHere");
             PossibleCommands["report-issue"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
             PossibleCommands["report-issue"].Add("silent_bad", "-s");
 
-            // Add Make Suggestion Example Commands
+            //// Add Make Suggestion Example Commands
             PossibleCommands.Add("suggestion", []);
             PossibleCommands["suggestion"].Add("base", "");
             PossibleCommands["suggestion"].Add("prepopulated_short", "-t MyTitleHere -d MyDescriptionHere");
             PossibleCommands["suggestion"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
             PossibleCommands["suggestion"].Add("silent_bad", "-s");
 
-            // List Template Example Commands
+            //// List Template Example Commands
             PossibleCommands.Add("list-templates", []);
             PossibleCommands["list-templates"].Add("base", "");
             PossibleCommands["list-templates"].Add("quick_info", "-q");
 
-            // Check for Updated Templates Commands
+            //// Check for Updated Templates Commands
             PossibleCommands.Add("update-templates", []);
             PossibleCommands["update-templates"].Add("base", "");
             PossibleCommands["update-templates"].Add("ignore_cache", "-i");
             PossibleCommands["update-templates"].Add("force_updates", "-f");
             PossibleCommands["update-templates"].Add("force_updates_silent", "-f -s");
 
-            // Prepare Template Example Commands
+            //// Prepare Template Example Commands
             PossibleCommands.Add("prepare", []);
-            PossibleCommands["prepare"].Add("v_base", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES_BASE\\Velentr.BASE -o C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES");
-            PossibleCommands["prepare"].Add("v_dual", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES_BASE\\Velentr.DUAL_SUPPORT -o C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES");
-            PossibleCommands["prepare"].Add("v_dual_gen", @"-d C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES_BASE\\Velentr.DUAL_SUPPORT_WITH_GENERIC -o C:\\Users\\ricky\\Dropbox\\Projects\\ProjectTools\\Templates\\TEMPLATES");
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var baseDirectory = Path.GetFullPath(Path.Combine(currentDirectory, "..", "..", "..", "..", "Templates"));
+            var outputDirectory = Path.Combine(baseDirectory, "TEMPLATES");
+            List<(string, string)> projects = [("v_base", "Velentr.BASE"), ("v_dual", "Velentr.DUAL_SUPPORT"), ("v_dual_gen", "Velentr.DUAL_SUPPORT_WITH_GENERIC")];
+
+            foreach ((var name, var project) in projects)
+            {
+                var projectDirectory = Path.Combine(baseDirectory, "TEMPLATES_BASE", project);
+                var command = $"-d {projectDirectory} -o {outputDirectory}";
+
+                PossibleCommands["prepare"].Add(name, command);
+            }
+
+            //// Generate Project Example Commands
+            PossibleCommands.Add("generate", []);
+            var generatedOutputDirectory = Path.Combine(currentDirectory, "GENERATED");
+
+            foreach ((var name, var project) in projects)
+            {
+                var projectDirectory = Path.Combine(baseDirectory, "TEMPLATES_BASE", project);
+                var command = $"-f -n {name} -t {project} -o {generatedOutputDirectory}";
+
+                PossibleCommands["generate"].Add(name, command);
+            }
         }
     }
 }

@@ -1,5 +1,9 @@
 ﻿using CommandLine;
 using ProjectTools.Core;
+using ProjectTools.Core.Options;
+using ProjectTools.Core.Templating;
+using ProjectTools.Core.Templating.Generation;
+using ProjectTools.Helpers;
 
 namespace ProjectTools.Options
 {
@@ -22,14 +26,21 @@ namespace ProjectTools.Options
         /// </summary>
         /// <value>The name.</value>
         [Option('n', "name", Required = true, HelpText = "The name for the generated solution")]
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the output directory.
         /// </summary>
         /// <value>The output directory.</value>
         [Option('o', "output-directory", Required = true, HelpText = "The output directory for the new solution")]
-        public required string OutputDirectory { get; set; }
+        public string OutputDirectory { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [preserve default solution configuration].
+        /// </summary>
+        /// <value><c>true</c> if [preserve default solution configuration]; otherwise, <c>false</c>.</value>
+        [Option('p', "preserve-default-solution-config", Required = false, Default = false, HelpText = "If flag is provided, the solution config will be preserved as the default value, if no specific config is set.")]
+        public bool PreserveDefaultSolutionConfig { get; set; }
 
         /// <summary>
         /// Gets or sets the solution configuration.
@@ -43,7 +54,7 @@ namespace ProjectTools.Options
         /// </summary>
         /// <value>The template.</value>
         [Option('t', "template", Required = true, HelpText = "The template to use")]
-        public required string Template { get; set; }
+        public string Template { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets a value indicating whether [what if].
@@ -69,11 +80,29 @@ namespace ProjectTools.Options
             {
                 return $"Template {Template} does not exist! Please run list-templates to view all available templates.";
             }
+            var template = Manager.Instance.Templater.GetTemplateByName(Template);
+            _ = LogMessage($"Temple: {template.Template.Information.Name} (version {template.Template.Information.Version}) Project Generation");
+            _ = LogMessage("----------------------------");
 
             // Get the templater for the template
             var templater = Manager.Instance.Templater.GetTemplaterForTemplate(Template);
+            var settings = GetSolutionSettings(templater);
 
-            throw new NotImplementedException();
+            var options = new GenerateOptions()
+            {
+                Force = Force,
+                SolutionSettings = settings,
+                OutputDirectory = OutputDirectory,
+                Template = Template,
+                BaseName = Name,
+            };
+
+            if (WhatIf)
+            {
+                return $"Solution not generated, but configuration settings saved: {SolutionConfig}";
+            }
+            var results = templater.GenerateProject(options, LogMessage, LogMessage, LogMessage);
+            return results;
         }
 
         /// <summary>
@@ -89,7 +118,76 @@ namespace ProjectTools.Options
             OutputDirectory = options.OutputDirectory;
             SolutionConfig = options.SolutionConfig;
             Template = options.Template;
+            WhatIf = options.WhatIf;
+            PreserveDefaultSolutionConfig = options.PreserveDefaultSolutionConfig;
             Silent = options.Silent;
+        }
+
+        /// <summary>
+        /// Gets the solution settings.
+        /// </summary>
+        /// <param name="templater">The templater.</param>
+        /// <returns>The user configured solution settings.</returns>
+        /// <exception cref="System.Exception">Could not find a value for field {setting.Metadata.RequiredFieldName}!</exception>
+        private SolutionSettings GetSolutionSettings(AbstractTemplater templater)
+        {
+            SolutionSettings settings;
+            string backupFile;
+            var solutionConfigFile = !string.IsNullOrEmpty(SolutionConfig) ? SolutionConfig : Constants.TemplatesProjectConfigurationFile;
+
+            (var properties, var hadFile) = templater.GetGenerationSolutionSettingProperties(Template, OutputDirectory, solutionConfigFile, Name);
+
+            if (hadFile)
+            {
+                _ = LogMessage($" {Environment.NewLine}SOLUTION SETTINGS");
+                if (!PropertyHelpers.ContinueEditingSettings(properties, LogMessage))
+                {
+                    (settings, backupFile) = templater.GetSolutionSettingsForProperties(properties, solutionConfigFile, PreserveDefaultSolutionConfig);
+                    _ = LogMessage($"  Configuration saved to: {backupFile}");
+                    return settings;
+                }
+            }
+
+            // if we didn't have an existing file, or the user wants to edit the settings, get the user input
+            bool continueEditing;
+            do
+            {
+                _ = LogMessage($" {Environment.NewLine}SOLUTION SETTINGS");
+
+                // loop through each setting we need and ask what it should be
+                foreach (var setting in properties)
+                {
+                    // if this setting requires another setting to be a certain value, check that value
+                    if (!string.IsNullOrWhiteSpace(setting.Metadata.RequiredFieldName))
+                    {
+                        var otherField = properties.Where(x => x.Name == setting.Metadata.RequiredFieldName).FirstOrDefault();
+                        var otherFieldValue = otherField?.CurrentValue;
+
+                        if (otherFieldValue == null)
+                        {
+                            throw new Exception($"Could not find a value for field {setting.Metadata.RequiredFieldName}!");
+                        }
+
+                        var actualOtherValue = PropertyHelpers.GetDisplayValue(otherFieldValue, otherField.Type);
+                        var requiredOtherValue = PropertyHelpers.GetDisplayValue(setting.Metadata.RequiredFieldValue, otherField.Type);
+                        if (actualOtherValue != requiredOtherValue)
+                        {
+                            continue;
+                        }
+                    }
+
+                    // otherwise, get the user input for the setting
+                    var result = PropertyHelpers.GetInputForProperty(setting);
+                    setting.CurrentValue = result;
+                }
+
+                _ = LogMessage(" ");
+                continueEditing = PropertyHelpers.ContinueEditingSettings(properties, LogMessage);
+            } while (continueEditing);
+
+            (settings, backupFile) = templater.GetSolutionSettingsForProperties(properties, solutionConfigFile, PreserveDefaultSolutionConfig);
+            _ = LogMessage($"  Configuration saved to: {backupFile}");
+            return settings;
         }
     }
 }
