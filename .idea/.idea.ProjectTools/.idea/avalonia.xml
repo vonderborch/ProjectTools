@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="ProjectTools.UI/ProjectTools.UI/App.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/AboutView.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/GenerateProjectView.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/MainView.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/MainWindow.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/MakeSuggestionView.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/PrepareTemplate.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/PrepareTemplateView.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/ReportIssueView.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+        <entry key="ProjectTools.UI/ProjectTools.UI/Views/SettingsView.axaml" value="ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

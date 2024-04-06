@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:ProjectTools.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectTools.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+    
+  <Grid>
+      <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="160" />
+          <ColumnDefinition Width="75*" />
+      </Grid.ColumnDefinitions>
+      
+      <!-- Main Controls -->
+      <Border Grid.Column="0"
+              BorderBrush="Gray"
+              BorderThickness="2"
+              CornerRadius="3"
+              Padding="3">
+          <Grid Width="160">
+              <Grid.RowDefinitions>
+                  <RowDefinition Height="55*" />
+                  <RowDefinition Height="45*" />
+              </Grid.RowDefinitions>
+              
+              <StackPanel Grid.Row="0" Spacing="5" Margin="5">
+                  <TextBlock Text="Available Tools" HorizontalAlignment="Center" />
+                  <Button Width="150" Name="PrepareTemplateButton" Click="ChangePageHandler">Prepare Template</Button>
+                  <Button Width="150" Name="GenerateProjectButton" Click="ChangePageHandler">Generate Project</Button>
+              </StackPanel>
+              <StackPanel Grid.Row="1" Spacing="5" Margin="5">
+                  <TextBlock Text="App Controls" HorizontalAlignment="Center" />
+                  <Button Width="150" Name="AboutButton" Click="ChangePageHandler">About</Button>
+                  <Button Width="150" Name="SettingsButton" Click="ChangePageHandler">Settings</Button>
+                  <Button Width="150" Name="ReportIssueButton" Click="OpenWebpageHandler">Report Issue</Button>
+                  <Button Width="150" Name="MakeSuggestionButton" Click="OpenWebpageHandler">Make Suggestion</Button>
+                  <Button Width="150" Name="OpenRepoButton" Click="OpenWebpageHandler">Open Repo</Button>
+                  <Button Width="150" Click="ExitAppHandler">Exit</Button>
+              </StackPanel>
+          </Grid>
+      </Border>
+      
+      <Viewbox Name="PageView" Grid.Column="1" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top">
+          
+          <ContentControl Content="{Binding CurrentPage}"/>
+      </Viewbox>
+  </Grid>
+
+</UserControl>

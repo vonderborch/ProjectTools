@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFi
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTools.UI", "ProjectTools.UI\ProjectTools.UI\ProjectTools.UI.csproj", "{F733A86B-8075-4A76-8BE1-8F9CAFEF0B66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTools.UI.Desktop", "ProjectTools.UI\ProjectTools.UI.Desktop\ProjectTools.UI.Desktop.csproj", "{3F5AF734-4E06-4BB3-B758-9F38A80C145E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +34,14 @@ Global
 		{49E8FD9E-0973-41FA-A9D3-763C409AF17D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49E8FD9E-0973-41FA-A9D3-763C409AF17D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49E8FD9E-0973-41FA-A9D3-763C409AF17D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F733A86B-8075-4A76-8BE1-8F9CAFEF0B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F733A86B-8075-4A76-8BE1-8F9CAFEF0B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F733A86B-8075-4A76-8BE1-8F9CAFEF0B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F733A86B-8075-4A76-8BE1-8F9CAFEF0B66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F5AF734-4E06-4BB3-B758-9F38A80C145E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F5AF734-4E06-4BB3-B758-9F38A80C145E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F5AF734-4E06-4BB3-B758-9F38A80C145E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F5AF734-4E06-4BB3-B758-9F38A80C145E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

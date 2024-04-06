@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ProjectTools.Core
@@ -117,5 +118,10 @@ namespace ProjectTools.Core
         /// The excluded files
         /// </summary>
         public static string[] EXCLUDED_FILES => [TemplaterTemplatesInfoFileName];
+        
+        /// <summary>
+        /// The version of the core library
+        /// </summary>
+        public static string Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown";
     }
 }
