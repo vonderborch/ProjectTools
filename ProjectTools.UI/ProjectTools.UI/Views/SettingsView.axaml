@@ -2,7 +2,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ProjectTools.Views.SettingsView">
-    Welcome to Avalonia!
+             xmlns:vm="clr-namespace:ProjectTools.ViewModels"
+             xmlns:viewModels="clr-namespace:ProjectTools.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="630" d:DesignHeight="440"
+             x:Class="ProjectTools.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <viewModels:SettingsViewModel />
+    </Design.DataContext>
+    <StackPanel Width="630" Height="440">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Git Web Path: " VerticalAlignment="Center"/>
+            <TextBox Name="GitWebPathTextBox" Width="400" MaxLines="1" Text="{Binding GitWebPath}"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Git Access Token: " VerticalAlignment="Center"/>
+            <TextBox Name="GitAccessTokenTextBox" Width="400" MaxLines="1" PasswordChar="*" Text="{Binding GitAccessToken}"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Template Repositories (new-line-separated): " VerticalAlignment="Top"/>
+            <TextBox Name="TemplateRepositoriesTextBox" Width="320" Height="300" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding GitTemplateRepositoriesText}"></TextBox>
+        </StackPanel>
+        <Button Click="SaveSettingsClickHandler">Save Settings</Button>
+    </StackPanel>
 </UserControl>

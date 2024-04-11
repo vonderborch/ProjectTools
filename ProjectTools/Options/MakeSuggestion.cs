@@ -57,10 +57,10 @@ namespace ProjectTools.Options
             description = HttpUtility.UrlEncode(description);
 
             var baseUrl = $"{Constants.ApplicationRepositoryUrl}/issues/new";
-            var url = $"{baseUrl}?title={title}&body={description}&labels=bug";
+            var url = $"{baseUrl}?title={title}&body={description}&labels=enhancement";
             // Report issue
             LogMessage("Opening browser to make suggestion ...");
-            UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} tomake a suggestion!");
+            UrlHelpers.OpenUrl(url, $"Please go to {baseUrl} to make a suggestion!");
 
             return string.Empty;
         }

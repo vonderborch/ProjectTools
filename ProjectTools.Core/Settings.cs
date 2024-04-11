@@ -41,7 +41,7 @@ namespace ProjectTools.Core
         /// </summary>
         public Settings()
         {
-            TemplateRepositories = [];
+            TemplateRepositories = [Constants.DefaultTemplateRepository];
             LastTemplatesUpdateCheck = DateTime.MinValue;
             GitWebPath = "https://github.com/";
             GitAccessToken = string.Empty;
