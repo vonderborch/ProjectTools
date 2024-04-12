@@ -3,17 +3,34 @@ using ReactiveUI;
 
 namespace ProjectTools.ViewModels;
 
+/// <summary>
+/// Represents the main view model of the application.
+/// </summary>
 public class MainViewModel : ViewModelBase
 {
-    // The default is the first page
+    /// <summary>
+    /// Represents the current view model in the application.
+    /// </summary>
     private ViewModelBase _currentViewModel;
 
+    /// <summary>
+    /// Represents the current page in the application.
+    /// </summary>
     private Pages _currentPage;
 
+    /// <summary>
+    /// Represents the name of the current page in the application.
+    /// </summary>
     private string _currentPageName;
 
+    /// <summary>
+    /// Represents the current state of whether the controls are locked or not.
+    /// </summary>
     public bool ControlsLocked;
-    
+
+    /// <summary>
+    /// Represents the main view model of the application.
+    /// </summary>
     public MainViewModel()
     {
         if (!Manager.Instance.ValidateSettings())
@@ -31,7 +48,7 @@ public class MainViewModel : ViewModelBase
             CurrentPage = new AboutViewModel();
         }
     }
-    
+
     /// <summary>
     /// Gets the current page. The property is read-only
     /// </summary>
@@ -40,14 +57,21 @@ public class MainViewModel : ViewModelBase
         get => _currentViewModel;
         set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
     }
-    
-    
+
+
+    /// <summary>
+    /// Represents the name of the current page in the application.
+    /// </summary>
     public string CurrentPageName
     {
         get => _currentPageName;
         set => this.RaiseAndSetIfChanged(ref _currentPageName, value);
     }
 
+    /// <summary>
+    /// Changes the current page of the application to the specified page.
+    /// </summary>
+    /// <param name="newPage">The page to navigate to.</param>
     public void ChangePage(Pages newPage)
     {
         if (newPage != _currentPage && !ControlsLocked)

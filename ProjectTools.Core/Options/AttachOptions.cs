@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectTools.Core.Options
+namespace ProjectTools.Core.Options;
+
+internal class AttachOptions
 {
-    internal class AttachOptions { }
 }

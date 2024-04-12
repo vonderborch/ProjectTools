@@ -3,73 +3,73 @@ using Microsoft.Scripting.Utils;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Templating;
 
-namespace ProjectTools.Core.Implementations
+namespace ProjectTools.Core.Implementations;
+
+/// <summary>
+/// A factory for returning the correct templater.
+/// </summary>
+public static class TemplaterFactory
 {
     /// <summary>
-    /// A factory for returning the correct templater.
+    /// The templaters
     /// </summary>
-    public static class TemplaterFactory
+    private static readonly Dictionary<Implementation, RegisteredTemplateMetadata> _templaters;
+
+    /// <summary>
+    /// Initializes the <see cref="TemplaterFactory"/> class.
+    /// </summary>
+    static TemplaterFactory()
     {
-        /// <summary>
-        /// The templaters
-        /// </summary>
-        private static readonly Dictionary<Implementation, RegisteredTemplateMetadata> _templaters;
+        // Load all templaters from the calling assembly and see if they should be registered.
+        var typesInAssembly = Assembly.GetCallingAssembly().GetTypes();
+        var templaterType = typeof(AbstractTemplater);
+        var implementations = typesInAssembly.Where(x =>
+            x.IsClass && !x.IsAbstract && x.BaseType == templaterType &&
+            x.IsDefined(typeof(ImplementationRegister), false)).ToList();
 
-        /// <summary>
-        /// Initializes the <see cref="TemplaterFactory"/> class.
-        /// </summary>
-        static TemplaterFactory()
+        _templaters = [];
+        foreach (var implementation in implementations)
         {
-            // Load all templaters from the calling assembly and see if they should be registered.
-            var typesInAssembly = Assembly.GetCallingAssembly().GetTypes();
-            var templaterType = typeof(AbstractTemplater);
-            var implementations = typesInAssembly.Where(x => x.IsClass && !x.IsAbstract && x.BaseType == templaterType && x.IsDefined(typeof(ImplementationRegister), false)).ToList();
+            var registrationAttribute =
+                (ImplementationRegister)implementation.GetCustomAttribute(typeof(ImplementationRegister), false);
 
-            _templaters = [];
-            foreach (var implementation in implementations)
-            {
-                var registrationAttribute = (ImplementationRegister)implementation.GetCustomAttribute(typeof(ImplementationRegister), false);
-
-                _templaters.Add(registrationAttribute.Implementation, new RegisteredTemplateMetadata(registrationAttribute, implementation));
-            }
+            _templaters.Add(registrationAttribute.Implementation,
+                new RegisteredTemplateMetadata(registrationAttribute, implementation));
         }
+    }
 
-        /// <summary>
-        /// Gets the implementations.
-        /// </summary>
-        /// <returns>A list of registered implementations.</returns>
-        public static List<Implementation> GetImplementations()
-        {
-            return _templaters.Keys.ToList();
-        }
+    /// <summary>
+    /// Gets the implementations.
+    /// </summary>
+    /// <returns>A list of registered implementations.</returns>
+    public static List<Implementation> GetImplementations()
+    {
+        return _templaters.Keys.ToList();
+    }
 
-        /// <summary>
-        /// Gets the templater for a specified implementation.
-        /// </summary>
-        /// <param name="implementation">The implementation.</param>
-        /// <returns>The templater for the implementation.</returns>
-        public static AbstractTemplater GetTemplater(Implementation implementation)
-        {
-            return _templaters.TryGetValue(implementation, out var templater)
-                ? templater.Instance
-                : throw new ArgumentException($"No templater found for implementation {implementation}");
-        }
+    /// <summary>
+    /// Gets the templater for a specified implementation.
+    /// </summary>
+    /// <param name="implementation">The implementation.</param>
+    /// <returns>The templater for the implementation.</returns>
+    public static AbstractTemplater GetTemplater(Implementation implementation)
+    {
+        return _templaters.TryGetValue(implementation, out var templater)
+            ? templater.Instance
+            : throw new ArgumentException($"No templater found for implementation {implementation}");
+    }
 
-        /// <summary>
-        /// Gets all registered templaters.
-        /// </summary>
-        /// <returns>A list of all registered templaters.</returns>
-        internal static List<AbstractTemplater> GetAllRegisteredTemplaters()
-        {
-            var implementations = GetImplementations();
-            var output = new List<AbstractTemplater>();
+    /// <summary>
+    /// Gets all registered templaters.
+    /// </summary>
+    /// <returns>A list of all registered templaters.</returns>
+    internal static List<AbstractTemplater> GetAllRegisteredTemplaters()
+    {
+        var implementations = GetImplementations();
+        var output = new List<AbstractTemplater>();
 
-            foreach (var implementation in implementations)
-            {
-                output.Add(GetTemplater(implementation));
-            }
+        foreach (var implementation in implementations) output.Add(GetTemplater(implementation));
 
-            return output;
-        }
+        return output;
     }
 }

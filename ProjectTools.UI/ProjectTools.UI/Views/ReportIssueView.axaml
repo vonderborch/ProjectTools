@@ -14,12 +14,12 @@
     </Design.DataContext>
     <StackPanel Width="630" Height="440">
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Bug Title: " VerticalAlignment="Center"/>
-            <TextBox Name="TitleTextBox" Width="400" MaxLines="1"></TextBox>
+            <TextBlock Text="Bug Title: " VerticalAlignment="Center" />
+            <TextBox Name="TitleTextBox" Width="400" MaxLines="1" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Bug Description: " VerticalAlignment="Center"/>
-            <TextBox Name="DescriptionTextBox" Width="400" Height="300" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
+            <TextBlock Text="Bug Description: " VerticalAlignment="Center" />
+            <TextBox Name="DescriptionTextBox" Width="400" Height="300" AcceptsReturn="True" TextWrapping="Wrap" />
         </StackPanel>
         <Button Click="ReportIssueClickHandler">Create Bug Report</Button>
     </StackPanel>

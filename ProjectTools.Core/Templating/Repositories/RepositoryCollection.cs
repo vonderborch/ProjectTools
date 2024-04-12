@@ -1,97 +1,87 @@
 ﻿using System.Diagnostics;
 using ProjectTools.Core.Templating.LocalRepository;
 
-namespace ProjectTools.Core.Templating.Repositories
+namespace ProjectTools.Core.Templating.Repositories;
+
+/// <summary>
+/// A collection of git template repositories
+/// </summary>
+[DebuggerDisplay("{Repositories.Count}")]
+public class RepositoryCollection
 {
     /// <summary>
-    /// A collection of git template repositories
+    /// The most recent list of templates for the monitored repositories
     /// </summary>
-    [DebuggerDisplay("{Repositories.Count}")]
-    public class RepositoryCollection
+    private List<TemplateGitMetadata> _templateCache = [];
+
+    /// <summary>
+    /// The most recent template map cache for for the monitored repositories
+    /// </summary>
+    private Dictionary<string, TemplateGitMetadata> _templateMapCache = [];
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RepositoryCollection"/> class.
+    /// </summary>
+    /// <param name="repositories">The repositories.</param>
+    /// <param name="autoLoad">if set to <c>true</c> [automatic load].</param>
+    public RepositoryCollection(List<string> repositories, bool autoLoad = true)
     {
-        /// <summary>
-        /// The most recent list of templates for the monitored repositories
-        /// </summary>
-        private List<TemplateGitMetadata> _templateCache = [];
+        RepositoryNames = repositories;
+        Repositories = (from repo in repositories select new Repository(repo, autoLoad)).ToList();
+    }
 
-        /// <summary>
-        /// The most recent template map cache for for the monitored repositories
-        /// </summary>
-        private Dictionary<string, TemplateGitMetadata> _templateMapCache = [];
+    /// <summary>
+    /// Gets the repositories.
+    /// </summary>
+    /// <value>The repositories.</value>
+    public List<Repository> Repositories { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositoryCollection"/> class.
-        /// </summary>
-        /// <param name="repositories">The repositories.</param>
-        /// <param name="autoLoad">if set to <c>true</c> [automatic load].</param>
-        public RepositoryCollection(List<string> repositories, bool autoLoad = true)
+    /// <summary>
+    /// Gets the repository names.
+    /// </summary>
+    /// <value>The repository names.</value>
+    public List<string> RepositoryNames { get; }
+
+    /// <summary>
+    /// Gets the template map.
+    /// </summary>
+    /// <value>The template map.</value>
+    public Dictionary<string, TemplateGitMetadata> TemplateMap
+    {
+        get
         {
-            RepositoryNames = repositories;
-            Repositories = (from repo in repositories select new Repository(repo, autoLoad)).ToList();
+            if (_templateMapCache.Count == 0) _templateMapCache = _templateCache.ToDictionary(x => x.Name, x => x);
+
+            return _templateMapCache;
         }
+    }
 
-        /// <summary>
-        /// Gets the repositories.
-        /// </summary>
-        /// <value>The repositories.</value>
-        public List<Repository> Repositories { get; }
-
-        /// <summary>
-        /// Gets the repository names.
-        /// </summary>
-        /// <value>The repository names.</value>
-        public List<string> RepositoryNames { get; }
-
-        /// <summary>
-        /// Gets the template map.
-        /// </summary>
-        /// <value>The template map.</value>
-        public Dictionary<string, TemplateGitMetadata> TemplateMap
+    /// <summary>
+    /// Gets the templates list.
+    /// </summary>
+    /// <value>The templates list.</value>
+    public List<TemplateGitMetadata> TemplatesList
+    {
+        get
         {
-            get
-            {
-                if (_templateMapCache.Count == 0)
-                {
-                    _templateMapCache = _templateCache.ToDictionary(x => x.Name, x => x);
-                }
+            if (_templateCache.Count == 0) _templateCache = GetTemplateInfoForRepositories(true);
 
-                return _templateMapCache;
-            }
+            return _templateCache;
         }
+    }
 
-        /// <summary>
-        /// Gets the templates list.
-        /// </summary>
-        /// <value>The templates list.</value>
-        public List<TemplateGitMetadata> TemplatesList
-        {
-            get
-            {
-                if (_templateCache.Count == 0)
-                {
-                    _templateCache = GetTemplateInfoForRepositories(true);
-                }
+    /// <summary>
+    /// Gets the template information for repository.
+    /// </summary>
+    /// <param name="forceLoad">if set to <c>true</c> [force load].</param>
+    /// <returns>Template info for the repository</returns>
+    public List<TemplateGitMetadata> GetTemplateInfoForRepositories(bool forceLoad = true)
+    {
+        var output = new List<TemplateGitMetadata>();
+        foreach (var repo in Repositories) output.AddRange(repo.GetTemplateInfoForRepository(forceLoad));
 
-                return _templateCache;
-            }
-        }
-
-        /// <summary>
-        /// Gets the template information for repository.
-        /// </summary>
-        /// <param name="forceLoad">if set to <c>true</c> [force load].</param>
-        /// <returns>Template info for the repository</returns>
-        public List<TemplateGitMetadata> GetTemplateInfoForRepositories(bool forceLoad = true)
-        {
-            var output = new List<TemplateGitMetadata>();
-            foreach (var repo in Repositories)
-            {
-                output.AddRange(repo.GetTemplateInfoForRepository(forceLoad));
-            }
-
-            _templateCache = output;
-            _templateMapCache = [];
-            return output;
-        }
+        _templateCache = output;
+        _templateMapCache = [];
+        return output;
     }
 }

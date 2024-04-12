@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <BaseOutputPath>..\release</BaseOutputPath>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>1.0</FileVersion>
-    <Company>Christian Webber</Company>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <BaseOutputPath>..\release</BaseOutputPath>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <AssemblyVersion>1.0</AssemblyVersion>
+        <FileVersion>1.0</FileVersion>
+        <Company>Christian Webber</Company>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DynamicLanguageRuntime" Version="1.3.4" />
-    <PackageReference Include="IronPython" Version="3.4.1" />
-    <PackageReference Include="IronPython.StdLib" Version="3.4.1" />
-    <PackageReference Include="LibGit2Sharp" Version="0.29.0" />
-    <PackageReference Include="Octokit" Version="9.0.0" />
-    <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="DynamicLanguageRuntime" Version="1.3.4"/>
+        <PackageReference Include="IronPython" Version="3.4.1"/>
+        <PackageReference Include="IronPython.StdLib" Version="3.4.1"/>
+        <PackageReference Include="LibGit2Sharp" Version="0.29.0"/>
+        <PackageReference Include="Octokit" Version="9.0.0"/>
+        <PackageReference Include="SharpZipLib" Version="1.4.2"/>
+        <PackageReference Include="System.Collections.Specialized" Version="4.3.0"/>
+    </ItemGroup>
 
 </Project>

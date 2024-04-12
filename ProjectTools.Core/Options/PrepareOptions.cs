@@ -1,27 +1,26 @@
 ﻿using ProjectTools.Core.Templating.Common;
 
-namespace ProjectTools.Core.Options
+namespace ProjectTools.Core.Options;
+
+public class PrepareOptions
 {
-    public class PrepareOptions
-    {
-        /// <summary>
-        /// The directory
-        /// </summary>
-        public required string Directory;
+    /// <summary>
+    /// The directory
+    /// </summary>
+    public required string Directory;
 
-        /// <summary>
-        /// The output directory
-        /// </summary>
-        public required string OutputDirectory;
+    /// <summary>
+    /// The output directory
+    /// </summary>
+    public required string OutputDirectory;
 
-        /// <summary>
-        /// The skip cleaning
-        /// </summary>
-        public required bool SkipCleaning;
+    /// <summary>
+    /// The skip cleaning
+    /// </summary>
+    public required bool SkipCleaning;
 
-        /// <summary>
-        /// The template settings
-        /// </summary>
-        public required Template Template;
-    }
+    /// <summary>
+    /// The template settings
+    /// </summary>
+    public required Template Template;
 }

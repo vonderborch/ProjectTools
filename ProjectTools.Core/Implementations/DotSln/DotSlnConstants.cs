@@ -1,19 +1,18 @@
-﻿namespace ProjectTools.Core.Implementations.DotSln
+﻿namespace ProjectTools.Core.Implementations.DotSln;
+
+public static class DotSlnConstants
 {
-    public static class DotSlnConstants
+    /// <summary>
+    /// The regex tags
+    /// NOTE: Keep in sync with GenerateOptions().UpdateReplacementTextWithTags()
+    /// </summary>
+    public static readonly string[] REGEX_TAGS =
     {
-        /// <summary>
-        /// The regex tags
-        /// NOTE: Keep in sync with GenerateOptions().UpdateReplacementTextWithTags()
-        /// </summary>
-        public static readonly string[] REGEX_TAGS =
-        {
-            "[AUTHOR]",
-            "[COMPANY]",
-            "[TAGS]",
-            "[DESCRIPTION]",
-            "[LICENSE]",
-            "[VERSION]",
-        };
-    }
+        "[AUTHOR]",
+        "[COMPANY]",
+        "[TAGS]",
+        "[DESCRIPTION]",
+        "[LICENSE]",
+        "[VERSION]"
+    };
 }

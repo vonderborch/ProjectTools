@@ -1,13 +1,12 @@
-﻿namespace ProjectTools.Core.Implementations
+﻿namespace ProjectTools.Core.Implementations;
+
+/// <summary>
+/// Available Implementations for templating, etc.
+/// </summary>
+public enum Implementation
 {
     /// <summary>
-    /// Available Implementations for templating, etc.
+    /// An implementation is available for Visual Studio .sln Projects
     /// </summary>
-    public enum Implementation
-    {
-        /// <summary>
-        /// An implementation is available for Visual Studio .sln Projects
-        /// </summary>
-        DotSln,
-    }
+    DotSln
 }

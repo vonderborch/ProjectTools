@@ -54,9 +54,13 @@ namespace ProjectTools
             var currentDirectory = Directory.GetCurrentDirectory();
             var baseDirectory = Path.GetFullPath(Path.Combine(currentDirectory, "..", "..", "..", "..", "Templates"));
             var outputDirectory = Path.Combine(baseDirectory, "TEMPLATES");
-            List<(string, string)> projects = [("v_base", "Velentr.BASE"), ("v_dual", "Velentr.DUAL_SUPPORT"), ("v_dual_gen", "Velentr.DUAL_SUPPORT_WITH_GENERIC")];
+            List<(string, string)> projects =
+            [
+                ("v_base", "Velentr.BASE"), ("v_dual", "Velentr.DUAL_SUPPORT"),
+                ("v_dual_gen", "Velentr.DUAL_SUPPORT_WITH_GENERIC")
+            ];
 
-            foreach ((var name, var project) in projects)
+            foreach (var (name, project) in projects)
             {
                 var projectDirectory = Path.Combine(baseDirectory, "TEMPLATES_BASE", project);
                 var command = $"-d {projectDirectory} -o {outputDirectory}";
@@ -68,7 +72,7 @@ namespace ProjectTools
             PossibleCommands.Add("generate", []);
             var generatedOutputDirectory = Path.Combine(currentDirectory, "GENERATED");
 
-            foreach ((var name, var project) in projects)
+            foreach (var (name, project) in projects)
             {
                 var projectDirectory = Path.Combine(baseDirectory, "TEMPLATES_BASE", project);
                 var command = $"-f -n {name} -t {project} -o {generatedOutputDirectory}";

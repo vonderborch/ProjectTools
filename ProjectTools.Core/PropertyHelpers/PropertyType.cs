@@ -1,32 +1,31 @@
-﻿namespace ProjectTools.Core.PropertyHelpers
+﻿namespace ProjectTools.Core.PropertyHelpers;
+
+/// <summary>
+/// Types available for Template Settings
+/// </summary>
+public enum PropertyType
 {
     /// <summary>
-    /// Types available for Template Settings
+    /// Setting is a boolean
     /// </summary>
-    public enum PropertyType
-    {
-        /// <summary>
-        /// Setting is a boolean
-        /// </summary>
-        Bool,
+    Bool,
 
-        /// <summary>
-        /// Setting is a string
-        /// </summary>
-        String,
+    /// <summary>
+    /// Setting is a string
+    /// </summary>
+    String,
 
-        /// <summary> Setting is a List<string> separated by commas </summary>
-        StringListComma,
+    /// <summary> Setting is a List<string> separated by commas </summary>
+    StringListComma,
 
-        /// <summary> Setting is a List<string> separated by semi-colans </summary>
-        StringListSemiColan,
+    /// <summary> Setting is a List<string> separated by semi-colans </summary>
+    StringListSemiColan,
 
-        /// <summary> Setting is a Dictionary<string, string> </summary>
-        DictionaryStringString,
+    /// <summary> Setting is a Dictionary<string, string> </summary>
+    DictionaryStringString,
 
-        /// <summary>
-        /// Setting is an enum
-        /// </summary>
-        Enum,
-    }
+    /// <summary>
+    /// Setting is an enum
+    /// </summary>
+    Enum
 }
