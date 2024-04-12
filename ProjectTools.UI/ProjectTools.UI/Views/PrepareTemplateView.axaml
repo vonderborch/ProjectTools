@@ -12,5 +12,38 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <viewModels:PrepareTemplateViewModel />
     </Design.DataContext>
-    Welcome to Avalonia!
+    
+    <TabControl Margin="5">
+        <TabItem Header="Preparation Settings">
+            <StackPanel Width="630" Height="440">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Project Directory: " />
+                    <TextBox Name="DirectoryText" Text="{Binding Directory}" />
+                    <Button>Find Project...</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Template Output Directory: " />
+                    <TextBox Name="OutputDirectoryText" Text="{Binding OutputDirectory}" />
+                    <Button>Set Output...</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Skip Cleaning: " />
+                    <CheckBox IsChecked="{Binding SkipCleaning}" />
+                    <TextBlock Text="What If: " />
+                    <CheckBox IsChecked="{Binding WhatIf}" />
+                </StackPanel>
+                <Button>Continue to Template Settings</Button>
+                <Button>Reset</Button>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Template Settings" IsVisible="False">
+            <StackPanel Width="630" Height="440">
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Preparation Output" IsVisible="False">
+            <StackPanel Width="630" Height="440">
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+    
 </UserControl>
