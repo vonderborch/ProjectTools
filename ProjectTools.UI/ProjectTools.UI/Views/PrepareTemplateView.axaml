@@ -13,37 +13,34 @@
         <viewModels:PrepareTemplateViewModel />
     </Design.DataContext>
     
-    <TabControl Margin="5">
-        <TabItem Header="Preparation Settings">
-            <StackPanel Width="630" Height="440">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Project Directory: " />
-                    <TextBox Name="DirectoryText" Text="{Binding Directory}" />
-                    <Button>Find Project...</Button>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Template Output Directory: " />
-                    <TextBox Name="OutputDirectoryText" Text="{Binding OutputDirectory}" />
-                    <Button>Set Output...</Button>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Skip Cleaning: " />
-                    <CheckBox IsChecked="{Binding SkipCleaning}" />
-                    <TextBlock Text="What If: " />
-                    <CheckBox IsChecked="{Binding WhatIf}" />
-                </StackPanel>
-                <Button>Continue to Template Settings</Button>
-                <Button>Reset</Button>
+    <StackPanel Width="630" Height="440">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Project Directory: " />
+            <TextBox Name="DirectoryText" Text="{Binding Directory}" />
+            <Button Click="FindTemplateProjectHandler">Find Project...</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Template Output Directory: " />
+            <TextBox Name="OutputDirectoryText" Text="{Binding OutputDirectory}" />
+            <Button Click="SaveFileLocationHandler">Set Output...</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Skip Cleaning: " />
+            <CheckBox IsChecked="{Binding SkipCleaning}" />
+            <TextBlock Text="What If: " />
+            <CheckBox IsChecked="{Binding WhatIf}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <ListBox Name="TemplateSettingsList" Height="200" />
+            <StackPanel Name="SelectedItemSettings" Orientation="Vertical">
+                
             </StackPanel>
-        </TabItem>
-        <TabItem Header="Template Settings" IsVisible="False">
-            <StackPanel Width="630" Height="440">
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="Preparation Output" IsVisible="False">
-            <StackPanel Width="630" Height="440">
-            </StackPanel>
-        </TabItem>
-    </TabControl>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button Click="GenerateTemplateHandler">Generate</Button>
+            <Button Click="ResetHandler">Reset</Button>
+        </StackPanel>
+        <TextBlock Name="OutputText" Text="{Binding Output}" />
+    </StackPanel>
     
 </UserControl>

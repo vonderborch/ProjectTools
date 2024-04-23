@@ -34,4 +34,6 @@ public class PrepareTemplateViewModel : ViewModelBase
     /// <c>true</c> if the "What If" mode is enabled; otherwise, <c>false</c>.
     /// </value>
     public bool WhatIf { get; set; } = false;
+
+    public string Output { get; set; } = string.Empty;
 }
