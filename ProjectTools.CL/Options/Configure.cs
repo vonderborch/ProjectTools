@@ -1,5 +1,4 @@
 using CommandLine;
-using Microsoft.VisualBasic;
 using ProjectTools.CL.Helpers;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;

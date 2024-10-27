@@ -6,7 +6,7 @@ public static class AppSettingsConstants
     /// The version of the settings file. This is used to determine if the existing settings file is compatible with
     /// the current version of the application.
     /// </summary>
-    public const Version SettingsVersion = new("1.1");
+    public static readonly Version SettingsVersion = new("1.1");
 
     /// <summary>
     /// The file name of the settings file.

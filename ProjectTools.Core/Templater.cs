@@ -4,7 +4,7 @@ namespace ProjectTools.Core;
 
 public class Templater
 {
-    pubic void GenerateTemplate(string pathToDirectoryToTemplate, Template newTemplate)
+    public void GenerateTemplate(string pathToDirectoryToTemplate, Template newTemplate)
     {
         
     }

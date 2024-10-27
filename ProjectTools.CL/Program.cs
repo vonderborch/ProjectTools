@@ -1,3 +1,26 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using CommandLine;
+using ProjectTools.CL.Options;
 
-Console.WriteLine("Hello, World!");
+namespace ProjectTools.CL;
+
+internal class Program
+{
+    /// <summary>
+    /// Defines the entry point of the application.
+    /// </summary>
+    /// <param name="args">The arguments.</param>
+    /// <exception cref="System.ArgumentException">Invalid test command!</exception>
+    private static void Main(string[] args)
+    {
+        var commandHelper = new CommandHelper();
+        
+        #if DEBUG
+        var testRootCommand = "about";
+        var testCommandSpecific = "";
+
+        args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);
+        #endif
+        
+        commandHelper.ParseAndExecuteArguments(args);
+    }
+}
