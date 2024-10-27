@@ -5,9 +5,16 @@ using ProjectTools.Core.Constants;
 
 namespace ProjectTools.CL.Options;
 
+/// <summary>
+/// A command to get information about the program with.
+/// </summary>
 [Verb("about", HelpText = "Get information about the program.")]
 public class About : AbstractOption
 {
+    /// <summary>
+    /// Executes the option.
+    /// </summary>
+    /// <returns>The result.</returns>
     public override string Execute()
     {
         Console.WriteLine("Program: ProjectTools");
@@ -18,6 +25,10 @@ public class About : AbstractOption
         return "";
     }
 
+    /// <summary>
+    /// Sets the options.
+    /// </summary>
+    /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)
     {
         var options = (About)option;

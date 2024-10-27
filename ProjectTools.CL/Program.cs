@@ -15,7 +15,7 @@ internal class Program
         var commandHelper = new CommandHelper();
         
         #if DEBUG
-        var testRootCommand = "about";
+        var testRootCommand = "report-issue";
         var testCommandSpecific = "";
 
         args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);

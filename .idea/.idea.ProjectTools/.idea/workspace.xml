@@ -10,19 +10,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6afe272-963e-481a-8c1b-ac828828af4c" name="Changes" comment="v2.0 start">
-      <change afterPath="$PROJECT_DIR$/ProjectTools.CL/CommandHelper.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjectTools.CL/DebugCommands.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjectTools.Core/Constants/AppConstants.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.App/ProjectTools.App.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.App/ProjectTools.App.csproj" afterDir="false" />
+    <list default="true" id="b6afe272-963e-481a-8c1b-ac828828af4c" name="Changes" comment="extra">
+      <change afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/MakeSuggestion.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/ReportIssue.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectTools/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjectTools/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Options/About.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/About.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Options/Configure.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/Configure.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.CL/ProjectTools.CL.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/ProjectTools.CL.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.Core/Constants/AppSettingsConstants.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.Core/Constants/AppSettingsConstants.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.Core/ProjectTools.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.Core/ProjectTools.Core.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.Core/Templater.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.Core/Templater.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.sln" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Options/UpdateTemplates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/UpdateTemplates.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectTools.Core/Constants/AppConstants.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.Core/Constants/AppConstants.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +60,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/OLD/ProjectTools.CoreOLD/Implementations/DotSln/DotSlnTemplater.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -185,7 +181,7 @@
       <workItem from="1728598718783" duration="1860000" />
       <workItem from="1728743985742" duration="10424000" />
       <workItem from="1730046770568" duration="1557000" />
-      <workItem from="1730048347971" duration="3257000" />
+      <workItem from="1730048347971" duration="4756000" />
     </task>
     <task id="LOCAL-00001" summary="v2.0 start">
       <option name="closed" value="true" />
@@ -195,12 +191,29 @@
       <option name="project" value="LOCAL" />
       <updated>1728768430782</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Some updates.">
+      <option name="closed" value="true" />
+      <created>1730051999221</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730051999222</updated>
+    </task>
+    <task id="LOCAL-00003" summary="extra">
+      <option name="closed" value="true" />
+      <created>1730052015382</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1730052015382</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -217,7 +230,9 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="v2.0 start" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.0 start" />
+    <MESSAGE value="Some updates." />
+    <MESSAGE value="extra" />
+    <option name="LAST_COMMIT_MESSAGE" value="extra" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

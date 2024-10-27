@@ -14,10 +14,19 @@ public class DebugCommands
             _commands[command].Add("", "");
         }
         
-        // Configuration Commands
+        //// Configuration Commands
         
-        // About Commands
+        //// About Commands
         
+        //// Add Report Issue Example Commands
+        _commands["report-issue"].Add("prepopulated_short", "-t MyTitleHere -d MyDescriptionHere");
+        _commands["report-issue"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
+        _commands["report-issue"].Add("silent_bad", "-s");
+        
+        //// Add Make Suggestion Example Commands
+        _commands["suggestion"].Add("prepopulated_short", "-t MyTitleHere -d MyDescriptionHere");
+        _commands["suggestion"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
+        _commands["suggestion"].Add("silent_bad", "-s");
     }
 
     public string[] GetArgumentsForCommandToRun(string rootCommand, string specificCommand)

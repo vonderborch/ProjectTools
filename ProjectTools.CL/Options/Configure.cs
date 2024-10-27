@@ -20,6 +20,10 @@ public class Configure : AbstractOption
         AllowTemplateUpdates = false;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override string Execute()
     {
         var settings = AppSettings.Load();
@@ -42,6 +46,10 @@ public class Configure : AbstractOption
         return "Settings Saved!";
     }
 
+    /// <summary>
+    /// Sets the options.
+    /// </summary>
+    /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)
     {
         var options = (Configure)option;
