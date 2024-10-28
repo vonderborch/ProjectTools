@@ -1,7 +1,4 @@
-﻿using CommandLine;
-using ProjectTools.CL.Options;
-
-namespace ProjectTools.CL;
+﻿namespace ProjectTools.CL;
 
 internal class Program
 {
@@ -13,14 +10,14 @@ internal class Program
     private static void Main(string[] args)
     {
         var commandHelper = new CommandHelper();
-        
-        #if DEBUG
-        var testRootCommand = "report-issue";
-        var testCommandSpecific = "";
+
+#if DEBUG
+        var testRootCommand = "list-templaters";
+        var testCommandSpecific = "simple";
 
         args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);
-        #endif
-        
+#endif
+
         commandHelper.ParseAndExecuteArguments(args);
     }
 }

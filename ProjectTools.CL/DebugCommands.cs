@@ -3,7 +3,7 @@ namespace ProjectTools.CL;
 public class DebugCommands
 {
     private Dictionary<string, Dictionary<string, string>> _commands;
-    
+
     public DebugCommands(CommandHelper commandHelper)
     {
         _commands = new();
@@ -13,20 +13,23 @@ public class DebugCommands
             _commands.Add(command, []);
             _commands[command].Add("", "");
         }
-        
+
         //// Configuration Commands
-        
+
         //// About Commands
-        
+
         //// Add Report Issue Example Commands
         _commands["report-issue"].Add("prepopulated_short", "-t MyTitleHere -d MyDescriptionHere");
         _commands["report-issue"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
         _commands["report-issue"].Add("silent_bad", "-s");
-        
+
         //// Add Make Suggestion Example Commands
         _commands["suggestion"].Add("prepopulated_short", "-t MyTitleHere -d MyDescriptionHere");
         _commands["suggestion"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
         _commands["suggestion"].Add("silent_bad", "-s");
+
+        //// Add List Templaters Example Commands
+        _commands["list-templaters"].Add("simple", "-i");
     }
 
     public string[] GetArgumentsForCommandToRun(string rootCommand, string specificCommand)
@@ -35,11 +38,12 @@ public class DebugCommands
         {
             throw new ArgumentException($"Invalid root command: {rootCommand}");
         }
+
         if (!_commands[rootCommand].ContainsKey(specificCommand))
         {
             throw new ArgumentException($"Invalid specific command: {specificCommand}");
         }
-        
+
         var specificCommandArguments = _commands[rootCommand][specificCommand];
         var finalArgs = new List<string>();
         finalArgs.Add(rootCommand);

@@ -4,20 +4,25 @@
     <projectFile>OLD/ProjectToolsOLD/ProjectToolsOLD.csproj</projectFile>
     <projectFile>ProjectTools.App/ProjectTools.App.csproj</projectFile>
     <projectFile>ProjectTools.CL/ProjectTools.CL.csproj</projectFile>
+    <projectFile profileName="ProjectTools.UI.Browser">ProjectTools.UI/ProjectTools.UI.Browser/ProjectTools.UI.Browser.csproj</projectFile>
+    <projectFile>ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj</projectFile>
+    <projectFile kind="XamarinIOS">ProjectTools.UI/ProjectTools.UI.iOS/ProjectTools.UI.iOS.csproj</projectFile>
     <projectFile>ProjectTools/ProjectTools.csproj</projectFile>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6afe272-963e-481a-8c1b-ac828828af4c" name="Changes" comment="extra">
-      <change afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/MakeSuggestion.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/ReportIssue.cs" afterDir="false" />
+    <list default="true" id="51c34c1c-3e9e-4459-bef7-8ba56c40f61a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/ListTemplaters.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjectTools.Core/Templaters/AbstractBaseTemplater.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjectTools.Core/Templaters/DotSlnTemplater.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjectTools.Core/Templaters/DotSlnxTemplater.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjectTools.Core/Templaters/GenericTemplater.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjectTools.Core/Templaters/TemplaterRegistration.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectTools/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjectTools/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Options/About.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/About.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Options/Configure.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/Configure.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Options/UpdateTemplates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Options/UpdateTemplates.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectTools.Core/Constants/AppConstants.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.Core/Constants/AppConstants.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectTools.CL/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.CL/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectTools.Core/Templater.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectTools.Core/Templater.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,34 +46,34 @@
     &quot;assignee&quot;: &quot;vonderborch&quot;
   }
 }</component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="main" />
+      </list>
+    </option>
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/vonderborch/ProjectTools.git&quot;,
     &quot;accountId&quot;: &quot;6ab2857e-0e56-4668-b855-52b54888369c&quot;
-  },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
-    },
-    &quot;owner&quot;: &quot;vonderborch&quot;,
-    &quot;repository&quot;: &quot;ProjectTools&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/OLD/ProjectTools.CoreOLD/Implementations/DotSln/DotSlnTemplater.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/christianwebber/Library/CloudStorage/Dropbox/Projects/ProjectTools/ProjectTools.UI/ProjectTools.UI/Views/PrepareTemplateView.axaml" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="Toolset" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 8
 }</component>
-  <component name="ProjectId" id="2imtp5eW3OeScET6Sqv6nET5bQR" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectId" id="2eh6fD79mLoa66asubR030JEjx8" />
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -77,18 +82,27 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    ".NET Project.ProjectTools.App.executor": "Run",
-    ".NET Project.ProjectTools.CL.executor": "Run",
+    ".NET Project.ProjectTools.CL.executor": "Debug",
+    ".NET Project.ProjectTools.UI.Desktop.executor": "Run",
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Attach to Process.1683:ProjectTools.Desktop.executor": "Debug",
+    "Attach to Process.1807:ProjectTools.Desktop.executor": "Debug",
+    "Attach to Process.18508:ProjectTools.Desktop.executor": "Debug",
+    "Attach to Process.18596:ProjectTools.Desktop.executor": "Debug",
+    "Attach to Process.18876:ProjectTools.Desktop.executor": "Debug",
+    "Attach to Process.1932:ProjectTools.Desktop.executor": "Debug",
+    "Attach to Process.39122:ProjectTools.Desktop.executor": "Debug",
+    "Attach to Process.39261:ProjectTools.Desktop.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "#17 on cw__2-0",
-    "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -165,49 +179,122 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="ProjectTools.UI.Desktop" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/ProjectTools.UI/ProjectTools.UI.Desktop/ProjectTools.UI.Desktop.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="DotNetCore" />
+      <option name="PROJECT_TFM" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="ProjectTools.UI.Browser" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/ProjectTools.UI/ProjectTools.UI.Browser/ProjectTools.UI.Browser.csproj" />
+      <option name="LAUNCH_PROFILE_TFM" value="net7.0" />
+      <option name="LAUNCH_PROFILE_NAME" value="ProjectTools.UI.Browser" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
+      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
+      <option name="SEND_DEBUG_REQUEST" value="1" />
+      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="ProjectTools.UI.iOS" type="XamarinIOSProject" factoryName="Xamarin.iOS">
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/ProjectTools.UI/ProjectTools.UI.iOS/ProjectTools.UI.iOS.csproj" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="IS_PASS_PARENT_ENVS" value="false" />
+      <option name="EXTRA_MLAUNCH_PARAMETERS" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b6afe272-963e-481a-8c1b-ac828828af4c" name="Changes" comment="" />
-      <created>1720107760267</created>
+      <changelist id="51c34c1c-3e9e-4459-bef7-8ba56c40f61a" name="Changes" comment="" />
+      <created>1712344566715</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1720107760267</updated>
-      <workItem from="1720107762054" duration="79000" />
-      <workItem from="1720279661125" duration="525000" />
-      <workItem from="1728598347126" duration="120000" />
-      <workItem from="1728598477982" duration="200000" />
-      <workItem from="1728598718783" duration="1860000" />
-      <workItem from="1728743985742" duration="10424000" />
-      <workItem from="1730046770568" duration="1557000" />
-      <workItem from="1730048347971" duration="4756000" />
+      <updated>1712344566715</updated>
+      <workItem from="1712344567822" duration="322000" />
+      <workItem from="1712345183392" duration="57000" />
+      <workItem from="1712345267777" duration="11071000" />
+      <workItem from="1712421058180" duration="11391000" />
+      <workItem from="1712887661825" duration="2894000" />
+      <workItem from="1713219468169" duration="2057000" />
+      <workItem from="1713830682542" duration="113000" />
+      <workItem from="1713830803906" duration="2152000" />
+      <workItem from="1713832972192" duration="2479000" />
+      <workItem from="1716132564571" duration="476000" />
+      <workItem from="1716133051306" duration="1530000" />
+      <workItem from="1716134596408" duration="1602000" />
+      <workItem from="1718458456513" duration="188000" />
+      <workItem from="1728137496334" duration="311000" />
+      <workItem from="1728137857140" duration="3357000" />
+      <workItem from="1730154863189" duration="242000" />
+      <workItem from="1730155575535" duration="2430000" />
     </task>
-    <task id="LOCAL-00001" summary="v2.0 start">
+    <task id="LOCAL-00001" summary="Starting to wire up a UI.">
       <option name="closed" value="true" />
-      <created>1728768430782</created>
+      <created>1712424088337</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1728768430782</updated>
+      <updated>1712424088337</updated>
     </task>
-    <task id="LOCAL-00002" summary="Some updates.">
+    <task id="LOCAL-00002" summary="Settings, Make Suggestion, and Report Issue pages implemented. Settings need to be configured to allow a user to select any menu option.">
       <option name="closed" value="true" />
-      <created>1730051999221</created>
+      <created>1712874732432</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1730051999222</updated>
+      <updated>1712874732432</updated>
     </task>
-    <task id="LOCAL-00003" summary="extra">
+    <task id="LOCAL-00003" summary="Refactoring/cleanup and comments for the UI project.">
       <option name="closed" value="true" />
-      <created>1730052015382</created>
+      <created>1712888288140</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1730052015382</updated>
+      <updated>1712888288140</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="WIP prepare template view">
+      <option name="closed" value="true" />
+      <created>1712889924291</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1712889924291</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Changes">
+      <option name="closed" value="true" />
+      <created>1713830700091</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1713830700091</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Changes">
+      <option name="closed" value="true" />
+      <created>1713832777828</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1713832777828</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -220,19 +307,70 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="v2.0 start" />
-    <MESSAGE value="Some updates." />
-    <MESSAGE value="extra" />
-    <option name="LAST_COMMIT_MESSAGE" value="extra" />
+    <MESSAGE value="Starting to wire up a UI." />
+    <MESSAGE value="Settings, Make Suggestion, and Report Issue pages implemented. Settings need to be configured to allow a user to select any menu option." />
+    <MESSAGE value="Refactoring/cleanup and comments for the UI project." />
+    <MESSAGE value="WIP prepare template view" />
+    <MESSAGE value="Changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/ProjectTools.Core/Templater.cs</url>
+          <line>33</line>
+          <properties documentPath="$PROJECT_DIR$/ProjectTools.Core/Templater.cs" containingFunctionPresentation="Method 'GetTemplaters'">
+            <startOffsets>
+              <option value="746" />
+            </startOffsets>
+            <endOffsets>
+              <option value="774" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/ProjectTools.Core/Templater.cs</url>
+          <line>41</line>
+          <properties documentPath="$PROJECT_DIR$/ProjectTools.Core/Templater.cs" containingFunctionPresentation="Method 'GetTemplaters'">
+            <startOffsets>
+              <option value="1071" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1115" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
