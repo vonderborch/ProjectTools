@@ -1,21 +1,14 @@
-using System.Text.Json.Serialization;
-
 namespace ProjectTools.Core.Templates;
 
 /// <summary>
-/// A slug used in a template when creating or extending a project.
+/// A slug used when creating a new template.
 /// </summary>
-public class Slug
+public class PreperationSlug
 {
     /// <summary>
     /// The allowed values for the slug.
     /// </summary>
     public List<object?> AllowedValues = [];
-
-    /// <summary>
-    /// The current value for the slug.
-    /// </summary>
-    [JsonIgnore] public object? CurrentValue = null;
 
     /// <summary>
     /// The default value for the slug.
@@ -38,6 +31,11 @@ public class Slug
     public bool RequiresUserInput = false;
 
     /// <summary>
+    /// The strings we search for to replace with the SlugKey.
+    /// </summary>
+    public required List<string> SearchStrings;
+
+    /// <summary>
     /// The key used to identify where to replace the slug with the current value for the slug.
     /// </summary>
     public required string SlugKey;
@@ -46,4 +44,18 @@ public class Slug
     /// The type of the slug.
     /// </summary>
     public required SlugType Type;
+
+    public Slug ToSlug()
+    {
+        return new Slug
+        {
+            SlugKey = SlugKey,
+            DisplayName = DisplayName,
+            Type = Type,
+            DefaultValue = DefaultValue,
+            AllowedValues = AllowedValues,
+            DisallowedValues = DisallowedValues,
+            RequiresUserInput = RequiresUserInput
+        };
+    }
 }

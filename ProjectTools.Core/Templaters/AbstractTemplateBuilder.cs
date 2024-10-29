@@ -20,5 +20,10 @@ public abstract class AbstractTemplateBuilder(string name, string description, s
     /// </summary>
     /// <param name="pathToDirectoryToTemplate">The path to the directory being templated.</param>
     /// <returns>A list of slugs to request.</returns>
-    public abstract List<Slug> GetBaseSlugs(string pathToDirectoryToTemplate);
+    public abstract List<PreperationSlug> GetBaseSlugs(string pathToDirectoryToTemplate);
+
+    public virtual void ReplaceSearchStringsWithSlugs(List<PreperationSlug> slugs, string pathToDirectoryToTemplate)
+    {
+        throw new NotImplementedException();
+    }
 }

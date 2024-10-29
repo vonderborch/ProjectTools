@@ -46,9 +46,11 @@ public class Templater
     /// <summary>
     /// </summary>
     /// <param name="pathToDirectoryToTemplate"></param>
+    /// <param name="templateBuilder"></param>
     /// <param name="newTemplate"></param>
     /// <returns></returns>
-    public string GenerateTemplate(string pathToDirectoryToTemplate, Template newTemplate)
+    public string GenerateTemplate(string pathToDirectoryToTemplate, AbstractTemplateBuilder templateBuilder,
+        Template newTemplate)
     {
         return string.Empty;
     }
