@@ -6,8 +6,8 @@ namespace ProjectTools.CL.Options;
 /// <summary>
 ///     A command to get information about the program with.
 /// </summary>
-[Verb("list-templaters", HelpText = "Get information about what templaters are available.")]
-public class ListTemplaters : AbstractOption
+[Verb("list-template-builders", HelpText = "Get information about what template builders are available.")]
+public class ListTemplateBuilders : AbstractOption
 {
     [Option('i', "simple", Default = false, Required = false,
         HelpText = "Display just the name and version of available templaters.")]
@@ -20,7 +20,7 @@ public class ListTemplaters : AbstractOption
     public override string Execute()
     {
         var templater = new Templater();
-        var templaters = templater.GetTemplaters();
+        var templaters = templater.GetTemplateBuilders();
 
         if (templaters.Count == 0)
         {
@@ -55,7 +55,7 @@ public class ListTemplaters : AbstractOption
     /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)
     {
-        var options = (ListTemplaters)option;
+        var options = (ListTemplateBuilders)option;
         Silent = options.Silent;
         Simple = options.Simple;
     }

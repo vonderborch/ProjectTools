@@ -28,8 +28,8 @@ public class DebugCommands
         _commands["suggestion"].Add("silent_ready", "-s -t MyTitleHere -d MyDescriptionHere");
         _commands["suggestion"].Add("silent_bad", "-s");
 
-        //// Add List Templaters Example Commands
-        _commands["list-templaters"].Add("simple", "-i");
+        //// Add List Template Builders Example Commands
+        _commands["list-template-builders"].Add("simple", "-i");
     }
 
     public string[] GetArgumentsForCommandToRun(string rootCommand, string specificCommand)

@@ -11,35 +11,36 @@ public class Templater
 {
     /// <summary>
     /// </summary>
-    private readonly List<AbstractBaseTemplater> _availableTemplaters;
+    private readonly List<AbstractTemplateBuilder> _availableTemplateBuilders;
 
     /// <summary>
     /// </summary>
     public Templater()
     {
-        _availableTemplaters = new List<AbstractBaseTemplater>();
+        _availableTemplateBuilders = new List<AbstractTemplateBuilder>();
     }
 
     /// <summary>
     /// </summary>
     /// <param name="forceRefresh"></param>
     /// <returns></returns>
-    public List<AbstractBaseTemplater> GetTemplaters(bool forceRefresh = false)
+    public List<AbstractTemplateBuilder> GetTemplateBuilders(bool forceRefresh = false)
     {
-        if (_availableTemplaters.Count > 0 && !forceRefresh) return _availableTemplaters;
+        if (_availableTemplateBuilders.Count > 0 && !forceRefresh) return _availableTemplateBuilders;
 
-        // Step 1 - Grab built-in templaters
+        // Step 1 - Grab built-in template builders
         var assembly = Assembly.GetExecutingAssembly();
         var types = assembly.GetTypes();
 
-        var builtInTemplaters = types.Where(t => t.GetCustomAttribute<TemplaterRegistration>() != null).ToList();
-        foreach (var templater in builtInTemplaters)
-            _availableTemplaters.Add((AbstractBaseTemplater)Activator.CreateInstance(templater));
+        var builtInTemplateBuilders =
+            types.Where(t => t.IsClass && !t.IsAbstract && t.BaseType == typeof(AbstractTemplateBuilder)).ToList();
+        foreach (var templater in builtInTemplateBuilders)
+            _availableTemplateBuilders.Add((AbstractTemplateBuilder)Activator.CreateInstance(templater));
 
-        // Step 2 - Grab templater plugins
-        // TODO: Implement templater plugins
+        // Step 2 - Grab template builders plugins
+        // TODO: Implement template builders plugins
 
-        return _availableTemplaters;
+        return _availableTemplateBuilders;
     }
 
     /// <summary>

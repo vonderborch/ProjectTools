@@ -5,7 +5,7 @@ namespace ProjectTools.Core.Templaters;
 /// <summary>
 ///     An abstract class for templating a directory.
 /// </summary>
-public abstract class AbstractBaseTemplater(string name, string description, string version, string author)
+public abstract class AbstractTemplateBuilder(string name, string description, string version, string author)
 {
     public string Name { get; private set; } = name;
 

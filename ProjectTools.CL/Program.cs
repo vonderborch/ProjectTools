@@ -12,7 +12,7 @@ internal class Program
         var commandHelper = new CommandHelper();
 
 #if DEBUG
-        var testRootCommand = "list-templaters";
+        var testRootCommand = "list-template-builders";
         var testCommandSpecific = "simple";
 
         args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);
