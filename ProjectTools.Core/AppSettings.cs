@@ -1,6 +1,6 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 
 namespace ProjectTools.Core;
 
@@ -25,6 +25,11 @@ public class AppSettings
     public DateTime LastTemplatesUpdateCheck;
 
     /// <summary>
+    /// A list of repositories templates are pulled from.
+    /// </summary>
+    [JsonIgnore] public List<string> RepositoriesList;
+
+    /// <summary>
     /// The seconds between template update checks
     /// </summary>
     public int SecondsBetweenTemplateUpdateChecks = 86400;
@@ -34,12 +39,6 @@ public class AppSettings
     /// the current version of the application.
     /// </summary>
     public Version SettingsVersion = AppSettingsConstants.SettingsVersion;
-
-    /// <summary>
-    /// A list of repositories templates are pulled from.
-    /// </summary>
-    [JsonIgnore]
-    public List<string> RepositoriesList;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AppSettings"/> class.
@@ -101,23 +100,13 @@ public class AppSettings
             return null;
         }
 
-        var rawContents = File.ReadAllText(AppSettingsConstants.SettingsFilePath);
-        if (!string.IsNullOrWhiteSpace(rawContents))
+        var settings = JsonHelpers.DeserializeFromFile<AppSettings>(AppSettingsConstants.SettingsFilePath);
+        if (settings == null)
         {
-            try
-            {
-                var settings = JsonSerializer.Deserialize<AppSettings>(rawContents, JsonConstants.JsonSerializeOptions);
-                // TODO: Long term, we should change what we do depending on the SettingsVersion stored in the file (upgrade, etc.)
-                return settings ?? null;
-            }
-            catch
-            {
-                // TODO: Long term, we should log this error...and do something...but for now, just return null
-                return null;
-            }
+            // TODO: Long term, we should change what we do depending on the SettingsVersion stored in the file (upgrade, etc.)
         }
 
-        return null;
+        return settings;
     }
 
     /// <summary>
@@ -125,9 +114,6 @@ public class AppSettings
     /// </summary>
     public void Save()
     {
-        // Save the current settings to the settings file
-        var contents = JsonSerializer.Serialize(this, JsonConstants.JsonSerializeOptions);
-        _ = Directory.CreateDirectory(Path.GetDirectoryName(AppSettingsConstants.SettingsFilePath));
-        File.WriteAllText(AppSettingsConstants.SettingsFilePath, contents);
+        JsonHelpers.SerializeToFile(AppSettingsConstants.SettingsFilePath, this);
     }
 }

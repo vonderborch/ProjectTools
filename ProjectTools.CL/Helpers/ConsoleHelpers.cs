@@ -20,6 +20,7 @@ public static class ConsoleHelpers
         {
             actualDisplayValue = $" ({actualDisplayValue})";
         }
+
         message = $"{message}{actualDisplayValue}: ";
 
         // get the user's input for the message
@@ -31,6 +32,22 @@ public static class ConsoleHelpers
     }
 
     /// <summary>
+    /// Gets the input for a string list.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="defaultValue">The default value.</param>
+    /// <param name="seperatorChar">The separator character string.</param>
+    /// <param name="seperatorMessage">The separator message.</param>
+    /// <returns>The string list.</returns>
+    public static List<string> GetStringListInput(string message, List<string> defaultValue, string seperatorChar,
+        string seperatorMessage)
+    {
+        var pathsString = string.Join(seperatorChar, defaultValue);
+        pathsString = GetInput($"{message} ({seperatorMessage})", pathsString);
+        return pathsString.Split(seperatorChar).ToList();
+    }
+
+    /// <summary>
     /// Gets the input for an enum.
     /// </summary>
     /// <param name="message">The message.</param>
@@ -38,7 +55,8 @@ public static class ConsoleHelpers
     /// <param name="defaultValue">The default value.</param>
     /// <param name="displayValue">The display value.</param>
     /// <returns>The user's input.</returns>
-    public static string GetInputWithLimit(string message, List<string> allowedValues, string defaultValue = "", string displayValue = "")
+    public static string GetInputWithLimit(string message, List<string> allowedValues, string defaultValue = "",
+        string displayValue = "")
     {
         // determine the message to the user
         var actualDisplayValue = string.IsNullOrWhiteSpace(displayValue) ? defaultValue : displayValue;
@@ -46,6 +64,7 @@ public static class ConsoleHelpers
         {
             actualDisplayValue = $" ({actualDisplayValue})";
         }
+
         var allowedValuesDisplay = string.Join(", ", allowedValues);
         message = $"{message} (Allowed Values: {allowedValuesDisplay}){actualDisplayValue}: ";
 

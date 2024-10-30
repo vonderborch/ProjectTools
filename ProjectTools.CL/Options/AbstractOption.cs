@@ -30,6 +30,11 @@ public abstract class AbstractOption
     protected bool AllowTemplateUpdates { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether [allow silent parameter].
+    /// </summary>
+    protected bool AllowSilentParameter { get; set; } = true;
+
+    /// <summary>
     /// Executes what this option represents.
     /// </summary>
     /// <param name="option">The option.</param>
@@ -43,6 +48,9 @@ public abstract class AbstractOption
     /// <returns>The result.</returns>
     public string ExecuteOption(AbstractOption option)
     {
+        if (!AllowSilentParameter && option.Silent)
+            throw new Exception("Silent is not a valid option for this command!");
+
         if (AppSettings.Load() == null && AllowAutoConfiguration)
         {
             _ = LogMessage("Creating settings file...");

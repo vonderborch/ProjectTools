@@ -9,4 +9,9 @@ public class GenericTemplateBuilder()
     {
         throw new NotImplementedException();
     }
+
+    public override bool IsValidDirectoryForBuilder(string pathToDirectoryToTemplate)
+    {
+        return true;
+    }
 }

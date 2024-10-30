@@ -18,8 +18,9 @@ public class Configure : AbstractOption
     {
         AllowAutoConfiguration = false;
         AllowTemplateUpdates = false;
+        AllowSilentParameter = false;
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -28,11 +29,14 @@ public class Configure : AbstractOption
     {
         var settings = AppSettings.Load();
         settings ??= new AppSettings();
-        
-        settings.GitWebPath = ConsoleHelpers.GetInput("Git Web Path", settings.GitWebPath);
-        settings.GitAccessToken = ConsoleHelpers.GetInput("Git Access Token", settings.GitAccessToken, settings.SecuredAccessToken);
 
-        var reposText = !string.IsNullOrWhiteSpace(settings.RepositoriesListText) ? settings.RepositoriesListText : AppSettingsConstants.DefaultRepository;
+        settings.GitWebPath = ConsoleHelpers.GetInput("Git Web Path", settings.GitWebPath);
+        settings.GitAccessToken =
+            ConsoleHelpers.GetInput("Git Access Token", settings.GitAccessToken, settings.SecuredAccessToken);
+
+        var reposText = !string.IsNullOrWhiteSpace(settings.RepositoriesListText)
+            ? settings.RepositoriesListText
+            : AppSettingsConstants.DefaultRepository;
 
         var repositories = ConsoleHelpers.GetInput("Template repositories (comma separated)", reposText);
 
@@ -41,6 +45,7 @@ public class Configure : AbstractOption
         {
             settings.AddTemplateRepository(repo);
         }
+
         settings.Save();
 
         return "Settings Saved!";

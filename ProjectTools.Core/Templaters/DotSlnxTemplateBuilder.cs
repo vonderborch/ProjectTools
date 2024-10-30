@@ -14,4 +14,20 @@ public class DotSlnxTemplateBuilder()
     {
         base.ReplaceSearchStringsWithSlugs(slugs, pathToDirectoryToTemplate);
     }
+
+    public override bool IsValidDirectoryForBuilder(string pathToDirectoryToTemplate)
+    {
+        // check if any file is a .sln file...
+        foreach (var file in Directory.GetFiles(pathToDirectoryToTemplate))
+            if (file.EndsWith(".slnx"))
+                return true;
+
+        foreach (var subDirectory in Directory.GetDirectories(pathToDirectoryToTemplate))
+        {
+            var result = IsValidDirectoryForBuilder(subDirectory);
+            if (result) return result;
+        }
+
+        return false;
+    }
 }

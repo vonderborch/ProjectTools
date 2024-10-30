@@ -9,6 +9,8 @@ public abstract class AbstractTemplateBuilder(string name, string description, s
 {
     public string Name { get; private set; } = name;
 
+    public string NameLowercase => Name.ToLowerInvariant();
+
     public string Description { get; private set; } = description;
 
     public string Version { get; private set; } = version;
@@ -26,4 +28,6 @@ public abstract class AbstractTemplateBuilder(string name, string description, s
     {
         throw new NotImplementedException();
     }
+
+    public abstract bool IsValidDirectoryForBuilder(string pathToDirectoryToTemplate);
 }
