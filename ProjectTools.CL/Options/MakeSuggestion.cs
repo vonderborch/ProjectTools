@@ -1,6 +1,5 @@
 using System.Web;
 using CommandLine;
-using Microsoft.VisualBasic;
 using ProjectTools.CL.Helpers;
 using ProjectTools.CL.Options;
 using ProjectTools.Core.Constants;
@@ -9,7 +8,7 @@ using ProjectTools.Core.Constants;
 /// A command to make a suggestion for the program with.
 /// </summary>
 [Verb("suggestion", HelpText = "Make a suggestion for the program")]
-public class MakeSuggestion : AbstractOption
+public class MakeSuggestion : SilenceAbleAbstractOption
 {
     /// <summary>
     /// Gets or sets the description of the suggestion.
@@ -24,7 +23,7 @@ public class MakeSuggestion : AbstractOption
     /// <value>The title.</value>
     [Option('t', "title", Required = false, HelpText = "The title of the new feature or functionality")]
     public string Title { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// Executes the option.
     /// </summary>

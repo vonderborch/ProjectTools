@@ -3,7 +3,7 @@ namespace ProjectTools.Core.Templates;
 /// <summary>
 /// A slug used when creating a new template.
 /// </summary>
-public class PreperationSlug
+public class PreparationSlug
 {
     /// <summary>
     /// The allowed values for the slug.
@@ -26,6 +26,11 @@ public class PreperationSlug
     public required string DisplayName;
 
     /// <summary>
+    ///     True if we need to ask about this preparation slug _at all_, false otherwise.
+    /// </summary>
+    public bool RequiresAnyInput = true;
+
+    /// <summary>
     /// True if the slug requires user input, false otherwise.
     /// </summary>
     public bool RequiresUserInput = false;
@@ -45,6 +50,10 @@ public class PreperationSlug
     /// </summary>
     public required SlugType Type;
 
+    /// <summary>
+    ///     Converts a PreparationSlug to a Slug.
+    /// </summary>
+    /// <returns>The Slug.</returns>
     public Slug ToSlug()
     {
         return new Slug

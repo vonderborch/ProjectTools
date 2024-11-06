@@ -29,7 +29,7 @@ public class DebugCommands
         _commands["suggestion"].Add("silent_bad", "-s");
 
         //// Add List Template Builders Example Commands
-        _commands["list-template-builders"].Add("simple", "-i");
+        _commands["list-template-builders"].Add("simple", "-s");
     }
 
     public string[] GetArgumentsForCommandToRun(string rootCommand, string specificCommand)

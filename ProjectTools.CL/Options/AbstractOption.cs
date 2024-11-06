@@ -1,4 +1,3 @@
-using CommandLine;
 using ProjectTools.Core;
 
 namespace ProjectTools.CL.Options;
@@ -8,15 +7,6 @@ namespace ProjectTools.CL.Options;
 /// </summary>
 public abstract class AbstractOption
 {
-    /// <summary>
-    /// Gets or sets a value indicating whether this <see cref="AbstractOption"/> is silent.
-    /// </summary>
-    /// <value><c>true</c> if silent; otherwise, <c>false</c>.</value>
-    [Option('s', "silent", Required = false, Default = false,
-        HelpText =
-            "If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available.")]
-    public bool Silent { get; set; }
-
     /// <summary>
     /// Gets or sets a value indicating whether [allow automatic configuration].
     /// </summary>
@@ -28,11 +18,6 @@ public abstract class AbstractOption
     /// </summary>
     /// <value><c>true</c> if [allow template updates]; otherwise, <c>false</c>.</value>
     protected bool AllowTemplateUpdates { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether [allow silent parameter].
-    /// </summary>
-    protected bool AllowSilentParameter { get; set; } = true;
 
     /// <summary>
     /// Executes what this option represents.
@@ -48,13 +33,10 @@ public abstract class AbstractOption
     /// <returns>The result.</returns>
     public string ExecuteOption(AbstractOption option)
     {
-        if (!AllowSilentParameter && option.Silent)
-            throw new Exception("Silent is not a valid option for this command!");
-
         if (AppSettings.Load() == null && AllowAutoConfiguration)
         {
             _ = LogMessage("Creating settings file...");
-            var configure = new Configure() { Silent = Silent };
+            var configure = new Configure();
             _ = configure.Execute();
         }
 

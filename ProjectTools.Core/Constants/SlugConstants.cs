@@ -11,11 +11,11 @@ public static class SlugConstants
     /// Gets a list of base slugs to parameterize the template with.
     /// </summary>
     /// <returns>The list of base preparation slugs</returns>
-    public static List<PreperationSlug> GetBasePreparationSlugs()
+    public static List<PreparationSlug> GetBasePreparationSlugs()
     {
         return
         [
-            new PreperationSlug
+            new PreparationSlug
             {
                 SlugKey = "SolutionName",
                 DisplayName = "Solution Name",

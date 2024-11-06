@@ -9,7 +9,7 @@ namespace ProjectTools.CL.Options;
 [Verb("list-template-builders", HelpText = "Get information about what template builders are available.")]
 public class ListTemplateBuilders : AbstractOption
 {
-    [Option('i', "simple", Default = false, Required = false,
+    [Option('s', "simple", Default = false, Required = false,
         HelpText = "Display just the name and version of available templaters.")]
     public bool Simple { get; set; }
 
@@ -56,7 +56,6 @@ public class ListTemplateBuilders : AbstractOption
     protected override void SetOptions(AbstractOption option)
     {
         var options = (ListTemplateBuilders)option;
-        Silent = options.Silent;
         Simple = options.Simple;
     }
 }

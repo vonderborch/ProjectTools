@@ -108,4 +108,23 @@ public static class ConsoleHelpers
             }
         }
     }
+
+    /// <summary>
+    ///     Gets the input for an enum.
+    /// </summary>
+    /// <param name="message">A message to display to the user.</param>
+    /// <param name="defaultValue">The default value, if any.</param>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <returns>The user's selected value.</returns>
+    public static T GetEnumInput<T>(string message, T defaultValue = default) where T : Enum
+    {
+        var allowedValues = Enum.GetNames(typeof(T)).ToList();
+        var input = GetInputWithLimit(message, allowedValues, defaultValue.ToString());
+        return (T)Enum.Parse(typeof(T), input);
+    }
+
+    public static void PrintLine(int amount = 1)
+    {
+        for (var i = 0; i < amount; i++) Console.WriteLine("----------------------------------------");
+    }
 }

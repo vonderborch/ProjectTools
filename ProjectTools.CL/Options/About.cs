@@ -18,10 +18,11 @@ public class About : AbstractOption
     public override string Execute()
     {
         Console.WriteLine("Program: ProjectTools");
-        Console.WriteLine($"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}");
+        Console.WriteLine(
+            $"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}");
         Console.WriteLine($"Core Version: {AppConstants.CoreVersion}");
         Console.WriteLine("Author: Christian Webber");
-        
+
         return "";
     }
 
@@ -31,7 +32,5 @@ public class About : AbstractOption
     /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)
     {
-        var options = (About)option;
-        Silent = options.Silent;
     }
 }

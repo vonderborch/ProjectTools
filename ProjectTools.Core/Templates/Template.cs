@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace ProjectTools.Core.Templates;
 
 /// <summary>
@@ -35,6 +37,8 @@ public class Template
     /// </summary>
     public List<string> RenameOnlyPaths = [];
 
+    private string? safeName;
+
     /// <summary>
     /// Information on slugs for this template, used to replace instances of the slug with the value of the slug.
     /// </summary>
@@ -49,4 +53,22 @@ public class Template
     /// The current version of the template.
     /// </summary>
     public string Version = string.Empty;
+
+    /// <summary>
+    ///     Gets a file-system safe name for the template.
+    /// </summary>
+    [JsonIgnore]
+    public string SafeName
+    {
+        get
+        {
+            if (safeName != null) return safeName;
+
+            safeName = Name;
+            safeName = safeName.Replace(" ", "_");
+            foreach (var c in Path.GetInvalidFileNameChars()) safeName = safeName.Replace(c, '-');
+
+            return safeName;
+        }
+    }
 }

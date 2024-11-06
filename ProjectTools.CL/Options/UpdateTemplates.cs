@@ -3,7 +3,7 @@ namespace ProjectTools.CL.Options;
 /// <summary>
 /// A command to update the templates.
 /// </summary>
-public class UpdateTemplates : AbstractOption
+public class UpdateTemplates : SilenceAbleAbstractOption
 {
     /// <summary>
     /// Executes the option.

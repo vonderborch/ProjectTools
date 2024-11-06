@@ -65,7 +65,7 @@ public static class JsonHelpers
     public static string SerializeToString(object obj, JsonSerializerOptions? options = null)
     {
         var actualOptions = options ?? JsonConstants.JsonSerializeOptions;
-        var contents = JsonSerializer.Serialize(this, actualOptions);
+        var contents = JsonSerializer.Serialize(obj, actualOptions);
 
         return contents;
     }

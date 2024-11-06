@@ -1,4 +1,6 @@
 using System.Reflection;
+using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Templaters;
 using ProjectTools.Core.Templates;
 
@@ -43,15 +45,39 @@ public class Templater
         return _availableTemplateBuilders;
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="pathToDirectoryToTemplate"></param>
-    /// <param name="templateBuilder"></param>
-    /// <param name="newTemplate"></param>
-    /// <returns></returns>
-    public string GenerateTemplate(string pathToDirectoryToTemplate, AbstractTemplateBuilder templateBuilder,
-        Template newTemplate)
+    public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
+        bool forceOverride, List<PreparationSlug> slugs, Template template)
     {
-        return string.Empty;
+        var outputTempDirectory = Path.Combine(outputDirectory, template.SafeName);
+        var outputFile = Path.Combine(outputDirectory, $"{template.SafeName}.{PathConstants.TemplateFileExtension}");
+
+        // Step 1 - Copy the directory to the output directory
+        if (!PathHelpers.CleanDirectory(outputTempDirectory))
+            return "Directory already exists and force override is not enabled.";
+
+        if (!PathHelpers.CleanFile(outputFile)) return "Directory already exists and force override is not enabled.";
+
+
+        if (Directory.Exists(outputTempDirectory))
+        {
+            if (forceOverride)
+                File.Delete(outputFile);
+            else
+                return "File already exists and force override is not enabled.";
+        }
+
+        // Step 2 - Go through the slugs and replace all instances of the search terms with the slug key
+
+        // Step 3 - PrepSlugs -> Slugs and attach to the template
+        var finalSlugs = slugs.Select(slug => slug.ToSlug()).ToList();
+        template.Slugs = finalSlugs;
+
+        // Step 4 - Create the template info file
+
+
+        // Step 5 - Convert the template directory to a zip file
+
+        // Step 6 - DONE
+        return "Success!";
     }
 }

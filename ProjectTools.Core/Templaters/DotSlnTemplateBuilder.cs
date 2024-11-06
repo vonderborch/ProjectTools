@@ -6,13 +6,13 @@ namespace ProjectTools.Core.Templaters;
 public class DotSlnTemplateBuilder()
     : AbstractTemplateBuilder(".sln", "A template builder for a .sln solutions.", "2.0.0", "Christian Webber")
 {
-    public override List<PreperationSlug> GetBaseSlugs(string pathToDirectoryToTemplate)
+    public override List<PreparationSlug> GetPreparationSlugs(string pathToDirectoryToTemplate, Template template)
     {
-        List<PreperationSlug> slugs = SlugConstants.GetBasePreparationSlugs();
+        var slugs = SlugConstants.GetBasePreparationSlugs();
 
         slugs.AddRange(
             [
-                new PreperationSlug
+                new PreparationSlug
                 {
                     SlugKey = "Author",
                     DisplayName = "Author",
@@ -20,7 +20,7 @@ public class DotSlnTemplateBuilder()
                     RequiresUserInput = true,
                     SearchStrings = ["Author"]
                 },
-                new PreperationSlug
+                new PreparationSlug
                 {
                     SlugKey = "Description",
                     DisplayName = "Description",
@@ -28,7 +28,7 @@ public class DotSlnTemplateBuilder()
                     RequiresUserInput = true,
                     SearchStrings = ["Description"]
                 },
-                new PreperationSlug
+                new PreparationSlug
                 {
                     SlugKey = "Version",
                     DisplayName = "Version",
@@ -40,11 +40,6 @@ public class DotSlnTemplateBuilder()
         );
 
         return slugs;
-    }
-
-    public override void ReplaceSearchStringsWithSlugs(List<PreperationSlug> slugs, string pathToDirectoryToTemplate)
-    {
-        base.ReplaceSearchStringsWithSlugs(slugs, pathToDirectoryToTemplate);
     }
 
     public override bool IsValidDirectoryForBuilder(string pathToDirectoryToTemplate)

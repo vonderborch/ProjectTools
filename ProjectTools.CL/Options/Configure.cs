@@ -18,7 +18,6 @@ public class Configure : AbstractOption
     {
         AllowAutoConfiguration = false;
         AllowTemplateUpdates = false;
-        AllowSilentParameter = false;
     }
 
     /// <summary>
