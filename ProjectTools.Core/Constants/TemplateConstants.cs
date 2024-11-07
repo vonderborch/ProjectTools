@@ -1,11 +1,19 @@
 namespace ProjectTools.Core.Constants;
 
+/// <summary>
+///     Various constants related to templates.
+/// </summary>
 public static class TemplateConstants
 {
     /// <summary>
     ///     The name of the template settings file.
     /// </summary>
     public static string TemplateSettingsFileName = "template.json";
+
+    /// <summary>
+    ///     The file extension for templates.
+    /// </summary>
+    public static readonly string TemplateFileExtension = "ptt";
 
     /// <summary>
     ///     The default template version.

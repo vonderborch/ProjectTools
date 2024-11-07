@@ -38,7 +38,8 @@ public class Preparer
         var types = assembly.GetTypes();
 
         var builtInTemplateBuilders =
-            types.Where(t => t is { IsClass: true, IsAbstract: false } && t.BaseType == typeof(AbstractTemplateBuilder)).ToList();
+            types.Where(t => t is { IsClass: true, IsAbstract: false } && t.BaseType == typeof(AbstractTemplateBuilder))
+                .ToList();
         foreach (var templater in builtInTemplateBuilders)
         {
             this._availableTemplateBuilders.Add((AbstractTemplateBuilder)Activator.CreateInstance(templater));
@@ -54,7 +55,8 @@ public class Preparer
         bool forceOverride, PreparationTemplate template, Logger coreLogger, Logger instructionLogger)
     {
         var outputTempDirectory = Path.Combine(outputDirectory, template.SafeName);
-        var outputFile = Path.Combine(outputDirectory, $"{template.SafeName}.{PathConstants.TemplateFileExtension}");
+        var outputFile =
+            Path.Combine(outputDirectory, $"{template.SafeName}.{TemplateConstants.TemplateFileExtension}");
 
         // Step 1 - Cleanup directories/files
         coreLogger.Log("Step 1/8 - Cleaning existing directories and files...");
