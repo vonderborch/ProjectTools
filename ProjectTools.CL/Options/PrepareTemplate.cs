@@ -303,6 +303,49 @@ public class PrepareTemplate : AbstractOption
 
         // Ask if the user has any additional slugs they want to add...
         List<PreparationSlug> customSlugs = new();
+        while (ConsoleHelpers.GetYesNo("Do you want to add any additional slugs?", false))
+        {
+            PreparationSlug slug = new();
+            do
+            {
+                // Slug Display Name
+                slug.DisplayName = ConsoleHelpers.GetInput("Slug Display Name", slug.DisplayName);
+
+                // Slug Key
+                slug.SlugKey = ConsoleHelpers.GetInput("Slug Key", slug.SlugKey);
+
+                // Slug Type
+                slug.Type = ConsoleHelpers.GetEnumInput("Slug Type", slug.Type);
+
+                // Slug Search Strings
+                slug.SearchStrings = ConsoleHelpers.GetStringListInput("Slug Search Strings", slug.SearchStrings,
+                    ",", "comma-separated");
+
+                // Slug Default Value, if any
+                var defaultValue = ConsoleHelpers.GetInput("Slug Default Value",
+                    (slug.DefaultValue ?? string.Empty).ToString());
+                slug.DefaultValue = slug.Type.CorrectedValueType(defaultValue);
+
+                // Slug Allowed Values, if any
+                var allowedValues = ConsoleHelpers.GetStringListInput("Slug Allowed Values", slug.AllowedValues,
+                    ",", "comma-separated");
+                slug.AllowedValues = slug.Type.CorrectedValueType(allowedValues);
+
+                // Slug Disallowed Values, if any
+                var disallowedValues = ConsoleHelpers.GetStringListInput("Slug Disallowed Values",
+                    slug.DisallowedValues,
+                    ",", "comma-separated");
+                slug.DisallowedValues = slug.Type.CorrectedValueType(disallowedValues);
+
+                // Slug Requires User Input
+                slug.RequiresUserInput =
+                    ConsoleHelpers.GetYesNo("Does the slug require user input?", slug.RequiresUserInput);
+            } while (ContinueEditingSlug(slug, false));
+
+            customSlugs.Add(slug);
+        }
+        
+        while ()
         // TODO - add custom slug input here...
 
         // Combine the three lists and return!
