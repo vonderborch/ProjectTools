@@ -19,7 +19,7 @@ public class ListTemplateBuilders : AbstractOption
     /// <returns>The result.</returns>
     public override string Execute()
     {
-        var templater = new Templater();
+        var templater = new Preparer();
         var templaters = templater.GetTemplateBuilders();
 
         if (templaters.Count == 0)

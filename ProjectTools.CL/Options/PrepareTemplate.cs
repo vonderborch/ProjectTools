@@ -73,7 +73,7 @@ public class PrepareTemplate : AbstractOption
         ValidateParameters();
 
         // Get the template builder for the preparation of the directory
-        var templater = new Templater();
+        var templater = new Preparer();
         var templateBuilderForPrep = GetTemplateBuilderForPreparation(templater);
 
         // Get info on the template we're building...
@@ -117,12 +117,12 @@ public class PrepareTemplate : AbstractOption
     /// <summary>
     ///     Gets the template builder for the preparation of the directory.
     /// </summary>
-    /// <param name="templater">The templater engine.</param>
+    /// <param name="preparer">The templater engine.</param>
     /// <returns>A template builder for use in preparation.</returns>
     /// <exception cref="Exception">Raises if no template builder could be used.</exception>
-    private AbstractTemplateBuilder GetTemplateBuilderForPreparation(Templater templater)
+    private AbstractTemplateBuilder GetTemplateBuilderForPreparation(Preparer preparer)
     {
-        var templateBuilders = templater.GetTemplateBuilders();
+        var templateBuilders = preparer.GetTemplateBuilders();
         AbstractTemplateBuilder? templateBuilderForPrep = null;
         // If template builder is auto, try to detect the correct one
         if (this.TemplateBuilder == "auto")

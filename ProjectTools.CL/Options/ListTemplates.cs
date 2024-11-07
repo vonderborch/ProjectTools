@@ -3,10 +3,10 @@ using CommandLine;
 namespace ProjectTools.CL.Options;
 
 /// <summary>
-///     A command to get information about the program with.
+///     A command to list available templates.
 /// </summary>
-[Verb("update-templates", HelpText = "Lists all templates available to use.")]
-public class UpdateTemplates : AbstractOption
+[Verb("list-templates", HelpText = "Lists all templates available to use.")]
+public class ListTemplates : AbstractOption
 {
     /// <summary>
     ///     Executes the option.
@@ -14,7 +14,7 @@ public class UpdateTemplates : AbstractOption
     /// <returns>The result.</returns>
     public override string Execute()
     {
-        // TODO - Add logic to update templates
+        // TODO - Add logic to list all templates
 
         return "";
     }
