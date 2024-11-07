@@ -51,12 +51,13 @@ public class Templater
     }
 
     public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
-        bool forceOverride, PreparationTemplate template)
+        bool forceOverride, PreparationTemplate template, Logger coreLogger, Logger instructionLogger)
     {
         var outputTempDirectory = Path.Combine(outputDirectory, template.SafeName);
         var outputFile = Path.Combine(outputDirectory, $"{template.SafeName}.{PathConstants.TemplateFileExtension}");
 
         // Step 1 - Cleanup directories/files
+        coreLogger.Log("Step 1/8 - Cleaning existing directories and files...");
         if (!IOHelpers.CleanDirectory(outputTempDirectory, forceOverride))
         {
             return "Directory already exists and force override is not enabled.";
@@ -68,19 +69,36 @@ public class Templater
         }
 
         // Step 2 - Copy the directory we are trying to template to the output directory
+        coreLogger.Log("Step 2/8 - Copying directory to temp directory...");
         IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, template.PrepareExcludedPaths);
 
         // Step 3 - Go through the slugs and replace all instances of the search terms with the slug key
+        coreLogger.Log("Step 3/8 - Templatizing directory...");
         UpdateDirectoryFiles(outputTempDirectory, outputTempDirectory, template, false);
 
         // Step 4 - Create the template info file
+        coreLogger.Log("Step 4/8 - Creating template settings file...");
         var outputTemplateInfoFile = Path.Combine(outputTempDirectory, TemplateConstants.TemplateSettingsFileName);
         JsonHelpers.SerializeToFile(outputTemplateInfoFile, template.ToTemplate());
 
         // Step 5 - Convert the template directory to a zip file
+        coreLogger.Log("Step 5/8 - Archiving directory...");
         IOHelpers.ArchiveDirectory(outputTempDirectory, outputFile, skipCleaning);
 
-        // Step 6 - DONE
+        // TODO - Step 6 - Try to execute scripts!
+        coreLogger.Log("Step 6/8 - Executing scripts...");
+
+        // TODO - Step 7 - List instructions!
+        coreLogger.Log("Step 7/8 - Listing instructions...");
+
+        // Step 8 - DONE
+        coreLogger.Log("Step 8/8 - Cleaning directory...");
+        if (!skipCleaning)
+        {
+            IOHelpers.CleanDirectory(outputTempDirectory, true);
+        }
+        
+        coreLogger.Log("Success!");
         return "Success!";
     }
 
