@@ -96,8 +96,10 @@ public class PrepareTemplate : AbstractOption
             return "What-If mode enabled. No changes were made.";
         }
 
+        Logger coreLogger = new(LogMessage);
+        Logger instructionLogger = new(LogMessage);
         return templater.GenerateTemplate(this.Directory, this.OutputDirectory, this.SkipCleaning, this.ForceOverride,
-            template);
+            template, coreLogger, instructionLogger);
     }
 
     /// <summary>

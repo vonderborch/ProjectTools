@@ -97,9 +97,9 @@ public class Templater
         {
             IOHelpers.CleanDirectory(outputTempDirectory, true);
         }
-        
+
         coreLogger.Log("Success!");
-        return "Success!";
+        return "";
     }
 
 
