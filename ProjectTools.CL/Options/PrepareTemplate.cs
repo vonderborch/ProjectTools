@@ -118,7 +118,7 @@ public class PrepareTemplate : AbstractOption
     ///     Gets the template builder for the preparation of the directory.
     /// </summary>
     /// <param name="templater">The templater engine.</param>
-    /// <returns>A template builder for use in preperation.</returns>
+    /// <returns>A template builder for use in preparation.</returns>
     /// <exception cref="Exception">Raises if no template builder could be used.</exception>
     private AbstractTemplateBuilder GetTemplateBuilderForPreparation(Templater templater)
     {
@@ -139,7 +139,7 @@ public class PrepareTemplate : AbstractOption
         // Otherwise, try to find the template builder by name...
         else
         {
-            var templateBuilder = templateBuilders.Where(x => x.NameLowercase == this.TemplateBuilder).FirstOrDefault();
+            var templateBuilder = templateBuilders.FirstOrDefault(x => x.NameLowercase == this.TemplateBuilder);
             if (templateBuilder != null)
             {
                 if (templateBuilder.IsValidDirectoryForBuilder(this.Directory))
@@ -175,10 +175,7 @@ public class PrepareTemplate : AbstractOption
         }
 
         var hadExistingSettingsFile = template != null;
-        if (template == null)
-        {
-            template = new PreparationTemplate();
-        }
+        template ??= new PreparationTemplate();
 
         template.TemplaterVersion = TemplateConstants.CurrentTemplateVersion;
 
@@ -255,10 +252,27 @@ public class PrepareTemplate : AbstractOption
             }
         }
 
-        // Ask the user for input on the slugs that require it
+        // Ask the user for input on the slugs that require it...
+        slugsWithInput = GetBuiltinSlugs(slugsWithInput);
+
+        // Ask if the user has any additional slugs they want to add...
+        List<PreparationSlug> customSlugs = GetCustomSlugs();
+
+        // Combine the three lists and return!
+        var slugs = slugsWithNoInput.CombineLists(slugsWithInput).CombineLists(customSlugs);
+        return slugs;
+    }
+
+    /// <summary>
+    /// Gets all existing slugs that require input.
+    /// </summary>
+    /// <param name="slugs">The slugs.</param>
+    /// <returns>The slugs.</returns>
+    private List<PreparationSlug> GetBuiltinSlugs(List<PreparationSlug> slugs)
+    {
         do
         {
-            foreach (var slug in slugsWithInput)
+            foreach (var slug in slugs)
             {
                 do
                 {
@@ -299,10 +313,19 @@ public class PrepareTemplate : AbstractOption
                 // PRINT LINE
                 ConsoleHelpers.PrintLine();
             }
-        } while (ContinueEditingSlugs(slugsWithInput, false));
+        } while (ContinueEditingSlugs(slugs, false));
 
-        // Ask if the user has any additional slugs they want to add...
+        return slugs;
+    }
+
+    /// <summary>
+    /// Gets custom slugs.
+    /// </summary>
+    /// <returns>The slugs.</returns>
+    private List<PreparationSlug> GetCustomSlugs()
+    {
         List<PreparationSlug> customSlugs = new();
+        
         while (ConsoleHelpers.GetYesNo("Do you want to add any additional slugs?", false))
         {
             PreparationSlug slug = new();
@@ -345,9 +368,7 @@ public class PrepareTemplate : AbstractOption
             customSlugs.Add(slug);
         }
 
-        // Combine the three lists and return!
-        var slugs = slugsWithNoInput.CombineLists(slugsWithInput).CombineLists(customSlugs);
-        return slugs;
+        return customSlugs;
     }
 
     /// <summary>
