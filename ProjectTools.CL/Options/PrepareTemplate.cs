@@ -344,9 +344,6 @@ public class PrepareTemplate : AbstractOption
 
             customSlugs.Add(slug);
         }
-        
-        while ()
-        // TODO - add custom slug input here...
 
         // Combine the three lists and return!
         var slugs = slugsWithNoInput.CombineLists(slugsWithInput).CombineLists(customSlugs);

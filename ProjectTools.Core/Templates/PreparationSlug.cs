@@ -13,7 +13,7 @@ public class PreparationSlug : Slug
     /// <summary>
     ///     The strings we search for to replace with the SlugKey.
     /// </summary>
-    public required List<string> SearchStrings;
+    public List<string> SearchStrings = [];
 
     /// <summary>
     ///     Converts a PreparationSlug to a Slug.

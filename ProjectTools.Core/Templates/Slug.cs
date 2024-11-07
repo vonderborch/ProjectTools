@@ -30,7 +30,7 @@ public class Slug
     /// <summary>
     ///     The display name of the slug.
     /// </summary>
-    public required string DisplayName;
+    public string DisplayName = string.Empty;
 
     /// <summary>
     ///     True if the slug requires user input, false otherwise.
@@ -40,12 +40,12 @@ public class Slug
     /// <summary>
     ///     The key used to identify where to replace the slug with the current value for the slug.
     /// </summary>
-    public required string SlugKey;
+    public string SlugKey = string.Empty;
 
     /// <summary>
     ///     The type of the slug.
     /// </summary>
-    public required SlugType Type;
+    public SlugType Type = SlugType.String;
 
     /// <summary>
     ///     The actual slug key used in files.
