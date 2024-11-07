@@ -13,7 +13,7 @@ internal class Program
 
 #if DEBUG
         var testRootCommand = "prepare";
-        var testCommandSpecific = "base";
+        var testCommandSpecific = "dual_and_generic";
 
         args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);
 #endif

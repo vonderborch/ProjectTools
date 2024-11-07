@@ -71,7 +71,7 @@ public class Templater
         IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, template.PrepareExcludedPaths);
 
         // Step 3 - Go through the slugs and replace all instances of the search terms with the slug key
-        UpdateDirectoryFiles(outputTempDirectory, outputTempDirectory, template, isRenameOnlyPath: false);
+        UpdateDirectoryFiles(outputTempDirectory, outputTempDirectory, template, false);
 
         // Step 4 - Create the template info file
         var outputTemplateInfoFile = Path.Combine(outputTempDirectory, TemplateConstants.TemplateSettingsFileName);
@@ -84,6 +84,7 @@ public class Templater
         return "Success!";
     }
 
+
     /// <summary>
     ///     Updates the directory files per the template and replacement text.
     /// </summary>
@@ -91,32 +92,40 @@ public class Templater
     /// <param name="rootOutputDirectory">The root output directory.</param>
     /// <param name="template">The template.</param>
     /// <param name="isRenameOnlyPath">Whether we're already in a rename-only path or not.</param>
-    private void UpdateDirectoryFiles(string directory, string rootOutputDirectory, PreparationTemplate template, bool isRenameOnlyPath)
+    private void UpdateDirectoryFiles(string directory, string rootOutputDirectory, PreparationTemplate template,
+        bool isRenameOnlyPath)
     {
-        var files = Directory.GetFiles(directory)
-            .Where(f => Path.GetFileName(f) != TemplateConstants.TemplateSettingsFileName);
-
-        foreach (var file in files)
-        {
-            UpdateFile(file, rootOutputDirectory, template, IsRenameOnlyPath(file, rootOutputDirectory, template, isRenameOnlyPath));
-        }
-
+        // Go through sub-directories and update them...
         var directories = Directory.GetDirectories(directory);
         for (var i = 0; i < directories.Length; i++)
         {
-            var actualDirectoryName = UpdateText(directories[i], template.ReplacementText);
-            if (actualDirectoryName != directories[i])
+            // update the files in the sub-directory...
+            UpdateDirectoryFiles(directories[i], rootOutputDirectory, template,
+                IsRenameOnlyPath(directories[i], rootOutputDirectory, template, isRenameOnlyPath));
+
+            // make sure to rename the sub-directory...
+            var actualDirectoryName = UpdateText(Path.GetFileName(directories[i]), template.ReplacementText);
+            var baseDirectoryName = Path.GetFileName(directories[i]);
+            if (actualDirectoryName != baseDirectoryName)
             {
-                IOHelpers.CopyDirectory(directories[i], actualDirectoryName, []);
+                var actualDirectory = Path.Combine(Path.GetDirectoryName(directories[i]), actualDirectoryName);
+                IOHelpers.CopyDirectory(directories[i], actualDirectory, []);
                 Directory.Delete(directories[i], true);
             }
-            
-            UpdateDirectoryFiles(actualDirectoryName, rootOutputDirectory, template, IsRenameOnlyPath(directories[i], rootOutputDirectory, template, isRenameOnlyPath));
+        }
+
+        // update all files in the current directory...
+        var files = Directory.GetFiles(directory)
+            .Where(f => Path.GetFileName(f) != TemplateConstants.TemplateSettingsFileName);
+        foreach (var file in files)
+        {
+            UpdateFile(file, rootOutputDirectory, template,
+                IsRenameOnlyPath(file, rootOutputDirectory, template, isRenameOnlyPath));
         }
     }
 
     /// <summary>
-    /// Returns whether the path is a rename-only path.
+    ///     Returns whether the path is a rename-only path.
     /// </summary>
     /// <param name="path">The path.</param>
     /// <param name="rootOutputDirectory">The root output directory.</param>
@@ -130,7 +139,7 @@ public class Templater
         {
             return true;
         }
-        
+
         var relativePath = Path.GetRelativePath(rootOutputDirectory, path);
         return template.RenameOnlyPaths.Contains(relativePath);
     }
@@ -142,7 +151,8 @@ public class Templater
     /// <param name="rootOutputDirectory">The root output directory.</param>
     /// <param name="template">The template.</param>
     /// <param name="isRenameOnlyPath">Whether we're already in a rename-only path or not.</param>
-    private void UpdateFile(string file, string rootOutputDirectory, PreparationTemplate template, bool isRenameOnlyPath)
+    private void UpdateFile(string file, string rootOutputDirectory, PreparationTemplate template,
+        bool isRenameOnlyPath)
     {
         // Step 1 - Get a temp file name...
         var tempFile = file;
@@ -154,8 +164,9 @@ public class Templater
 
         // Step 2 - Determine the output file name
         var relativeFilePath = Path.GetRelativePath(rootOutputDirectory, file);
-        var outputFile = UpdateText(relativeFilePath, template.ReplacementText);
-        outputFile = Path.Combine(rootOutputDirectory, outputFile);
+        var outputFileName = Path.GetFileName(relativeFilePath);
+        var outputFile = UpdateText(outputFileName, template.ReplacementText);
+        outputFile = Path.Combine(rootOutputDirectory, Path.GetDirectoryName(relativeFilePath), outputFile);
 
         // Step 3 - Is the file one we need to update contents of, or not?
         if (isRenameOnlyPath)

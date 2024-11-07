@@ -3,7 +3,7 @@
     {
       "RequiresAnyInput": true,
       "SearchStrings": [
-        "Velentr.BASE"
+        "Velentr.DUAL_SUPPORT_WITH_GENERIC"
       ],
       "AllowedValues": [],
       "DefaultValue": "MyLibrary",
@@ -54,8 +54,8 @@
     }
   ],
   "Author": "Christian Webber",
-  "Description": "A generic library for an FNA/Monogame program that doesn\u0027t require any specific support for FNA or Monogame.",
-  "Name": "Velentr.BASE",
+  "Description": "A library with individual implementations for FNA and Monogame, and a base implementation.",
+  "Name": "Velentr.DUAL_SUPPORT_WITH_GENERIC",
   "PathsToRemove": [],
   "PrepareExcludedPaths": [
     "bin",
@@ -63,11 +63,19 @@
     ".vs",
     ".git",
     "release",
-    "debug"
+    "debug",
+    "FNA"
   ],
-  "PythonScriptPaths": [],
+  "PythonScriptPaths": [
+    "install_fna.py"
+  ],
   "RenameOnlyPaths": [
-    "logo.png"
+    "logo.png",
+    "install_fna.py",
+    "update_fna.py",
+    "Velentr.DevEnv.FNA",
+    "Velentr.DevEnv.Monogame",
+    "fna_updater"
   ],
   "TemplateBuilder": ".sln",
   "TemplaterVersion": "1.0.0",

@@ -153,12 +153,13 @@ public static class IOHelpers
                 var path = Path.Combine(destination, dirName);
                 CopyDirectoryHelper(directories[i], path, excludedDirectories);
 
-                var nameWithSeperator = $"{dirName}\\";
+                /*
                 var updatedExcludedDirectories = excludedDirectories
                     .Select(x => x.StartsWith(dirName) ? x[dirName.Length..] : x).ToList();
                 updatedExcludedDirectories = updatedExcludedDirectories
                     .Where(x => x.Contains(Path.DirectorySeparatorChar)).ToList();
-                CopyDirectoryHelper(directories[i], path, excludedDirectories);
+                CopyDirectoryHelper(directories[i], path, updatedExcludedDirectories);
+                */
             }
         }
     }
@@ -172,15 +173,15 @@ public static class IOHelpers
     /// <param name="sleepTime">The sleep time.</param>
     private static void SafeCopyFile(string source, string destination, int numTries = 3, int sleepTime = 500)
     {
+        if (source == destination)
+        {
+            return;
+        }
+
         for (var i = 0; i < numTries; i++)
         {
             try
             {
-                if (File.Exists(destination))
-                {
-                    File.Delete(destination);
-                }
-
                 File.Copy(source, destination, true);
                 return;
             }

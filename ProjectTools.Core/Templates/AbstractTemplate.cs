@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using ProjectTools.Core.Constants;
 
 namespace ProjectTools.Core.Templates;
 
@@ -51,6 +52,11 @@ public abstract class AbstractTemplate
     ///     The name of the template builder to use.
     /// </summary>
     public string TemplateBuilder = string.Empty;
+
+    /// <summary>
+    ///     The version of the templater that created the template.
+    /// </summary>
+    public Version TemplaterVersion = TemplateConstants.DefaultTemplateVersion;
 
     /// <summary>
     ///     The current version of the template.

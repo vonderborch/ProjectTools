@@ -161,12 +161,24 @@ public class PrepareTemplate : AbstractOption
         // Get the existing template settings file, if it exists
         var templateSettingsFile = Path.Combine(this.Directory, TemplateConstants.TemplateSettingsFileName);
         var template = JsonHelpers.DeserializeFromFile<PreparationTemplate>(templateSettingsFile);
+        if (template != null)
+        {
+            if (template.TemplaterVersion < TemplateConstants.MinSupportedTemplateVersion ||
+                template.TemplaterVersion > TemplateConstants.MaxSupportedTemplateVersion)
+            {
+                LogMessage(
+                    $"Template version {template.TemplaterVersion} is not supported. Current supported versions are {TemplateConstants.MinSupportedTemplateVersion} to {TemplateConstants.MaxSupportedTemplateVersion}");
+                template = null;
+            }
+        }
 
         var hadExistingSettingsFile = template != null;
         if (template == null)
         {
             template = new PreparationTemplate();
         }
+
+        template.TemplaterVersion = TemplateConstants.CurrentTemplateVersion;
 
         // Populate the template builder if it's not already populated
         if (string.IsNullOrEmpty(template.TemplateBuilder))
