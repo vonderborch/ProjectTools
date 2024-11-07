@@ -1,12 +1,12 @@
 namespace ProjectTools.Core.Constants;
 
 /// <summary>
-/// Constants related to directories.
+///     Constants related to directories.
 /// </summary>
 public static class PathConstants
 {
     /// <summary>
-    /// The core directory for the program
+    ///     The core directory for the program
     /// </summary>
     public static readonly string CoreDirectory =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ProjectTools");

@@ -6,7 +6,7 @@ namespace ProjectTools.Core.Helpers;
 public static class JsonHelpers
 {
     /// <summary>
-    /// Deserializes a JSON file to the specified type.
+    ///     Deserializes a JSON file to the specified type.
     /// </summary>
     /// <param name="path">The path to the JSON file.</param>
     /// <param name="options">Options to use when deserializing the file.</param>
@@ -14,16 +14,22 @@ public static class JsonHelpers
     /// <returns>The type, or the default for the type.</returns>
     public static TValue? DeserializeFromFile<TValue>(string path, JsonSerializerOptions? options = null)
     {
-        if (!File.Exists(path)) return default;
+        if (!File.Exists(path))
+        {
+            return default;
+        }
 
         var rawContents = File.ReadAllText(path);
-        if (string.IsNullOrWhiteSpace(rawContents)) return default;
+        if (string.IsNullOrWhiteSpace(rawContents))
+        {
+            return default;
+        }
 
         return DeserializeString<TValue>(rawContents, options);
     }
 
     /// <summary>
-    /// Deserializes a JSON string to the specified type.
+    ///     Deserializes a JSON string to the specified type.
     /// </summary>
     /// <param name="contents">The contents to deserialize.</param>
     /// <param name="options">Options to use when deserializing the file.</param>
@@ -44,7 +50,7 @@ public static class JsonHelpers
     }
 
     /// <summary>
-    /// Serializes an object to a JSON file.
+    ///     Serializes an object to a JSON file.
     /// </summary>
     /// <param name="path">The file to output the JSON string to.</param>
     /// <param name="obj">The object to serialize.</param>
@@ -57,7 +63,7 @@ public static class JsonHelpers
     }
 
     /// <summary>
-    /// Serializes an object to a JSON string.
+    ///     Serializes an object to a JSON string.
     /// </summary>
     /// <param name="obj">The object to serialize.</param>
     /// <param name="options">Options to use when serializing the file.</param>

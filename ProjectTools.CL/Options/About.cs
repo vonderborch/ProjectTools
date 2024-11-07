@@ -6,13 +6,13 @@ using ProjectTools.Core.Constants;
 namespace ProjectTools.CL.Options;
 
 /// <summary>
-/// A command to get information about the program with.
+///     A command to get information about the program with.
 /// </summary>
 [Verb("about", HelpText = "Get information about the program.")]
 public class About : AbstractOption
 {
     /// <summary>
-    /// Executes the option.
+    ///     Executes the option.
     /// </summary>
     /// <returns>The result.</returns>
     public override string Execute()
@@ -27,7 +27,7 @@ public class About : AbstractOption
     }
 
     /// <summary>
-    /// Sets the options.
+    ///     Sets the options.
     /// </summary>
     /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)

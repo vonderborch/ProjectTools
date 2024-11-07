@@ -29,9 +29,12 @@ public class ListTemplateBuilders : AbstractOption
         else
         {
             Console.WriteLine($"Found {templaters.Count} templaters...");
-            if (Simple)
+            if (this.Simple)
             {
-                foreach (var t in templaters) Console.WriteLine($"- {t.Name} - {t.Version}");
+                foreach (var t in templaters)
+                {
+                    Console.WriteLine($"- {t.Name} - {t.Version}");
+                }
             }
             else
             {
@@ -56,6 +59,6 @@ public class ListTemplateBuilders : AbstractOption
     protected override void SetOptions(AbstractOption option)
     {
         var options = (ListTemplateBuilders)option;
-        Simple = options.Simple;
+        this.Simple = options.Simple;
     }
 }

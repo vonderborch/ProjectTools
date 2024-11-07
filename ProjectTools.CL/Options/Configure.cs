@@ -6,22 +6,21 @@ using ProjectTools.Core.Constants;
 namespace ProjectTools.CL.Options;
 
 /// <summary>
-/// An option that is used to configure the application settings.
+///     An option that is used to configure the application settings.
 /// </summary>
 [Verb("configure", HelpText = "Configure application settings")]
 public class Configure : AbstractOption
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Configure"/> class.
+    ///     Initializes a new instance of the <see cref="Configure" /> class.
     /// </summary>
     public Configure()
     {
-        AllowAutoConfiguration = false;
-        AllowTemplateUpdates = false;
+        this.AllowAutoConfiguration = false;
+        this.AllowTemplateUpdates = false;
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <returns></returns>
     public override string Execute()
@@ -51,12 +50,10 @@ public class Configure : AbstractOption
     }
 
     /// <summary>
-    /// Sets the options.
+    ///     Sets the options.
     /// </summary>
     /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)
     {
-        var options = (Configure)option;
-        Silent = options.Silent;
     }
 }

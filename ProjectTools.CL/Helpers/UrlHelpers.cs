@@ -3,12 +3,12 @@ using System.Diagnostics;
 namespace ProjectTools.CL.Helpers;
 
 /// <summary>
-/// Various helpers for dealing with URLs.
+///     Various helpers for dealing with URLs.
 /// </summary>
 public class UrlHelpers
 {
     /// <summary>
-    /// Opens the URL.
+    ///     Opens the URL.
     /// </summary>
     /// <param name="url">The URL.</param>
     /// <param name="errorMessage">The error message.</param>

@@ -8,4 +8,12 @@
         <FileVersion>2.0.0</FileVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <OutputPath>..\debug\core\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>..\release\core\</OutputPath>
+    </PropertyGroup>
+
 </Project>

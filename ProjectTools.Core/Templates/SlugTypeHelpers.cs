@@ -21,7 +21,10 @@ public static class SlugTypeHelpers
     /// <exception cref="ArgumentOutOfRangeException">Raises if the type is invalid.</exception>
     public static object? CorrectedValueType(this SlugType type, string value)
     {
-        if (string.IsNullOrEmpty(value) && NullableSlugTypes.Contains(type)) return null;
+        if (string.IsNullOrEmpty(value) && NullableSlugTypes.Contains(type))
+        {
+            return null;
+        }
 
         switch (type)
         {
@@ -55,7 +58,10 @@ public static class SlugTypeHelpers
     public static List<object?> CorrectedValueType(this SlugType type, List<string> values)
     {
         List<object?> correctedValues = new();
-        foreach (var value in values) correctedValues.Add(type.CorrectedValueType(value));
+        foreach (var value in values)
+        {
+            correctedValues.Add(type.CorrectedValueType(value));
+        }
 
         return correctedValues;
     }

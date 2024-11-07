@@ -1,0 +1,80 @@
+{
+  "ReplacementText": {
+    "Velentr.BASE": "[[SolutionName]]",
+    "Christian Webber": "[[Author]]",
+    "A library": "[[Description]]",
+    "1.0.0": "[[Version]]"
+  },
+  "Slugs": [
+    {
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "Velentr.BASE"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "MyLibrary",
+      "DisallowedValues": [],
+      "DisplayName": "Solution Name",
+      "RequiresUserInput": true,
+      "SlugKey": "SolutionName",
+      "Type": "String"
+    },
+    {
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "Christian Webber"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "My Name",
+      "DisallowedValues": [],
+      "DisplayName": "Author",
+      "RequiresUserInput": true,
+      "SlugKey": "Author",
+      "Type": "String"
+    },
+    {
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "A library"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "A library",
+      "DisallowedValues": [],
+      "DisplayName": "Description",
+      "RequiresUserInput": true,
+      "SlugKey": "Description",
+      "Type": "String"
+    },
+    {
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "1.0.0"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "1.0.0",
+      "DisallowedValues": [],
+      "DisplayName": "Version",
+      "RequiresUserInput": true,
+      "SlugKey": "Version",
+      "Type": "String"
+    }
+  ],
+  "Author": "Christian Webber",
+  "Description": "A generic library for an FNA/Monogame program that doesn\u0027t require any specific support for FNA or Monogame.",
+  "Name": "Velentr.BASE",
+  "PathsToRemove": [],
+  "PrepareExcludedPaths": [
+    "bin",
+    "obj",
+    ".vs",
+    ".git",
+    "release",
+    "debug"
+  ],
+  "PythonScriptPaths": [],
+  "RenameOnlyPaths": [
+    "logo.png"
+  ],
+  "TemplateBuilder": ".sln",
+  "Version": "2024-11-07"
+}

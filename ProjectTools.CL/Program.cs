@@ -3,7 +3,7 @@
 internal class Program
 {
     /// <summary>
-    /// Defines the entry point of the application.
+    ///     Defines the entry point of the application.
     /// </summary>
     /// <param name="args">The arguments.</param>
     /// <exception cref="System.ArgumentException">Invalid test command!</exception>
@@ -12,8 +12,8 @@ internal class Program
         var commandHelper = new CommandHelper();
 
 #if DEBUG
-        var testRootCommand = "list-template-builders";
-        var testCommandSpecific = "simple";
+        var testRootCommand = "prepare";
+        var testCommandSpecific = "base";
 
         args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);
 #endif

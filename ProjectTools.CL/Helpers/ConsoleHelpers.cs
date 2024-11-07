@@ -1,12 +1,12 @@
 namespace ProjectTools.CL.Helpers;
 
 /// <summary>
-/// Various helper methods for the console.
+///     Various helper methods for the console.
 /// </summary>
 public static class ConsoleHelpers
 {
     /// <summary>
-    /// Gets the input.
+    ///     Gets the input.
     /// </summary>
     /// <param name="message">The message.</param>
     /// <param name="defaultValue">The default value.</param>
@@ -32,23 +32,39 @@ public static class ConsoleHelpers
     }
 
     /// <summary>
-    /// Gets the input for a string list.
+    ///     Gets the input for a string list.
     /// </summary>
     /// <param name="message">The message.</param>
     /// <param name="defaultValue">The default value.</param>
-    /// <param name="seperatorChar">The separator character string.</param>
-    /// <param name="seperatorMessage">The separator message.</param>
+    /// <param name="separatorChar">The separator character string.</param>
+    /// <param name="separatorMessage">The separator message.</param>
     /// <returns>The string list.</returns>
-    public static List<string> GetStringListInput(string message, List<string> defaultValue, string seperatorChar,
-        string seperatorMessage)
+    public static List<string> GetStringListInput(string message, List<string> defaultValue, string separatorChar,
+        string separatorMessage)
     {
-        var pathsString = string.Join(seperatorChar, defaultValue);
-        pathsString = GetInput($"{message} ({seperatorMessage})", pathsString);
-        return pathsString.Split(seperatorChar).ToList();
+        var partsString = string.Join(separatorChar, defaultValue);
+        var outputString = GetInput($"{message} ({separatorMessage})", partsString);
+        return outputString.Split(separatorChar, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .ToList();
     }
 
     /// <summary>
-    /// Gets the input for an enum.
+    ///     Gets the input for a string list.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="defaultValue">The default value.</param>
+    /// <param name="separatorChar">The separator character string.</param>
+    /// <param name="separatorMessage">The separator message.</param>
+    /// <returns>The string list.</returns>
+    public static List<string> GetStringListInput(string message, List<object?> defaultValue, string separatorChar,
+        string separatorMessage)
+    {
+        List<string> parts = defaultValue.Select(x => x.ToString()).ToList();
+        return GetStringListInput(message, parts, separatorChar, separatorMessage);
+    }
+
+    /// <summary>
+    ///     Gets the input for an enum.
     /// </summary>
     /// <param name="message">The message.</param>
     /// <param name="allowedValues">The list of allowed values.</param>
@@ -82,7 +98,7 @@ public static class ConsoleHelpers
     }
 
     /// <summary>
-    /// Gets whether the user agrees or not.
+    ///     Gets whether the user agrees or not.
     /// </summary>
     /// <param name="message">The message.</param>
     /// <param name="defaultYes">if set to <c>true</c> [default yes].</param>
@@ -98,11 +114,13 @@ public static class ConsoleHelpers
             {
                 return true;
             }
-            else if (key.Key == ConsoleKey.N)
+
+            if (key.Key == ConsoleKey.N)
             {
                 return false;
             }
-            else if (key.Key == ConsoleKey.Enter)
+
+            if (key.Key == ConsoleKey.Enter)
             {
                 return defaultYes;
             }
@@ -125,6 +143,9 @@ public static class ConsoleHelpers
 
     public static void PrintLine(int amount = 1)
     {
-        for (var i = 0; i < amount; i++) Console.WriteLine("----------------------------------------");
+        for (var i = 0; i < amount; i++)
+        {
+            Console.WriteLine("----------------------------------------");
+        }
     }
 }

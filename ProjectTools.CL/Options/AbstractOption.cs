@@ -3,37 +3,37 @@ using ProjectTools.Core;
 namespace ProjectTools.CL.Options;
 
 /// <summary>
-/// An abstract command line option
+///     An abstract command line option
 /// </summary>
 public abstract class AbstractOption
 {
     /// <summary>
-    /// Gets or sets a value indicating whether [allow automatic configuration].
+    ///     Gets or sets a value indicating whether [allow automatic configuration].
     /// </summary>
     /// <value><c>true</c> if [allow automatic configuration]; otherwise, <c>false</c>.</value>
     protected bool AllowAutoConfiguration { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether [allow template updates].
+    ///     Gets or sets a value indicating whether [allow template updates].
     /// </summary>
     /// <value><c>true</c> if [allow template updates]; otherwise, <c>false</c>.</value>
     protected bool AllowTemplateUpdates { get; set; } = true;
 
     /// <summary>
-    /// Executes what this option represents.
+    ///     Executes what this option represents.
     /// </summary>
     /// <param name="option">The option.</param>
     /// <returns>The result of the execution.</returns>
     public abstract string Execute();
 
     /// <summary>
-    /// Executes the option.
+    ///     Executes the option.
     /// </summary>
     /// <param name="option">The option.</param>
     /// <returns>The result.</returns>
     public string ExecuteOption(AbstractOption option)
     {
-        if (AppSettings.Load() == null && AllowAutoConfiguration)
+        if (AppSettings.Load() == null && this.AllowAutoConfiguration)
         {
             _ = LogMessage("Creating settings file...");
             var configure = new Configure();
@@ -45,7 +45,7 @@ public abstract class AbstractOption
     }
 
     /// <summary>
-    /// Logs the message.
+    ///     Logs the message.
     /// </summary>
     /// <param name="value">The value.</param>
     /// <returns>True to indicate a message was wrwitten.</returns>
@@ -56,7 +56,7 @@ public abstract class AbstractOption
     }
 
     /// <summary>
-    /// Sets the options.
+    ///     Sets the options.
     /// </summary>
     /// <param name="option">The option.</param>
     protected abstract void SetOptions(AbstractOption option);

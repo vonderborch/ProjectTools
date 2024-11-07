@@ -1,12 +1,12 @@
 namespace ProjectTools.CL.Options;
 
 /// <summary>
-/// A command to update the templates.
+///     A command to update the templates.
 /// </summary>
 public class UpdateTemplates : SilenceAbleAbstractOption
 {
     /// <summary>
-    /// Executes the option.
+    ///     Executes the option.
     /// </summary>
     /// <returns>The result.</returns>
     public override string Execute()
@@ -15,7 +15,7 @@ public class UpdateTemplates : SilenceAbleAbstractOption
     }
 
     /// <summary>
-    /// Sets the options.
+    ///     Sets the options.
     /// </summary>
     /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)

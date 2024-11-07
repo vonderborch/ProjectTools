@@ -1,3 +1,4 @@
+using ProjectTools.Core.Constants;
 using ProjectTools.Core.Templates;
 
 namespace ProjectTools.Core.Templaters;
@@ -10,12 +11,12 @@ public abstract class AbstractTemplateBuilder(string name, string description, s
     /// <summary>
     ///     The name of the template builder.
     /// </summary>
-    public string Name { get; private set; } = name;
+    public string Name { get; } = name;
 
     /// <summary>
     ///     The lower-case name of the template builder.
     /// </summary>
-    public string NameLowercase => Name.ToLowerInvariant();
+    public string NameLowercase => this.Name.ToLowerInvariant();
 
     /// <summary>
     ///     The description of the template builder.
@@ -38,7 +39,56 @@ public abstract class AbstractTemplateBuilder(string name, string description, s
     /// <param name="pathToDirectoryToTemplate">The path to the directory being templated.</param>
     /// <param name="template">The template being used.</param>
     /// <returns>A list of slugs to request.</returns>
-    public abstract List<PreparationSlug> GetPreparationSlugs(string pathToDirectoryToTemplate, Template template);
+    public List<PreparationSlug> GetPreparationSlugs(string pathToDirectoryToTemplate, PreparationTemplate template)
+    {
+        var slugs = new List<PreparationSlug>(template.Slugs);
+        slugs = AddPreparationSlugs(SlugConstants.GetBasePreparationSlugs(), slugs);
+        slugs = AddPreparationSlugs(GetPreparationSlugsForTemplate(pathToDirectoryToTemplate, template), slugs);
+        return slugs;
+    }
+
+    /// <summary>
+    ///     Gets a list of base slugs to parameterize the template with.
+    /// </summary>
+    /// <param name="pathToDirectoryToTemplate">The path to the directory being templated.</param>
+    /// <param name="template">The template being used.</param>
+    /// <returns>A list of slugs to request.</returns>
+    public abstract List<PreparationSlug> GetPreparationSlugsForTemplate(string pathToDirectoryToTemplate,
+        PreparationTemplate template);
+
+    /// <summary>
+    ///     Adds a preparation slug to the existing list of preparation slugs, if possible.
+    /// </summary>
+    /// <param name="newSlug">The new slug to add.</param>
+    /// <param name="existingSlugs">The existing slugs.</param>
+    /// <returns>The updated list of slugs.</returns>
+    public List<PreparationSlug> AddPreparationSlug(PreparationSlug newSlug, List<PreparationSlug> existingSlugs)
+    {
+        if (existingSlugs.Any(slug => slug.SlugKey == newSlug.SlugKey))
+        {
+            return existingSlugs;
+        }
+
+        existingSlugs.Add(newSlug);
+        return existingSlugs;
+    }
+
+    /// <summary>
+    ///     Adds the preparation slugs to the existing list of preparation slugs, if possible.
+    /// </summary>
+    /// <param name="newSlugs">The new slugs to add.</param>
+    /// <param name="existingSlugs">The existing slugs.</param>
+    /// <returns>The updated list of slugs.</returns>
+    public List<PreparationSlug> AddPreparationSlugs(List<PreparationSlug> newSlugs,
+        List<PreparationSlug> existingSlugs)
+    {
+        foreach (var slug in newSlugs)
+        {
+            existingSlugs = AddPreparationSlug(slug, existingSlugs);
+        }
+
+        return existingSlugs;
+    }
 
     /// <summary>
     ///     Goes through the directory and prepares it for templating.
