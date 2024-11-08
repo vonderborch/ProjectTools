@@ -12,6 +12,8 @@ public class Templater
 
     public Templater()
     {
+        IOHelpers.CreateDirectoryIfNotExists(PathConstants.TemplateDirectory);
+
         this.LocalTemplates =
             JsonHelpers.DeserializeFromFile<List<LocalTemplateInfo>>(PathConstants.TemplatesInfoCacheFile) ?? [];
     }
@@ -29,7 +31,6 @@ public class Templater
 
         this.LocalTemplates = [];
         // Find all template files and load the template.json file from them into memory!
-        IOHelpers.CreateDirectoryIfNotExists(PathConstants.TemplateDirectory);
         var templateFiles = Directory.GetFiles(PathConstants.TemplateDirectory,
             $"*.{TemplateConstants.TemplateFileExtension}", SearchOption.AllDirectories);
         foreach (var templateFile in templateFiles)
@@ -74,7 +75,7 @@ public class Templater
         return this.LocalTemplates;
     }
 
-    public void UpdateTemplates()
+    public void CheckForTemplateUpdates()
     {
     }
 }
