@@ -38,4 +38,10 @@ public class LocalTemplateInfo
     ///     The URL to the template.
     /// </summary>
     public string Url = string.Empty;
+
+    /// <summary>
+    ///     Returns True if the template is local-only, False otherwise.
+    /// </summary>
+    [JsonIgnore]
+    public bool IsLocalOnlyTemplate => string.IsNullOrEmpty(this.Url);
 }

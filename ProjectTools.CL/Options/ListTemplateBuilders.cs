@@ -1,3 +1,4 @@
+using System.Text;
 using CommandLine;
 using ProjectTools.Core;
 
@@ -9,9 +10,9 @@ namespace ProjectTools.CL.Options;
 [Verb("list-template-builders", HelpText = "Get information about what template builders are available.")]
 public class ListTemplateBuilders : AbstractOption
 {
-    [Option('s', "simple", Default = false, Required = false,
-        HelpText = "Display just the name and version of available templaters.")]
-    public bool Simple { get; set; }
+    [Option('f', "full", Default = false, Required = false,
+        HelpText = "If flag is set, full information on the template builders will be displayed.")]
+    public bool Full { get; set; }
 
     /// <summary>
     ///     Executes the option.
@@ -24,32 +25,31 @@ public class ListTemplateBuilders : AbstractOption
 
         if (templaters.Count == 0)
         {
-            Console.WriteLine("No templaters found.");
+            return "No template builders found.";
+        }
+
+        LogMessage($"Found {templaters.Count} template builders...");
+        StringBuilder output = new()
+        if (this.Full)
+        {
+            output.AppendLine("----------------------------------------");
+            foreach (var t in templaters)
+            {
+                output.AppendLine($"Template Builder: {t.Name}");
+                output.AppendLine($"  - Version: {t.Version}");
+                output.AppendLine($"  - Author: {t.Author}");
+                output.AppendLine($"  - Description: {t.Description}");
+            }
         }
         else
         {
-            Console.WriteLine($"Found {templaters.Count} templaters...");
-            if (this.Simple)
+            foreach (var t in templaters)
             {
-                foreach (var t in templaters)
-                {
-                    Console.WriteLine($"- {t.Name} - {t.Version}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("----------------------------------------");
-                foreach (var t in templaters)
-                {
-                    Console.WriteLine($"Templater: {t.Name}");
-                    Console.WriteLine($"  - Version: {t.Version}");
-                    Console.WriteLine($"  - Author: {t.Author}");
-                    Console.WriteLine($"  - Description: {t.Description}");
-                }
+                output.AppendLine($"- {t.Name} - {t.Version}");
             }
         }
 
-        return "";
+        return output.ToString();
     }
 
     /// <summary>
@@ -59,6 +59,6 @@ public class ListTemplateBuilders : AbstractOption
     protected override void SetOptions(AbstractOption option)
     {
         var options = (ListTemplateBuilders)option;
-        this.Simple = options.Simple;
+        this.Full = options.Full;
     }
 }

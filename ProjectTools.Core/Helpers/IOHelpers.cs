@@ -1,5 +1,8 @@
-using System.IO.Compression;
+using System.Text;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 using ProjectTools.Core.Constants;
+using ZipFile = System.IO.Compression.ZipFile;
 
 namespace ProjectTools.Core.Helpers;
 
@@ -120,6 +123,38 @@ public static class IOHelpers
         {
             _ = Directory.CreateDirectory(directory);
         }
+    }
+
+    /// <summary>
+    ///     Gets the file contents from archive.
+    /// </summary>
+    /// <param name="archivePath">The archive path.</param>
+    /// <param name="file">The file.</param>
+    /// <param name="bufferSize">Size of the buffer.</param>
+    /// <returns>The contents of the file, if found</returns>
+    public static string GetFileContentsFromArchivedFile(string archivePath, string file, int bufferSize = 4096)
+    {
+        var contents = string.Empty;
+
+        using (var fileStream = File.OpenRead(archivePath))
+        {
+            using var zipFile = new ICSharpCode.SharpZipLib.Zip.ZipFile(fileStream);
+            foreach (ZipEntry entry in zipFile)
+            {
+                if (Path.GetFileName(entry.Name) == file)
+                {
+                    using var inputStream = zipFile.GetInputStream(entry);
+                    using var output = new MemoryStream();
+                    var buffer = new byte[bufferSize];
+                    StreamUtils.Copy(inputStream, output, buffer);
+                    contents = Encoding.UTF8.GetString(output.ToArray());
+
+                    break;
+                }
+            }
+        }
+
+        return contents;
     }
 
     /// <summary>

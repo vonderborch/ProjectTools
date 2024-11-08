@@ -38,7 +38,10 @@ public class DebugCommands
         this._commands["suggestion"].Add("silent_bad", "-s");
 
         //// Add List Template Builders Example Commands
-        this._commands["list-template-builders"].Add("simple", "-s");
+        this._commands["list-template-builders"].Add("full", "-f");
+
+        //// Add List Templates Example Commands
+        this._commands["list-templates"].Add("full", "-f");
 
         //// Prepare Commands
         var baseTemplate = Path.Combine(templatesDirectory, "Velentr.BASE");

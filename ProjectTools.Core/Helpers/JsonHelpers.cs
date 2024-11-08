@@ -29,6 +29,23 @@ public static class JsonHelpers
     }
 
     /// <summary>
+    ///     Deserializes a file in an archive.
+    /// </summary>
+    /// <param name="archive">The archive.</param>
+    /// <param name="file">The file.</param>
+    /// <returns>The deserialized object</returns>
+    public static T? DeserializeFromArchivedFile<T>(string archive, string file) where T : class
+    {
+        var contents = IOHelpers.GetFileContentsFromArchivedFile(archive, file);
+        if (string.IsNullOrWhiteSpace(contents))
+        {
+            return default;
+        }
+
+        return DeserializeString<T>(contents);
+    }
+
+    /// <summary>
     ///     Deserializes a JSON string to the specified type.
     /// </summary>
     /// <param name="contents">The contents to deserialize.</param>
@@ -37,6 +54,11 @@ public static class JsonHelpers
     /// <returns>The type, or the default for the type.</returns>
     public static TValue? DeserializeString<TValue>(string contents, JsonSerializerOptions? options = null)
     {
+        if (string.IsNullOrWhiteSpace(contents))
+        {
+            return default;
+        }
+
         var actualOptions = options ?? JsonConstants.JsonSerializeOptions;
 
         try
