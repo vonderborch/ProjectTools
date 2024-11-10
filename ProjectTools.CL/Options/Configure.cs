@@ -1,7 +1,7 @@
 using CommandLine;
 using ProjectTools.CL.Helpers;
-using ProjectTools.Core;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Settings;
 
 namespace ProjectTools.CL.Options;
 
@@ -25,24 +25,29 @@ public class Configure : AbstractOption
     /// <returns></returns>
     public override string Execute()
     {
-        var settings = AppSettings.Load();
+        var settings = AbstractSettings.Load();
         settings ??= new AppSettings();
 
-        settings.GitWebPath = ConsoleHelpers.GetInput("Git Web Path", settings.GitWebPath);
-        settings.GitAccessToken =
-            ConsoleHelpers.GetInput("Git Access Token", settings.GitAccessToken, settings.SecuredAccessToken);
-
-        var reposText = !string.IsNullOrWhiteSpace(settings.RepositoriesListText)
-            ? settings.RepositoriesListText
-            : AppSettingsConstants.DefaultRepository;
-
-        var repositories = ConsoleHelpers.GetInput("Template repositories (comma separated)", reposText);
-
-        var newRepos = repositories.Split(',').Select(x => x.Trim()).ToList();
-        foreach (var repo in newRepos)
+        if (settings.GitSources.Count == 0)
         {
-            settings.AddTemplateRepository(repo);
+            if (ConsoleHelpers.GetYesNo("Add https://www.github.com as a git source?"))
+            {
+                var accessToken = ConsoleHelpers.GetInput("Git Access Token");
+                settings.GitSources.Add("https://www.github.com", accessToken);
+                settings.RepositoriesList.Add("https://www.github.com", TemplateConstants.DefaultTemplateRepository);
+            }
         }
+        else
+        {
+            settings.GitSources =
+                ConsoleHelpers.GetStringStringDictionaryInput("Edit git sources? (git_website: access_token, ...)",
+                    settings.GitSources);
+        }
+
+
+        settings.RepositoriesList =
+            ConsoleHelpers.GetStringStringDictionaryInput(
+                "Edit template repositories? (git_website: repo_link, ...)", settings.RepositoriesList);
 
         settings.Save();
 

@@ -1,4 +1,4 @@
-using ProjectTools.Core;
+using ProjectTools.Core.Settings;
 
 namespace ProjectTools.CL.Options;
 
@@ -33,7 +33,7 @@ public abstract class AbstractOption
     /// <returns>The result.</returns>
     public string ExecuteOption(AbstractOption option)
     {
-        if (AppSettings.Load() == null && this.AllowAutoConfiguration)
+        if (AbstractSettings.Load() == null && this.AllowAutoConfiguration)
         {
             _ = LogMessage("Creating settings file...");
             var configure = new Configure();

@@ -11,6 +11,11 @@ public static class TemplateConstants
     public static string TemplateSettingsFileName = "template.json";
 
     /// <summary>
+    ///     The default template repository
+    /// </summary>
+    public static string DefaultTemplateRepository = "https://github.com/vonderborch/ProjectTools";
+
+    /// <summary>
     ///     The file extension for templates.
     /// </summary>
     public static readonly string TemplateFileExtension = "ptt";

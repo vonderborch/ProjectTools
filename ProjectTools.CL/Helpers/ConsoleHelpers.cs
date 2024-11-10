@@ -31,6 +31,70 @@ public static class ConsoleHelpers
         return output;
     }
 
+    public static Dictionary<string, string> GetStringStringDictionaryInput(string message,
+        Dictionary<string, string> defaultValue, string keyValueSeparator = ": ", string itemSeparator = ", ")
+    {
+        var displayValue = StringStringDictionaryToString(defaultValue, keyValueSeparator, itemSeparator);
+        while (GetYesNo($"{message}? ({displayValue})", false))
+        {
+            // Step 1 - Ask if user wants to delete any items from the dictionary
+            while (GetYesNo($"Delete existing values? ({displayValue})", false))
+            {
+                var key = GetInput("Key to delete?");
+                if (string.IsNullOrEmpty(key) || !defaultValue.ContainsKey(key))
+                {
+                    Console.WriteLine("A valid key must be specified!");
+                }
+
+                defaultValue.Remove(key);
+                displayValue = StringStringDictionaryToString(defaultValue, keyValueSeparator, itemSeparator);
+            }
+
+            // Step 2 - Ask if user wants to edit any items from the dictionary
+            while (GetYesNo($"Edit existing values? ({displayValue})", false))
+            {
+                var key = GetInput("Key to edit?");
+                if (string.IsNullOrEmpty(key) || !defaultValue.ContainsKey(key))
+                {
+                    Console.WriteLine("A valid key must be specified!");
+                }
+
+                var newValue = GetInput("New value?", defaultValue[key]);
+                defaultValue[key] = newValue;
+                displayValue = StringStringDictionaryToString(defaultValue, keyValueSeparator, itemSeparator);
+            }
+
+            // Step 3 - Ask if user wants to add any items from the dictionary
+            while (GetYesNo($"Add new values? ({displayValue})", false))
+            {
+                var key = GetInput("New Key?");
+                if (string.IsNullOrEmpty(key) || defaultValue.ContainsKey(key))
+                {
+                    Console.WriteLine("A non-duplicate key must be specified!");
+                }
+
+                var newValue = GetInput("New value?", defaultValue[key]);
+                defaultValue[key] = newValue;
+                displayValue = StringStringDictionaryToString(defaultValue, keyValueSeparator, itemSeparator);
+            }
+        }
+
+        return defaultValue;
+    }
+
+    private static string StringStringDictionaryToString(Dictionary<string, string> value, string keyValueSeparator,
+        string itemSeparator)
+    {
+        List<string> partsString = new();
+        foreach (var (k, v) in value)
+        {
+            partsString.Add($"{k}{keyValueSeparator}{v}");
+        }
+
+        var outputString = string.Join(itemSeparator, partsString);
+        return outputString;
+    }
+
     /// <summary>
     ///     Gets the input for a string list.
     /// </summary>
@@ -141,6 +205,10 @@ public static class ConsoleHelpers
         return (T)Enum.Parse(typeof(T), input);
     }
 
+    /// <summary>
+    ///     Prints a line to the console.
+    /// </summary>
+    /// <param name="amount">The amount of lines to print.</param>
     public static void PrintLine(int amount = 1)
     {
         for (var i = 0; i < amount; i++)

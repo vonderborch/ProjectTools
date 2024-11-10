@@ -2,12 +2,13 @@ using System.Text.Json.Serialization;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 
-namespace ProjectTools.Core;
+namespace ProjectTools.Core.Settings;
 
 /// <summary>
 ///     Settings for the application.
 /// </summary>
-public class AppSettings
+[SettingRegistration(1, 1, 1, 2)]
+public class AppSettings_1_1_0 : AbstractSettings
 {
     /// <summary>
     ///     The git access token
@@ -25,27 +26,21 @@ public class AppSettings
     public DateTime LastTemplatesUpdateCheck;
 
     /// <summary>
-    ///     A list of repositories templates are pulled from.
-    /// </summary>
-    [JsonIgnore] public List<string> RepositoriesList;
-
-    /// <summary>
     ///     The seconds between template update checks
     /// </summary>
     public int SecondsBetweenTemplateUpdateChecks = 86400;
 
     /// <summary>
-    ///     The version of the settings file. This is used to determine if the existing settings file is compatible with
-    ///     the current version of the application.
+    ///     A list of repositories templates are pulled from.
     /// </summary>
-    public Version SettingsVersion = AppSettingsConstants.SettingsVersion;
+    public List<string> TemplateRepositories;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AppSettings" /> class.
+    ///     Initializes a new instance of the <see cref="AppSettings_1_1_0" /> class.
     /// </summary>
-    public AppSettings()
+    public AppSettings_1_1_0()
     {
-        this.RepositoriesList = [];
+        this.TemplateRepositories = [];
         this.LastTemplatesUpdateCheck = DateTime.MinValue;
         this.GitWebPath = "https://github.com/";
         this.GitAccessToken = string.Empty;
@@ -56,7 +51,7 @@ public class AppSettings
     /// </summary>
     /// <value>The repositories list text.</value>
     [JsonIgnore]
-    public string RepositoriesListText => string.Join(", ", this.RepositoriesList);
+    public string RepositoriesListText => string.Join(", ", this.TemplateRepositories);
 
     /// <summary>
     ///     Gets the secured access token.
@@ -80,39 +75,49 @@ public class AppSettings
     /// <param name="repository">The new template repository to add.</param>
     public void AddTemplateRepository(string repository)
     {
-        if (!this.RepositoriesList.Contains(repository))
+        if (!this.TemplateRepositories.Contains(repository))
         {
-            this.RepositoriesList.Add(repository);
+            this.TemplateRepositories.Add(repository);
         }
     }
 
     /// <summary>
-    ///     Loads the file.
+    ///     Loads the settings file.
     /// </summary>
-    /// <returns>
-    ///     A Settings object representing the settings stored in the file. Or null if no settings could be loaded.
-    /// </returns>
-    public static AppSettings? Load()
+    /// <returns>The loaded settings class.</returns>
+    public new static AbstractSettings? LoadVersion()
     {
-        if (!File.Exists(AppSettingsConstants.SettingsFilePath))
-        {
-            return null;
-        }
-
-        var settings = JsonHelpers.DeserializeFromFile<AppSettings>(AppSettingsConstants.SettingsFilePath);
-        if (settings == null)
-        {
-            // TODO: Long term, we should change what we do depending on the SettingsVersion stored in the file (upgrade, etc.)
-        }
-
+        var settings = JsonHelpers.DeserializeFromFile<AppSettings_1_1_0>(AppSettingsConstants.SettingsFilePath);
         return settings;
     }
 
     /// <summary>
-    ///     Saves the settings to a file.
+    ///     A method to convert the settings to the next version.
     /// </summary>
-    public void Save()
+    /// <returns>The updated settings.</returns>
+    public new static AbstractSettings? ToNextSettingsVersion(AbstractSettings? currentSettings)
     {
-        JsonHelpers.SerializeToFile(AppSettingsConstants.SettingsFilePath, this);
+        if (currentSettings == null)
+        {
+            return null;
+        }
+
+        var actualCurrentSettings = (AppSettings_1_1_0)currentSettings;
+        AppSettings nextVersion = new(); // TODO: Update this to point to 1.2.0 when 1.3.0 is created..
+        nextVersion.LastTemplatesUpdateCheck = actualCurrentSettings.LastTemplatesUpdateCheck;
+        nextVersion.SecondsBetweenTemplateUpdateChecks = actualCurrentSettings.SecondsBetweenTemplateUpdateChecks;
+
+        nextVersion.GitSources = new Dictionary<string, string>
+        {
+            [actualCurrentSettings.GitWebPath] = actualCurrentSettings.GitAccessToken
+        };
+
+        nextVersion.RepositoriesList = new Dictionary<string, string>();
+        foreach (var repo in actualCurrentSettings.TemplateRepositories)
+        {
+            nextVersion.RepositoriesList.Add(actualCurrentSettings.GitWebPath, repo);
+        }
+
+        return nextVersion;
     }
 }
