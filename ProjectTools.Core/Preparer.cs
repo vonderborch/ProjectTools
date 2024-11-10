@@ -130,7 +130,7 @@ public class Preparer
             {
                 var actualDirectory = Path.Combine(Path.GetDirectoryName(subdirectory), actualDirectoryName);
                 IOHelpers.CopyDirectory(subdirectory, actualDirectory, []);
-                Directory.Delete(directory, true);
+                Directory.Delete(subdirectory, true);
             }
         }
 
