@@ -29,7 +29,7 @@ public class ListTemplateBuilders : AbstractOption
         }
 
         LogMessage($"Found {templaters.Count} template builders...");
-        StringBuilder output = new()
+        StringBuilder output = new();
         if (this.Full)
         {
             output.AppendLine("----------------------------------------");
