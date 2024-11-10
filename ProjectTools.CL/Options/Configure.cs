@@ -47,7 +47,7 @@ public class Configure : AbstractOption
 
         settings.RepositoriesList =
             ConsoleHelpers.GetStringStringDictionaryInput(
-                "Edit template repositories? (git_website: repo_link, ...)", settings.RepositoriesList);
+                "Edit template repositories? (repo_link: git_website, ...)", settings.RepositoriesList);
 
         settings.Save();
 

@@ -39,4 +39,9 @@ public static class TemplateConstants
     ///     The maximum supported template version.
     /// </summary>
     public static Version MaxSupportedTemplateVersion = new(1, 1, 0);
+
+    /// <summary>
+    ///     The maximum depth to search for git repo templates.
+    /// </summary>
+    public static int MaxGitRepoTemplateSearchDepth = 5;
 }
