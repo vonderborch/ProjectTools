@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace ProjectTools.Core.Templates;
 
-public class LocalTemplateInfo
+public struct LocalTemplateInfo
 {
     /// <summary>
     ///     The local path to the template.
@@ -44,4 +44,19 @@ public class LocalTemplateInfo
     /// </summary>
     [JsonIgnore]
     public bool IsLocalOnlyTemplate => string.IsNullOrEmpty(this.Url);
+
+    /// <summary>
+    ///     Creates a new instance of the <see cref="LocalTemplateInfo" /> struct.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="localPath">The local path.</param>
+    /// <param name="size">The size, in bytes.</param>
+    /// <param name="template">The template.</param>
+    public LocalTemplateInfo(string name, string localPath, ulong size, Template template)
+    {
+        this.LocalPath = localPath;
+        this.Name = name;
+        this.Size = size;
+        this.Template = template;
+    }
 }

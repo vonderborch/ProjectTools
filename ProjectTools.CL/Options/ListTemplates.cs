@@ -20,8 +20,8 @@ public class ListTemplates : AbstractOption
     /// <returns>The result.</returns>
     public override string Execute()
     {
-        var templater = new Templater();
-        var availableTemplates = templater.PopulateLocalTemplates(true);
+        var localTemplates = new LocalTemplates();
+        var availableTemplates = localTemplates.Templates;
 
         if (availableTemplates.Count == 0)
         {

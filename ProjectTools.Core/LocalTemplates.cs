@@ -5,38 +5,49 @@ using ProjectTools.Core.Templates;
 namespace ProjectTools.Core;
 
 /// <summary>
+///     A class that manages local templates.
 /// </summary>
-public class Templater
+public class LocalTemplates
 {
-    public List<LocalTemplateInfo> LocalTemplates;
+    /// <summary>
+    ///     The list of local templates...
+    /// </summary>
+    private List<LocalTemplateInfo> _templates;
 
-    public Templater()
+    /// <summary>
+    ///     Creates a new instance of the <see cref="LocalTemplates" /> class.
+    /// </summary>
+    public LocalTemplates()
     {
         IOHelpers.CreateDirectoryIfNotExists(PathConstants.TemplateDirectory);
 
-        this.LocalTemplates =
-            JsonHelpers.DeserializeFromFile<List<LocalTemplateInfo>>(PathConstants.TemplatesInfoCacheFile) ?? [];
+        this._templates = new List<LocalTemplateInfo>();
+        PopulateLocalTemplates(true);
     }
+
+    /// <summary>
+    ///     The list of local templates.
+    /// </summary>
+    public List<LocalTemplateInfo> Templates => [..this._templates];
+
 
     public List<LocalTemplateInfo> PopulateLocalTemplates(bool forceRefresh = false)
     {
-        if (this.LocalTemplates.Count > 0 && !forceRefresh)
+        if (this._templates.Count > 0 && !forceRefresh)
         {
-            return this.LocalTemplates;
+            return this._templates;
         }
 
-        this.LocalTemplates = [];
+        this._templates = [];
         var existingInfo =
             JsonHelpers.DeserializeFromFile<List<LocalTemplateInfo>>(PathConstants.TemplatesInfoCacheFile) ?? [];
 
-        this.LocalTemplates = [];
+        this._templates = [];
         // Find all template files and load the template.json file from them into memory!
         var templateFiles = Directory.GetFiles(PathConstants.TemplateDirectory,
             $"*.{TemplateConstants.TemplateFileExtension}", SearchOption.AllDirectories);
         foreach (var templateFile in templateFiles)
         {
-            var fileName = Path.GetFileName(templateFile);
-
             try
             {
                 var template =
@@ -47,13 +58,13 @@ public class Templater
                     throw new Exception("Invalid template file!");
                 }
 
-                var existingInfoForTemplate = existingInfo.FirstOrDefault(x => x.Name == template.Name);
-                if (existingInfoForTemplate != null)
+                try
                 {
+                    var existingInfoForTemplate = existingInfo.First(x => x.Name == template.Name);
                     existingInfoForTemplate.Template = template;
-                    this.LocalTemplates.Add(existingInfoForTemplate);
+                    this._templates.Add(existingInfoForTemplate);
                 }
-                else
+                catch (ArgumentNullException)
                 {
                     // First time we've seen this file!
                     var info = new LocalTemplateInfo
@@ -63,7 +74,7 @@ public class Templater
                         Template = template,
                         Size = (ulong)new FileInfo(templateFile).Length
                     };
-                    this.LocalTemplates.Add(info);
+                    this._templates.Add(info);
                 }
             }
             catch
@@ -72,10 +83,6 @@ public class Templater
             }
         }
 
-        return this.LocalTemplates;
-    }
-
-    public void CheckForTemplateUpdates()
-    {
+        return this._templates;
     }
 }
