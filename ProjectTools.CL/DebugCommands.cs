@@ -10,6 +10,7 @@ public class DebugCommands
     {
         //// Directory Info
         var currentDirectory = Assembly.GetExecutingAssembly().Location;
+        var testOutputDirectory = Path.Combine(currentDirectory, "TEST_OUTPUT_DIRECTORY");
         var rootRepoDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\..\..\"));
         var templatesDirectory = Path.Combine(rootRepoDirectory, "Templates", "TEMPLATES_BASE");
         var templatesOutputDirectory = Path.Combine(rootRepoDirectory, "Templates", "TEMPLATES");
@@ -56,6 +57,9 @@ public class DebugCommands
         this._commands["prepare"].Add("dual", $"-f -d {dualTemplate} -o {templatesOutputDirectory}");
         this._commands["prepare"]
             .Add("dual_and_generic", $"-f -d {dualAndGenericTemplate} -o {templatesOutputDirectory}");
+
+        //// Add Generate-Project Commands
+        this._commands["generate"].Add("base", $"-f -o {testOutputDirectory} -t Velentr.BASE");
     }
 
     public string[] GetArgumentsForCommandToRun(string rootCommand, string specificCommand)

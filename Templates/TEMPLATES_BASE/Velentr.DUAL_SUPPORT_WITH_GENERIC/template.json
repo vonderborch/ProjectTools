@@ -188,7 +188,7 @@
         "Velentr.DUAL_SUPPORT_WITH_GENERIC"
       ],
       "AllowedValues": [],
-      "DefaultValue": "MyLibrary",
+      "DefaultValue": "[[ParentDirectoryName]].",
       "DisallowedValues": [],
       "DisplayName": "Solution Name",
       "RequiresUserInput": true,
@@ -201,7 +201,7 @@
         "Christian Webber"
       ],
       "AllowedValues": [],
-      "DefaultValue": "My Name",
+      "DefaultValue": "[[CurrentUserName]]",
       "DisallowedValues": [],
       "DisplayName": "Author",
       "RequiresUserInput": true,

@@ -61,6 +61,7 @@ public class PreparationTemplate : AbstractTemplate
             PythonScriptPaths = this.PythonScriptPaths,
             RenameOnlyPaths = this.RenameOnlyPaths,
             TemplateBuilder = this.TemplateBuilder,
+            TemplaterVersion = this.TemplaterVersion,
             Version = this.Version
         };
     }

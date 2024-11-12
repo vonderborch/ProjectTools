@@ -20,12 +20,6 @@ public abstract class AbstractOption
     protected bool AllowTemplateUpdates { get; set; } = true;
 
     /// <summary>
-    ///     Executes what this option represents.
-    /// </summary>
-    /// <returns>The result of the execution.</returns>
-    public abstract string Execute();
-
-    /// <summary>
     ///     Executes the option.
     /// </summary>
     /// <param name="option">The option.</param>
@@ -84,6 +78,12 @@ public abstract class AbstractOption
         var totalTime = DateTime.Now - time;
         return totalTime.TotalSeconds.ToString("0.00");
     }
+
+    /// <summary>
+    ///     Executes what this option represents.
+    /// </summary>
+    /// <returns>The result of the execution.</returns>
+    public abstract string Execute();
 
     /// <summary>
     ///     Sets the options.

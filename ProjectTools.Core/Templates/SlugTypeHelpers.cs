@@ -5,11 +5,47 @@ namespace ProjectTools.Core.Templates;
 /// </summary>
 public static class SlugTypeHelpers
 {
+    /// <summary>
+    ///     Slug types that can be null.
+    /// </summary>
     private static readonly List<SlugType> NullableSlugTypes =
     [
         SlugType.Boolean,
         SlugType.Int
     ];
+
+    /// <summary>
+    ///     Converts the object to a string.
+    /// </summary>
+    /// <param name="type">The slug type.</param>
+    /// <param name="value">The value.</param>
+    /// <returns>The string representation of the object.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Raises if the slug type isn't supported.</exception>
+    public static string ObjectToString(this SlugType type, object? value)
+    {
+        if (value == null)
+        {
+            return string.Empty;
+        }
+
+        switch (type)
+        {
+            case SlugType.Boolean:
+            case SlugType.Int:
+            case SlugType.RandomGuid:
+            case SlugType.String:
+                return value.ToString() ?? string.Empty;
+            case SlugType.StringListComma:
+                return string.Join(",", (List<string>)value);
+            case SlugType.StringListSemiColan:
+                return string.Join(";", (List<string>)value);
+            case SlugType.DictionaryStringString:
+                var dict = (Dictionary<string, string>)value;
+                return string.Join(", ", dict.Select(x => $"{x.Key}: {x.Value}"));
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+    }
 
     /// <summary>
     ///     Converts the provided value to the correct object type.

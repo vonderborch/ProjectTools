@@ -1,3 +1,5 @@
+using ProjectTools.Core.Templates;
+
 namespace ProjectTools.CL.Helpers;
 
 /// <summary>
@@ -29,6 +31,36 @@ public static class ConsoleHelpers
 
         var output = string.IsNullOrWhiteSpace(input) ? defaultValue : input;
         return output;
+    }
+
+    /// <summary>
+    ///     Gets the input.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="slugType">The slug type.</param>
+    /// <param name="defaultValue">The default value.</param>
+    /// <param name="displayValue">The display value.</param>
+    /// <returns>The user's input.</returns>
+    public static object? GetInput(string message, SlugType slugType, object? defaultValue, string displayValue = "")
+    {
+        // determine the message to the user
+        var actualDefaultValue = slugType.ObjectToString(defaultValue);
+        var actualDisplayValue = string.IsNullOrWhiteSpace(displayValue) ? actualDefaultValue : displayValue;
+
+        if (!string.IsNullOrWhiteSpace(actualDisplayValue))
+        {
+            actualDisplayValue = $" ({actualDisplayValue})";
+        }
+
+        message = $"{message}{actualDisplayValue}: ";
+
+        // get the user's input for the message
+        Console.Write(message);
+        var input = Console.ReadLine();
+
+        var output = string.IsNullOrWhiteSpace(input) ? actualDefaultValue : input;
+        var finalOutput = slugType.CorrectedValueType(output);
+        return finalOutput;
     }
 
     public static Dictionary<string, string> GetStringStringDictionaryInput(string message,

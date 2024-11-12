@@ -31,6 +31,11 @@ public class LocalTemplates
     public List<LocalTemplateInfo> Templates => [..this._templates];
 
     /// <summary>
+    ///     A list of all template names.
+    /// </summary>
+    public List<string> TemplateNames => this._templates.Select(x => x.Name).ToList();
+
+    /// <summary>
     ///     Populates info on all templates we have locally.
     /// </summary>
     /// <param name="forceRefresh">True to force a refresh, False otherwise.</param>

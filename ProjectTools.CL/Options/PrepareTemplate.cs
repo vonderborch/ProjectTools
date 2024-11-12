@@ -15,6 +15,25 @@ namespace ProjectTools.CL.Options;
 [Verb("prepare", HelpText = "Prepare a template")]
 public class PrepareTemplate : AbstractOption
 {
+    private readonly Dictionary<SlugType, string> _messageExtras = new();
+
+    public PrepareTemplate()
+    {
+        var specialValueHandler = new SpecialValueHandler("C://my_fake_directory//sub_directory", null);
+
+        foreach (var slugType in Enum.GetValues<SlugType>())
+        {
+            var messageExtra = "";
+            var specialKeywords = specialValueHandler.GetSpecialKeywords(slugType);
+            if (specialKeywords.Count > 0)
+            {
+                messageExtra = $" (special keywords: {string.Join(", ", specialKeywords)})";
+            }
+
+            this._messageExtras.Add(slugType, messageExtra);
+        }
+    }
+
     /// <summary>
     ///     Gets or sets the directory.
     /// </summary>
@@ -184,7 +203,6 @@ public class PrepareTemplate : AbstractOption
 
         var hadExistingSettingsFile = template != null;
         template ??= new PreparationTemplate();
-
         template.TemplaterVersion = TemplateConstants.CurrentTemplateVersion;
 
         // Populate the template builder if it's not already populated
@@ -280,44 +298,9 @@ public class PrepareTemplate : AbstractOption
     {
         do
         {
-            foreach (var slug in slugs)
+            for (var i = 0; i < slugs.Count; i++)
             {
-                do
-                {
-                    // Slug Display Name
-                    slug.DisplayName = ConsoleHelpers.GetInput("Slug Display Name", slug.DisplayName);
-
-                    // Slug Key
-                    slug.SlugKey = ConsoleHelpers.GetInput("Slug Key", slug.SlugKey);
-
-                    // Slug Type
-                    slug.Type = ConsoleHelpers.GetEnumInput("Slug Type", slug.Type);
-
-                    // Slug Search Strings
-                    slug.SearchStrings = ConsoleHelpers.GetStringListInput("Slug Search Strings", slug.SearchStrings,
-                        ",", "comma-separated");
-
-                    // Slug Default Value, if any
-                    var defaultValue = ConsoleHelpers.GetInput("Slug Default Value",
-                        (slug.DefaultValue ?? string.Empty).ToString());
-                    slug.DefaultValue = slug.Type.CorrectedValueType(defaultValue);
-
-                    // Slug Allowed Values, if any
-                    var allowedValues = ConsoleHelpers.GetStringListInput("Slug Allowed Values", slug.AllowedValues,
-                        ",", "comma-separated");
-                    slug.AllowedValues = slug.Type.CorrectedValueType(allowedValues);
-
-                    // Slug Disallowed Values, if any
-                    var disallowedValues = ConsoleHelpers.GetStringListInput("Slug Disallowed Values",
-                        slug.DisallowedValues,
-                        ",", "comma-separated");
-                    slug.DisallowedValues = slug.Type.CorrectedValueType(disallowedValues);
-
-                    // Slug Requires User Input
-                    slug.RequiresUserInput =
-                        ConsoleHelpers.GetYesNo("Does the slug require user input?", slug.RequiresUserInput);
-                } while (ContinueEditingSlug(slug, false));
-
+                slugs[i] = GetSlugInfo(slugs[i], false);
                 // PRINT LINE
                 ConsoleHelpers.PrintLine();
             }
@@ -337,24 +320,56 @@ public class PrepareTemplate : AbstractOption
         while (ConsoleHelpers.GetYesNo("Do you want to add any additional slugs?", false))
         {
             PreparationSlug slug = new();
-            do
+            slug = GetSlugInfo(slug, true);
+
+            customSlugs.Add(slug);
+        }
+
+        return customSlugs;
+    }
+
+    /// <summary>
+    ///     Gets info from the user about a slug.
+    /// </summary>
+    /// <param name="slug">The slug.</param>
+    /// <param name="allowAdjustSlugType">True to allow a user to change the slug type, False otherwise.</param>
+    /// <returns>The updated slug.</returns>
+    private PreparationSlug GetSlugInfo(PreparationSlug slug, bool allowAdjustSlugType)
+    {
+        do
+        {
+            // Slug Display Name
+            slug.DisplayName = ConsoleHelpers.GetInput("Slug Display Name", slug.DisplayName);
+
+            // Slug Key
+            slug.SlugKey = ConsoleHelpers.GetInput("Slug Key", slug.SlugKey);
+
+            // Slug Type
+            if (allowAdjustSlugType)
             {
-                // Slug Display Name
-                slug.DisplayName = ConsoleHelpers.GetInput("Slug Display Name", slug.DisplayName);
-
-                // Slug Key
-                slug.SlugKey = ConsoleHelpers.GetInput("Slug Key", slug.SlugKey);
-
-                // Slug Type
                 slug.Type = ConsoleHelpers.GetEnumInput("Slug Type", slug.Type);
+            }
 
-                // Slug Search Strings
-                slug.SearchStrings = ConsoleHelpers.GetStringListInput("Slug Search Strings", slug.SearchStrings,
-                    ",", "comma-separated");
+            // Slug Search Strings
+            slug.SearchStrings = ConsoleHelpers.GetStringListInput("Slug Search Strings", slug.SearchStrings,
+                ",", "comma-separated");
 
+            // Random Guids don't need any other info...
+            if (slug.Type == SlugType.RandomGuid)
+            {
+                slug.DefaultValue = null;
+                slug.AllowedValues = [];
+                slug.DisallowedValues = [];
+                slug.RequiresUserInput = false;
+            }
+            else
+            {
                 // Slug Default Value, if any
-                var defaultValue = ConsoleHelpers.GetInput("Slug Default Value",
-                    (slug.DefaultValue ?? string.Empty).ToString());
+                var defaultValueDisplay = slug.DefaultValue?.ToString() ?? string.Empty;
+                var messageExtra = this._messageExtras[slug.Type];
+
+                var defaultValue =
+                    ConsoleHelpers.GetInput($"Slug Default Value{messageExtra}", defaultValueDisplay);
                 slug.DefaultValue = slug.Type.CorrectedValueType(defaultValue);
 
                 // Slug Allowed Values, if any
@@ -371,12 +386,10 @@ public class PrepareTemplate : AbstractOption
                 // Slug Requires User Input
                 slug.RequiresUserInput =
                     ConsoleHelpers.GetYesNo("Does the slug require user input?", slug.RequiresUserInput);
-            } while (ContinueEditingSlug(slug, false));
+            }
+        } while (ContinueEditingSlug(slug, false));
 
-            customSlugs.Add(slug);
-        }
-
-        return customSlugs;
+        return slug;
     }
 
     /// <summary>
