@@ -124,9 +124,8 @@ public class PrepareTemplate : AbstractOption
         }
 
         Logger coreLogger = new(LogMessage);
-        Logger instructionLogger = new(LogMessage);
         return templater.GenerateTemplate(this.Directory, this.OutputDirectory, this.SkipCleaning, this.ForceOverride,
-            template, coreLogger, instructionLogger);
+            template, coreLogger);
     }
 
     /// <summary>

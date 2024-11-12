@@ -12,10 +12,12 @@ namespace ProjectTools.Core;
 public class Preparer
 {
     /// <summary>
+    ///     The available template builders.
     /// </summary>
     private readonly List<AbstractTemplateBuilder> _availableTemplateBuilders;
 
     /// <summary>
+    ///     Constructs a new instance of <see cref="Preparer" />.
     /// </summary>
     public Preparer()
     {
@@ -23,9 +25,10 @@ public class Preparer
     }
 
     /// <summary>
+    ///     Gets all template builders.
     /// </summary>
-    /// <param name="forceRefresh"></param>
-    /// <returns></returns>
+    /// <param name="forceRefresh">True to force refresh, False otherwise.</param>
+    /// <returns>All available template builders.</returns>
     public List<AbstractTemplateBuilder> GetTemplateBuilders(bool forceRefresh = false)
     {
         if (this._availableTemplateBuilders.Count > 0 && !forceRefresh)
@@ -51,8 +54,18 @@ public class Preparer
         return this._availableTemplateBuilders;
     }
 
+    /// <summary>
+    ///     Generates a template from the specified directory.
+    /// </summary>
+    /// <param name="pathToDirectory">The path to the directory.</param>
+    /// <param name="outputDirectory">The output directory.</param>
+    /// <param name="skipCleaning">Whether to skip cleaning or not.</param>
+    /// <param name="forceOverride">Whether to delete any existing template or not.</param>
+    /// <param name="template">The template info.</param>
+    /// <param name="coreLogger">The core logger.</param>
+    /// <returns>The results of the template prep process.</returns>
     public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
-        bool forceOverride, PreparationTemplate template, Logger coreLogger, Logger instructionLogger)
+        bool forceOverride, PreparationTemplate template, Logger coreLogger)
     {
         var outputTempDirectory = Path.Combine(outputDirectory, template.SafeName);
         var outputFile =

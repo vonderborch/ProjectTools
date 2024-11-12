@@ -14,7 +14,7 @@ public class Template : AbstractTemplate
     /// <summary>
     ///     A cache of the slug's current values.
     /// </summary>
-    private Dictionary<string, object?>? _slugValuesCache;
+    private Dictionary<string, string>? _slugValuesCache;
 
     /// <summary>
     ///     Information on slugs for this template, used to replace instances of the slug with the value of the slug.
@@ -139,21 +139,31 @@ public class Template : AbstractTemplate
         }
     }
 
+    /// <summary>
+    ///     Updates the provided test with the slug values.
+    /// </summary>
+    /// <param name="value">The text.</param>
+    /// <returns>The updated text.</returns>
     private string UpdateText(string value)
     {
         foreach (var (toBeReplaced, replacedValue) in SlugsToValues())
         {
-            value = value.Replace(toBeReplaced, replacedValue?.ToString() ?? string.Empty);
+            value = value.Replace(toBeReplaced, replacedValue);
         }
 
         return value;
     }
 
-    private Dictionary<string, object?> SlugsToValues()
+    /// <summary>
+    ///     Gets the slug key -> value mapping dictionary.
+    /// </summary>
+    /// <returns>The mapping dictionary.</returns>
+    private Dictionary<string, string> SlugsToValues()
     {
         if (this._slugValuesCache == null)
         {
-            this._slugValuesCache = this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.CurrentValue);
+            this._slugValuesCache =
+                this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.Type.ObjectToString(s.CurrentValue));
         }
 
         return this._slugValuesCache;
