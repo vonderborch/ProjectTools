@@ -11,18 +11,22 @@ public class SpecialValueHandler
     private readonly Dictionary<SlugType, Dictionary<string, string>> _specialValues = new();
 
     /// <summary>
+    ///     Creates a new instance of the <see cref="SpecialValueHandler" /> class.
     /// </summary>
-    /// <param name="parentDirectory"></param>
-    /// <param name="template"></param>
-    public SpecialValueHandler(string parentDirectory, Template? template)
+    /// <param name="parentDirectory">The parent directory.</param>
+    /// <param name="projectName">The project name.</param>
+    /// <param name="template">The template.</param>
+    public SpecialValueHandler(string parentDirectory, string projectName, Template? template)
     {
         foreach (var slugType in Enum.GetValues<SlugType>())
         {
             this._specialValues[slugType] = new Dictionary<string, string>();
         }
 
-
         //// String Special Values
+        // Add special values for project name
+        this._specialValues[SlugType.String]["[[ProjectName]]"] = projectName;
+
         // Add special values for parent directories
         this._specialValues[SlugType.String]["[[ParentDirectory]]"] = parentDirectory;
         this._specialValues[SlugType.String]["[[ParentDirectoryName]]"] = Path.GetFileName(parentDirectory);
@@ -40,21 +44,21 @@ public class SpecialValueHandler
         this._specialValues[SlugType.String]["[[CurrentUserName]]"] = Environment.UserName;
     }
 
+    /// <summary>
+    ///     Get all special keywords for a specific slug type.
+    /// </summary>
+    /// <param name="type">The slug type.</param>
+    /// <returns>The special keywords.</returns>
     public List<string> GetSpecialKeywords(SlugType type)
     {
         return this._specialValues[type].Keys.ToList();
     }
 
-    public void AddSlugValueToSpecialValues(SlugType slugType, string slug, string value)
-    {
-        if (!this._specialValues.ContainsKey(slugType))
-        {
-            this._specialValues[slugType] = new Dictionary<string, string>();
-        }
-
-        this._specialValues[slugType].TryAdd(slug, value);
-    }
-
+    /// <summary>
+    ///     Assigns special values to a slug, if possible.
+    /// </summary>
+    /// <param name="slug">The slug.</param>
+    /// <returns>The updated slug.</returns>
     public Slug AssignValuesToSlug(Slug slug)
     {
         if (slug.CurrentValue == null)
@@ -77,7 +81,7 @@ public class SpecialValueHandler
 
             slug.CurrentValue = slug.DefaultValue;
         }
-        
+
         return slug;
     }
 }

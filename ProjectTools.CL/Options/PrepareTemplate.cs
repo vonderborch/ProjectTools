@@ -19,7 +19,7 @@ public class PrepareTemplate : AbstractOption
 
     public PrepareTemplate()
     {
-        var specialValueHandler = new SpecialValueHandler("C://my_fake_directory//sub_directory", null);
+        var specialValueHandler = new SpecialValueHandler("C://my_fake_directory//sub_directory", "fake_proj", null);
 
         foreach (var slugType in Enum.GetValues<SlugType>())
         {
@@ -251,6 +251,10 @@ public class PrepareTemplate : AbstractOption
             // Ask for PythonScriptPaths
             template.PythonScriptPaths = ConsoleHelpers.GetStringListInput("Python Script Paths",
                 template.PythonScriptPaths, ",", "comma-separated");
+
+            // Ask for Instructions
+            template.Instructions =
+                ConsoleHelpers.GetStringListInput("User Instructions", template.Instructions, ",", "comma-separated");
         } while (ContinueEditingTemplateSettings(template, false));
 
         return (template, hadExistingSettingsFile);

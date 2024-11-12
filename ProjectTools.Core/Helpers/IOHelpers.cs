@@ -72,6 +72,18 @@ public static class IOHelpers
     }
 
     /// <summary>
+    ///     Deletes the directory if it exists.
+    /// </summary>
+    /// <param name="file">The directory.</param>
+    public static void DeleteDirectoryIfExists(string file)
+    {
+        if (Directory.Exists(file))
+        {
+            Directory.Delete(file, true);
+        }
+    }
+
+    /// <summary>
     ///     Removes the directory, if allowed.
     /// </summary>
     /// <param name="path">The path.</param>
@@ -167,6 +179,59 @@ public static class IOHelpers
         }
 
         return contents;
+    }
+
+    /// <summary>
+    ///     Unzips the directory.
+    /// </summary>
+    /// <param name="outputDirectory">The output directory.</param>
+    /// <param name="archiveFile">The archive file.</param>
+    /// <param name="excludedFiles">The excluded files.</param>
+    /// <param name="overrideDirectory">if set to <c>true</c> [override directory].</param>
+    public static void UnzipDirectory(string outputDirectory, string archiveFile, List<string> excludedFiles,
+        bool overrideDirectory = true)
+    {
+        if (overrideDirectory)
+        {
+            DeleteDirectoryIfExists(outputDirectory);
+        }
+
+        using var file = File.OpenRead(archiveFile);
+        using var zip = new ICSharpCode.SharpZipLib.Zip.ZipFile(file);
+        foreach (ZipEntry entry in zip)
+        {
+            var path = Path.Combine(outputDirectory, entry.Name.Replace("/", Path.DirectorySeparatorChar.ToString()));
+            var directoryPath = Path.GetDirectoryName(path);
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                if (entry.IsDirectory)
+                {
+                    _ = Directory.CreateDirectory(path);
+                }
+                else
+                {
+                    if (excludedFiles.Contains(Path.GetFileName(entry.Name)))
+                    {
+                        continue;
+                    }
+
+                    if (directoryPath is { Length: > 0 })
+                    {
+                        _ = Directory.CreateDirectory(directoryPath);
+                    }
+
+                    var buffer = new byte[4096];
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+
+                    using var inputStream = zip.GetInputStream(entry);
+                    using var output = File.Create(path);
+                    StreamUtils.Copy(inputStream, output, buffer);
+                }
+            }
+        }
     }
 
     /// <summary>

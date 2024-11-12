@@ -44,4 +44,11 @@ public static class TemplateConstants
     ///     The maximum depth to search for git repo templates.
     /// </summary>
     public static int MaxGitRepoTemplateSearchDepth = 3;
+
+    /// <summary>
+    ///     The excluded file names
+    /// </summary>
+    public static List<string> GeneratedProjectExcludedFileNames => [TemplateSettingsFileName];
+
+    public static List<string> ExcludedDirectoryNamesDuringProjectGeneration => [".git"];
 }

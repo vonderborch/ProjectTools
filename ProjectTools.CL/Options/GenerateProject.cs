@@ -39,6 +39,12 @@ public class GenerateProject : AbstractOption
     public string Template { get; set; } = string.Empty;
 
     /// <summary>
+    ///     Gets or sets the name of the new project.
+    /// </summary>
+    [Option('n', "name", Required = true, HelpText = "The name of the project")]
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>
     ///     Gets or sets the generate project configuration file to use.
     /// </summary>
     [Option('c', "generate-project-config", Required = false,
@@ -97,13 +103,14 @@ public class GenerateProject : AbstractOption
         }
 
         // Step 3 - Get User Configuration Settings
-        this._specialValueHandler = new SpecialValueHandler(this.ParentOutputDirectory, templateToUse.Template);
+        this._specialValueHandler =
+            new SpecialValueHandler(this.ParentOutputDirectory, this.Name, templateToUse.Template);
         var actualTemplate = UpdateTemplateWithUserInput(projectConfigFile, templateToUse.Template);
 
         // Step 4 - Generate the project!
-        
-        
-        return string.Empty;
+        Logger logger = new(LogMessage);
+        return actualTemplate.GenerateProject(this.ParentOutputDirectory, this.Name, templateToUse.LocalPath, logger,
+            logger, logger);
     }
 
     /// <summary>

@@ -20,6 +20,11 @@ public abstract class AbstractTemplate
     public string Description = string.Empty;
 
     /// <summary>
+    ///     A list of instructions to display to the user.
+    /// </summary>
+    public List<string> Instructions = [];
+
+    /// <summary>
     ///     The name of the template.
     /// </summary>
     public string Name = string.Empty;

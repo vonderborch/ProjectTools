@@ -188,7 +188,7 @@
         "Velentr.DUAL_SUPPORT_WITH_GENERIC"
       ],
       "AllowedValues": [],
-      "DefaultValue": "[[ParentDirectoryName]].",
+      "DefaultValue": "[[ParentDirectoryName]].[[ProjectName]]",
       "DisallowedValues": [],
       "DisplayName": "Solution Name",
       "RequiresUserInput": true,
