@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace ProjectTools.Core.Templates;
@@ -5,6 +6,7 @@ namespace ProjectTools.Core.Templates;
 /// <summary>
 ///     A slug used in a template when creating or extending a project.
 /// </summary>
+[DebuggerDisplay("{DisplayName} - {CurrentValue}")]
 public class Slug
 {
     /// <summary>

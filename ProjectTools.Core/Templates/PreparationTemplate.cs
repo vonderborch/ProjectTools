@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace ProjectTools.Core.Templates;
@@ -5,6 +6,7 @@ namespace ProjectTools.Core.Templates;
 /// <summary>
 ///     A preparation template used when preparing a project for templating.
 /// </summary>
+[DebuggerDisplay("{Name}")]
 public class PreparationTemplate : AbstractTemplate
 {
     /// <summary>
@@ -18,7 +20,7 @@ public class PreparationTemplate : AbstractTemplate
     public List<PreparationSlug> Slugs = [];
 
     /// <summary>
-    /// Replacement text for the slugs.
+    ///     Replacement text for the slugs.
     /// </summary>
     [JsonIgnore]
     public Dictionary<string, string> ReplacementText

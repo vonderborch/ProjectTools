@@ -7,13 +7,13 @@ namespace ProjectTools.Core.Settings;
 /// <summary>
 ///     Settings for the application.
 /// </summary>
-[SettingRegistration(1, 4)]
-public class AppSettings : AbstractSettings
+[SettingRegistration(1, 3, 1, 4)]
+public class AppSettings_1_3_0 : AbstractSettings
 {
     /// <summary>
-    ///     The git sources and their access tokens.
+    ///     The git sources.
     /// </summary>
-    public Dictionary<string, string> GitSourcesAndAccessTokens;
+    public Dictionary<string, string> GitSources;
 
     /// <summary>
     ///     The last time the template repositories were checked for updates.
@@ -21,9 +21,9 @@ public class AppSettings : AbstractSettings
     public DateTime LastTemplatesUpdateCheck;
 
     /// <summary>
-    ///     A dictionary representing repositories and their respective git source.
+    ///     A list of repositories templates are pulled from.
     /// </summary>
-    public Dictionary<string, string> RepositoriesAndGitSources;
+    public Dictionary<string, string> RepositoriesList;
 
     /// <summary>
     ///     The seconds between template update checks
@@ -31,20 +31,14 @@ public class AppSettings : AbstractSettings
     public int SecondsBetweenTemplateUpdateChecks = 86400;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AppSettings" /> class.
+    ///     Initializes a new instance of the <see cref="AppSettings_1_3_0" /> class.
     /// </summary>
-    public AppSettings()
+    public AppSettings_1_3_0()
     {
-        this.GitSourcesAndAccessTokens = [];
-        this.RepositoriesAndGitSources = [];
+        this.GitSources = [];
+        this.RepositoriesList = [];
         this.LastTemplatesUpdateCheck = DateTime.MinValue;
     }
-
-    /// <summary>
-    ///     The list of repositories.
-    /// </summary>
-    [JsonIgnore]
-    public List<string> RepositoriesList => this.RepositoriesAndGitSources.Keys.ToList();
 
     /// <summary>
     ///     Gets a value indicating whether [should update templates].
@@ -61,7 +55,7 @@ public class AppSettings : AbstractSettings
     /// <returns>The loaded settings class.</returns>
     public new static AbstractSettings? LoadVersion()
     {
-        var settings = JsonHelpers.DeserializeFromFile<AppSettings>(AppSettingsConstants.SettingsFilePath);
+        var settings = JsonHelpers.DeserializeFromFile<AppSettings_1_3_0>(AppSettingsConstants.SettingsFilePath);
         return settings;
     }
 
@@ -71,6 +65,18 @@ public class AppSettings : AbstractSettings
     /// <returns>The updated settings.</returns>
     public new static AbstractSettings? ToNextSettingsVersion(AbstractSettings? currentSettings)
     {
-        throw new NotImplementedException();
+        if (currentSettings == null)
+        {
+            return null;
+        }
+
+        var actualCurrentSettings = (AppSettings_1_3_0)currentSettings;
+        AppSettings nextVersion = new(); // TODO: Update this to point to 1.4.0 when 1.5.0 is created..
+        nextVersion.LastTemplatesUpdateCheck = actualCurrentSettings.LastTemplatesUpdateCheck;
+        nextVersion.SecondsBetweenTemplateUpdateChecks = actualCurrentSettings.SecondsBetweenTemplateUpdateChecks;
+
+        nextVersion.GitSourcesAndAccessTokens = actualCurrentSettings.GitSources;
+        nextVersion.RepositoriesAndGitSources = actualCurrentSettings.RepositoriesList;
+        return nextVersion;
     }
 }

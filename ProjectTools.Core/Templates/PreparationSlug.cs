@@ -1,8 +1,11 @@
+using System.Diagnostics;
+
 namespace ProjectTools.Core.Templates;
 
 /// <summary>
 ///     A slug used when creating a new template.
 /// </summary>
+[DebuggerDisplay("{DisplayName} - {CurrentValue}")]
 public class PreparationSlug : Slug
 {
     /// <summary>

@@ -7,7 +7,7 @@ namespace ProjectTools.Core.Settings;
 /// <summary>
 ///     Settings for the application.
 /// </summary>
-[SettingRegistration(1, 1, 1, 2)]
+[SettingRegistration(1, 1, 1, 3)]
 public class AppSettings_1_1_0 : AbstractSettings
 {
     /// <summary>
@@ -103,7 +103,7 @@ public class AppSettings_1_1_0 : AbstractSettings
         }
 
         var actualCurrentSettings = (AppSettings_1_1_0)currentSettings;
-        AppSettings nextVersion = new(); // TODO: Update this to point to 1.2.0 when 1.3.0 is created..
+        AppSettings_1_3_0 nextVersion = new(); // TODO: Update this to point to 1.2.0 when 1.3.0 is created..
         nextVersion.LastTemplatesUpdateCheck = actualCurrentSettings.LastTemplatesUpdateCheck;
         nextVersion.SecondsBetweenTemplateUpdateChecks = actualCurrentSettings.SecondsBetweenTemplateUpdateChecks;
 

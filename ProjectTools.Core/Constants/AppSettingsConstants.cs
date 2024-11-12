@@ -11,7 +11,7 @@ public static class AppSettingsConstants
     ///     The version of the settings file. This is used to determine if the existing settings file is compatible with
     ///     the current version of the application.
     /// </summary>
-    public static readonly Version SettingsVersion = new(1, 3);
+    public static readonly Version SettingsVersion = new(1, 4);
 
     /// <summary>
     ///     The default settings version to attempt to load from if all else fails...

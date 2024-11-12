@@ -28,26 +28,27 @@ public class Configure : AbstractOption
         var settings = AbstractSettings.Load();
         settings ??= new AppSettings();
 
-        if (settings.GitSources.Count == 0)
+        if (settings.GitSourcesAndAccessTokens.Count == 0)
         {
             if (ConsoleHelpers.GetYesNo("Add https://www.github.com as a git source?"))
             {
                 var accessToken = ConsoleHelpers.GetInput("Git Access Token");
-                settings.GitSources.Add("https://www.github.com", accessToken);
-                settings.RepositoriesList.Add("https://www.github.com", TemplateConstants.DefaultTemplateRepository);
+                settings.GitSourcesAndAccessTokens.Add("https://www.github.com", accessToken);
+                settings.RepositoriesAndGitSources.Add("https://www.github.com",
+                    TemplateConstants.DefaultTemplateRepository);
             }
         }
         else
         {
-            settings.GitSources =
+            settings.GitSourcesAndAccessTokens =
                 ConsoleHelpers.GetStringStringDictionaryInput("Edit git sources? (git_website: access_token, ...)",
-                    settings.GitSources);
+                    settings.GitSourcesAndAccessTokens);
         }
 
 
-        settings.RepositoriesList =
+        settings.RepositoriesAndGitSources =
             ConsoleHelpers.GetStringStringDictionaryInput(
-                "Edit template repositories? (repo_link: git_website, ...)", settings.RepositoriesList);
+                "Edit template repositories? (repo_link: git_website, ...)", settings.RepositoriesAndGitSources);
 
         settings.Save();
 

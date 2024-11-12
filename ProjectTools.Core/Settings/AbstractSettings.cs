@@ -20,8 +20,28 @@ public abstract class AbstractSettings
     /// <summary>
     ///     The settings version.
     /// </summary>
-    public Version SettingsVersion { get; set; }
+    public Version SettingsVersion { get; }
 
+    /// <summary>
+    ///     Loads the settings or raises an exception if we can't load them.
+    /// </summary>
+    /// <returns>The app settings.</returns>
+    /// <exception cref="Exception">Raises if we couldn't load the app settings.</exception>
+    public static AppSettings LoadOrThrow()
+    {
+        var appSettings = Load();
+        if (appSettings == null)
+        {
+            throw new Exception("Failed to load app settings.");
+        }
+
+        return appSettings;
+    }
+
+    /// <summary>
+    ///     Loads the settings from a file.
+    /// </summary>
+    /// <returns>The app settings, or null if we couldn't load them.</returns>
     public static AppSettings? Load()
     {
         // if the settings file does not exist, return null
@@ -59,6 +79,11 @@ public abstract class AbstractSettings
         return settings;
     }
 
+    /// <summary>
+    ///     Upgrades the app settings file version.
+    /// </summary>
+    /// <param name="fromVersion">The version to upgrade from.</param>
+    /// <returns>The upgraded app settings, or null if we could not update.</returns>
     private static AppSettings? UpgradeAppSettingsFile(Version fromVersion)
     {
         // Step 1 - Handle when the current version matches the app version

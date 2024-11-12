@@ -1,8 +1,11 @@
+using System.Diagnostics;
+
 namespace ProjectTools.Core.Templates;
 
 /// <summary>
 ///     A template, used to create or extend projects.
 /// </summary>
+[DebuggerDisplay("{Name}")]
 public class Template : AbstractTemplate
 {
     /// <summary>

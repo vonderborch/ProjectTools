@@ -23,20 +23,22 @@ public class GitRepoContents
     /// <summary>
     ///     Initializes a new instance of the <see cref="GitRepoContents" /> class.
     /// </summary>
+    /// <param name="client">The git client.</param>
     /// <param name="info">The information.</param>
     /// <param name="owner">The owner.</param>
     /// <param name="name">The name.</param>
     /// <param name="path">The path.</param>
     /// <param name="currentDepth">The current depth.</param>
-    public GitRepoContents(RepositoryContent info, string owner, string name, string path, int currentDepth = 0)
+    public GitRepoContents(GitHubClient client, RepositoryContent info, string owner, string name, string path,
+        int currentDepth = 0)
     {
         this.Info = info;
 
         if (info.Type == ContentType.Dir && currentDepth < TemplateConstants.MaxGitRepoTemplateSearchDepth)
         {
-            var childContents = Manager.Instance.GitClient.Repository.Content.GetAllContents(owner, name, path).Result;
-
-            this.ChildContent = childContents.Select(c => new GitRepoContents(c, owner, name, c.Path, currentDepth + 1))
+            var childContents = client.Repository.Content.GetAllContents(owner, name, path).Result;
+            this.ChildContent = childContents
+                .Select(c => new GitRepoContents(client, c, owner, name, c.Path, currentDepth + 1))
                 .ToList();
         }
         else
