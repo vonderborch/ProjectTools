@@ -9,6 +9,11 @@ namespace ProjectTools.Core.Settings;
 public abstract class AbstractSettings
 {
     /// <summary>
+    ///     The settings version.
+    /// </summary>
+    public Version SettingsVersion;
+
+    /// <summary>
     ///     Constructs a new instance of the <see cref="AbstractSettings" /> class.
     /// </summary>
     public AbstractSettings()
@@ -16,11 +21,6 @@ public abstract class AbstractSettings
         var version = GetSettingsVersionForClass(GetType());
         this.SettingsVersion = version;
     }
-
-    /// <summary>
-    ///     The settings version.
-    /// </summary>
-    public Version SettingsVersion { get; }
 
     /// <summary>
     ///     Loads the settings or raises an exception if we can't load them.

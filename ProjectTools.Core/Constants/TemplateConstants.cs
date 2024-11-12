@@ -43,5 +43,5 @@ public static class TemplateConstants
     /// <summary>
     ///     The maximum depth to search for git repo templates.
     /// </summary>
-    public static int MaxGitRepoTemplateSearchDepth = 5;
+    public static int MaxGitRepoTemplateSearchDepth = 3;
 }

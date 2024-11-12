@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 
 namespace ProjectTools.Core.Templates;
 
@@ -76,13 +77,7 @@ public abstract class AbstractTemplate
                 return this.safeName;
             }
 
-            this.safeName = this.Name;
-            this.safeName = this.safeName.Replace(" ", "_");
-            foreach (var c in Path.GetInvalidFileNameChars())
-            {
-                this.safeName = this.safeName.Replace(c, '-');
-            }
-
+            this.safeName = IOHelpers.GetFileSystemSafeString(this.Name);
             return this.safeName;
         }
     }

@@ -15,4 +15,14 @@ public abstract class SilenceAbleAbstractOption : AbstractOption
         HelpText =
             "If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available.")]
     public bool Silent { get; set; }
+
+    /// <summary>
+    ///     Gets the template updater command object.
+    /// </summary>
+    /// <returns>The template updater command object.</returns>
+    protected override UpdateTemplates GetTemplateUpdaterCommandObject()
+    {
+        UpdateTemplates obj = new() { Silent = this.Silent, ForceCheck = true, ForceRedownload = false };
+        return obj;
+    }
 }

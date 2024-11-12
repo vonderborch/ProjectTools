@@ -30,7 +30,12 @@ public class LocalTemplates
     /// </summary>
     public List<LocalTemplateInfo> Templates => [..this._templates];
 
-
+    /// <summary>
+    ///     Populates info on all templates we have locally.
+    /// </summary>
+    /// <param name="forceRefresh">True to force a refresh, False otherwise.</param>
+    /// <returns>A list of information on all local templates.</returns>
+    /// <exception cref="Exception">Raises if an invalid template file is discovered.</exception>
     public List<LocalTemplateInfo> PopulateLocalTemplates(bool forceRefresh = false)
     {
         if (this._templates.Count > 0 && !forceRefresh)
@@ -64,16 +69,11 @@ public class LocalTemplates
                     existingInfoForTemplate.Template = template;
                     this._templates.Add(existingInfoForTemplate);
                 }
-                catch (ArgumentNullException)
+                catch (InvalidOperationException)
                 {
                     // First time we've seen this file!
-                    var info = new LocalTemplateInfo
-                    {
-                        LocalPath = templateFile,
-                        Name = template.Name,
-                        Template = template,
-                        Size = (ulong)new FileInfo(templateFile).Length
-                    };
+                    var info = new LocalTemplateInfo(template.Name, templateFile,
+                        (ulong)new FileInfo(templateFile).Length, template);
                     this._templates.Add(info);
                 }
             }
@@ -83,6 +83,17 @@ public class LocalTemplates
             }
         }
 
+        SaveLocalTemplateInfo(this._templates);
         return this._templates;
+    }
+
+    /// <summary>
+    ///     Saves the new local template info.
+    /// </summary>
+    /// <param name="newInfo">The new info to save.</param>
+    public void SaveLocalTemplateInfo(List<LocalTemplateInfo> newInfo)
+    {
+        this._templates = newInfo;
+        JsonHelpers.SerializeToFile(PathConstants.TemplatesInfoCacheFile, newInfo);
     }
 }

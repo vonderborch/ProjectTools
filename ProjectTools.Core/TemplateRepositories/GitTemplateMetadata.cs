@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Octokit;
+using ProjectTools.Core.Helpers;
 
 namespace ProjectTools.Core.TemplateRepositories;
 
@@ -21,7 +22,7 @@ public class GitTemplateMetadata
     /// <summary>
     ///     The SHA checksum for the template
     /// </summary>
-    public string SHA;
+    public string Sha;
 
     /// <summary>
     ///     The size
@@ -36,24 +37,12 @@ public class GitTemplateMetadata
     /// <summary>
     ///     Initializes a new instance of the <see cref="GitTemplateMetadata" /> class.
     /// </summary>
-    public GitTemplateMetadata()
-    {
-        this.Name = string.Empty;
-        this.SHA = string.Empty;
-        this.Url = string.Empty;
-        this.Repo = string.Empty;
-        this.Size = 0;
-    }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="GitTemplateMetadata" /> class.
-    /// </summary>
     /// <param name="info">The git content information.</param>
     /// <param name="repo">The repo the template is located in.</param>
     public GitTemplateMetadata(RepositoryContent info, string repo)
     {
         this.Name = info.Name;
-        this.SHA = info.Sha;
+        this.Sha = info.Sha;
         this.Url = info.DownloadUrl;
         this.Repo = repo;
         this.Size = info.Size;
@@ -62,7 +51,12 @@ public class GitTemplateMetadata
     /// <summary>
     ///     Gets the display name.
     /// </summary>
-    /// <value>The display name.</value>
     [JsonIgnore]
     public string DisplayName => Path.GetFileNameWithoutExtension(this.Name);
+
+    /// <summary>
+    ///     Gets the safe name.
+    /// </summary>
+    [JsonIgnore]
+    public string SafeName => IOHelpers.GetFileSystemSafeString(this.Name);
 }

@@ -22,7 +22,6 @@ public abstract class AbstractOption
     /// <summary>
     ///     Executes what this option represents.
     /// </summary>
-    /// <param name="option">The option.</param>
     /// <returns>The result of the execution.</returns>
     public abstract string Execute();
 
@@ -33,15 +32,35 @@ public abstract class AbstractOption
     /// <returns>The result.</returns>
     public string ExecuteOption(AbstractOption option)
     {
-        if (AbstractSettings.Load() == null && this.AllowAutoConfiguration)
+        SetOptions(option);
+
+        // run configuration option if we are allowed to and need to...
+        if (this.AllowAutoConfiguration && AbstractSettings.Load() == null)
         {
-            _ = LogMessage("Creating settings file...");
+            LogMessage("Creating settings file...");
             var configure = new Configure();
-            _ = configure.Execute();
+            configure.Execute();
         }
 
-        SetOptions(option);
+        // run updating logic if we are allowed to and need to...
+        var appSettings = AbstractSettings.Load();
+        if (this.AllowTemplateUpdates && appSettings is { ShouldUpdateTemplates: true })
+        {
+            var updateTemplates = GetTemplateUpdaterCommandObject();
+            updateTemplates.Execute();
+        }
+
         return Execute();
+    }
+
+    /// <summary>
+    ///     Gets the template updater command object.
+    /// </summary>
+    /// <returns>The template updater command object.</returns>
+    protected virtual UpdateTemplates GetTemplateUpdaterCommandObject()
+    {
+        UpdateTemplates obj = new() { Silent = false, ForceCheck = false, ForceRedownload = false };
+        return obj;
     }
 
     /// <summary>
@@ -53,6 +72,17 @@ public abstract class AbstractOption
     {
         Console.WriteLine(value);
         return true;
+    }
+
+    /// <summary>
+    ///     Returns the total seconds since a given time in string form.
+    /// </summary>
+    /// <param name="time">The time.</param>
+    /// <returns>The total time in seconds.</returns>
+    protected string TotalSecondsSinceTime(DateTime time)
+    {
+        var totalTime = DateTime.Now - time;
+        return totalTime.TotalSeconds.ToString("0.00");
     }
 
     /// <summary>

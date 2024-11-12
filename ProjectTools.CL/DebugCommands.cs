@@ -43,6 +43,11 @@ public class DebugCommands
         //// Add List Templates Example Commands
         this._commands["list-templates"].Add("full", "-f");
 
+        //// Add update-templates Example Commands
+        this._commands["update-templates"].Add("full", "-f -u");
+        this._commands["update-templates"].Add("force_check", "-f");
+        this._commands["update-templates"].Add("force_redownload", "-i");
+
         //// Prepare Commands
         var baseTemplate = Path.Combine(templatesDirectory, "Velentr.BASE");
         var dualTemplate = Path.Combine(templatesDirectory, "Velentr.DUAL_SUPPORT");
@@ -69,6 +74,6 @@ public class DebugCommands
         var finalArgs = new List<string>();
         finalArgs.Add(rootCommand);
         finalArgs.AddRange(specificCommandArguments.Split(" "));
-        return finalArgs.ToArray();
+        return finalArgs.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
     }
 }

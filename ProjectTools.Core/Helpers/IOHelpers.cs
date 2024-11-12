@@ -8,6 +8,18 @@ namespace ProjectTools.Core.Helpers;
 
 public static class IOHelpers
 {
+    public static string GetFileSystemSafeString(string str)
+    {
+        var safeStr = str;
+        safeStr = safeStr.Replace(" ", "_");
+        foreach (var c in Path.GetInvalidFileNameChars())
+        {
+            safeStr = safeStr.Replace(c, '-');
+        }
+
+        return safeStr;
+    }
+
     /// <summary>
     ///     Archives a directory.
     /// </summary>
