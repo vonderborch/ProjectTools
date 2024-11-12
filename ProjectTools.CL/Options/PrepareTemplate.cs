@@ -3,7 +3,7 @@ using ProjectTools.CL.Helpers;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
-using ProjectTools.Core.Templaters;
+using ProjectTools.Core.TemplateBuilders;
 using ProjectTools.Core.Templates;
 
 namespace ProjectTools.CL.Options;
@@ -56,6 +56,10 @@ public class PrepareTemplate : AbstractOption
         HelpText = "If flag is provided, any existing template will be overriden.")]
     public bool ForceOverride { get; set; }
 
+    /// <summary>
+    ///     Sets the options.
+    /// </summary>
+    /// <param name="option">The option.</param>
     protected override void SetOptions(AbstractOption option)
     {
         var options = (PrepareTemplate)option;
@@ -67,6 +71,10 @@ public class PrepareTemplate : AbstractOption
         this.ForceOverride = options.ForceOverride;
     }
 
+    /// <summary>
+    ///     Executes the option.
+    /// </summary>
+    /// <returns>The result.</returns>
     public override string Execute()
     {
         // Validate parameters
@@ -256,7 +264,7 @@ public class PrepareTemplate : AbstractOption
         slugsWithInput = GetBuiltinSlugs(slugsWithInput);
 
         // Ask if the user has any additional slugs they want to add...
-        List<PreparationSlug> customSlugs = GetCustomSlugs();
+        var customSlugs = GetCustomSlugs();
 
         // Combine the three lists and return!
         var slugs = slugsWithNoInput.CombineLists(slugsWithInput).CombineLists(customSlugs);
@@ -264,7 +272,7 @@ public class PrepareTemplate : AbstractOption
     }
 
     /// <summary>
-    /// Gets all existing slugs that require input.
+    ///     Gets all existing slugs that require input.
     /// </summary>
     /// <param name="slugs">The slugs.</param>
     /// <returns>The slugs.</returns>
@@ -319,13 +327,13 @@ public class PrepareTemplate : AbstractOption
     }
 
     /// <summary>
-    /// Gets custom slugs.
+    ///     Gets custom slugs.
     /// </summary>
     /// <returns>The slugs.</returns>
     private List<PreparationSlug> GetCustomSlugs()
     {
         List<PreparationSlug> customSlugs = new();
-        
+
         while (ConsoleHelpers.GetYesNo("Do you want to add any additional slugs?", false))
         {
             PreparationSlug slug = new();

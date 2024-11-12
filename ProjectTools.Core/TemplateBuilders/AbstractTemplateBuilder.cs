@@ -1,7 +1,7 @@
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Templates;
 
-namespace ProjectTools.Core.Templaters;
+namespace ProjectTools.Core.TemplateBuilders;
 
 /// <summary>
 ///     An abstract class for templating a directory.
@@ -101,17 +101,6 @@ public abstract class AbstractTemplateBuilder(string name, string description, s
         string pathToDirectoryToTemplate)
     {
         throw new NotImplementedException();
-    }
-
-    /// <summary>
-    ///     Converts the preparation slugs to slugs.
-    /// </summary>
-    /// <param name="slugs">The preparation slugs to convert.</param>
-    /// <returns>The slugs.</returns>
-    public List<Slug> GetSlugsFromPreparationSlugs(List<PreparationSlug> slugs)
-    {
-        var output = slugs.Select(slug => slug.ToSlug()).ToList();
-        return output;
     }
 
     /// <summary>

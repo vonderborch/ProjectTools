@@ -12,8 +12,8 @@ internal class Program
         var commandHelper = new CommandHelper();
 
 #if DEBUG
-        var testRootCommand = "list-templates";
-        var testCommandSpecific = "";
+        var testRootCommand = "prepare";
+        var testCommandSpecific = "dual_and_generic";
 
         args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);
 #endif

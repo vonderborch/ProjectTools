@@ -1,7 +1,7 @@
 using System.Reflection;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
-using ProjectTools.Core.Templaters;
+using ProjectTools.Core.TemplateBuilders;
 using ProjectTools.Core.Templates;
 
 namespace ProjectTools.Core;

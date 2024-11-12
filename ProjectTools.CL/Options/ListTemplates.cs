@@ -10,6 +10,9 @@ namespace ProjectTools.CL.Options;
 [Verb("list-templates", HelpText = "Lists all templates available to use.")]
 public class ListTemplates : AbstractOption
 {
+    /// <summary>
+    ///     A flag to indicate whether to output full info or not.
+    /// </summary>
     [Option('f', "full", Default = false, Required = false,
         HelpText = "If flag is set, full information on the templates will be displayed.")]
     public bool Full { get; set; }

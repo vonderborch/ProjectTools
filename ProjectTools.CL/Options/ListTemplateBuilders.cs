@@ -10,6 +10,9 @@ namespace ProjectTools.CL.Options;
 [Verb("list-template-builders", HelpText = "Get information about what template builders are available.")]
 public class ListTemplateBuilders : AbstractOption
 {
+    /// <summary>
+    ///     A flag to indicate whether to output full info or not.
+    /// </summary>
     [Option('f', "full", Default = false, Required = false,
         HelpText = "If flag is set, full information on the template builders will be displayed.")]
     public bool Full { get; set; }
