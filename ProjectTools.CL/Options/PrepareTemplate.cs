@@ -15,10 +15,18 @@ namespace ProjectTools.CL.Options;
 [Verb("prepare", HelpText = "Prepare a template")]
 public class PrepareTemplate : AbstractOption
 {
+    /// <summary>
+    ///     A dictionary containing the special keys for each field
+    /// </summary>
     private readonly Dictionary<SlugType, string> _messageExtras = new();
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PrepareTemplate" /> class.
+    /// </summary>
     public PrepareTemplate()
     {
+        this.AllowTemplateUpdates = false;
+
         var specialValueHandler = new SpecialValueHandler("C://my_fake_directory//sub_directory", "fake_proj", null);
 
         foreach (var slugType in Enum.GetValues<SlugType>())

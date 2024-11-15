@@ -115,7 +115,7 @@ public class AppSettings_1_2_0 : AbstractSettings
         nextVersion.RepositoriesList = new Dictionary<string, string>();
         foreach (var repo in actualCurrentSettings.RepositoriesList)
         {
-            nextVersion.RepositoriesList.Add(actualCurrentSettings.GitWebPath, repo);
+            nextVersion.RepositoriesList.Add(repo, actualCurrentSettings.GitWebPath);
         }
 
         return nextVersion;

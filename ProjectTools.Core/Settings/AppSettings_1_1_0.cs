@@ -103,7 +103,7 @@ public class AppSettings_1_1_0 : AbstractSettings
         }
 
         var actualCurrentSettings = (AppSettings_1_1_0)currentSettings;
-        AppSettings_1_3_0 nextVersion = new(); // TODO: Update this to point to 1.2.0 when 1.3.0 is created..
+        AppSettings_1_3_0 nextVersion = new();
         nextVersion.LastTemplatesUpdateCheck = actualCurrentSettings.LastTemplatesUpdateCheck;
         nextVersion.SecondsBetweenTemplateUpdateChecks = actualCurrentSettings.SecondsBetweenTemplateUpdateChecks;
 
@@ -115,7 +115,7 @@ public class AppSettings_1_1_0 : AbstractSettings
         nextVersion.RepositoriesList = new Dictionary<string, string>();
         foreach (var repo in actualCurrentSettings.TemplateRepositories)
         {
-            nextVersion.RepositoriesList.Add(actualCurrentSettings.GitWebPath, repo);
+            nextVersion.RepositoriesList.Add(repo, actualCurrentSettings.GitWebPath);
         }
 
         return nextVersion;

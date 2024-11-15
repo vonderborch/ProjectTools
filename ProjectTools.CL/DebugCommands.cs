@@ -11,7 +11,9 @@ public class DebugCommands
         //// Directory Info
         var currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         var testOutputDirectory = Path.Combine(currentDirectory, "TEST_OUTPUT_DIRECTORY");
-        var rootRepoDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\..\..\"));
+        var rootRepoDirectory =
+            Path.GetDirectoryName(
+                Path.GetDirectoryName(Path.GetDirectoryName(currentDirectory)));
         var templatesDirectory = Path.Combine(rootRepoDirectory, "Templates", "TEMPLATES_BASE");
         var templatesOutputDirectory = Path.Combine(rootRepoDirectory, "Templates", "TEMPLATES");
 
@@ -53,7 +55,7 @@ public class DebugCommands
         var baseTemplate = Path.Combine(templatesDirectory, "Velentr.BASE");
         var dualTemplate = Path.Combine(templatesDirectory, "Velentr.DUAL_SUPPORT");
         var dualAndGenericTemplate = Path.Combine(templatesDirectory, "Velentr.DUAL_SUPPORT_WITH_GENERIC");
-        this._commands["prepare"].Add("base", $"-f -d {baseTemplate} -o {templatesOutputDirectory}");
+        this._commands["prepare"].Add("base", $"-f -c -d {baseTemplate} -o {templatesOutputDirectory}");
         this._commands["prepare"].Add("dual", $"-f -d {dualTemplate} -o {templatesOutputDirectory}");
         this._commands["prepare"]
             .Add("dual_and_generic", $"-f -d {dualAndGenericTemplate} -o {templatesOutputDirectory}");

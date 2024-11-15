@@ -59,4 +59,10 @@ public class GitTemplateMetadata
     /// </summary>
     [JsonIgnore]
     public string SafeName => IOHelpers.GetFileSystemSafeString(this.Name);
+
+    /// <summary>
+    ///     Gets the size in MB.
+    /// </summary>
+    [JsonIgnore]
+    public double SizeInMb => this.Size / 1024d / 1024d;
 }

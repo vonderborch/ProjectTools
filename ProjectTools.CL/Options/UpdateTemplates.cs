@@ -69,19 +69,27 @@ public class UpdateTemplates : SilenceAbleAbstractOption
         if (updateResultCheck.NewTemplates.Count > 0)
         {
             // Step 3a - Ask about new templates...
-            if (this.Silent || (updateResultCheck.NewTemplates.Count > 0 && ConsoleHelpers.GetYesNo(
-                    $"Found {updateResultCheck.NewTemplates.Count} new templates ({updateResultCheck.NewTemplateSizeInMegabytes:0.000} megabyte(s)), queue them for download?")))
+            foreach (var template in updateResultCheck.NewTemplates)
             {
-                totalDownloadingSize += updateResultCheck.NewTemplateSize;
-                totalTemplatesToDownload.AddRange(updateResultCheck.NewTemplates);
+                if (this.Silent ||
+                    ConsoleHelpers.GetYesNo(
+                        $"Download new template `{template.DisplayName}` ({template.SizeInMb} megabyte(s))?"))
+                {
+                    totalDownloadingSize += (ulong)template.Size;
+                    totalTemplatesToDownload.Add(template);
+                }
             }
 
             // Step 3a - Ask about new templates...
-            if (this.Silent || (updateResultCheck.UpdateableTemplates.Count > 0 && ConsoleHelpers.GetYesNo(
-                    $"Found {updateResultCheck.UpdateableTemplates.Count} templates needing updates ({updateResultCheck.UpdateableTemplateSizeInMegabytes:0.000} megabyte(s)), queue them for download?")))
+            foreach (var template in updateResultCheck.UpdateableTemplates)
             {
-                totalDownloadingSize += updateResultCheck.UpdateableTemplateSize;
-                totalTemplatesToDownload.AddRange(updateResultCheck.UpdateableTemplates);
+                if (this.Silent ||
+                    ConsoleHelpers.GetYesNo(
+                        $"Update template `{template.DisplayName}` ({template.SizeInMb} megabyte(s))?"))
+                {
+                    totalDownloadingSize += (ulong)template.Size;
+                    totalTemplatesToDownload.Add(template);
+                }
             }
         }
 

@@ -12,8 +12,8 @@ internal class Program
         var commandHelper = new CommandHelper();
 
 #if DEBUG
-        var testRootCommand = "generate";
-        var testCommandSpecific = "base";
+        var testRootCommand = "prepare";
+        var testCommandSpecific = "dual";
 
         args = new DebugCommands(commandHelper).GetArgumentsForCommandToRun(testRootCommand, testCommandSpecific);
 #endif
