@@ -133,8 +133,7 @@ public static class IOHelpers
     /// <param name="excludedDirectories">The excluded directories.</param>
     public static void CopyDirectory(string source, string destination, List<string> excludedDirectories)
     {
-        var actualExcludedDirectories = excludedDirectories.Select(x => x.ToLowerInvariant()).ToList();
-        CopyDirectoryHelper(source, destination, actualExcludedDirectories);
+        CopyDirectoryHelper(source, source, destination, excludedDirectories);
     }
 
     /// <summary>
@@ -238,9 +237,11 @@ public static class IOHelpers
     ///     Copies the directory helper.
     /// </summary>
     /// <param name="source">The source.</param>
+    /// <param name="rootSource">The root source directory.</param>
     /// <param name="destination">The destination.</param>
     /// <param name="excludedDirectories">The excluded directories.</param>
-    private static void CopyDirectoryHelper(string source, string destination, List<string> excludedDirectories)
+    private static void CopyDirectoryHelper(string source, string rootSource, string destination,
+        List<string> excludedDirectories)
     {
         CreateDirectoryIfNotExists(destination);
 
@@ -259,19 +260,11 @@ public static class IOHelpers
         for (var i = 0; i < directories.Length; i++)
         {
             var dirName = Path.GetFileName(directories[i]);
-            var dirNameLower = dirName.ToLowerInvariant();
-            if (!excludedDirectories.Contains(dirNameLower))
+            var relativePath = Path.GetRelativePath(rootSource, directories[i]);
+            if (!excludedDirectories.Contains(relativePath))
             {
                 var path = Path.Combine(destination, dirName);
-                CopyDirectoryHelper(directories[i], path, excludedDirectories);
-
-                /*
-                var updatedExcludedDirectories = excludedDirectories
-                    .Select(x => x.StartsWith(dirName) ? x[dirName.Length..] : x).ToList();
-                updatedExcludedDirectories = updatedExcludedDirectories
-                    .Where(x => x.Contains(Path.DirectorySeparatorChar)).ToList();
-                CopyDirectoryHelper(directories[i], path, updatedExcludedDirectories);
-                */
+                CopyDirectoryHelper(directories[i], rootSource, path, excludedDirectories);
             }
         }
     }

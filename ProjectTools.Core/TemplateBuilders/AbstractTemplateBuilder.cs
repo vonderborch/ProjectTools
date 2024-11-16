@@ -1,4 +1,5 @@
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Templates;
 
 namespace ProjectTools.Core.TemplateBuilders;
@@ -64,7 +65,8 @@ public abstract class AbstractTemplateBuilder(string name, string description, s
     /// <returns>The updated list of slugs.</returns>
     public List<PreparationSlug> AddPreparationSlug(PreparationSlug newSlug, List<PreparationSlug> existingSlugs)
     {
-        if (existingSlugs.Any(slug => slug.SlugKey == newSlug.SlugKey))
+        if (existingSlugs.Any(slug =>
+                slug.SlugKey == newSlug.SlugKey || slug.SearchStrings.CompareLists(newSlug.SearchStrings)))
         {
             return existingSlugs;
         }

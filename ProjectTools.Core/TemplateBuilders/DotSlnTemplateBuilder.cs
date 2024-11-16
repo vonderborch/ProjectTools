@@ -37,7 +37,7 @@ public class DotSlnTemplateBuilder()
         ];
 
         // Add guids from the .sln file to the list of prep slugs
-        var guids = GetGuids(pathToDirectoryToTemplate);
+        var guids = GetGuids(pathToDirectoryToTemplate, pathToDirectoryToTemplate, template);
         var guidPadding = $"D{guids.Count.ToString().Length}";
 
         for (var i = 0; i < guids.Count; i++)
@@ -58,7 +58,7 @@ public class DotSlnTemplateBuilder()
         return slugs;
     }
 
-    private List<string> GetGuids(string directory)
+    private List<string> GetGuids(string directory, string rootDirectory, PreparationTemplate template)
     {
         List<string> output = new();
         // try to find .sln files
@@ -82,11 +82,15 @@ public class DotSlnTemplateBuilder()
         var directories = Directory.GetDirectories(directory);
         foreach (var dir in directories)
         {
-            var directoryGuids = GetGuids(dir);
-            output.AddRange(directoryGuids);
+            var relativePath = Path.GetRelativePath(rootDirectory, dir);
+            if (!template.PrepareExcludedPaths.Contains(relativePath))
+            {
+                var directoryGuids = GetGuids(dir, rootDirectory, template);
+                output.AddRange(directoryGuids);
+            }
         }
 
-        return output;
+        return output.Distinct().ToList();
     }
 
     public override bool IsValidDirectoryForBuilder(string pathToDirectoryToTemplate)
