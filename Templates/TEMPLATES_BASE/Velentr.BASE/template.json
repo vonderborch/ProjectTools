@@ -176,12 +176,12 @@
   "Name": "Velentr.BASE",
   "PathsToRemove": [],
   "PrepareExcludedPaths": [
-    "bin",
-    "obj",
-    ".vs",
-    ".git",
-    "release",
-    "debug"
+    "*bin",
+    "*obj",
+    "*.vs",
+    "*.git",
+    "*release",
+    "*debug"
   ],
   "PythonScriptPaths": [],
   "RenameOnlyPaths": [
@@ -189,5 +189,5 @@
   ],
   "TemplateBuilder": ".sln",
   "TemplaterVersion": "1.0.0",
-  "Version": "2024-11-16"
+  "Version": "2024-11-18"
 }

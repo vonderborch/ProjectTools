@@ -527,13 +527,13 @@
   "Name": "Velentr.DUAL_SUPPORT_WITH_GENERIC",
   "PathsToRemove": [],
   "PrepareExcludedPaths": [
-    "bin",
-    "obj",
-    ".vs",
-    ".git",
-    "release",
-    "debug",
-    "FNA"
+    "*bin",
+    "*obj",
+    "*.vs",
+    "*.git",
+    "*release",
+    "*debug",
+    "*FNA"
   ],
   "PythonScriptPaths": [
     "install_fna.py"
@@ -542,11 +542,11 @@
     "logo.png",
     "install_fna.py",
     "update_fna.py",
-    "Velentr.DevEnv.FNA",
-    "Velentr.DevEnv.Monogame",
+    "*Velentr.DevEnv.FNA",
+    "*Velentr.DevEnv.Monogame",
     "fna_updater"
   ],
   "TemplateBuilder": ".sln",
   "TemplaterVersion": "1.0.0",
-  "Version": "2024-11-16"
+  "Version": "2024-11-18"
 }

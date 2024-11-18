@@ -248,23 +248,22 @@ public static class IOHelpers
         // Copy over items
         var files = Directory.GetFiles(source)
             .Where(f => Path.GetFileName(f) != TemplateConstants.TemplateSettingsFileName).ToList();
-        for (var i = 0; i < files.Count; i++)
+        foreach (var file in files)
         {
-            var path = Path.Combine(destination, Path.GetFileName(files[i]));
+            var path = Path.Combine(destination, Path.GetFileName(file));
 
-            SafeCopyFile(files[i], path);
+            SafeCopyFile(file, path);
         }
 
         // Copy over sub-directories
         var directories = Directory.GetDirectories(source);
-        for (var i = 0; i < directories.Length; i++)
+        foreach (var directory in directories)
         {
-            var dirName = Path.GetFileName(directories[i]);
-            var relativePath = Path.GetRelativePath(rootSource, directories[i]);
-            if (!excludedDirectories.Contains(relativePath))
+            if (!PathHelpers.PathIsInList(directory, rootSource, excludedDirectories))
             {
+                var dirName = Path.GetFileName(directory);
                 var path = Path.Combine(destination, dirName);
-                CopyDirectoryHelper(directories[i], rootSource, path, excludedDirectories);
+                CopyDirectoryHelper(directory, rootSource, path, excludedDirectories);
             }
         }
     }
