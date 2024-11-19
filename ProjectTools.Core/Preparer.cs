@@ -115,7 +115,7 @@ public class Preparer
     ///     Updates the directory files per the template and replacement text.
     /// </summary>
     /// <param name="directory">The directory to update.</param>
-    /// <param name="rootOutputDirectory">The root output directory.</param>
+    /// <param name="rootDirectory">The root output directory.</param>
     /// <param name="template">The template.</param>
     /// <param name="isRenameOnlyPath">Whether we're already in a rename-only path or not.</param>
     private void UpdateFileSystemEntries(string directory, string rootDirectory, PreparationTemplate template,
@@ -126,9 +126,16 @@ public class Preparer
         {
             var baseEntryName = Path.GetFileName(entry);
             var entryActualName = UpdateText(baseEntryName, template.ReplacementText);
+            if (entryActualName == "logo.png")
+            {
+                var test = true;
+            }
+
             var actualPath = Path.Combine(Path.GetDirectoryName(entry) ?? string.Empty, entryActualName);
-            var relativePath = Path.GetRelativePath(rootDirectory, actualPath);
-            var entryIsRenameOnlyPath = IsRenameOnlyPath(relativePath, rootDirectory, template, isRenameOnlyPath);
+            var entryIsRenameOnlyPath =
+                PathHelpers.PathIsInList(actualPath, rootDirectory, template.RenameOnlyPaths, true, true);
+
+            isRenameOnlyPath = isRenameOnlyPath || entryIsRenameOnlyPath;
 
             // Handle directories
             if (Directory.Exists(entry))
@@ -145,7 +152,7 @@ public class Preparer
                 }
 
                 // then we update the sub-directory!
-                UpdateFileSystemEntries(actualPath, rootDirectory, template, entryIsRenameOnlyPath);
+                UpdateFileSystemEntries(actualPath, rootDirectory, template, isRenameOnlyPath);
             }
             // Handle files
             else
@@ -175,26 +182,6 @@ public class Preparer
                 }
             }
         }
-    }
-
-    /// <summary>
-    ///     Returns whether the path is a rename-only path.
-    /// </summary>
-    /// <param name="path">The path.</param>
-    /// <param name="rootOutputDirectory">The root output directory.</param>
-    /// <param name="template">The template.</param>
-    /// <param name="isRenameOnlyPath">Whether we're already in a rename-only path or not.</param>
-    /// <returns>True for rename-only paths, False otherwise.</returns>
-    private bool IsRenameOnlyPath(string path, string rootOutputDirectory, PreparationTemplate template,
-        bool isRenameOnlyPath)
-    {
-        if (isRenameOnlyPath)
-        {
-            return true;
-        }
-
-        var relativePath = Path.GetRelativePath(rootOutputDirectory, path);
-        return template.RenameOnlyPaths.Contains(relativePath);
     }
 
     /// <summary>

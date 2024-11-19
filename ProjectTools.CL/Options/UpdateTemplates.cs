@@ -66,31 +66,36 @@ public class UpdateTemplates : SilenceAbleAbstractOption
         // Step 3 - Ask user what templates to download...
         var totalTemplatesToDownload = new List<GitTemplateMetadata>();
         var totalDownloadingSize = 0UL;
-        if (updateResultCheck.NewTemplates.Count > 0)
+        if (updateResultCheck.TotalTemplatesNeedingDownload > 0)
         {
+            LogMessage($"Found {updateResultCheck.TotalTemplatesNeedingDownload} templates to download/update...");
             // Step 3a - Ask about new templates...
             foreach (var template in updateResultCheck.NewTemplates)
             {
                 if (this.Silent ||
                     ConsoleHelpers.GetYesNo(
-                        $"Download new template `{template.DisplayName}` ({template.SizeInMb} megabyte(s))?"))
+                        $"Download new template `{template.DisplayName}` ({template.SizeInMb:0.000} megabyte(s))?"))
                 {
                     totalDownloadingSize += (ulong)template.Size;
                     totalTemplatesToDownload.Add(template);
                 }
             }
 
-            // Step 3a - Ask about new templates...
+            // Step 3b - Ask about updateable templates...
             foreach (var template in updateResultCheck.UpdateableTemplates)
             {
                 if (this.Silent ||
                     ConsoleHelpers.GetYesNo(
-                        $"Update template `{template.DisplayName}` ({template.SizeInMb} megabyte(s))?"))
+                        $"Update template `{template.DisplayName}` ({template.SizeInMb:0.000} megabyte(s))?"))
                 {
                     totalDownloadingSize += (ulong)template.Size;
                     totalTemplatesToDownload.Add(template);
                 }
             }
+        }
+        else
+        {
+            return "Found no templates to download or update!";
         }
 
         // Exit early if no templates are queued for download...

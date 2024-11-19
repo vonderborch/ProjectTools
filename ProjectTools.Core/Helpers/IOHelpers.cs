@@ -259,7 +259,7 @@ public static class IOHelpers
         var directories = Directory.GetDirectories(source);
         foreach (var directory in directories)
         {
-            if (!PathHelpers.PathIsInList(directory, rootSource, excludedDirectories))
+            if (!PathHelpers.PathIsInList(directory, rootSource, excludedDirectories, true))
             {
                 var dirName = Path.GetFileName(directory);
                 var path = Path.Combine(destination, dirName);

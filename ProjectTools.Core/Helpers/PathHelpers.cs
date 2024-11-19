@@ -9,8 +9,10 @@ public static class PathHelpers
     /// <param name="rootPath">The root path.</param>
     /// <param name="paths">The paths to check.</param>
     /// <param name="checkWithRegex">If set to <c>true</c> check with regex.</param>
+    /// <param name="checkEntryName">If set to <c>true</c> check the entry name.</param>
     /// <returns>True if contained, False otherwise.</returns>
-    public static bool PathIsInList(string path, string rootPath, List<string> paths, bool checkWithRegex = false)
+    public static bool PathIsInList(string path, string rootPath, List<string> paths, bool checkWithRegex = false,
+        bool checkEntryName = false)
     {
         var relativePath = Path.GetRelativePath(rootPath, path);
 
@@ -21,7 +23,7 @@ public static class PathHelpers
                 return true;
             }
 
-            if (pathToCheck.Contains("*"))
+            if (checkWithRegex && pathToCheck.Contains("*"))
             {
                 var basePathToCheck = pathToCheck.Replace("*", "");
                 if (pathToCheck.StartsWith("*") && Path.GetFileName(relativePath) == basePathToCheck)
@@ -33,6 +35,11 @@ public static class PathHelpers
                 {
                     return true;
                 }
+            }
+
+            if (checkEntryName && Path.GetFileName(relativePath) == pathToCheck)
+            {
+                return true;
             }
         }
 

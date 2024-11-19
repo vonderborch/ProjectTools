@@ -62,6 +62,9 @@ public class DebugCommands
 
         //// Add Generate-Project Commands
         this._commands["generate"].Add("base", $"-f -o {testOutputDirectory} -t Velentr.BASE -n BASE_TEST");
+        this._commands["generate"].Add("dual", $"-f -o {testOutputDirectory} -t Velentr.DUAL -n DUAL_TEST");
+        this._commands["generate"].Add("dual_and_generic",
+            $"-f -o {testOutputDirectory} -t Velentr.DUAL_AND_GENERIC -n DAG_TEST");
     }
 
     public string[] GetArgumentsForCommandToRun(string rootCommand, string specificCommand)

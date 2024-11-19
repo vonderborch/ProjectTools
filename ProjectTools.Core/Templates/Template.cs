@@ -85,7 +85,7 @@ public class Template : AbstractTemplate
             $"Successfully prepared created the solution in {totalTime.TotalSeconds:0.00} second(s): {outputDirectory}";
     }
 
-    private void UpdateFiles(string directory, string rootDirectory)
+    private void UpdateFiles(string directory, string rootDirectory, bool isRenameOnlyPath = false)
     {
         var entries = Directory.GetFileSystemEntries(directory);
 
@@ -96,8 +96,8 @@ public class Template : AbstractTemplate
                 continue;
             }
 
-            var relativePath = Path.GetRelativePath(rootDirectory, entry);
-            var isRenameOnly = this.RenameOnlyPaths.Contains(relativePath);
+            var isRenameOnly = PathHelpers.PathIsInList(entry, rootDirectory, this.RenameOnlyPaths, true, true);
+            isRenameOnlyPath = isRenameOnlyPath || isRenameOnly;
             var newEntryPath = UpdateText(entry);
 
             // Update directory naming...
@@ -113,7 +113,7 @@ public class Template : AbstractTemplate
                 // update inner files if and only if we should
                 if (!isRenameOnly)
                 {
-                    UpdateFiles(path, rootDirectory);
+                    UpdateFiles(path, rootDirectory, isRenameOnlyPath);
                 }
             }
             // Otherwise, update the files as needed
@@ -129,7 +129,7 @@ public class Template : AbstractTemplate
                     File.Move(entry, newEntryPath);
                 }
 
-                if (!isRenameOnly)
+                if (!isRenameOnlyPath)
                 {
                     var text = File.ReadAllText(newEntryPath);
                     text = UpdateText(text);

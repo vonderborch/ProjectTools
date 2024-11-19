@@ -1,3 +1,4 @@
+using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Templates;
 
 namespace ProjectTools.Core.TemplateBuilders;
@@ -82,8 +83,7 @@ public class DotSlnTemplateBuilder()
         var directories = Directory.GetDirectories(directory);
         foreach (var dir in directories)
         {
-            var relativePath = Path.GetRelativePath(rootDirectory, dir);
-            if (!template.PrepareExcludedPaths.Contains(relativePath))
+            if (!PathHelpers.PathIsInList(dir, rootDirectory, template.PrepareExcludedPaths, true, true))
             {
                 var directoryGuids = GetGuids(dir, rootDirectory, template);
                 output.AddRange(directoryGuids);
