@@ -2,6 +2,7 @@ using System.Diagnostics;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Settings;
+using Python.Runtime;
 
 namespace ProjectTools.Core.Templates;
 
@@ -24,7 +25,7 @@ public class Template : AbstractTemplate
     public string GenerateProject(string parentOutputDirectory, string name, string pathToTemplate,
         Logger logger,
         Logger instructionLogger,
-        Logger commandLogger, bool overrideExisting = false)
+        Logger commandLogger, bool overrideExisting = false, bool skipCleaning = false)
     {
         var startTime = DateTime.Now;
         var appSettings = AbstractSettings.LoadOrThrow();
@@ -52,14 +53,14 @@ public class Template : AbstractTemplate
         UpdateFiles(outputDirectory, outputDirectory);
         logger.Log("Files updated!", 2);
 
-        // Step 4 - Run scripts (PYTHON TIME!?)
+        // Step 4 - Run scripts (C# SCRIPT TIME!?)
         logger.Log("Step 4/6: Running scripts...");
         List<string> instructions = new();
         if (this.PythonScriptPaths.Count > 0)
         {
+            PythonEngine.Initialize();
         }
         else
-
         {
             logger.Log("No scripts to execute!", 2);
         }
@@ -69,6 +70,10 @@ public class Template : AbstractTemplate
         instructions = instructions.CombineLists(this.Instructions);
         if (instructions.Count > 0)
         {
+            foreach (var instruction in instructions)
+            {
+                instructionLogger.Log(instruction);
+            }
         }
         else
         {
@@ -77,6 +82,10 @@ public class Template : AbstractTemplate
 
         // Step 6 - Cleanup
         logger.Log("Step 6/6: Cleaning things up...");
+        if (skipCleaning)
+        {
+            logger.Log("Skipping cleaning!", 2);
+        }
 
         // DONE!
         logger.Log("Work complete!");
