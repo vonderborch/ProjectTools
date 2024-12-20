@@ -7,46 +7,49 @@ using ProjectTools.Core.Settings;
 
 namespace ProjectTools.Core.Scripting;
 
+/// <summary>
+///     A manager for Python scripting.
+/// </summary>
 public sealed class PythonManager
 {
+    /// <summary>
+    ///     The lazy instance of the <see cref="PythonManager" />.
+    /// </summary>
     private static readonly Lazy<PythonManager> Lazy = new(() => new PythonManager());
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PythonManager" /> class.
+    /// </summary>
     private PythonManager()
     {
         var pythonInfo = DetermineAndExtractPythonVersion();
 
         this.PythonExecutable = Path.Combine(this.PythonDirectory, pythonInfo.Item2);
-        this.PythonDll = Path.Combine(this.PythonDirectory, pythonInfo.Item3);
     }
 
+    /// <summary>
+    ///     Gets the instance of the <see cref="PythonManager" />.
+    /// </summary>
     public static PythonManager Manager => Lazy.Value;
 
+    /// <summary>
+    ///     The directory where Python is stored.
+    /// </summary>
     public string PythonDirectory => Path.Combine(PathConstants.CoreDirectory, "python");
 
-    public string PythonDll { get; }
-
+    /// <summary>
+    ///     The executable for Python.
+    /// </summary>
     public string PythonExecutable { get; }
 
-    private Tuple<string, string, string> DetermineAndExtractPythonVersion()
+    /// <summary>
+    ///     Determines the Python version and extracts it.
+    /// </summary>
+    /// <returns>Information on the Python version.</returns>
+    private Tuple<string, string> DetermineAndExtractPythonVersion()
     {
-        var architecture = RuntimeInformation.OSArchitecture;
-        OSPlatform platform;
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            platform = OSPlatform.Windows;
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            platform = OSPlatform.Linux;
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            platform = OSPlatform.OSX;
-        }
-        else
-        {
-            throw new PlatformNotSupportedException("The current platform is not supported.");
-        }
+        var architecture = EnvironmentHelpers.Architecture;
+        var platform = EnvironmentHelpers.OS;
 
         var pythonInfo = PythonConstants.PythonInfo[platform][architecture];
         if (Directory.Exists(this.PythonDirectory) &&
@@ -58,7 +61,7 @@ public sealed class PythonManager
         if (!Directory.Exists(this.PythonDirectory))
         {
             var fileStream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream($"ProjectTools.Core.PythonVersions.{pythonInfo.Item1}.tar.gz");
+                .GetManifestResourceStream($"ProjectTools.Core.Scripting.{pythonInfo.Item1}.tar.gz");
             IOHelpers.DecompressTarball(fileStream, PathConstants.CoreDirectory);
             fileStream.Close();
 

@@ -1,8 +1,4 @@
 ﻿<Solution>
-  <Folder Name="/OLD/">
-    <Project Path="OLD\ProjectTools.CoreOLD\ProjectTools.CoreOLD.csproj" Type="Classic C#" />
-    <Project Path="OLD\ProjectToolsOLD\ProjectToolsOLD.csproj" Type="Classic C#" />
-  </Folder>
   <Folder Name="/SolutionFiles/">
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
