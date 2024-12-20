@@ -89,6 +89,7 @@ public class Template : AbstractTemplate
                         StartInfo = startInfo
                     };
                     proc.Start();
+                    proc.WaitForExit();
                 }
                 catch (Exception e)
                 {

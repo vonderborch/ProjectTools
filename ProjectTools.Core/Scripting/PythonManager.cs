@@ -78,6 +78,7 @@ public sealed class PythonManager
                     StartInfo = startInfo
                 };
                 proc.Start();
+                proc.WaitForExit();
             }
         }
 

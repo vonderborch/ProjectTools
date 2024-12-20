@@ -9,6 +9,16 @@ namespace ProjectTools.Core.Settings;
 public class SettingRegistration : Attribute
 {
     /// <summary>
+    ///     The settings classes.
+    /// </summary>
+    private static readonly Lazy<Type[]> SettingsClasses = new(() =>
+    {
+        return Assembly.GetExecutingAssembly().GetTypes()
+            .Where(t => t.IsSubclassOf(typeof(AbstractSettings)) && !t.IsAbstract &&
+                        t.IsDefined(typeof(SettingRegistration), false)).ToArray();
+    });
+
+    /// <summary>
     ///     The next compatible settings version.
     /// </summary>
     public readonly Version? NextSettingsVersion;
@@ -56,11 +66,7 @@ public class SettingRegistration : Attribute
             return null;
         }
 
-        var settingsClasses = Assembly.GetExecutingAssembly().GetTypes()
-            .Where(t => t.IsSubclassOf(typeof(AbstractSettings)) && !t.IsAbstract &&
-                        t.IsDefined(typeof(SettingRegistration), false));
-
-        foreach (var settingsClass in settingsClasses)
+        foreach (var settingsClass in SettingsClasses.Value)
         {
             var registration =
                 (SettingRegistration?)GetCustomAttribute(settingsClass, typeof(SettingRegistration));
@@ -86,11 +92,7 @@ public class SettingRegistration : Attribute
             return null;
         }
 
-        var settingsClasses = Assembly.GetExecutingAssembly().GetTypes()
-            .Where(t => t.IsSubclassOf(typeof(AbstractSettings)) && !t.IsAbstract &&
-                        t.IsDefined(typeof(SettingRegistration), false));
-
-        foreach (var settingsClass in settingsClasses)
+        foreach (var settingsClass in SettingsClasses.Value)
         {
             var registration =
                 (SettingRegistration?)GetCustomAttribute(settingsClass, typeof(SettingRegistration));

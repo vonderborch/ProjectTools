@@ -28,7 +28,8 @@ public static class IOHelpers
     /// <param name="directoryToArchive">The directory to archive.</param>
     /// <param name="archivePath">The archive path.</param>
     /// <param name="skipCleaning">if set to <c>true</c> [skip cleaning].</param>
-    public static void ArchiveDirectory(string directoryToArchive, string archivePath, bool skipCleaning)
+    public static void ArchiveDirectory(string directoryToArchive, string archivePath, bool skipCleaning,
+        int maxRetries = 10, int baseDelayMs = 100, int maxDelayMs = 3000)
     {
         // Delete any existing archive
         if (File.Exists(archivePath))
@@ -42,8 +43,7 @@ public static class IOHelpers
         // Delete the base directory to archive if requested
         if (!skipCleaning)
         {
-            Thread.Sleep(500);
-            for (var i = 0; i < 10; i++)
+            for (var attempt = 0; attempt < maxRetries; attempt++)
             {
                 try
                 {
@@ -52,8 +52,15 @@ public static class IOHelpers
                 }
                 catch (Exception)
                 {
-                    // Give some time to let the OS release the directory
-                    Thread.Sleep(500);
+                    if (attempt == maxRetries - 1)
+                    {
+                        throw;
+                    }
+
+                    // Exponential backoff: 100ms, 200ms, 400ms, 800ms, 1600ms, etc.
+                    var delayMs = baseDelayMs * (int)Math.Pow(2, attempt);
+                    delayMs = Math.Min(delayMs, maxDelayMs);
+                    Thread.Sleep(delayMs);
                 }
             }
 
