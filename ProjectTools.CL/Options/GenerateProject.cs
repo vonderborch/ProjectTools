@@ -110,7 +110,7 @@ public class GenerateProject : AbstractOption
         // Step 4 - Generate the project!
         Logger logger = new(LogMessage);
         return actualTemplate.GenerateProject(this.ParentOutputDirectory, this.Name, templateToUse.LocalPath, logger,
-            logger, logger);
+            logger, logger, this.Force);
     }
 
     /// <summary>

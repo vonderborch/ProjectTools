@@ -71,12 +71,14 @@ public class AppSettings_1_3_0 : AbstractSettings
         }
 
         var actualCurrentSettings = (AppSettings_1_3_0)currentSettings;
-        AppSettings nextVersion = new(); // TODO: Update this to point to 1.4.0 when 1.5.0 is created..
-        nextVersion.LastTemplatesUpdateCheck = actualCurrentSettings.LastTemplatesUpdateCheck;
-        nextVersion.SecondsBetweenTemplateUpdateChecks = actualCurrentSettings.SecondsBetweenTemplateUpdateChecks;
+        AppSettings_1_4_0 nextVersion = new()
+        {
+            LastTemplatesUpdateCheck = actualCurrentSettings.LastTemplatesUpdateCheck,
+            SecondsBetweenTemplateUpdateChecks = actualCurrentSettings.SecondsBetweenTemplateUpdateChecks,
+            GitSourcesAndAccessTokens = actualCurrentSettings.GitSources,
+            RepositoriesAndGitSources = actualCurrentSettings.RepositoriesList
+        };
 
-        nextVersion.GitSourcesAndAccessTokens = actualCurrentSettings.GitSources;
-        nextVersion.RepositoriesAndGitSources = actualCurrentSettings.RepositoriesList;
         return nextVersion;
     }
 }

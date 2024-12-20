@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
+using ProjectTools.Core.Scripting;
 using ProjectTools.Core.Settings;
-using Python.Runtime;
 
 namespace ProjectTools.Core.Templates;
 
@@ -58,7 +58,31 @@ public class Template : AbstractTemplate
         List<string> instructions = new();
         if (this.PythonScriptPaths.Count > 0)
         {
-            PythonEngine.Initialize();
+            foreach (var scriptPath in this.PythonScriptPaths)
+            {
+                var script = Path.Combine(outputDirectory, scriptPath);
+                try
+                {
+                    commandLogger.Log($"Executing Script {scriptPath}...");
+                    ProcessStartInfo startInfo = new()
+                    {
+                        FileName = PythonManager.Manager.PythonExecutable,
+                        Arguments = $""""{script}"""",
+                        WorkingDirectory = outputDirectory,
+                        UseShellExecute = true
+                    };
+                    Process proc = new()
+                    {
+                        StartInfo = startInfo
+                    };
+                    proc.Start();
+                }
+                catch (Exception e)
+                {
+                    commandLogger.Log($"Error running script {scriptPath}: {e.Message}");
+                    instructions.Add($"Run script: {script}");
+                }
+            }
         }
         else
         {

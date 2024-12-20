@@ -37,7 +37,7 @@ public abstract class AbstractOption
         }
 
         // run updating logic if we are allowed to and need to...
-        var appSettings = AbstractSettings.Load();
+        var appSettings = AbstractSettings.LoadOrThrow();
         if (this.AllowTemplateUpdates && appSettings is { ShouldUpdateTemplates: true })
         {
             var updateTemplates = GetTemplateUpdaterCommandObject();

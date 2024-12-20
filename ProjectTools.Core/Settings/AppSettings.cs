@@ -7,7 +7,7 @@ namespace ProjectTools.Core.Settings;
 /// <summary>
 ///     Settings for the application.
 /// </summary>
-[SettingRegistration(1, 4)]
+[SettingRegistration(1, 5)]
 public class AppSettings : AbstractSettings
 {
     /// <summary>
@@ -19,6 +19,11 @@ public class AppSettings : AbstractSettings
     ///     The last time the template repositories were checked for updates.
     /// </summary>
     public DateTime LastTemplatesUpdateCheck;
+
+    /// <summary>
+    ///     The version of Python being used
+    /// </summary>
+    public string PythonVersion = PythonConstants.PythonVersion;
 
     /// <summary>
     ///     A dictionary representing repositories and their respective git source.

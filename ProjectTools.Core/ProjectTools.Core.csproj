@@ -18,8 +18,22 @@
 
     <ItemGroup>
         <PackageReference Include="Octokit" Version="13.0.1"/>
-        <PackageReference Include="pythonnet" Version="3.1.0-preview2024-09-06"/>
         <PackageReference Include="SharpZipLib" Version="1.4.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="PythonVersions\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-aarch64-apple-darwin-install_only.tar.gz"/>
+        <EmbeddedResource Include="PythonVersions\cpython-3.12.8+20241206-aarch64-apple-darwin-install_only.tar.gz"/>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64-apple-darwin-install_only.tar.gz"/>
+        <EmbeddedResource Include="PythonVersions\cpython-3.12.8+20241206-x86_64-apple-darwin-install_only.tar.gz"/>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64-pc-windows-msvc-shared-install_only.tar.gz"/>
+        <EmbeddedResource Include="PythonVersions\cpython-3.12.8+20241206-x86_64-pc-windows-msvc-shared-install_only.tar.gz"/>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64_v2-unknown-linux-gnu-install_only.tar.gz"/>
+        <EmbeddedResource Include="PythonVersions\cpython-3.12.8+20241206-x86_64_v2-unknown-linux-gnu-install_only.tar.gz"/>
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
+using ProjectTools.Core.Scripting;
 
 namespace ProjectTools.Core.Settings;
 
@@ -27,12 +28,17 @@ public abstract class AbstractSettings
     /// </summary>
     /// <returns>The app settings.</returns>
     /// <exception cref="Exception">Raises if we couldn't load the app settings.</exception>
-    public static AppSettings LoadOrThrow()
+    public static AppSettings LoadOrThrow(bool loadPython = true)
     {
         var appSettings = Load();
         if (appSettings == null)
         {
             throw new Exception("Failed to load app settings.");
+        }
+
+        if (loadPython)
+        {
+            _ = PythonManager.Manager.PythonDirectory;
         }
 
         return appSettings;

@@ -1,5 +1,7 @@
 using System.Text;
 using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.GZip;
+using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using ProjectTools.Core.Constants;
 using ZipFile = System.IO.Compression.ZipFile;
@@ -178,6 +180,23 @@ public static class IOHelpers
         }
 
         return contents;
+    }
+
+    /// <summary>
+    ///     Unzips the tar file.
+    /// </summary>
+    /// <param name="archiveFile">The archive file.</param>
+    /// <param name="outputDirectory">The output directory.</param>
+    public static void DecompressTarball(Stream archiveFile, string outputDirectory)
+    {
+        CreateDirectoryIfNotExists(outputDirectory);
+        Stream gzipStream = new GZipInputStream(archiveFile);
+
+        var tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+        tarArchive.ExtractContents(outputDirectory);
+        tarArchive.Close();
+
+        gzipStream.Close();
     }
 
     /// <summary>
