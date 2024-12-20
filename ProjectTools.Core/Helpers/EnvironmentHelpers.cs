@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using ProjectTools.Core.Constants;
 
 namespace ProjectTools.Core.Helpers;
 
@@ -16,10 +17,10 @@ public static class EnvironmentHelpers
         Architecture = RuntimeInformation.OSArchitecture;
 
         var foundOs = false;
-        var oses = Enum.GetValues(typeof(OSPlatform));
+        var oses = PythonConstants.PythonInfo.Keys;
         foreach (var os in oses)
         {
-            if (RuntimeInformation.IsOSPlatform((OSPlatform)os))
+            if (RuntimeInformation.IsOSPlatform(os))
             {
                 OS = (OSPlatform)os;
                 foundOs = true;

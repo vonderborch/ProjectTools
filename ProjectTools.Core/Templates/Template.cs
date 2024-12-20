@@ -80,7 +80,9 @@ public class Template : AbstractTemplate
                         FileName = PythonManager.Manager.PythonExecutable,
                         Arguments = $""""{script}"""",
                         WorkingDirectory = outputDirectory,
-                        UseShellExecute = true
+                        UseShellExecute = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
                     };
                     Process proc = new()
                     {
