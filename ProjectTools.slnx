@@ -1,0 +1,12 @@
+﻿<Solution>
+  <Folder Name="/SolutionFiles/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="ConsoleCommands.md" />
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="ProjectTools.App\ProjectTools.App.csproj" Type="Classic C#" />
+  <Project Path="ProjectTools.CL\ProjectTools.CL.csproj" Type="Classic C#" />
+  <Project Path="ProjectTools.Core\ProjectTools.Core.csproj" Type="Classic C#" />
+</Solution>

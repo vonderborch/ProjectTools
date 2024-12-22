@@ -1,0 +1,202 @@
+using System.Reflection;
+using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
+using ProjectTools.Core.TemplateBuilders;
+using ProjectTools.Core.Templates;
+
+namespace ProjectTools.Core;
+
+/// <summary>
+///     A class for templating a directory.
+/// </summary>
+public class Preparer
+{
+    /// <summary>
+    ///     The available template builders.
+    /// </summary>
+    private readonly List<AbstractTemplateBuilder> _availableTemplateBuilders;
+
+    /// <summary>
+    ///     Constructs a new instance of <see cref="Preparer" />.
+    /// </summary>
+    public Preparer()
+    {
+        this._availableTemplateBuilders = new List<AbstractTemplateBuilder>();
+    }
+
+    /// <summary>
+    ///     Gets all template builders.
+    /// </summary>
+    /// <param name="forceRefresh">True to force refresh, False otherwise.</param>
+    /// <returns>All available template builders.</returns>
+    public List<AbstractTemplateBuilder> GetTemplateBuilders(bool forceRefresh = false)
+    {
+        if (this._availableTemplateBuilders.Count > 0 && !forceRefresh)
+        {
+            return this._availableTemplateBuilders;
+        }
+
+        // Step 1 - Grab built-in template builders
+        var assembly = Assembly.GetExecutingAssembly();
+        var types = assembly.GetTypes();
+
+        var builtInTemplateBuilders =
+            types.Where(t => t is { IsClass: true, IsAbstract: false } && t.BaseType == typeof(AbstractTemplateBuilder))
+                .ToList();
+        foreach (var templater in builtInTemplateBuilders)
+        {
+            this._availableTemplateBuilders.Add((AbstractTemplateBuilder)Activator.CreateInstance(templater));
+        }
+
+        // Step 2 - Grab template builders plugins
+        // TODO: Implement template builders plugins
+
+        return this._availableTemplateBuilders;
+    }
+
+    /// <summary>
+    ///     Generates a template from the specified directory.
+    /// </summary>
+    /// <param name="pathToDirectory">The path to the directory.</param>
+    /// <param name="outputDirectory">The output directory.</param>
+    /// <param name="skipCleaning">Whether to skip cleaning or not.</param>
+    /// <param name="forceOverride">Whether to delete any existing template or not.</param>
+    /// <param name="template">The template info.</param>
+    /// <param name="coreLogger">The core logger.</param>
+    /// <returns>The results of the template prep process.</returns>
+    public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
+        bool forceOverride, PreparationTemplate template, Logger coreLogger)
+    {
+        var outputTempDirectory = Path.Combine(outputDirectory, template.SafeName);
+        var outputFile =
+            Path.Combine(outputDirectory, $"{template.SafeName}.{TemplateConstants.TemplateFileExtension}");
+
+        // Step 1 - Cleanup directories/files
+        coreLogger.Log("Step 1/6 - Cleaning existing directories and files...");
+        if (!IOHelpers.CleanDirectory(outputTempDirectory, forceOverride))
+        {
+            return "Directory already exists and force override is not enabled.";
+        }
+
+        if (!IOHelpers.CleanFile(outputFile, forceOverride))
+        {
+            return "Output file already exists and force override is not enabled.";
+        }
+
+        // Step 2 - Copy the directory we are trying to template to the output directory
+        coreLogger.Log("Step 2/6 - Copying directory to temp directory...");
+        IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, template.PrepareExcludedPaths);
+
+        // Step 3 - Go through the slugs and replace all instances of the search terms with the slug key
+        coreLogger.Log("Step 3/6 - Templatizing directory...");
+        UpdateFileSystemEntries(outputTempDirectory, outputTempDirectory, template, false);
+
+        // Step 4 - Create the template info file
+        coreLogger.Log("Step 4/6 - Creating template settings file...");
+        var outputTemplateInfoFile = Path.Combine(outputTempDirectory, TemplateConstants.TemplateSettingsFileName);
+        JsonHelpers.SerializeToFile(outputTemplateInfoFile, template.ToTemplate());
+
+        // Step 5 - Convert the template directory to a zip file
+        coreLogger.Log("Step 5/6 - Archiving directory...");
+        IOHelpers.ArchiveDirectory(outputTempDirectory, outputFile, skipCleaning);
+
+        // Step 6 - DONE
+        coreLogger.Log("Step 6/6 - Cleaning directory...");
+        if (!skipCleaning)
+        {
+            IOHelpers.CleanDirectory(outputTempDirectory, true);
+        }
+
+        coreLogger.Log("Success!");
+        return "";
+    }
+
+    /// <summary>
+    ///     Updates the directory files per the template and replacement text.
+    /// </summary>
+    /// <param name="directory">The directory to update.</param>
+    /// <param name="rootDirectory">The root output directory.</param>
+    /// <param name="template">The template.</param>
+    /// <param name="isRenameOnlyPath">Whether we're already in a rename-only path or not.</param>
+    private void UpdateFileSystemEntries(string directory, string rootDirectory, PreparationTemplate template,
+        bool isRenameOnlyPath)
+    {
+        var fileSystemEntries = Directory.GetFileSystemEntries(directory);
+        foreach (var entry in fileSystemEntries)
+        {
+            var baseEntryName = Path.GetFileName(entry);
+            var entryActualName = UpdateText(baseEntryName, template.ReplacementText);
+            if (entryActualName == "logo.png")
+            {
+                var test = true;
+            }
+
+            var actualPath = Path.Combine(Path.GetDirectoryName(entry) ?? string.Empty, entryActualName);
+            var entryIsRenameOnlyPath =
+                PathHelpers.PathIsInList(actualPath, rootDirectory, template.RenameOnlyPaths, true, true);
+
+            isRenameOnlyPath = isRenameOnlyPath || entryIsRenameOnlyPath;
+
+            // Handle directories
+            if (Directory.Exists(entry))
+            {
+                // if the base name doesn't match the actual name, we need to rename the directory...
+                if (baseEntryName != entryActualName)
+                {
+                    if (Directory.Exists(actualPath))
+                    {
+                        throw new Exception($"Path `{actualPath}` already exists for renamed path `{entry}`!");
+                    }
+
+                    Directory.Move(entry, actualPath);
+                }
+
+                // then we update the sub-directory!
+                UpdateFileSystemEntries(actualPath, rootDirectory, template, isRenameOnlyPath);
+            }
+            // Handle files
+            else
+            {
+                // if the base name doesn't match the actual name, we need to rename the file...
+                if (baseEntryName != entryActualName)
+                {
+                    if (File.Exists(actualPath))
+                    {
+                        throw new Exception($"Path `{actualPath}` already exists for renamed path `{entry}`!");
+                    }
+
+                    File.Move(entry, actualPath);
+                }
+
+                if (!isRenameOnlyPath)
+                {
+                    var inputLines = File.ReadAllLines(actualPath);
+                    List<string> outputLines = new();
+                    foreach (var line in inputLines)
+                    {
+                        var updatedLine = UpdateText(line, template.ReplacementText);
+                        outputLines.Add(updatedLine);
+                    }
+
+                    File.WriteAllLines(actualPath, outputLines);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Updates the specified text with all instances of the replacementText dict.
+    /// </summary>
+    /// <param name="text">The base text.</param>
+    /// <param name="replacementText">Keys to search for and replace with the specified values.</param>
+    /// <returns>The updated text.</returns>
+    private string UpdateText(string text, Dictionary<string, string> replacementText)
+    {
+        foreach (var (key, value) in replacementText)
+        {
+            text = text.Replace(key, value);
+        }
+
+        return text;
+    }
+}
