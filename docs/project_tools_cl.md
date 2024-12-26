@@ -19,18 +19,29 @@
 
 #### Parameters
 
-| Name                    | Short Name | Is Required | Default Value | Type   | Description                                            |
-|-------------------------|------------|-------------|---------------|--------|--------------------------------------------------------|
-| force                   | f          | false       | false         | bool   | Overrides the existing directory if it already exists. |
-| parent-output-directory | o          | true        |               | string | The parent output directory for the new solution.      |
-| template                | t          | false       | tr            | bool   | Overrides the existing directory if it already exists. |
-| force                   | f          | false       | false         | bool   | Overrides the existing directory if it already exists. |
-| force                   | f          | false       | false         | bool   | Overrides the existing directory if it already exists. |
+| Name                    | Short Name | Is Required | Default Value | Type   | Description                                                                                                |
+|-------------------------|------------|-------------|---------------|--------|------------------------------------------------------------------------------------------------------------|
+| force                   | f          | false       | false         | bool   | Overrides the existing directory if it already exists.                                                     |
+| parent-output-directory | o          | true        |               | string | The parent output directory for the new solution.                                                          |
+| template                | t          | true        |               | string | The template to use.                                                                                       |
+| name                    | n          | true        |               | string | The name of the project.                                                                                   |
+| generate-project-config | c          | false       |               | string | The specific generate project configuration file to use.                                                   |
+| what-if                 | i          | false       | false         | bool   | If flag is provided, the solution will not be generated, but the user will be guided through all settings. |
+| remove-existing-config  | r          | false       | false         | bool   | If flag is provided, we will delete the existing project generation config file before execute anything.   |
 
-#### Example Commands
+### prepare
 
-```bash
-generate -f
-```
+#### Parameters
+
+| Name                    | Short Name | Is Required | Default Value | Type   | Description                                                                                                |
+|-------------------------|------------|-------------|---------------|--------|------------------------------------------------------------------------------------------------------------|
+| force                   | f          | false       | false         | bool   | If flag is provided, any existing template will be overriden.                                              |
+| parent-output-directory | o          | true        |               | string | The parent output directory for the new solution.                                                          |
+| template                | t          | true        |               | string | The template to use.                                                                                       |
+| name                    | n          | true        |               | string | The name of the project.                                                                                   |
+| generate-project-config | c          | false       |               | string | The specific generate project configuration file to use.                                                   |
+| what-if                 | i          | false       | false         | bool   | If flag is provided, the solution will not be generated, but the user will be guided through all settings. |
+| remove-existing-config  | r          | false       | false         | bool   | If flag is provided, we will delete the existing project generation config file before execute anything.   |
+
 
 WIP
