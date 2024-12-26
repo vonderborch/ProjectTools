@@ -14,7 +14,7 @@ namespace ProjectTools.CL.Options;
 /// </summary>
 /// <seealso cref="AbstractOption" />
 [Verb("prepare", HelpText = "Prepare a template")]
-[MenuMetadata(7)]
+[MenuMetadata(80)]
 public class PrepareTemplate : AbstractOption
 {
     /// <summary>

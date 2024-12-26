@@ -154,7 +154,8 @@ public class Menu
 
     private string GetCommandLineArgsForMenuItem(string menuItem)
     {
-        return $"{menuItem} {this.MenuItemsAdditionalArgs[menuItem]}";
+        var args = this.MenuItemsAdditionalArgs[menuItem];
+        return string.IsNullOrWhiteSpace(args) ? menuItem : $"{menuItem} {args}";
     }
 
     /// <summary>

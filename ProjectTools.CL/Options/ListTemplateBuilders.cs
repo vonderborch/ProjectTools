@@ -9,7 +9,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to get information about the program with.
 /// </summary>
 [Verb("list-template-builders", HelpText = "Get information about what template builders are available.")]
-[MenuMetadata(5)]
+[MenuMetadata(21)]
 public class ListTemplateBuilders : AbstractOption
 {
     /// <summary>

@@ -19,7 +19,7 @@ public class About : AbstractOption
     /// <returns>The result.</returns>
     public override string Execute()
     {
-        Console.WriteLine("Program: ProjectTools");
+        Console.WriteLine($"Program: {AppConstants.AppNameCommandLine}");
         Console.WriteLine(
             $"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}");
         Console.WriteLine($"Core Version: {AppConstants.CoreVersion}");

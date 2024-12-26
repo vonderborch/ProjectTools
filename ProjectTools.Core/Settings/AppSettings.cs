@@ -7,13 +7,18 @@ namespace ProjectTools.Core.Settings;
 /// <summary>
 ///     Settings for the application.
 /// </summary>
-[SettingRegistration(1, 5)]
+[SettingRegistration(1, 6)]
 public class AppSettings : AbstractSettings
 {
     /// <summary>
     ///     The git sources and their access tokens.
     /// </summary>
     public Dictionary<string, string> GitSourcesAndAccessTokens;
+
+    /// <summary>
+    ///     The last time the app was checked for updates.
+    /// </summary>
+    public Dictionary<string, DateTime> LastAppUpdateCheck;
 
     /// <summary>
     ///     The last time the template repositories were checked for updates.
@@ -31,6 +36,11 @@ public class AppSettings : AbstractSettings
     public Dictionary<string, string> RepositoriesAndGitSources;
 
     /// <summary>
+    ///     The seconds between app update checks.
+    /// </summary>
+    public int SecondsBetweenAppUpdateChecks = 86400;
+
+    /// <summary>
     ///     The seconds between template update checks
     /// </summary>
     public int SecondsBetweenTemplateUpdateChecks = 86400;
@@ -43,6 +53,11 @@ public class AppSettings : AbstractSettings
         this.GitSourcesAndAccessTokens = [];
         this.RepositoriesAndGitSources = [];
         this.LastTemplatesUpdateCheck = DateTime.MinValue;
+        this.LastAppUpdateCheck = new Dictionary<string, DateTime>
+        {
+            { AppConstants.AppNameCommandLine, DateTime.MinValue },
+            { AppConstants.AppNameGui, DateTime.MinValue }
+        };
     }
 
     /// <summary>
@@ -68,6 +83,21 @@ public class AppSettings : AbstractSettings
     {
         var settings = JsonHelpers.DeserializeFromFile<AppSettings>(AppSettingsConstants.SettingsFilePath);
         return settings;
+    }
+
+    /// <summary>
+    ///     Gets a value indicating whether we should check for app updates.
+    /// </summary>
+    /// <param name="appName">The app name to check.</param>
+    /// <returns>True if we should check for updates, False otherwise.</returns>
+    public bool ShouldCheckForAppUpdates(string appName)
+    {
+        if (this.LastAppUpdateCheck.TryGetValue(appName, out var lastCheck))
+        {
+            return (DateTime.Now - lastCheck).TotalSeconds > this.SecondsBetweenAppUpdateChecks;
+        }
+
+        return true;
     }
 
     /// <summary>

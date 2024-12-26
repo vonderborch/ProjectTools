@@ -14,6 +14,12 @@ public abstract class AbstractOption
     protected bool AllowAutoConfiguration { get; set; } = true;
 
     /// <summary>
+    ///     Gets or sets a value indicating whether [allow app updates].
+    /// </summary>
+    protected bool AllowAppUpdates { get; set; } = true;
+
+    /// <value><c>true</c> if [allow app updates]; otherwise, <c>false</c>.</value>
+    /// <summary>
     ///     Gets or sets a value indicating whether [allow template updates].
     /// </summary>
     /// <value><c>true</c> if [allow template updates]; otherwise, <c>false</c>.</value>
@@ -36,8 +42,15 @@ public abstract class AbstractOption
             configure.Execute();
         }
 
-        // run updating logic if we are allowed to and need to...
         var appSettings = AbstractSettings.LoadOrThrow();
+
+        if (this.AllowAppUpdates)
+        {
+            var updator = new CheckForUpdates();
+            updator.Execute();
+        }
+
+        // run updating logic if we are allowed to and need to...
         if (this.AllowTemplateUpdates && appSettings is { ShouldUpdateTemplates: true })
         {
             var updateTemplates = GetTemplateUpdaterCommandObject();

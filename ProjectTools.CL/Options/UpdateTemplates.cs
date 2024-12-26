@@ -10,7 +10,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to get information about the program with.
 /// </summary>
 [Verb("update-templates", HelpText = "Lists all templates available to use.")]
-[MenuMetadata(4, "-f")]
+[MenuMetadata(20, "-f")]
 public class UpdateTemplates : SilenceAbleAbstractOption
 {
     /// <summary>

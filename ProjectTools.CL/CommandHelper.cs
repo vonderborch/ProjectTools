@@ -73,7 +73,7 @@ public class CommandHelper
             }
         }
 
-        rootCommands.Sort((x, y) => x.Item3.Priority > y.Item3.Priority ? -1 : 1);
+        rootCommands.Sort((x, y) => y.Item3.Priority.CompareTo(x.Item3.Priority));
         return rootCommands;
     }
 
@@ -100,6 +100,10 @@ public class CommandHelper
         }
     }
 
+    /// <summary>
+    ///     Runs the command.
+    /// </summary>
+    /// <param name="obj">The command to execute.</param>
     private void Run(object obj)
     {
         var options = (AbstractOption)obj;
@@ -112,6 +116,10 @@ public class CommandHelper
         }
     }
 
+    /// <summary>
+    ///     Displays the menu to the user.
+    /// </summary>
+    /// <returns>The selected menu item and any arguments.</returns>
     public string DisplayMenu()
     {
         var commands = GetAvailableRootCommandsAndHelpText();

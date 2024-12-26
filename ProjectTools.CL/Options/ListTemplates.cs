@@ -9,7 +9,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to list available templates.
 /// </summary>
 [Verb("list-templates", HelpText = "Lists all templates available to use.")]
-[MenuMetadata(6)]
+[MenuMetadata(30)]
 public class ListTemplates : AbstractOption
 {
     /// <summary>
