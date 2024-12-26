@@ -69,6 +69,11 @@ public class DebugCommands
 
     public string[] GetArgumentsForCommandToRun(string rootCommand, string specificCommand)
     {
+        if (string.IsNullOrEmpty(rootCommand))
+        {
+            return [];
+        }
+
         if (!this._commands.ContainsKey(rootCommand))
         {
             throw new ArgumentException($"Invalid root command: {rootCommand}");

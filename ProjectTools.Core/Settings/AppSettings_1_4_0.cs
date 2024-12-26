@@ -61,7 +61,7 @@ public class AppSettings_1_4_0 : AbstractSettings
     /// <returns>The loaded settings class.</returns>
     public new static AbstractSettings? LoadVersion()
     {
-        var settings = JsonHelpers.DeserializeFromFile<AppSettings>(AppSettingsConstants.SettingsFilePath);
+        var settings = JsonHelpers.DeserializeFromFile<AppSettings_1_4_0>(AppSettingsConstants.SettingsFilePath);
         return settings;
     }
 

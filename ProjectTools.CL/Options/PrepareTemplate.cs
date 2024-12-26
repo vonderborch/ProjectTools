@@ -1,5 +1,6 @@
 using CommandLine;
 using ProjectTools.CL.Helpers;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
@@ -13,6 +14,7 @@ namespace ProjectTools.CL.Options;
 /// </summary>
 /// <seealso cref="AbstractOption" />
 [Verb("prepare", HelpText = "Prepare a template")]
+[MenuMetadata(7)]
 public class PrepareTemplate : AbstractOption
 {
     /// <summary>

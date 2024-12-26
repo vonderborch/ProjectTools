@@ -1,6 +1,7 @@
 using System.Web;
 using CommandLine;
 using ProjectTools.CL.Helpers;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core.Constants;
 
 namespace ProjectTools.CL.Options;
@@ -9,6 +10,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to report an issue with the program.
 /// </summary>
 [Verb("report-issue", HelpText = "Report an issue with the program")]
+[MenuMetadata(1)]
 public class ReportIssue : SilenceAbleAbstractOption
 {
     /// <summary>

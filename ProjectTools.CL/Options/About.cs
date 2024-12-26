@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using CommandLine;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core.Constants;
 
 namespace ProjectTools.CL.Options;
@@ -9,6 +10,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to get information about the program with.
 /// </summary>
 [Verb("about", HelpText = "Get information about the program.")]
+[MenuMetadata(0)]
 public class About : AbstractOption
 {
     /// <summary>

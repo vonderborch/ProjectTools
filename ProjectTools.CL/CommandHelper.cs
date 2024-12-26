@@ -1,5 +1,6 @@
 using System.Reflection;
 using CommandLine;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.CL.Options;
 
 namespace ProjectTools.CL;
@@ -55,6 +56,28 @@ public class CommandHelper
     }
 
     /// <summary>
+    ///     Finds the available root commands and their help text.
+    /// </summary>
+    /// <returns>The available root commands and their help text.</returns>
+    public List<(string, string, MenuMetadata)> GetAvailableRootCommandsAndHelpText()
+    {
+        var rootCommands = new List<(string, string, MenuMetadata)>();
+
+        foreach (var option in GetTypes())
+        {
+            var verbAttribute = (VerbAttribute)option.GetCustomAttribute(typeof(VerbAttribute), false);
+            var menuMetadata = (MenuMetadata)option.GetCustomAttribute(typeof(MenuMetadata), false);
+            if (verbAttribute != null && menuMetadata != null)
+            {
+                rootCommands.Add((verbAttribute.Name, verbAttribute.HelpText, menuMetadata));
+            }
+        }
+
+        rootCommands.Sort((x, y) => x.Item3.Priority > y.Item3.Priority ? -1 : 1);
+        return rootCommands;
+    }
+
+    /// <summary>
     ///     Parses the provided arguments and executes the appropriate command.
     /// </summary>
     /// <param name="args">The command line arguments.</param>
@@ -70,6 +93,11 @@ public class CommandHelper
     /// </summary>
     private static void HandleErrors(IEnumerable<Error> obj)
     {
+        Console.WriteLine("Errors while executing command:");
+        foreach (var error in obj)
+        {
+            Console.WriteLine(error.ToString());
+        }
     }
 
     private void Run(object obj)
@@ -82,5 +110,16 @@ public class CommandHelper
         {
             Console.WriteLine(result);
         }
+    }
+
+    public string DisplayMenu()
+    {
+        var commands = GetAvailableRootCommandsAndHelpText();
+        var menuCommands = commands.Select(s => s.Item1).ToList();
+        var menuHelpText = commands.Select(s => s.Item2).ToList();
+        var menuAdditionalArgs = commands.Select(s => s.Item3.AdditionalArgs).ToList();
+
+        var menu = new Menu("Project Tools", "Main Menu", menuCommands, menuHelpText, menuAdditionalArgs);
+        return menu.DisplayMenu();
     }
 }
