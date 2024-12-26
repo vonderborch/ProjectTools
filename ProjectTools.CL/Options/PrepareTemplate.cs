@@ -13,7 +13,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to prepare a project/solution directory as a template
 /// </summary>
 /// <seealso cref="AbstractOption" />
-[Verb("prepare", HelpText = "Prepare a template")]
+[Verb("prepare", HelpText = "Prepare a template.")]
 [MenuMetadata(80)]
 public class PrepareTemplate : AbstractOption
 {

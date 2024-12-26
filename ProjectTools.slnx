@@ -1,4 +1,9 @@
 ﻿<Solution>
+  <Folder Name="/Docs/">
+    <File Path="docs\home.md" />
+    <File Path="docs\project_tools_app.md" />
+    <File Path="docs\project_tools_cl.md" />
+  </Folder>
   <Folder Name="/SolutionFiles/">
     <File Path=".gitattributes" />
     <File Path=".gitignore" />

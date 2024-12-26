@@ -9,7 +9,7 @@ namespace ProjectTools.CL.Options;
 /// <summary>
 ///     An option that is used to configure the application settings.
 /// </summary>
-[Verb("configure", HelpText = "Configure application settings")]
+[Verb("configure", HelpText = "Configure application settings.")]
 [MenuMetadata(11)]
 public class Configure : AbstractOption
 {

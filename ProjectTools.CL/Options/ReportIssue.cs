@@ -9,7 +9,7 @@ namespace ProjectTools.CL.Options;
 /// <summary>
 ///     A command to report an issue with the program.
 /// </summary>
-[Verb("report-issue", HelpText = "Report an issue with the program")]
+[Verb("report-issue", HelpText = "Report an issue with the program.")]
 [MenuMetadata(1)]
 public class ReportIssue : SilenceAbleAbstractOption
 {

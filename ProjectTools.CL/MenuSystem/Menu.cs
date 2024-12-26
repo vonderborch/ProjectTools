@@ -29,7 +29,7 @@ public class Menu
         if (includeExit)
         {
             this.MenuItems.Add("EXIT");
-            menuHelpText.Add("Exits the program");
+            menuHelpText.Add("Exits the program.");
             menuItemsAdditionalArgs.Add("");
         }
 
