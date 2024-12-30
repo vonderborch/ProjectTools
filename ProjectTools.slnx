@@ -1,10 +1,20 @@
 ﻿<Solution>
+  <Folder Name="/Docs/">
+    <File Path="docs\home.md" />
+    <File Path="docs\project_tools_app.md" />
+    <File Path="docs\project_tools_cl.md" />
+  </Folder>
   <Folder Name="/SolutionFiles/">
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path="ConsoleCommands.md" />
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Templates/">
+    <File Path="Templates\TEMPLATES\Velentr.BASE.ptt" />
+    <File Path="Templates\TEMPLATES\Velentr.DUAL_SUPPORT.ptt" />
+    <File Path="Templates\TEMPLATES\Velentr.DUAL_SUPPORT_WITH_GENERIC.ptt" />
   </Folder>
   <Project Path="ProjectTools.App\ProjectTools.App.csproj" Type="Classic C#" />
   <Project Path="ProjectTools.CL\ProjectTools.CL.csproj" Type="Classic C#" />

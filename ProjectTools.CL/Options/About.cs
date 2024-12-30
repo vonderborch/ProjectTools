@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using CommandLine;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core.Constants;
 
 namespace ProjectTools.CL.Options;
@@ -9,6 +10,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to get information about the program with.
 /// </summary>
 [Verb("about", HelpText = "Get information about the program.")]
+[MenuMetadata(0)]
 public class About : AbstractOption
 {
     /// <summary>
@@ -17,7 +19,7 @@ public class About : AbstractOption
     /// <returns>The result.</returns>
     public override string Execute()
     {
-        Console.WriteLine("Program: ProjectTools");
+        Console.WriteLine($"Program: {AppConstants.AppNameCommandLine}");
         Console.WriteLine(
             $"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}");
         Console.WriteLine($"Core Version: {AppConstants.CoreVersion}");

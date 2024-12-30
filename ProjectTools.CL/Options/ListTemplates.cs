@@ -1,5 +1,6 @@
 using System.Text;
 using CommandLine;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core;
 
 namespace ProjectTools.CL.Options;
@@ -8,6 +9,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to list available templates.
 /// </summary>
 [Verb("list-templates", HelpText = "Lists all templates available to use.")]
+[MenuMetadata(30)]
 public class ListTemplates : AbstractOption
 {
     /// <summary>

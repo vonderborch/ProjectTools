@@ -1,5 +1,6 @@
 using CommandLine;
 using ProjectTools.CL.Helpers;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core;
 using ProjectTools.Core.TemplateRepositories;
 
@@ -8,7 +9,9 @@ namespace ProjectTools.CL.Options;
 /// <summary>
 ///     A command to get information about the program with.
 /// </summary>
-[Verb("update-templates", HelpText = "Lists all templates available to use.")]
+[Verb("update-templates",
+    HelpText = "Checks for any new or updated templates at the configured template repositories.")]
+[MenuMetadata(20, "-f")]
 public class UpdateTemplates : SilenceAbleAbstractOption
 {
     /// <summary>
@@ -29,7 +32,7 @@ public class UpdateTemplates : SilenceAbleAbstractOption
     /// <summary>
     ///     A flag indicating whether to force re-download all templates.
     /// </summary>
-    [Option('u', "force-redownload", Required = false, Default = false,
+    [Option('r', "force-redownload", Required = false, Default = false,
         HelpText = "If flag is provided, the program will force all templates to re-download.")]
     public bool ForceRedownload { get; set; }
 

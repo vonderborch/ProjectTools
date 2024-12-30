@@ -1,5 +1,6 @@
 using System.Text;
 using CommandLine;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core;
 
 namespace ProjectTools.CL.Options;
@@ -7,7 +8,9 @@ namespace ProjectTools.CL.Options;
 /// <summary>
 ///     A command to get information about the program with.
 /// </summary>
-[Verb("list-template-builders", HelpText = "Get information about what template builders are available.")]
+[Verb("list-template-builders",
+    HelpText = "Get information about what template builders are available to use when preparing templates.")]
+[MenuMetadata(21)]
 public class ListTemplateBuilders : AbstractOption
 {
     /// <summary>

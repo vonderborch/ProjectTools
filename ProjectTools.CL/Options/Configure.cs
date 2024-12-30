@@ -1,5 +1,6 @@
 using CommandLine;
 using ProjectTools.CL.Helpers;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Settings;
 
@@ -8,7 +9,8 @@ namespace ProjectTools.CL.Options;
 /// <summary>
 ///     An option that is used to configure the application settings.
 /// </summary>
-[Verb("configure", HelpText = "Configure application settings")]
+[Verb("configure", HelpText = "Configure application settings.")]
+[MenuMetadata(11)]
 public class Configure : AbstractOption
 {
     /// <summary>

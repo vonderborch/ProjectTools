@@ -1,5 +1,6 @@
 using CommandLine;
 using ProjectTools.CL.Helpers;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
@@ -11,6 +12,7 @@ namespace ProjectTools.CL.Options;
 ///     A command line option to generate a new project from a template.
 /// </summary>
 [Verb("generate", HelpText = "Generate a new project from a template")]
+[MenuMetadata(99)]
 public class GenerateProject : AbstractOption
 {
     /// <summary>
@@ -29,19 +31,19 @@ public class GenerateProject : AbstractOption
     ///     Gets or sets the parent output directory.
     /// </summary>
     [Option('o', "parent-output-directory", Required = true,
-        HelpText = "The parent output directory for the new solution")]
+        HelpText = "The parent output directory for the new solution.")]
     public string ParentOutputDirectory { get; set; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the template to use.
     /// </summary>
-    [Option('t', "template", Required = true, HelpText = "The template to use")]
+    [Option('t', "template", Required = true, HelpText = "The template to use.")]
     public string Template { get; set; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the name of the new project.
     /// </summary>
-    [Option('n', "name", Required = true, HelpText = "The name of the project")]
+    [Option('n', "name", Required = true, HelpText = "The name of the project.")]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>

@@ -1,27 +1,29 @@
 using System.Web;
 using CommandLine;
 using ProjectTools.CL.Helpers;
+using ProjectTools.CL.MenuSystem;
 using ProjectTools.CL.Options;
 using ProjectTools.Core.Constants;
 
 /// <summary>
 ///     A command to make a suggestion for the program with.
 /// </summary>
-[Verb("suggestion", HelpText = "Make a suggestion for the program")]
+[Verb("suggestion", HelpText = "Make a suggestion for the program.")]
+[MenuMetadata(2)]
 public class MakeSuggestion : SilenceAbleAbstractOption
 {
     /// <summary>
     ///     Gets or sets the description of the suggestion.
     /// </summary>
     /// <value>The description.</value>
-    [Option('d', "description", Required = false, HelpText = "The description of the new feature or functionality")]
+    [Option('d', "description", Required = false, HelpText = "The description of the new feature or functionality.")]
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the title of the suggestion.
     /// </summary>
     /// <value>The title.</value>
-    [Option('t', "title", Required = false, HelpText = "The title of the new feature or functionality")]
+    [Option('t', "title", Required = false, HelpText = "The title of the new feature or functionality.")]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
