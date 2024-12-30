@@ -1,16 +1,16 @@
 using CommandLine;
-using ProjectTools.CL.Helpers;
 using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 
 namespace ProjectTools.CL.Options;
 
 /// <summary>
 ///     A command to report an issue with the program.
 /// </summary>
-[Verb("wiki", HelpText = "Go to the wiki for instructions on the program.")]
+[Verb("documentation", HelpText = "Go to the wiki for documentation on the program.")]
 [MenuMetadata(1)]
-public class GoToWiki : AbstractOption
+public class Documentation : AbstractOption
 {
     /// <summary>
     ///     Executes the option.
@@ -22,7 +22,7 @@ public class GoToWiki : AbstractOption
 
         // Report issue
         LogMessage("Opening browser to the wiki...");
-        UrlHelpers.OpenUrl(url, $"Please go to {url} to file a bug!");
+        UrlHelpers.OpenUrl(url, $"Please go to {url} to open the wiki!");
 
         return string.Empty;
     }

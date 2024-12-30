@@ -3,6 +3,7 @@ using CommandLine;
 using ProjectTools.CL.Helpers;
 using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 
 namespace ProjectTools.CL.Options;
 

@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="60"
+             x:Class="ProjectTools.App.Views.ControlPanel">
+
+    <DockPanel Margin="2">
+        <Button Content="Home" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" Click="ButtonHome_Click" />
+        <Button Content="Generate Project" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
+        <Button Content="Prepare Template" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
+        <Button Content="Configuration" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
+        <Button Content="Help" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" Click="ButtonHelp_Click" />
+        <Button Content="Exit" HorizontalAlignment="Right" VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" Click="ButtonExit_Click" />
+    </DockPanel>
+</UserControl>

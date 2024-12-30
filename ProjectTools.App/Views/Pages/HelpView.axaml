@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="390"
+             x:Class="ProjectTools.App.Views.Pages.HelpView">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="2">
+            <Button Content="About" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" Click="ButtonAbout_Click" />
+            <Button Content="Make Suggestion" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" Click="ButtonMakeSuggestion_Click" />
+            <Button Content="Report Issue" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" Click="ButtonReportIssue_Click" />
+            <Button Content="Documentation" VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" Click="ButtonDocumentation_Click" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Column="1" Name="SubViewer" />
+    </Grid>
+</UserControl>

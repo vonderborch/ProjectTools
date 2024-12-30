@@ -4,6 +4,7 @@ using ProjectTools.CL.Helpers;
 using ProjectTools.CL.MenuSystem;
 using ProjectTools.CL.Options;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 
 /// <summary>
 ///     A command to make a suggestion for the program with.

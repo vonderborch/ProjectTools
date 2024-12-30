@@ -16,7 +16,7 @@ public class AppUpdator
     /// <param name="forceCheck">True to force the check, False otherwise.</param>
     /// <returns>True if there is an update, False if there is not.</returns>
     /// <exception cref="Exception">If an issue occurred while checking for application updates.</exception>
-    public bool CheckForUpdates(string appName, bool forceCheck)
+    public (string, bool) CheckForUpdates(string appName, bool forceCheck)
     {
         var appSettings = AbstractSettings.LoadOrThrow();
         if (forceCheck || appSettings.ShouldCheckForAppUpdates(appName))
@@ -41,10 +41,10 @@ public class AppUpdator
             appSettings.LastAppUpdateCheck[appName] = DateTime.Now;
             if (latestRelease.TagName != AppConstants.CoreVersion)
             {
-                return true;
+                return (latestRelease.TagName, true);
             }
         }
 
-        return false;
+        return (string.Empty, false);
     }
 }
