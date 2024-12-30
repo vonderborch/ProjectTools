@@ -13,7 +13,7 @@ namespace ProjectTools.CL.Options;
 ///     A command to prepare a project/solution directory as a template
 /// </summary>
 /// <seealso cref="AbstractOption" />
-[Verb("prepare", HelpText = "Prepare a template.")]
+[Verb("prepare", HelpText = "Prepare a new template.")]
 [MenuMetadata(80)]
 public class PrepareTemplate : AbstractOption
 {
@@ -66,8 +66,8 @@ public class PrepareTemplate : AbstractOption
     /// <summary>
     ///     Gets or sets the template builder to use with the solution.
     /// </summary>
-    [Option('t', "type", Required = false, Default = "auto",
-        HelpText = "The type of the solution to prepare. Defaults to auto.")]
+    [Option('t', "template-builder", Required = false, Default = "auto",
+        HelpText = "The type of template builder to use get prepare the template. Defaults to auto.")]
     public string TemplateBuilder { get; set; } = "auto";
 
     /// <summary>

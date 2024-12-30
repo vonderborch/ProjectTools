@@ -17,14 +17,14 @@ public class ReportIssue : SilenceAbleAbstractOption
     ///     Gets or sets the description of the issue.
     /// </summary>
     /// <value>The description.</value>
-    [Option('d', "description", Required = false, HelpText = "The description of the issue")]
+    [Option('d', "description", Required = false, HelpText = "The description of the issue.")]
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the title of the issue.
     /// </summary>
     /// <value>The title.</value>
-    [Option('t', "title", Required = false, HelpText = "The title of the issue")]
+    [Option('t', "title", Required = false, HelpText = "The title of the issue.")]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>

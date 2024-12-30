@@ -16,14 +16,14 @@ public class MakeSuggestion : SilenceAbleAbstractOption
     ///     Gets or sets the description of the suggestion.
     /// </summary>
     /// <value>The description.</value>
-    [Option('d', "description", Required = false, HelpText = "The description of the new feature or functionality")]
+    [Option('d', "description", Required = false, HelpText = "The description of the new feature or functionality.")]
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the title of the suggestion.
     /// </summary>
     /// <value>The title.</value>
-    [Option('t', "title", Required = false, HelpText = "The title of the new feature or functionality")]
+    [Option('t', "title", Required = false, HelpText = "The title of the new feature or functionality.")]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
