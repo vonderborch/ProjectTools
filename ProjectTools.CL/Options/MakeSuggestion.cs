@@ -9,7 +9,7 @@ using ProjectTools.Core.Constants;
 ///     A command to make a suggestion for the program with.
 /// </summary>
 [Verb("suggestion", HelpText = "Make a suggestion for the program.")]
-[MenuMetadata(2)]
+[MenuMetadata(3)]
 public class MakeSuggestion : SilenceAbleAbstractOption
 {
     /// <summary>
