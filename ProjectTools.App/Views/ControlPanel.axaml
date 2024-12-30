@@ -13,7 +13,7 @@
         <Button Content="Prepare Template" VerticalAlignment="Center" HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center" />
         <Button Content="Configuration" VerticalAlignment="Center" HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center" Click="ButtonConfiguration_Click" />
         <Button Content="Help" VerticalAlignment="Center" HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center" Click="ButtonHelp_Click" />
         <Button Content="Exit" HorizontalAlignment="Right" VerticalAlignment="Center"

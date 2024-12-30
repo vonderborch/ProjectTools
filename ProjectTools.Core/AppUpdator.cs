@@ -39,6 +39,7 @@ public class AppUpdator
             }
 
             appSettings.LastAppUpdateCheck[appName] = DateTime.Now;
+            appSettings.Save();
             if (latestRelease.TagName != AppConstants.CoreVersion)
             {
                 return (latestRelease.TagName, true);

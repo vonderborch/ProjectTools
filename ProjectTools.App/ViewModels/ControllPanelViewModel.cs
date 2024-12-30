@@ -8,6 +8,8 @@ public class ControlPanelViewModel : ViewModelBase
 
     public View CurrentView { get; set; } = View.Home;
 
+    public bool LockedToPage { get; set; } = false;
+
     public void ChangeView(View newView)
     {
         if (this.CurrentView != newView)

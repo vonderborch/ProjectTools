@@ -13,5 +13,10 @@ public enum View
     /// <summary>
     ///     The help view.
     /// </summary>
-    Help
+    Help,
+
+    /// <summary>
+    ///     The settings view.
+    /// </summary>
+    Settings
 }

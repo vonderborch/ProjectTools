@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using ProjectTools.App.ViewModels;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
@@ -18,18 +17,12 @@ public partial class AboutView : UserControl
     {
         AppUpdator updator = new();
         var (newVersion, hasUpdate) = updator.CheckForUpdates(AppConstants.AppNameGui, true);
-        
-        var hasUpdateText = hasUpdate ? $"There is an update available (v{newVersion})!" : "You are up to date!";
-        var okDialogBoxViewModel = new OkDialogBoxViewModel("Update Check Result", hasUpdateText);
-        var okDialogBox = new OkDialogBox
-        {
-            DataContext = okDialogBoxViewModel,
-            Width = 300,
-            Height = 150
-        };
 
-        await okDialogBox.ShowDialog(TopLevel.GetTopLevel(this) as Window);
-        if (hasUpdate && okDialogBoxViewModel.ResultIsOk.HasValue && okDialogBoxViewModel.ResultIsOk.Value)
+        var hasUpdateText = hasUpdate ? $"There is an update available (v{newVersion})!" : "You are up to date!";
+
+        var doUpdate = await OkDialogBox.OpenDialogBox(this, "Update Check Result", hasUpdateText, 300, 150);
+
+        if (hasUpdate && doUpdate)
         {
             UrlHelpers.OpenUrl(AppConstants.RepoLatestReleaseUrl,
                 $"Please go to {AppConstants.RepoLatestReleaseUrl} to download the latest release!");

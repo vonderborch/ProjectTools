@@ -23,6 +23,11 @@ public partial class ControlPanel : UserControl
         this.ViewModel.ChangeView(View.Help);
     }
 
+    public void ButtonConfiguration_Click(object sender, RoutedEventArgs args)
+    {
+        this.ViewModel.ChangeView(View.Settings);
+    }
+
     public void ButtonExit_Click(object sender, RoutedEventArgs args)
     {
         var window = TopLevel.GetTopLevel(this) as Window;

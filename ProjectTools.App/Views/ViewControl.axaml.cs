@@ -23,6 +23,9 @@ public partial class ViewControl : UserControl
             case View.Help:
                 newControl = new HelpView();
                 break;
+            case View.Settings:
+                newControl = new ConfigurationView();
+                break;
             default:
                 throw new Exception("Unknown view!");
         }

@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using ProjectTools.App.ViewModels;
+using ProjectTools.Core.Settings;
 
 namespace ProjectTools.App.Views;
 
@@ -18,6 +19,14 @@ public partial class MainWindow : Window
         this.Controls.DataContext = controlPanelContext;
         this.Views.DataContext = viewControlContext;
 
-        this.Views.ChangeView(View.Home);
+        if (AbstractSettings.Load() == null)
+        {
+            controlPanelContext.LockedToPage = true;
+            this.Views.ChangeView(View.Settings);
+        }
+        else
+        {
+            this.Views.ChangeView(View.Home);
+        }
     }
 }

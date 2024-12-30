@@ -31,10 +31,11 @@
         <TextBlock Name="TitleText" x:CompileBindings="False" Text="{Binding Title}" Margin="4" FontSize="20"
                    FontWeight="Bold" />
         <TextBlock Name="SummaryText" x:CompileBindings="False" Text="{Binding Description}" Margin="2"
-                   FontSize="16" />
+                   FontSize="16" TextWrapping="Wrap" />
         <StackPanel Orientation="Horizontal">
-            <Button x:CompileBindings="False" Content="{Binding OkText}" Click="ButtonOk_Click" />
-            <Button x:CompileBindings="False" Content="{Binding CancelText}" Click="ButtonCancel_Click" />
+            <Button x:CompileBindings="False" Name="OkButton" Content="{Binding OkText}" Click="ButtonOk_Click" />
+            <Button x:CompileBindings="False" Name="CancelButton" Content="{Binding CancelText}"
+                    Click="ButtonCancel_Click" />
         </StackPanel>
     </StackPanel>
 </Window>
