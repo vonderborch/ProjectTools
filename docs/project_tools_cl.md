@@ -43,7 +43,7 @@ A command to prepare a new template.
 | force            | f          | false       | false         | bool   | If flag is provided, any existing template will be overriden.                                             |
 | output-directory | o          | true        |               | string | The output directory to place the template into.                                                          |
 | skip-cleaning    | c          | false       | false         | bool   | If flag is provided, the working directory won't be deleted at the end of the prepare process.            |
-| template-builder | t          | false       | auto          | string | The type of template builder to use get prepare the template. Defaults to auto.                           |
+| template-builder | t          | false       | auto          | string | The type of template builder to use to prepare the template. Defaults to auto.                            |
 | what-if          | i          | false       | false         | bool   | If flag is provided, the template will not be prepared, but the user will be guided through all settings. |
 
 NOTE: For a list of available template builders, you can execute the `list-template-builders` command with the program.
@@ -117,7 +117,7 @@ A command for making a suggestion for the program.
 | silent      | s          | false       | false         | bool   | If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available. |
 | title       | t          | false       |               | string | The title of the new feature or functionality.                                                                                   |
 
-### suggestion
+### report-issue
 
 A command for reporting an issue with the program.
 

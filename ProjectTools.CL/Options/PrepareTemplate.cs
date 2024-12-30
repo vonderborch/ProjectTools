@@ -67,7 +67,7 @@ public class PrepareTemplate : AbstractOption
     ///     Gets or sets the template builder to use with the solution.
     /// </summary>
     [Option('t', "template-builder", Required = false, Default = "auto",
-        HelpText = "The type of template builder to use get prepare the template. Defaults to auto.")]
+        HelpText = "The type of template builder to use to prepare the template. Defaults to auto.")]
     public string TemplateBuilder { get; set; } = "auto";
 
     /// <summary>
