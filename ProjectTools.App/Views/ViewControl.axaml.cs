@@ -1,37 +1,34 @@
 using System;
 using Avalonia.Controls;
 using ProjectTools.App.PageRegistrationLogic;
-using ProjectTools.App.Views.Pages;
 
 namespace ProjectTools.App.Views;
 
+/// <summary>
+///     The view control.
+/// </summary>
 public partial class ViewControl : UserControl
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ViewControl" /> class.
+    /// </summary>
     public ViewControl()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    ///     Changes the displayed content.
+    /// </summary>
+    /// <param name="newPage">The new page to display.</param>
+    /// <exception cref="InvalidOperationException">Raised if we could not create the new page.</exception>
     public void ChangeView(Page newPage)
     {
-        UserControl newControl;
-
-        switch (newPage)
+        var pageType = PageRegistry.GetTypeForPage(newPage);
+        var newControl = (UserControl?)Activator.CreateInstance(pageType);
+        if (newControl is null)
         {
-            case Page.Home:
-                newControl = new HomePage();
-                break;
-            case Page.Help:
-                newControl = new HelpView();
-                break;
-            case Page.Settings:
-                newControl = new ConfigurationPage();
-                break;
-            case Page.PrepareTemplate:
-                newControl = new PrepareTemplate();
-                break;
-            default:
-                throw new Exception("Unknown view!");
+            throw new InvalidOperationException($"Could not create a control for page {newPage}");
         }
 
         newControl.DataContext = this.DataContext;

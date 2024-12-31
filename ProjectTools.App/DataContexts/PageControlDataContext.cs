@@ -3,6 +3,9 @@ using ProjectTools.App.PageRegistrationLogic;
 
 namespace ProjectTools.App.DataContexts;
 
+/// <summary>
+///     The data context for the page control.
+/// </summary>
 public class PageControlDataContext : BaseObservableDataContext
 {
     public Action<Page>? ChangeViewAction;

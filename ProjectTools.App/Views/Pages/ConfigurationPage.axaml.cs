@@ -11,9 +11,15 @@ using ProjectTools.Core.Settings;
 
 namespace ProjectTools.App.Views.Pages;
 
-[PageRegistration("Settings", Page.Settings, 30)]
+/// <summary>
+///     The settings/config page.
+/// </summary>
+[PageRegistration("Settings", Page.Settings)]
 public partial class ConfigurationPage : UserControl
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ConfigurationPage" /> class.
+    /// </summary>
     public ConfigurationPage()
     {
         InitializeComponent();
@@ -46,8 +52,16 @@ public partial class ConfigurationPage : UserControl
         this.TextBlockSettingsFileVersion.Text = settings.SettingsVersion.ToString();
     }
 
+    /// <summary>
+    ///     The data context.
+    /// </summary>
     private PageControlDataContext Context => (PageControlDataContext)this.DataContext;
 
+    /// <summary>
+    ///     The button to save the settings.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The events.</param>
     private async void ButtonSaveSettings_OnClick(object? sender, RoutedEventArgs e)
     {
         var settings = AbstractSettings.Load() ?? new AppSettings();

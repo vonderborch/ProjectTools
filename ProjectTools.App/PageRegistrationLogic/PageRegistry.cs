@@ -46,18 +46,22 @@ public static class PageRegistry
         }
     }
 
+    /// <summary>
+    ///     Gets the sorted pages.
+    /// </summary>
+    /// <returns>The pages.</returns>
     public static List<PageRegistration> GetPages()
     {
         var pages = _pageCache.Values
-            .Select(x => x.Item1).OrderBy(x => x.Priority).ToList();
+            .Select(x => x.Item1).OrderBy(x => (int)x.Page).ToList();
         return pages;
     }
 
-    public static Type GetTypeForPage(string page)
-    {
-        return _pageCache[_pageNameToEnum[page]].Item2;
-    }
-
+    /// <summary>
+    ///     Gets the type for the specified page.
+    /// </summary>
+    /// <param name="page">The page.</param>
+    /// <returns>The type.</returns>
     public static Type GetTypeForPage(Page page)
     {
         return _pageCache[page].Item2;

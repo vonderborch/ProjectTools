@@ -3,9 +3,15 @@ using ProjectTools.App.PageRegistrationLogic;
 
 namespace ProjectTools.App.Views.Pages;
 
-[PageRegistration("Home", Page.Home, 0)]
+/// <summary>
+///     The home page.
+/// </summary>
+[PageRegistration("Home", Page.Home)]
 public partial class HomePage : UserControl
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="HomePage" /> class.
+    /// </summary>
     public HomePage()
     {
         InitializeComponent();

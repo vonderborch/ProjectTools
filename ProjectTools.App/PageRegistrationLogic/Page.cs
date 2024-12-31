@@ -8,25 +8,35 @@ public enum Page
     /// <summary>
     ///     The home page.
     /// </summary>
-    Home,
+    Home = 0,
 
     /// <summary>
-    ///     The help page.
+    ///     The make suggestion page.
     /// </summary>
-    Help,
+    MakeSuggestion = 41,
+
+    /// <summary>
+    ///     The make suggestion page.
+    /// </summary>
+    ReportIssue = 42,
+
+    /// <summary>
+    ///     The about page.
+    /// </summary>
+    About = 43,
 
     /// <summary>
     ///     The settings page.
     /// </summary>
-    Settings,
+    Settings = 30,
 
     /// <summary>
     ///     The generate project page.
     /// </summary>
-    GenerateProject,
+    GenerateProject = 10,
 
     /// <summary>
     ///     The prepare template page.
     /// </summary>
-    PrepareTemplate
+    PrepareTemplate = 20
 }

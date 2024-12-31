@@ -13,12 +13,10 @@ public class PageRegistration : Attribute
     /// </summary>
     /// <param name="displayName">The display name.</param>
     /// <param name="page">The page.</param>
-    /// <param name="priority">The priority.</param>
-    public PageRegistration(string displayName, Page page, int priority)
+    public PageRegistration(string displayName, Page page)
     {
         this.DisplayName = displayName;
         this.Page = page;
-        this.Priority = priority;
     }
 
     /// <summary>
@@ -30,9 +28,4 @@ public class PageRegistration : Attribute
     ///     The page.
     /// </summary>
     public Page Page { get; }
-
-    /// <summary>
-    ///     The priority.
-    /// </summary>
-    public int Priority { get; }
 }
