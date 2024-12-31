@@ -6,40 +6,69 @@
              x:Class="ProjectTools.App.Views.Pages.PrepareTemplateControls.SlugConfiguration">
     <StackPanel Orientation="Vertical">
         <TextBlock>SLUG CONFIGURATION</TextBlock>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Vertical">
-                <ListBox Name="Slugs" SelectionMode="Single" SelectionChanged="Slugs_OnSelectionChanged" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <WrapPanel Orientation="Vertical" Grid.Column="0">
+                <ComboBox Name="ComboBoxSlugs" SelectionChanged="ComboBoxSlugs_OnSelectionChanged" />
                 <Button Content="Add Slug" Name="ButtonAddSlug" Click="ButtonAddSlug_OnClick" />
-            </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
+            </WrapPanel>
+            <WrapPanel Orientation="Vertical" Grid.Column="1">
+                <WrapPanel>
                     <TextBlock>Display Name: </TextBlock>
-                    <TextBox Name="DisplayName" Watermark="Display Name" />
-                </StackPanel>
+                    <TextBox Name="TextBoxDisplayName" Watermark="Display Name" />
+                </WrapPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <WrapPanel>
                     <TextBlock>Slug Key: </TextBlock>
-                    <TextBox Name="SlugKey" Watermark="Slug Key" />
-                </StackPanel>
+                    <TextBox Name="TextBoxSlugKey" Watermark="Slug Key" />
+                </WrapPanel>
 
-                <StackPanel Orientation="Horizontal" Name="SlugTypeConfig" IsVisible="False">
+                <WrapPanel Name="PanelSlugType" IsEnabled="False">
                     <TextBlock>Slug Type: </TextBlock>
-                    <TextBox Name="SlugType" Watermark="Slug Type" />
-                </StackPanel>
+                    <ComboBox Name="ComboBoxBoxSlugType" SelectionChanged="ComboBoxBoxSlugType_OnSelectionChanged" />
+                </WrapPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <WrapPanel>
                     <TextBlock>Slug Search Strings: </TextBlock>
-                    <TextBox Name="SearchStrings" Watermark="Slug Search Strings" AcceptsReturn="True" />
-                </StackPanel>
+                    <TextBox Name="TextBoxSearchStrings" Watermark="Slug Search Strings (new-line-separated)"
+                             AcceptsReturn="True" />
+                </WrapPanel>
 
-                <StackPanel Name="NonGuidOptions" IsVisible="False" Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
+                <WrapPanel Name="PanelNonGuidOptions" IsVisible="False" Orientation="Vertical">
+                    <WrapPanel>
+                        <TextBlock>Slug Type Special Values: </TextBlock>
+                        <TextBox Name="TextBoxSpecialValues" IsEnabled="False" AcceptsReturn="True" />
+                    </WrapPanel>
+
+                    <WrapPanel>
                         <TextBlock>Slug Default Value: </TextBlock>
-                        <TextBox Name="DefaultValue" Watermark="Slug Default Value" />
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
-        </StackPanel>
+                        <TextBox Name="TextBoxDefaultValue" Watermark="Slug Default Value" />
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <TextBlock>Slug Allowed Values: </TextBlock>
+                        <TextBox Name="TextBoxAllowedValues" Watermark="Slug Allowed Values (new-line-separated)"
+                                 AcceptsReturn="True" />
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <TextBlock>Slug Disallowed Values: </TextBlock>
+                        <TextBox Name="TextBoxDisallowedValues" Watermark="Slug Disallowed Values (new-line-separated)"
+                                 AcceptsReturn="True" />
+                    </WrapPanel>
+
+                    <CheckBox Name="CheckBoxRequiresUserInput">Requires User Input</CheckBox>
+                </WrapPanel>
+                <WrapPanel Orientation="Horizontal">
+                    <Button Content="Save Slug" Name="ButtonSaveSlug" Click="ButtonSaveSlug_OnClick" />
+                    <Button Content="Delete Slug" Name="ButtonDeleteSlug" Click="ButtonDeleteSlug_OnClick" />
+                </WrapPanel>
+            </WrapPanel>
+        </Grid>
 
         <Button Content="Generate Template" Name="ButtonGenerateTemplate"
                 Click="ButtonGenerateTemplate_OnClick" HorizontalAlignment="Stretch" />

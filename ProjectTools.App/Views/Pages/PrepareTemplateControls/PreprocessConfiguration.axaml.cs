@@ -32,6 +32,7 @@ public partial class PreprocessConfiguration : UserControl
         {
             var folder = folders[0];
             this.TextTemplateDirectory.Text = folder.TryGetLocalPath();
+            this.TextOutputDirectory.Text = Path.GetDirectoryName(this.TextTemplateDirectory.Text);
         }
     }
 
@@ -96,33 +97,10 @@ public partial class PreprocessConfiguration : UserControl
             this.PrepareViewModel.PreparationTemplate.TemplaterVersion = TemplateConstants.CurrentTemplateVersion;
 
             // Setup the next section...
-            this.PrepareViewModel.TemplateConfiguration.TextTemplateName.Text =
-                this.PrepareViewModel.PreparationTemplate.Name;
-            this.PrepareViewModel.TemplateConfiguration.TextTemplateDescription.Text =
-                this.PrepareViewModel.PreparationTemplate.Description;
-            this.PrepareViewModel.TemplateConfiguration.TextTemplateVersion.Text =
-                this.PrepareViewModel.PreparationTemplate.Version;
-            this.PrepareViewModel.TemplateConfiguration.TextTemplateAuthor.Text =
-                this.PrepareViewModel.PreparationTemplate.Author;
-            this.PrepareViewModel.TemplateConfiguration.TextTemplateRenameOnlyPaths.Text = string.Join(
-                Environment.NewLine,
-                this.PrepareViewModel.PreparationTemplate.RenameOnlyPaths);
-            this.PrepareViewModel.TemplateConfiguration.TextTemplatePathsToRemove.Text = string.Join(
-                Environment.NewLine,
-                this.PrepareViewModel.PreparationTemplate.PathsToRemove);
-            this.PrepareViewModel.TemplateConfiguration.TextTemplatePrepareExcludedPaths.Text = string.Join(
-                Environment.NewLine,
-                this.PrepareViewModel.PreparationTemplate.PrepareExcludedPaths);
-            this.PrepareViewModel.TemplateConfiguration.TextTemplatePythonScriptPaths.Text = string.Join(
-                Environment.NewLine,
-                this.PrepareViewModel.PreparationTemplate.PythonScriptPaths);
-            this.PrepareViewModel.TemplateConfiguration.TextTemplateInstructions.Text = string.Join(Environment.NewLine,
-                this.PrepareViewModel.PreparationTemplate.Instructions);
+            this.PrepareViewModel.TemplateConfiguration.UpdateTemplateConfigurationSettings();
 
             // Enable the next section!
             this.TextPreProcessLog.Text = "Pre-Processing Successful!";
-
-            this.PrepareViewModel.PrepareTemplate.ViewerTemplateConfig.IsEnabled = true;
         }
         catch (Exception ex)
         {
@@ -132,11 +110,21 @@ public partial class PreprocessConfiguration : UserControl
         }
     }
 
-    private async void ValidatePreProcessParameters()
+    private void ValidatePreProcessParameters()
     {
         if (!Directory.Exists(this.PrepareViewModel.TemplateDirectory))
         {
             throw new Exception("Template Directory specified does not exist!");
         }
+    }
+
+    private void TextTemplateDirectory_OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        this.PrepareViewModel.TemplateConfiguration.ResetTemplateConfigurationSettings();
+    }
+
+    private void TemplateBuilders_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        this.PrepareViewModel.TemplateConfiguration.ResetTemplateConfigurationSettings();
     }
 }

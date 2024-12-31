@@ -2,54 +2,51 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="ProjectTools.App.Views.Pages.PrepareTemplateControls.TemplateConfiguration">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
         <TextBlock>TEMPLATE CONFIGURATION</TextBlock>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Name: </TextBlock>
-            <TextBox Name="TextTemplateName" Watermark="Template Name" MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplateName" Watermark="Template Name" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Version: </TextBlock>
-            <TextBox Name="TextTemplateVersion" Watermark="Template Version" HorizontalAlignment="Stretch"
-                     MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplateVersion" Watermark="Template Version" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Description: </TextBlock>
-            <TextBox Name="TextTemplateDescription" Watermark="Template Description"
-                     TextWrapping="WrapWithOverflow" HorizontalAlignment="Stretch" MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplateDescription" Watermark="Template Description" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Author: </TextBlock>
-            <TextBox Name="TextTemplateAuthor" Watermark="Template Author" HorizontalAlignment="Stretch"
-                     MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplateAuthor" Watermark="Template Author" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Rename Only Paths: </TextBlock>
-            <TextBox Name="TextTemplateRenameOnlyPaths" Watermark="Template Rename Only Paths" AcceptsReturn="True"
-                     HorizontalAlignment="Stretch" MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplateRenameOnlyPaths" Watermark="Template Rename Only Paths (new-line-separated)"
+                     AcceptsReturn="True" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Paths To Remove: </TextBlock>
-            <TextBox Name="TextTemplatePathsToRemove" Watermark="Template Paths To Remove" AcceptsReturn="True"
-                     HorizontalAlignment="Stretch" MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplatePathsToRemove" Watermark="Template Paths To Remove (new-line-separated)"
+                     AcceptsReturn="True" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Paths Excluded From Template: </TextBlock>
-            <TextBox Name="TextTemplatePrepareExcludedPaths" Watermark="Paths Excluded From Template"
-                     AcceptsReturn="True" HorizontalAlignment="Stretch" MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplatePrepareExcludedPaths"
+                     Watermark="Paths Excluded From Template (new-line-separated)" AcceptsReturn="True" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Python Script Paths: </TextBlock>
-            <TextBox Name="TextTemplatePythonScriptPaths" Watermark="Python Script Paths" AcceptsReturn="True"
-                     HorizontalAlignment="Stretch" MaxWidth="250" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Name="TextTemplatePythonScriptPaths" Watermark="Python Script Paths (new-line-separated)"
+                     AcceptsReturn="True" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>User Instructions: </TextBlock>
-            <TextBox Name="TextTemplateInstructions" Watermark="User Instructions" AcceptsReturn="True"
-                     HorizontalAlignment="Stretch" MaxWidth="250" />
-        </StackPanel>
+            <TextBox Name="TextTemplateInstructions" Watermark="User Instructions (new-line-separated)"
+                     AcceptsReturn="True" />
+        </WrapPanel>
 
         <Button Content="Save Template Settings" Name="ButtonSaveTemplateSettings"
                 Click="ButtonSaveTemplateSettings_OnClick" HorizontalAlignment="Stretch" />

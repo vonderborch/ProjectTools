@@ -16,6 +16,51 @@ public partial class TemplateConfiguration : UserControl
         InitializeComponent();
     }
 
+    public void ResetTemplateConfigurationSettings()
+    {
+        this.TextTemplateName.Text = string.Empty;
+        this.TextTemplateDescription.Text = string.Empty;
+        this.TextTemplateVersion.Text = string.Empty;
+        this.TextTemplateAuthor.Text = string.Empty;
+        this.TextTemplateRenameOnlyPaths.Text = string.Empty;
+        this.TextTemplatePathsToRemove.Text = string.Empty;
+        this.TextTemplatePrepareExcludedPaths.Text = string.Empty;
+        this.TextTemplatePythonScriptPaths.Text = string.Empty;
+        this.TextTemplateInstructions.Text = string.Empty;
+
+        this.PrepareViewModel.PrepareTemplate.ViewerTemplateConfig.IsEnabled = false;
+        this.PrepareViewModel.SlugConfiguration.ResetSlugConfigurationPanel();
+    }
+
+    public void UpdateTemplateConfigurationSettings()
+    {
+        this.TextTemplateName.Text =
+            this.PrepareViewModel.PreparationTemplate.Name;
+        this.TextTemplateDescription.Text =
+            this.PrepareViewModel.PreparationTemplate.Description;
+        this.TextTemplateVersion.Text =
+            this.PrepareViewModel.PreparationTemplate.Version;
+        this.TextTemplateAuthor.Text =
+            this.PrepareViewModel.PreparationTemplate.Author;
+        this.TextTemplateRenameOnlyPaths.Text = string.Join(
+            Environment.NewLine,
+            this.PrepareViewModel.PreparationTemplate.RenameOnlyPaths);
+        this.TextTemplatePathsToRemove.Text = string.Join(
+            Environment.NewLine,
+            this.PrepareViewModel.PreparationTemplate.PathsToRemove);
+        this.TextTemplatePrepareExcludedPaths.Text = string.Join(
+            Environment.NewLine,
+            this.PrepareViewModel.PreparationTemplate.PrepareExcludedPaths);
+        this.TextTemplatePythonScriptPaths.Text = string.Join(
+            Environment.NewLine,
+            this.PrepareViewModel.PreparationTemplate.PythonScriptPaths);
+        this.TextTemplateInstructions.Text = string.Join(Environment.NewLine,
+            this.PrepareViewModel.PreparationTemplate.Instructions);
+
+        this.PrepareViewModel.PrepareTemplate.ViewerTemplateConfig.IsEnabled = true;
+        this.PrepareViewModel.SlugConfiguration.ResetSlugConfigurationPanel();
+    }
+
     private void ButtonSaveTemplateSettings_OnClick(object? sender, RoutedEventArgs e)
     {
         if (this.PrepareViewModel is null)
@@ -39,11 +84,7 @@ public partial class TemplateConfiguration : UserControl
         this.PrepareViewModel.PreparationTemplate.Instructions =
             SplitTextIntoList(this.TextTemplateInstructions.Text ?? string.Empty);
 
-        this.PrepareViewModel.SlugConfiguration.Slugs.ItemsSource = this.PrepareViewModel.PreparationTemplate.Slugs
-            .Where(x => x.RequiresAnyInput)
-            .Select(x => x.DisplayName).ToList();
-
-        this.PrepareViewModel.PrepareTemplate.ViewerSlugConfig.IsEnabled = true;
+        this.PrepareViewModel.SlugConfiguration.UpdateSlugConfigurationPanel();
     }
 
     private List<string> SplitTextIntoList(string text)

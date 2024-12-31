@@ -13,16 +13,24 @@
 
         <StackPanel Grid.Row="0" Orientation="Vertical">
             <TextBlock>PREPROCESS CONFIGURATION</TextBlock>
-            <Button Content="Template Directory" Name="ButtonTemplateDirectory" Click="ButtonTemplateDirectory_OnClick" />
-            <TextBox Name="TextTemplateDirectory" Watermark="Template Directory" HorizontalAlignment="Stretch" />
+            <WrapPanel>
+                <TextBox Name="TextTemplateDirectory" Watermark="Template Directory"
+                         TextChanged="TextTemplateDirectory_OnTextChanged" />
+                <Button Content="Template Directory" Name="ButtonTemplateDirectory"
+                        Click="ButtonTemplateDirectory_OnClick" />
+            </WrapPanel>
 
-            <Button Content="Output Directory" Name="ButtonOutputDirectory" Click="ButtonOutputDirectory_OnClick" />
-            <TextBox Name="TextOutputDirectory" Watermark="Output Directory" HorizontalAlignment="Stretch" />
+            <WrapPanel Orientation="Horizontal">
+                <TextBox Name="TextOutputDirectory" Watermark="Output Directory" />
+                <Button Content="Output Directory" Name="ButtonOutputDirectory" Click="ButtonOutputDirectory_OnClick" />
+            </WrapPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock>Template Builder: </TextBlock>
-                <ComboBox Name="TemplateBuilders" HorizontalAlignment="Stretch" />
-            </StackPanel>
+            <RelativePanel>
+                <TextBlock Name="TextTemplateBuilder" RelativePanel.AlignLeftWithPanel="True">Template Builder: </TextBlock>
+                <ComboBox Name="TemplateBuilders" RelativePanel.RightOf="TextTemplateBuilder"
+                          RelativePanel.AlignRightWithPanel="True"
+                          SelectionChanged="TemplateBuilders_OnSelectionChanged" />
+            </RelativePanel>
 
             <CheckBox IsChecked="False" Name="CheckBoxSkipCleaning">Skip Cleaning</CheckBox>
             <CheckBox IsChecked="False" Name="CheckBoxForce">Force Override Existing Template</CheckBox>
