@@ -1,32 +1,32 @@
-namespace ProjectTools.App;
+namespace ProjectTools.App.PageRegistrationLogic;
 
 /// <summary>
-///     A list of all the views in the application.
+///     A list of all the pages in the application.
 /// </summary>
-public enum View
+public enum Page
 {
     /// <summary>
-    ///     The home view.
+    ///     The home page.
     /// </summary>
     Home,
 
     /// <summary>
-    ///     The help view.
+    ///     The help page.
     /// </summary>
     Help,
 
     /// <summary>
-    ///     The settings view.
+    ///     The settings page.
     /// </summary>
     Settings,
 
     /// <summary>
-    ///     The generate project view.
+    ///     The generate project page.
     /// </summary>
     GenerateProject,
 
     /// <summary>
-    ///     The prepare template view.
+    ///     The prepare template page.
     /// </summary>
     PrepareTemplate
 }

@@ -1,9 +1,9 @@
 using System;
 using ProjectTools.App.PageRegistrationLogic;
 
-namespace ProjectTools.App.ViewModels;
+namespace ProjectTools.App.DataContexts;
 
-public class ControlPanelViewModel : ViewModelBase
+public class PageControlDataContext : BaseObservableDataContext
 {
     public Action<Page>? ChangeViewAction;
 
@@ -13,7 +13,7 @@ public class ControlPanelViewModel : ViewModelBase
 
     public void ChangeView(Page newPage)
     {
-        if (this.CurrentPage != newPage)
+        if (this.CurrentPage != newPage && !this.LockedToPage)
         {
             if (this.ChangeViewAction is not null)
             {

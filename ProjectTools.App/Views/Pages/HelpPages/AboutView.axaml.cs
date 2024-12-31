@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using ProjectTools.App.Dialogs.YesNoDialogBox;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
@@ -20,7 +21,15 @@ public partial class AboutView : UserControl
 
         var hasUpdateText = hasUpdate ? $"There is an update available (v{newVersion})!" : "You are up to date!";
 
-        var doUpdate = await OkDialogBox.OpenDialogBox(this, "Update Check Result", hasUpdateText, 300, 150);
+        var doUpdate = await YesNoDialogBox.Open(
+            this,
+            "Update Check Result",
+            hasUpdateText,
+            300,
+            150,
+            yesButtonText: "OK",
+            showNoButton: false
+        );
 
         if (hasUpdate && doUpdate)
         {

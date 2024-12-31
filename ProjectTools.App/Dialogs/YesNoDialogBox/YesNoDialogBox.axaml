@@ -1,0 +1,23 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ProjectTools.App.Dialogs.YesNoDialogBox.YesNoDialogBox"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        ExtendClientAreaChromeHints="NoChrome"
+        CanResize="False">
+
+    <StackPanel Orientation="Vertical">
+        <TextBlock Name="TextBlockTitle" Margin="4" FontSize="20" FontWeight="Bold" HorizontalAlignment="Stretch" />
+        <ScrollViewer HorizontalAlignment="Stretch">
+            <TextBlock Name="TextBlockDescription" Margin="2" FontSize="16" TextWrapping="Wrap"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        </ScrollViewer>
+        <StackPanel Orientation="Horizontal">
+            <Button x:CompileBindings="False" Name="ButtonNo" Click="ButtonNo_OnClick" />
+            <Button x:CompileBindings="False" Name="ButtonYes" Click="ButtonYes_OnClick" />
+        </StackPanel>
+    </StackPanel>
+</Window>

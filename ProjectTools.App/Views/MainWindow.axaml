@@ -17,8 +17,8 @@
     </Design.DataContext>
 
     <DockPanel Margin="2">
-        <views:ControlPanel DockPanel.Dock="Top" Name="Controls" />
-        <views:ViewControl DockPanel.Dock="Bottom" Name="Views" />
+        <views:ControlPanel DockPanel.Dock="Top" Name="PanelControls" />
+        <views:ViewControl DockPanel.Dock="Bottom" Name="PanelViews" />
     </DockPanel>
 
 </Window>

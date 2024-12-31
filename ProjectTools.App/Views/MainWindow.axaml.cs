@@ -1,5 +1,6 @@
 using Avalonia.Controls;
-using ProjectTools.App.ViewModels;
+using ProjectTools.App.DataContexts;
+using ProjectTools.App.PageRegistrationLogic;
 using ProjectTools.Core.Settings;
 
 namespace ProjectTools.App.Views;
@@ -10,23 +11,20 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        ControlPanelViewModel controlPanelContext = new();
-        ViewControlViewModel viewControlContext = new();
+        PageControlDataContext pageControlDataContext = new();
+        pageControlDataContext.ChangeViewAction += this.PanelViews.ChangeView;
 
-        controlPanelContext.ChangeViewAction += viewControlContext.ChangeView;
-        controlPanelContext.ChangeViewAction += this.Views.ChangeView;
-
-        this.Controls.DataContext = controlPanelContext;
-        this.Views.DataContext = viewControlContext;
+        this.PanelControls.DataContext = pageControlDataContext;
+        this.PanelViews.DataContext = pageControlDataContext;
 
         if (AbstractSettings.Load() == null)
         {
-            controlPanelContext.LockedToPage = true;
-            this.Views.ChangeView(View.Settings);
+            pageControlDataContext.LockedToPage = true;
+            this.PanelViews.ChangeView(Page.Settings);
         }
         else
         {
-            this.Views.ChangeView(View.Home);
+            this.PanelViews.ChangeView(Page.Home);
         }
     }
 }

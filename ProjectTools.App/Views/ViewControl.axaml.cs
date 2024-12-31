@@ -1,5 +1,6 @@
 using System;
 using Avalonia.Controls;
+using ProjectTools.App.PageRegistrationLogic;
 using ProjectTools.App.Views.Pages;
 
 namespace ProjectTools.App.Views;
@@ -11,25 +12,22 @@ public partial class ViewControl : UserControl
         InitializeComponent();
     }
 
-    public void ChangeView(View newView)
+    public void ChangeView(Page newPage)
     {
         UserControl newControl;
 
-        switch (newView)
+        switch (newPage)
         {
-            case View.Home:
-                newControl = new HomeView();
+            case Page.Home:
+                newControl = new HomePage();
                 break;
-            case View.Help:
+            case Page.Help:
                 newControl = new HelpView();
                 break;
-            case View.Settings:
-                newControl = new ConfigurationView();
+            case Page.Settings:
+                newControl = new ConfigurationPage();
                 break;
-            case View.GenerateProject:
-                newControl = new GenerateProject();
-                break;
-            case View.PrepareTemplate:
+            case Page.PrepareTemplate:
                 newControl = new PrepareTemplate();
                 break;
             default:

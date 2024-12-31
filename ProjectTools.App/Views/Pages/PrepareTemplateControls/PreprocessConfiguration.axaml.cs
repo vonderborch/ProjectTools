@@ -3,6 +3,7 @@ using System.IO;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using ProjectTools.App.Dialogs.YesNoDialogBox;
 using ProjectTools.App.ViewModels;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
@@ -105,8 +106,15 @@ public partial class PreprocessConfiguration : UserControl
         catch (Exception ex)
         {
             this.TextPreProcessLog.Text = $"Error While Pre-Processing Template: {ex.Message}";
-            await OkDialogBox.OpenDialogBox(this, "Error",
-                $"Error While Pre-Processing Template: {ex.Message}", 300, 150, showCancelButton: false);
+            await YesNoDialogBox.Open(
+                this,
+                "Error",
+                $"Error While Pre-Processing Template: {ex.Message}",
+                300,
+                150,
+                yesButtonText: "OK",
+                showNoButton: false
+            );
         }
     }
 

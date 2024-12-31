@@ -1,11 +1,13 @@
+using ProjectTools.App.PageRegistrationLogic;
+
 namespace ProjectTools.App.ViewModels;
 
 public class ViewControlViewModel
 {
-    public View CurrentView { get; set; } = View.Home;
+    public Page CurrentPage { get; set; } = Page.Home;
 
-    public void ChangeView(View newView)
+    public void ChangeView(Page newPage)
     {
-        this.CurrentView = newView;
+        this.CurrentPage = newPage;
     }
 }
