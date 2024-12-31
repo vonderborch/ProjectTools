@@ -16,13 +16,16 @@ public partial class PrepareTemplate : UserControl
         PreprocessConfiguration preprocessConfig = new();
         TemplateConfiguration templateConfiguration = new();
         SlugConfiguration slugConfiguration = new();
+        GenerateTemplate generateTemplate = new();
 
         this._prepareViewModel =
-            new PrepareTemplateViewModel(this, preprocessConfig, templateConfiguration, slugConfiguration);
+            new PrepareTemplateViewModel(this, preprocessConfig, templateConfiguration, slugConfiguration,
+                generateTemplate);
 
         preprocessConfig.PrepareViewModel = this._prepareViewModel;
         templateConfiguration.PrepareViewModel = this._prepareViewModel;
         slugConfiguration.PrepareViewModel = this._prepareViewModel;
+        generateTemplate.PrepareViewModel = this._prepareViewModel;
 
 
         var availableTemplateBuilders = this._prepareViewModel.Preparer.GetTemplateBuilders();
@@ -34,5 +37,6 @@ public partial class PrepareTemplate : UserControl
         this.ViewerPreprocessConfig.Content = preprocessConfig;
         this.ViewerTemplateConfig.Content = templateConfiguration;
         this.ViewerSlugConfig.Content = slugConfiguration;
+        this.ViewerTemplateGeneration.Content = generateTemplate;
     }
 }

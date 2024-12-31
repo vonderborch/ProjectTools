@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ProjectTools.App.ViewModels;
+using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Templates;
 
 namespace ProjectTools.App.Views.Pages.PrepareTemplateControls;
@@ -51,6 +54,7 @@ public partial class SlugConfiguration : UserControl
         this._slugCache = new Dictionary<string, PreparationSlug>();
         UpdateSlugChoiceComboBox();
         ResetSlugOptions();
+        this.PrepareViewModel.GenerateTemplate.Reset();
     }
 
     private void ResetSlugOptions()
@@ -118,8 +122,30 @@ public partial class SlugConfiguration : UserControl
 
     private void ButtonGenerateTemplate_OnClick(object? sender, RoutedEventArgs e)
     {
+        this.PrepareViewModel.GenerateTemplate.Reset();
         this.PrepareViewModel.PreparationTemplate.Slugs = this._slugCache.Values.ToList();
-        
+
+        var sourceTemplateInfoFile =
+            Path.Combine(this.PrepareViewModel.TemplateDirectory, TemplateConstants.TemplateSettingsFileName);
+        IOHelpers.DeleteFileIfExists(sourceTemplateInfoFile);
+        JsonHelpers.SerializeToFile(sourceTemplateInfoFile, this.PrepareViewModel.PreparationTemplate);
+
+        if (this.PrepareViewModel.WhatIf)
+        {
+            this.PrepareViewModel.GenerateTemplate.LogText("What-If mode enabled. No changes were made.");
+        }
+        else
+        {
+            Logger coreLogger = new(this.PrepareViewModel.GenerateTemplate.LogText);
+            var output = this.PrepareViewModel.Preparer.GenerateTemplate(this.PrepareViewModel.TemplateDirectory,
+                this.PrepareViewModel.OutputDirectory, this.PrepareViewModel.SkipCleaning,
+                this.PrepareViewModel.ForceOverride,
+                this.PrepareViewModel.PreparationTemplate, coreLogger);
+            if (!string.IsNullOrEmpty(output))
+            {
+                this.PrepareViewModel.GenerateTemplate.LogText(output);
+            }
+        }
     }
 
     private void ButtonSaveSlug_OnClick(object? sender, RoutedEventArgs e)

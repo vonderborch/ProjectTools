@@ -112,7 +112,7 @@ public class Preparer
     public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
         bool forceOverride, PreparationTemplate template, Logger coreLogger)
     {
-        var outputTempDirectory = Path.Combine(outputDirectory, template.SafeName);
+        var outputTempDirectory = Path.Combine(outputDirectory, $"{template.SafeName}_TEMPLATEGEN");
         var outputFile =
             Path.Combine(outputDirectory, $"{template.SafeName}.{TemplateConstants.TemplateFileExtension}");
 

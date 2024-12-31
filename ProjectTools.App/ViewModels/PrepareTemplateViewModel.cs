@@ -8,6 +8,7 @@ namespace ProjectTools.App.ViewModels;
 
 public class PrepareTemplateViewModel : ViewModelBase
 {
+    public GenerateTemplate GenerateTemplate;
     public Preparer Preparer;
 
     public PrepareTemplate PrepareTemplate;
@@ -19,13 +20,15 @@ public class PrepareTemplateViewModel : ViewModelBase
     public TemplateConfiguration TemplateConfiguration;
 
     public PrepareTemplateViewModel(PrepareTemplate prepareTemplate, PreprocessConfiguration preprocessConfiguration,
-        TemplateConfiguration templateConfiguration, SlugConfiguration slugConfiguration)
+        TemplateConfiguration templateConfiguration, SlugConfiguration slugConfiguration,
+        GenerateTemplate generateTemplate)
     {
         this.Preparer = new Preparer();
         this.PrepareTemplate = prepareTemplate;
         this.PreprocessConfiguration = preprocessConfiguration;
         this.TemplateConfiguration = templateConfiguration;
         this.SlugConfiguration = slugConfiguration;
+        this.GenerateTemplate = generateTemplate;
     }
 
     public string TemplateBuilderName { get; set; }
