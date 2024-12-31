@@ -27,19 +27,19 @@ public class ListTemplateBuilders : AbstractOption
     public override string Execute()
     {
         var templater = new Preparer();
-        var templaters = templater.GetTemplateBuilders();
+        var availableTemplateBuilders = templater.GetTemplateBuilders();
 
-        if (templaters.Count == 0)
+        if (availableTemplateBuilders.Count == 0)
         {
             return "No template builders found.";
         }
 
-        LogMessage($"Found {templaters.Count} template builders...");
+        LogMessage($"Found {availableTemplateBuilders.Count} template builders...");
         StringBuilder output = new();
         if (this.Full)
         {
             output.AppendLine("----------------------------------------");
-            foreach (var t in templaters)
+            foreach (var t in availableTemplateBuilders)
             {
                 output.AppendLine($"Template Builder: {t.Name}");
                 output.AppendLine($"  - Version: {t.Version}");
@@ -49,7 +49,7 @@ public class ListTemplateBuilders : AbstractOption
         }
         else
         {
-            foreach (var t in templaters)
+            foreach (var t in availableTemplateBuilders)
             {
                 output.AppendLine($"- {t.Name} - {t.Version}");
             }

@@ -25,6 +25,51 @@ public class Preparer
     }
 
     /// <summary>
+    ///     Gets the template builder for the specified option and directory.
+    /// </summary>
+    /// <param name="option">The template builder selected, or auto.</param>
+    /// <param name="directory">The directory we want to prepare as a template.</param>
+    /// <returns>The template builder.</returns>
+    /// <exception cref="Exception">Raised if we failed to find a valid template builder.</exception>
+    public AbstractTemplateBuilder GetTemplateBuilderForOption(string option, string directory)
+    {
+        var templateBuilders = GetTemplateBuilders();
+        AbstractTemplateBuilder? templateBuilderForPrep = null;
+        // If template builder is auto, try to detect the correct one
+        if (option == "auto")
+        {
+            foreach (var templateBuilder in templateBuilders)
+            {
+                if (templateBuilder.IsValidDirectoryForBuilder(directory))
+                {
+                    templateBuilderForPrep = templateBuilder;
+                    break;
+                }
+            }
+        }
+        // Otherwise, try to find the template builder by name...
+        else
+        {
+            var templateBuilder = templateBuilders.FirstOrDefault(x => x.NameLowercase == option);
+            if (templateBuilder != null)
+            {
+                if (templateBuilder.IsValidDirectoryForBuilder(directory))
+                {
+                    templateBuilderForPrep = templateBuilder;
+                }
+            }
+        }
+
+        // Raise an exception if we couldn't find a valid template builder, otherwise return the template builder
+        if (templateBuilderForPrep == null)
+        {
+            throw new Exception("Could not detect valid template builder for directory!");
+        }
+
+        return templateBuilderForPrep;
+    }
+
+    /// <summary>
     ///     Gets all template builders.
     /// </summary>
     /// <param name="forceRefresh">True to force refresh, False otherwise.</param>

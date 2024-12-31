@@ -9,47 +9,47 @@
         <Button Content="Save Settings" Name="SaveSettings" Click="SaveSettings_OnClick" />
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Git Sources and Access Tokens:</TextBlock>
+            <TextBlock>Git Sources and Access Tokens: </TextBlock>
             <TextBox Name="GitSources" AcceptsReturn="True" Watermark="Git Sources" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Git Repositories and Sources:</TextBlock>
+            <TextBlock>Git Repositories and Sources: </TextBlock>
             <TextBox Name="Repos" AcceptsReturn="True" Watermark="Git Repos" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Seconds Between App Update Checks:</TextBlock>
+            <TextBlock>Seconds Between App Update Checks: </TextBlock>
             <TextBox Name="SecondsBetweenAppUpdateChecks" AcceptsReturn="false" Watermark="Seconds" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Seconds Between Template Update Checks:</TextBlock>
+            <TextBlock>Seconds Between Template Update Checks: </TextBlock>
             <TextBox Name="SecondsBetweenTemplateUpdateChecks" AcceptsReturn="false" Watermark="Seconds" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Last App (GUI) Update Check:</TextBlock>
+            <TextBlock>Last App (GUI) Update Check: </TextBlock>
             <TextBlock Name="LastGuiUpdate" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Last App (CL) Update Check:</TextBlock>
+            <TextBlock>Last App (CL) Update Check: </TextBlock>
             <TextBlock Name="LastClUpdate" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Last Templates Update Check:</TextBlock>
+            <TextBlock>Last Templates Update Check: </TextBlock>
             <TextBlock Name="LastTemplatesUpdateCheck" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Python Scripting Version:</TextBlock>
+            <TextBlock>Python Scripting Version: </TextBlock>
             <TextBlock Name="PythonVersion" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock>Settings Version:</TextBlock>
+            <TextBlock>Settings Version: </TextBlock>
             <TextBlock Name="SettingsFileVersion" />
         </StackPanel>
     </StackPanel>

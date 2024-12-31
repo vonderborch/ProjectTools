@@ -26,6 +26,12 @@ public partial class ViewControl : UserControl
             case View.Settings:
                 newControl = new ConfigurationView();
                 break;
+            case View.GenerateProject:
+                newControl = new GenerateProject();
+                break;
+            case View.PrepareTemplate:
+                newControl = new PrepareTemplate();
+                break;
             default:
                 throw new Exception("Unknown view!");
         }

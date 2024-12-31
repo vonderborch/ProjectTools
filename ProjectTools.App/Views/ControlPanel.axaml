@@ -9,9 +9,9 @@
         <Button Content="Home" VerticalAlignment="Center" HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center" Click="ButtonHome_Click" />
         <Button Content="Generate Project" VerticalAlignment="Center" HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center" Click="ButtonGenerateProject_Click" />
         <Button Content="Prepare Template" VerticalAlignment="Center" HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center" Click="ButtonPrepareTemplate_Click" />
         <Button Content="Configuration" VerticalAlignment="Center" HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center" Click="ButtonConfiguration_Click" />
         <Button Content="Help" VerticalAlignment="Center" HorizontalContentAlignment="Center"

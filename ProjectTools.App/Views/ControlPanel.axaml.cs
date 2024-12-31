@@ -28,6 +28,16 @@ public partial class ControlPanel : UserControl
         this.ViewModel.ChangeView(View.Settings);
     }
 
+    public void ButtonGenerateProject_Click(object sender, RoutedEventArgs args)
+    {
+        this.ViewModel.ChangeView(View.GenerateProject);
+    }
+
+    public void ButtonPrepareTemplate_Click(object sender, RoutedEventArgs args)
+    {
+        this.ViewModel.ChangeView(View.PrepareTemplate);
+    }
+
     public void ButtonExit_Click(object sender, RoutedEventArgs args)
     {
         var window = TopLevel.GetTopLevel(this) as Window;

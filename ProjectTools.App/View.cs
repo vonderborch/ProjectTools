@@ -18,5 +18,15 @@ public enum View
     /// <summary>
     ///     The settings view.
     /// </summary>
-    Settings
+    Settings,
+
+    /// <summary>
+    ///     The generate project view.
+    /// </summary>
+    GenerateProject,
+
+    /// <summary>
+    ///     The prepare template view.
+    /// </summary>
+    PrepareTemplate
 }

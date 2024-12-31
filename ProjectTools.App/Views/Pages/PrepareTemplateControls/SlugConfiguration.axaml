@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectTools.App.Views.Pages.PrepareTemplateControls.SlugConfiguration">
+    <StackPanel Orientation="Vertical">
+        <TextBlock>SLUG CONFIGURATION</TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical">
+                <ListBox Name="Slugs" SelectionMode="Single" SelectionChanged="Slugs_OnSelectionChanged" />
+                <Button Content="Add Slug" Name="ButtonAddSlug" Click="ButtonAddSlug_OnClick" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Display Name: </TextBlock>
+                    <TextBox Name="DisplayName" Watermark="Display Name" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Slug Key: </TextBlock>
+                    <TextBox Name="SlugKey" Watermark="Slug Key" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Name="SlugTypeConfig" IsVisible="False">
+                    <TextBlock>Slug Type: </TextBlock>
+                    <TextBox Name="SlugType" Watermark="Slug Type" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Slug Search Strings: </TextBlock>
+                    <TextBox Name="SearchStrings" Watermark="Slug Search Strings" AcceptsReturn="True" />
+                </StackPanel>
+
+                <StackPanel Name="NonGuidOptions" IsVisible="False" Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Slug Default Value: </TextBlock>
+                        <TextBox Name="DefaultValue" Watermark="Slug Default Value" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <Button Content="Generate Template" Name="ButtonGenerateTemplate"
+                Click="ButtonGenerateTemplate_OnClick" HorizontalAlignment="Stretch" />
+    </StackPanel>
+</UserControl>
