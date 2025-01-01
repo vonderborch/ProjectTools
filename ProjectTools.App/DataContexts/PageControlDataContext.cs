@@ -1,4 +1,5 @@
 using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ProjectTools.App.PageRegistrationLogic;
 
 namespace ProjectTools.App.DataContexts;
@@ -6,7 +7,7 @@ namespace ProjectTools.App.DataContexts;
 /// <summary>
 ///     The data context for the page control.
 /// </summary>
-public class PageControlDataContext : BaseObservableDataContext
+public class PageControlDataContext : ObservableObject
 {
     public Action<Page>? ChangeViewAction;
 

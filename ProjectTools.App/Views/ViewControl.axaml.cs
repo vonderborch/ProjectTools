@@ -32,6 +32,6 @@ public partial class ViewControl : UserControl
         }
 
         newControl.DataContext = this.DataContext;
-        this.Content = newControl;
+        this.Viewer.Content = newControl;
     }
 }

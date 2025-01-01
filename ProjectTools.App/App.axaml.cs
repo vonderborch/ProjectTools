@@ -1,21 +1,29 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
 using ProjectTools.App.ViewModels;
 using ProjectTools.App.Views;
 
 namespace ProjectTools.App;
 
+/// <summary>
+///     The entry point of the application.
+/// </summary>
 public partial class App : Application
 {
+    /// <summary>
+    ///     Initializes the application.
+    /// </summary>
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
 
+    /// <summary>
+    ///     Runs after the application is initialized.
+    /// </summary>
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -32,6 +40,9 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
+    /// <summary>
+    ///     Disables the Avalonia DataAnnotation validation.
+    /// </summary>
     private void DisableAvaloniaDataAnnotationValidation()
     {
         // Get an array of plugins to remove
