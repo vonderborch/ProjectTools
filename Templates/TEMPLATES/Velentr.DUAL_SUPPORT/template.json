@@ -1,6 +1,7 @@
 {
   "Slugs": [
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "BD43E58E-48C2-45A0-A593-1626B877E3E5"
@@ -14,6 +15,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "A852B73A-1824-4C6A-8BE4-E6DD44B26492"
@@ -27,6 +29,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "E4EEEFDB-45D3-41E9-9FE4-62DFE6698F70"
@@ -40,6 +43,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "C7F6AB0B-00E8-495B-9285-270711E05419"
@@ -53,6 +57,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "BD106A2B-F285-4A23-95FD-D4F96666732B"
@@ -66,6 +71,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "E02E054E-3E8C-4207-A92C-A52EAC013DB4"
@@ -79,6 +85,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "2F24BA50-02C7-4C79-A2F3-C6216A5E2508"
@@ -92,6 +99,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "508DA6EF-FC5A-4CCE-B3EA-1EAA51C72117"
@@ -105,6 +113,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "67073604-A543-47B0-BFA4-0758A2C1F2C5"
@@ -118,6 +127,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "546AB09E-CB96-4064-B3F8-A0738E21E3DF"
@@ -131,6 +141,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "227895C9-A4FD-43ED-807B-87AF42D69A34"
@@ -144,6 +155,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "FDBF53CD-2E17-487C-82FA-B5D109C0F3C7"
@@ -157,6 +169,7 @@
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
         "Velentr.DUAL_SUPPORT"
@@ -170,6 +183,7 @@
       "Type": "String"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
         "Christian Webber"
@@ -183,6 +197,7 @@
       "Type": "String"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
         "A library"
@@ -196,6 +211,7 @@
       "Type": "String"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
         "1.0.0"
@@ -211,9 +227,13 @@
   ],
   "Author": "Christian Webber",
   "Description": "A library with individual implementations for FNA and Monogame.",
-  "Instructions": [],
+  "Instructions": [
+    ""
+  ],
   "Name": "Velentr.DUAL_SUPPORT",
-  "PathsToRemove": [],
+  "PathsToRemove": [
+    ""
+  ],
   "PrepareExcludedPaths": [
     "*bin",
     "*obj",
@@ -236,5 +256,5 @@
   ],
   "TemplateBuilder": ".sln",
   "TemplaterVersion": "1.0.0",
-  "Version": "2024-11-18"
+  "Version": "2025-01-02"
 }
