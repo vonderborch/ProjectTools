@@ -92,7 +92,7 @@ public class PrepareTemplateDataContext : ReactiveObject
     public Preparer TemplatePreparer;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PrepareTemplateDataContext"/> class.
+    ///     Initializes a new instance of the <see cref="PrepareTemplateDataContext" /> class.
     /// </summary>
     /// <param name="consoleLog">The console log object.</param>
     public PrepareTemplateDataContext(SelectableTextBlock? consoleLog = null)
@@ -436,7 +436,7 @@ public class PrepareTemplateDataContext : ReactiveObject
         this._consoleLog.Text = string.Empty;
     }
 
-    public void EnableTemplateConfigurationData()
+    private void EnableTemplateConfigurationData()
     {
         if (this.PreparationTemplate is null)
         {
@@ -489,7 +489,7 @@ public class PrepareTemplateDataContext : ReactiveObject
         this.TemplateInstructions = temp;
     }
 
-    public void EnabledSlugConfigurationData()
+    private void EnabledSlugConfigurationData()
     {
     }
 
