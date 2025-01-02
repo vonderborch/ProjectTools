@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.IO;
 using Avalonia.Controls;
@@ -8,6 +10,8 @@ using ProjectTools.App.Dialogs.YesNoDialogBox;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Templates;
+
+#endregion
 
 namespace ProjectTools.App.Views.Pages.PrepareTemplatePageControls;
 
@@ -37,38 +41,6 @@ public partial class PreprocessConfigurationControl : UserControl
     private PrepareTemplateDataContext Context => this._parentPage.Context;
 
     /// <summary>
-    ///     Event handler for when the text in the template directory text box changes.
-    /// </summary>
-    /// <param name="sender">The sender.</param>
-    /// <param name="e">The args.</param>
-    private void TextBoxTemplateDirectory_OnTextChanged(object? sender, TextChangedEventArgs e)
-    {
-        this.Context.TemplateDirectory = ((TextBox)sender).Text;
-        this.Context.TemplateConfigurationEnabled = false;
-    }
-
-    /// <summary>
-    ///     Event handler for when the button to select the template directory is clicked.
-    /// </summary>
-    /// <param name="sender">The sender.</param>
-    /// <param name="e">The args.</param>
-    private async void ButtonTemplateDirectory_OnClick(object? sender, RoutedEventArgs e)
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
-
-        // Start async operation to open the dialog.
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions { AllowMultiple = false, Title = "Select Directory to Prepare as Template" });
-
-        if (folders.Count >= 1)
-        {
-            var folder = folders[0];
-            this.Context.TemplateDirectory = folder.TryGetLocalPath();
-            this.Context.TemplateConfigurationEnabled = false;
-        }
-    }
-
-    /// <summary>
     ///     Event handler for when the button to select the output directory is clicked.
     /// </summary>
     /// <param name="sender">The sender.</param>
@@ -84,18 +56,8 @@ public partial class PreprocessConfigurationControl : UserControl
         if (folders.Count >= 1)
         {
             var folder = folders[0];
-            this.Context.OutputDirectory = folder.TryGetLocalPath();
+            this.Context.PreprocessDataContext.OutputDirectory = folder.TryGetLocalPath();
         }
-    }
-
-    /// <summary>
-    ///     Event handler for when the template builder combo box selection changes.
-    /// </summary>
-    /// <param name="sender">The sender.</param>
-    /// <param name="e">The args.</param>
-    private void ComboBoxTemplateBuilders_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        this.Context.TemplateConfigurationEnabled = false;
     }
 
     /// <summary>
@@ -111,8 +73,9 @@ public partial class PreprocessConfigurationControl : UserControl
 
             // Get the template builder we need to use
             this.Context.TemplateBuilder =
-                this.Context.TemplatePreparer.GetTemplateBuilderForOption(this.Context.SelectedTemplateBuilder,
-                    this.Context.TemplateDirectory);
+                this.Context.TemplatePreparer.GetTemplateBuilderForOption(
+                    this.Context.PreprocessDataContext.SelectedTemplateBuilder,
+                    this.Context.PreprocessDataContext.Directory);
 
             // Check if we already have a template or not
             this.Context.PreparationTemplate =
@@ -151,12 +114,54 @@ public partial class PreprocessConfigurationControl : UserControl
     }
 
     /// <summary>
+    ///     Event handler for when the button to select the template directory is clicked.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
+    private async void ButtonTemplateDirectory_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+
+        // Start async operation to open the dialog.
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions { AllowMultiple = false, Title = "Select Directory to Prepare as Template" });
+
+        if (folders.Count >= 1)
+        {
+            var folder = folders[0];
+            this.Context.PreprocessDataContext.Directory = folder.TryGetLocalPath();
+            this.Context.TemplateConfigurationEnabled = false;
+        }
+    }
+
+    /// <summary>
+    ///     Event handler for when the template builder combo box selection changes.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
+    private void ComboBoxTemplateBuilders_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        this.Context.TemplateConfigurationEnabled = false;
+    }
+
+    /// <summary>
+    ///     Event handler for when the text in the template directory text box changes.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
+    private void TextBoxTemplateDirectory_OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        this.Context.PreprocessDataContext.Directory = ((TextBox)sender).Text;
+        this.Context.TemplateConfigurationEnabled = false;
+    }
+
+    /// <summary>
     ///     Validates the pre process parameters.
     /// </summary>
     /// <exception cref="Exception">Raised if a parameter is invalid.</exception>
     private void ValidatePreProcessParameters()
     {
-        if (!Directory.Exists(this.Context.TemplateDirectory))
+        if (!Directory.Exists(this.Context.PreprocessDataContext.Directory))
         {
             throw new Exception("Template Directory specified does not exist!");
         }

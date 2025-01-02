@@ -1,6 +1,9 @@
+#region
+
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using ProjectTools.App.DataContexts;
+
+#endregion
 
 namespace ProjectTools.App.Views.Pages.PrepareTemplatePageControls;
 
@@ -28,14 +31,4 @@ public partial class TemplateConfigurationControl : UserControl
     ///     The data context.
     /// </summary>
     public PrepareTemplateDataContext Context => this._parentPage.Context;
-
-    /// <summary>
-    ///     The event handler for the save button.
-    /// </summary>
-    /// <param name="sender">The sender.</param>
-    /// <param name="e">The args.</param>
-    private void ButtonSaveTemplateSettings_OnClick(object? sender, RoutedEventArgs e)
-    {
-        this.Context.SlugConfigurationEnabled = true;
-    }
 }

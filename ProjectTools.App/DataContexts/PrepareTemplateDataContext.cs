@@ -1,13 +1,16 @@
+#region
+
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Avalonia.Controls;
+using ProjectTools.App.DataContexts.PrepareTemplateSubContexts;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.TemplateBuilders;
 using ProjectTools.Core.Templates;
 using ReactiveUI;
+
+#endregion
 
 namespace ProjectTools.App.DataContexts;
 
@@ -22,34 +25,9 @@ public class PrepareTemplateDataContext : ReactiveObject
     private readonly SelectableTextBlock? _consoleLog;
 
     /// <summary>
-    ///     The available template builders.
-    /// </summary>
-    private List<string> _availableTemplateBuilders;
-
-    /// <summary>
-    ///     Whether to force overwrite.
-    /// </summary>
-    private bool _forceOverwrite;
-
-    /// <summary>
-    ///     The output directory.
-    /// </summary>
-    private string _outputDirectory = string.Empty;
-
-    /// <summary>
     ///     Whether the preprocess configuration components are enabled.
     /// </summary>
     private bool _preprocessConfigurationEnabled = true;
-
-    /// <summary>
-    ///     The selected template builder index.
-    /// </summary>
-    private int _selectedTemplateBuilderIndex;
-
-    /// <summary>
-    ///     Whether to skip cleaning.
-    /// </summary>
-    private bool _skipCleaning;
 
     /// <summary>
     ///     Whether the slug configuration components are enabled.
@@ -60,16 +38,6 @@ public class PrepareTemplateDataContext : ReactiveObject
     ///     Whether the template configuration components are enabled.
     /// </summary>
     private bool _templateConfigurationEnabled;
-
-    /// <summary>
-    ///     The template directory.
-    /// </summary>
-    private string _templateDirectory = string.Empty;
-
-    /// <summary>
-    ///     Whether to run in WhatIf mode.
-    /// </summary>
-    private bool _whatIf;
 
     /// <summary>
     ///     Whether we had a preparation template already or not.
@@ -84,7 +52,7 @@ public class PrepareTemplateDataContext : ReactiveObject
     /// <summary>
     ///     The template builder.
     /// </summary>
-    public AbstractTemplateBuilder TemplateBuilder;
+    public AbstractTemplateBuilder? TemplateBuilder;
 
     /// <summary>
     ///     The Template Preparer.
@@ -99,78 +67,34 @@ public class PrepareTemplateDataContext : ReactiveObject
     {
         this._consoleLog = consoleLog;
         ClearLog();
+
         this.TemplatePreparer = new Preparer();
-        var availableTemplateBuilders = this.TemplatePreparer.GetTemplateBuilders();
-        var options = availableTemplateBuilders.Select(x => x.Name).ToList();
-        options.Insert(0, "auto");
-        this._availableTemplateBuilders = options;
-        this.PrepareTemplateSlugDataContext = new PrepareTemplateSlugDataContext(this);
+
+        this.PreprocessDataContext = new PreprocessDataContext(this);
+        this.TemplateConfigDataContext = new TemplateConfigurationDataContext(this);
+        this.SlugDataContext = new SlugDataContext(this);
     }
+
+    /// <summary>
+    ///     The data context for the preprocess configuration control.
+    /// </summary>
+    public PreprocessDataContext PreprocessDataContext { get; }
 
     /// <summary>
     ///     The slug data.
     /// </summary>
-    public PrepareTemplateSlugDataContext PrepareTemplateSlugDataContext { get; }
+    public SlugDataContext SlugDataContext { get; }
+
+    /// <summary>
+    ///     The template configuration data context.
+    /// </summary>
+    public TemplateConfigurationDataContext TemplateConfigDataContext { get; }
 
     /// <summary>
     ///     The template settings file.
     /// </summary>
     public string TemplateSettingsFile =>
-        Path.Combine(this.TemplateDirectory, TemplateConstants.TemplateSettingsFileName);
-
-    /// <summary>
-    ///     Whether to skip cleaning.
-    /// </summary>
-    public bool SkipCleaning
-    {
-        get => this._skipCleaning;
-        set => this.RaiseAndSetIfChanged(ref this._skipCleaning, value);
-    }
-
-    /// <summary>
-    ///     Whether to force overwrite.
-    /// </summary>
-    public bool ForceOverwrite
-    {
-        get => this._forceOverwrite;
-        set => this.RaiseAndSetIfChanged(ref this._forceOverwrite, value);
-    }
-
-    /// <summary>
-    ///     Whether to run in WhatIf mode.
-    /// </summary>
-    public bool WhatIf
-    {
-        get => this._whatIf;
-        set => this.RaiseAndSetIfChanged(ref this._whatIf, value);
-    }
-
-    /// <summary>
-    ///     The selected template builder.
-    /// </summary>
-    public string SelectedTemplateBuilder => this.AvailableTemplateBuilders[this.SelectedTemplateBuilderIndex];
-
-    /// <summary>
-    ///     The available template builders.
-    /// </summary>
-    public List<string> AvailableTemplateBuilders
-    {
-        get => this._availableTemplateBuilders;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref this._availableTemplateBuilders, value);
-            this.SelectedTemplateBuilderIndex = 0;
-        }
-    }
-
-    /// <summary>
-    ///     The selected template builder index.
-    /// </summary>
-    public int SelectedTemplateBuilderIndex
-    {
-        get => this._selectedTemplateBuilderIndex;
-        set => this.RaiseAndSetIfChanged(ref this._selectedTemplateBuilderIndex, value);
-    }
+        Path.Combine(this.PreprocessDataContext.Directory, TemplateConstants.TemplateSettingsFileName);
 
     /// <summary>
     ///     Whether the preprocess configuration components are enabled.
@@ -179,26 +103,6 @@ public class PrepareTemplateDataContext : ReactiveObject
     {
         get => this._preprocessConfigurationEnabled;
         set => this.RaiseAndSetIfChanged(ref this._preprocessConfigurationEnabled, value);
-    }
-
-    /// <summary>
-    ///     Whether the template configuration components are enabled.
-    /// </summary>
-    public bool TemplateConfigurationEnabled
-    {
-        get => this._templateConfigurationEnabled;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref this._templateConfigurationEnabled, value);
-            if (value)
-            {
-                EnableTemplateConfigurationData();
-            }
-            else
-            {
-                ResetTemplateConfigurationData();
-            }
-        }
     }
 
     /// <summary>
@@ -222,209 +126,21 @@ public class PrepareTemplateDataContext : ReactiveObject
     }
 
     /// <summary>
-    ///     The Template Directory.
+    ///     Whether the template configuration components are enabled.
     /// </summary>
-    public string TemplateDirectory
+    public bool TemplateConfigurationEnabled
     {
-        get => this._templateDirectory;
+        get => this._templateConfigurationEnabled;
         set
         {
-            if (string.IsNullOrEmpty(this.OutputDirectory) ||
-                Path.GetDirectoryName(this._templateDirectory) == this.OutputDirectory)
+            this.RaiseAndSetIfChanged(ref this._templateConfigurationEnabled, value);
+            if (value)
             {
-                this.OutputDirectory = Path.GetDirectoryName(value);
+                EnableTemplateConfigurationData();
             }
-
-            this.RaiseAndSetIfChanged(ref this._templateDirectory, value);
-        }
-    }
-
-    /// <summary>
-    ///     The Output Directory.
-    /// </summary>
-    public string OutputDirectory
-    {
-        get => this._outputDirectory;
-        set => this.RaiseAndSetIfChanged(ref this._outputDirectory, value);
-    }
-
-    /// <summary>
-    ///     The template name.
-    /// </summary>
-    public string TemplateName
-    {
-        get => this.PreparationTemplate?.Name ?? string.Empty;
-        set
-        {
-            if (this.PreparationTemplate is not null)
+            else
             {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.Name, value);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template version.
-    /// </summary>
-    public string TemplateVersion
-    {
-        get => this.PreparationTemplate?.Version ?? string.Empty;
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.Version, value);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template author.
-    /// </summary>
-    public string TemplateAuthor
-    {
-        get => this.PreparationTemplate?.Author ?? string.Empty;
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.Author, value);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template description.
-    /// </summary>
-    public string TemplateDescription
-    {
-        get => this.PreparationTemplate?.Description ?? string.Empty;
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.Description, value);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template rename only paths.
-    /// </summary>
-    public string TemplateRenameOnlyPaths
-    {
-        get
-        {
-            if (this.PreparationTemplate is null)
-            {
-                return string.Empty;
-            }
-
-            return string.Join(Environment.NewLine, this.PreparationTemplate.RenameOnlyPaths);
-        }
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.RenameOnlyPaths,
-                    value.Split(Environment.NewLine).ToList());
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template paths to remove.
-    /// </summary>
-    public string TemplatePathsToRemove
-    {
-        get
-        {
-            if (this.PreparationTemplate is null)
-            {
-                return string.Empty;
-            }
-
-            return string.Join(Environment.NewLine, this.PreparationTemplate.PathsToRemove);
-        }
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.RenameOnlyPaths,
-                    value.Split(Environment.NewLine).ToList());
-                this.PreparationTemplate.PathsToRemove = value.Split(Environment.NewLine).ToList();
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template prepare excluded paths.
-    /// </summary>
-    public string TemplatePrepareExcludedPaths
-    {
-        get
-        {
-            if (this.PreparationTemplate is null)
-            {
-                return string.Empty;
-            }
-
-            return string.Join(Environment.NewLine, this.PreparationTemplate.PrepareExcludedPaths);
-        }
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.PrepareExcludedPaths,
-                    value.Split(Environment.NewLine).ToList());
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template python script paths.
-    /// </summary>
-    public string TemplatePythonScriptPaths
-    {
-        get
-        {
-            if (this.PreparationTemplate is null)
-            {
-                return string.Empty;
-            }
-
-            return string.Join(Environment.NewLine, this.PreparationTemplate.PythonScriptPaths);
-        }
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.PythonScriptPaths,
-                    value.Split(Environment.NewLine).ToList());
-            }
-        }
-    }
-
-    /// <summary>
-    ///     The template instructions.
-    /// </summary>
-    public string TemplateInstructions
-    {
-        get
-        {
-            if (this.PreparationTemplate is null)
-            {
-                return string.Empty;
-            }
-
-            return string.Join(Environment.NewLine, this.PreparationTemplate.Instructions);
-        }
-        set
-        {
-            if (this.PreparationTemplate is not null)
-            {
-                this.RaiseAndSetIfChanged(ref this.PreparationTemplate.Instructions,
-                    value.Split(Environment.NewLine).ToList());
+                ResetTemplateConfigurationData();
             }
         }
     }
@@ -442,6 +158,11 @@ public class PrepareTemplateDataContext : ReactiveObject
         this._consoleLog.Text = string.Empty;
     }
 
+    private void EnabledSlugConfigurationData()
+    {
+        this.SlugDataContext.EnableContext();
+    }
+
     private void EnableTemplateConfigurationData()
     {
         if (this.PreparationTemplate is null)
@@ -449,55 +170,26 @@ public class PrepareTemplateDataContext : ReactiveObject
             throw new Exception("PreparationTemplate is null!");
         }
 
-        // Template Name
-        var temp = this.PreparationTemplate.Name;
-        this.TemplateName = string.Empty;
-        this.TemplateName = temp;
-
-        // Template Version
-        temp = this.PreparationTemplate.Version;
-        this.TemplateVersion = string.Empty;
-        this.TemplateVersion = temp;
-
-        // Template Author
-        temp = this.PreparationTemplate.Author;
-        this.TemplateAuthor = string.Empty;
-        this.TemplateAuthor = temp;
-
-        // Template Description
-        temp = this.PreparationTemplate.Description;
-        this.TemplateDescription = string.Empty;
-        this.TemplateDescription = temp;
-
-        // Template Rename Only Paths
-        temp = string.Join(Environment.NewLine, this.PreparationTemplate.RenameOnlyPaths);
-        this.TemplateRenameOnlyPaths = string.Empty;
-        this.TemplateRenameOnlyPaths = temp;
-
-        // Template Paths To Remove
-        temp = string.Join(Environment.NewLine, this.PreparationTemplate.PathsToRemove);
-        this.TemplatePathsToRemove = string.Empty;
-        this.TemplatePathsToRemove = temp;
-
-        // Template Prepare Excluded Paths
-        temp = string.Join(Environment.NewLine, this.PreparationTemplate.PrepareExcludedPaths);
-        this.TemplatePrepareExcludedPaths = string.Empty;
-        this.TemplatePrepareExcludedPaths = temp;
-
-        // Template Python Script Paths
-        temp = string.Join(Environment.NewLine, this.PreparationTemplate.PythonScriptPaths);
-        this.TemplatePythonScriptPaths = string.Empty;
-        this.TemplatePythonScriptPaths = temp;
-
-        // Template Instructions
-        temp = string.Join(Environment.NewLine, this.PreparationTemplate.Instructions);
-        this.TemplateInstructions = string.Empty;
-        this.TemplateInstructions = temp;
+        this.TemplateConfigDataContext.EnableContext();
+        this.SlugConfigurationEnabled = true;
     }
 
-    private void EnabledSlugConfigurationData()
+    /// <summary>
+    ///     Resets the slug configuration data.
+    /// </summary>
+    private void ResetSlugConfigurationData()
     {
-        this.PrepareTemplateSlugDataContext.SetContext();
+        this.SlugDataContext.ClearContext();
+    }
+
+    /// <summary>
+    ///     Resets the template configuration data.
+    /// </summary>
+    private void ResetTemplateConfigurationData()
+    {
+        this.TemplateConfigDataContext.ClearContext();
+        this.SlugConfigurationEnabled = false;
+        this.PreparationTemplate = null;
     }
 
     /// <summary>
@@ -512,34 +204,7 @@ public class PrepareTemplateDataContext : ReactiveObject
             return false;
         }
 
-        this._consoleLog.Text = $"{this._consoleLog.Text}{Environment.NewLine}{message}";
+        this._consoleLog.Text = $"{message}{Environment.NewLine}{this._consoleLog.Text}";
         return true;
-    }
-
-    /// <summary>
-    ///     Resets the template configuration data.
-    /// </summary>
-    private void ResetTemplateConfigurationData()
-    {
-        this.TemplateName = string.Empty;
-        this.TemplateVersion = string.Empty;
-        this.TemplateAuthor = string.Empty;
-        this.TemplateDescription = string.Empty;
-        this.TemplateRenameOnlyPaths = string.Empty;
-        this.TemplatePathsToRemove = string.Empty;
-        this.TemplatePrepareExcludedPaths = string.Empty;
-        this.TemplatePythonScriptPaths = string.Empty;
-        this.TemplateInstructions = string.Empty;
-        this.SlugConfigurationEnabled = false;
-
-        this.PreparationTemplate = null;
-    }
-
-    /// <summary>
-    ///     Resets the slug configuration data.
-    /// </summary>
-    private void ResetSlugConfigurationData()
-    {
-        this.PrepareTemplateSlugDataContext.ClearContext();
     }
 }

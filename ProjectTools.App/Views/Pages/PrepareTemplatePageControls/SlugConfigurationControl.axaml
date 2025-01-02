@@ -22,8 +22,8 @@
 
             <WrapPanel Orientation="Vertical" Grid.Column="0">
                 <ComboBox Name="ComboBoxSlugs" SelectionChanged="ComboBoxSlugs_OnSelectionChanged"
-                          ItemsSource="{Binding PrepareTemplateSlugDataContext.TemplateSlugNames}"
-                          SelectedItem="{Binding PrepareTemplateSlugDataContext.CurrentlyEditingSlug}" />
+                          ItemsSource="{Binding SlugDataContext.TemplateSlugsNames}"
+                          SelectedItem="{Binding SlugDataContext.CurrentEditingSlugName}" />
                 <WrapPanel Orientation="Horizontal">
                     <Button Content="Add Slug" Name="ButtonAddSlug" Click="ButtonAddSlug_OnClick" />
                     <Button Content="Delete Slug" Name="ButtonDeleteSlug" Click="ButtonDeleteSlug_OnClick" />
@@ -32,51 +32,58 @@
             <WrapPanel Orientation="Vertical" Grid.Column="1">
                 <WrapPanel>
                     <TextBlock>Display Name: </TextBlock>
-                    <TextBox Name="TextBoxDisplayName" Watermark="Display Name" Text="{Binding PrepareTemplateSlugDataContext.CurrentEditingSlugDisplayName}" />
+                    <TextBox Name="TextBoxDisplayName" Watermark="Display Name"
+                             Text="{Binding SlugDataContext.CurrentSlugName}" />
                 </WrapPanel>
 
                 <WrapPanel>
                     <TextBlock>Slug Key: </TextBlock>
-                    <TextBox Name="TextBoxSlugKey" Watermark="Slug Key" />
+                    <TextBox Name="TextBoxSlugKey" Watermark="Slug Key" Text="{Binding SlugDataContext.CurrentSlugKey}" />
                 </WrapPanel>
 
-                <WrapPanel Name="PanelSlugType" IsEnabled="False">
+                <WrapPanel Name="PanelSlugType" IsEnabled="{Binding SlugDataContext.CurrentSlugEnableSlugTypePanel}">
                     <TextBlock>Slug Type: </TextBlock>
                     <ComboBox Name="ComboBoxBoxSlugType"
-                              ItemsSource="{Binding PrepareTemplateSlugDataContext.SlugTypes}"
-                              SelectionChanged="ComboBoxBoxSlugType_OnSelectionChanged" />
+                              ItemsSource="{Binding SlugDataContext.AvailableSlugTypes}"
+                              SelectedItem="{Binding SlugDataContext.CurrentSlugSelectedType}" />
                 </WrapPanel>
 
                 <WrapPanel>
                     <TextBlock>Slug Search Strings: </TextBlock>
                     <TextBox Name="TextBoxSearchStrings" Watermark="Slug Search Strings (new-line-separated)"
-                             AcceptsReturn="True" />
+                             AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugSearchStrings}" />
                 </WrapPanel>
 
-                <WrapPanel Name="PanelNonGuidOptions" IsVisible="False" Orientation="Vertical">
+                <WrapPanel Name="PanelNonGuidOptions" IsVisible="{Binding SlugDataContext.NonGuidOptionsPanelEnabled}"
+                           Orientation="Vertical">
                     <WrapPanel>
                         <TextBlock>Slug Type Special Values: </TextBlock>
-                        <TextBox Name="TextBoxSpecialValues" IsEnabled="False" AcceptsReturn="True" />
+                        <SelectableTextBlock Name="TextBoxSpecialValues" IsEnabled="False"
+                                             Text="{Binding SlugDataContext.SlugTypeSpecialValues}" />
                     </WrapPanel>
 
                     <WrapPanel>
                         <TextBlock>Slug Default Value: </TextBlock>
-                        <TextBox Name="TextBoxDefaultValue" Watermark="Slug Default Value" />
+                        <TextBox Name="TextBoxDefaultValue" Watermark="Slug Default Value"
+                                 Text="{Binding SlugDataContext.CurrentSlugDefaultValue}" />
                     </WrapPanel>
 
                     <WrapPanel>
                         <TextBlock>Slug Allowed Values: </TextBlock>
                         <TextBox Name="TextBoxAllowedValues" Watermark="Slug Allowed Values (new-line-separated)"
-                                 AcceptsReturn="True" />
+                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugAllowedValues}" />
                     </WrapPanel>
 
                     <WrapPanel>
                         <TextBlock>Slug Disallowed Values: </TextBlock>
                         <TextBox Name="TextBoxDisallowedValues" Watermark="Slug Disallowed Values (new-line-separated)"
-                                 AcceptsReturn="True" />
+                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugDisallowedValues}" />
                     </WrapPanel>
 
-                    <CheckBox Name="CheckBoxRequiresUserInput">Requires User Input</CheckBox>
+                    <CheckBox Name="CheckBoxRequiresUserInput"
+                              IsChecked="{Binding SlugDataContext.CurrentSlugRequiresUserInput}">
+                        Requires User Input
+                    </CheckBox>
                 </WrapPanel>
             </WrapPanel>
         </Grid>

@@ -1,7 +1,12 @@
+#region
+
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ProjectTools.App.DataContexts;
+using ProjectTools.Core.Helpers;
+
+#endregion
 
 namespace ProjectTools.App.Views.Pages.PrepareTemplatePageControls;
 
@@ -30,28 +35,54 @@ public partial class SlugConfigurationControl : UserControl
     /// </summary>
     public PrepareTemplateDataContext Context => this._parentPage.Context;
 
-    private void ButtonGenerateTemplate_OnClick(object? sender, RoutedEventArgs e)
+    private void ButtonAddSlug_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        var newSlugName = this.Context.SlugDataContext.AddSlug();
+        this.ComboBoxSlugs.SelectedItem = newSlugName;
     }
 
     private void ButtonDeleteSlug_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        this.Context.SlugDataContext.DeleteCurrentSlug();
     }
 
-    private void ComboBoxBoxSlugType_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void ButtonGenerateTemplate_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
-    }
+        if (this.Context.PreparationTemplate is null)
+        {
+            throw new InvalidOperationException("Preparation template is null.");
+        }
 
-    private void ButtonAddSlug_OnClick(object? sender, RoutedEventArgs e)
-    {
-        throw new NotImplementedException();
+        IOHelpers.DeleteFileIfExists(this.Context.TemplateSettingsFile);
+        JsonHelpers.SerializeToFile(this.Context.TemplateSettingsFile, this.Context.PreparationTemplate);
+
+        if (this.Context.PreprocessDataContext.WhatIf)
+        {
+            this.Context.WriteLog("What-If mode enabled. Template settings updated, but no template generated.");
+        }
+        else
+        {
+            Logger coreLogger = new(this.Context.WriteLog);
+            var output = this.Context.TemplatePreparer.GenerateTemplate(this.Context.PreprocessDataContext.Directory,
+                this.Context.PreprocessDataContext.OutputDirectory, this.Context.PreprocessDataContext.SkipCleaning,
+                this.Context.PreprocessDataContext.ForceOverwrite,
+                this.Context.PreparationTemplate, coreLogger);
+            if (!string.IsNullOrEmpty(output))
+            {
+                this.Context.WriteLog(output);
+            }
+        }
     }
 
     private void ComboBoxSlugs_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        this.Context.PrepareTemplateSlugDataContext.UpdateContext();
+        if (e.AddedItems.Count > 0)
+        {
+            this.Context.SlugDataContext.SelectSlugContext(e.AddedItems[0].ToString());
+        }
+        else
+        {
+            this.Context.SlugDataContext.ClearContext();
+        }
     }
 }

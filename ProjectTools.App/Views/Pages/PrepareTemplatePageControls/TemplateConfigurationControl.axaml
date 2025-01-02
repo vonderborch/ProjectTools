@@ -17,52 +17,51 @@
         <TextBlock>TEMPLATE CONFIGURATION</TextBlock>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Name: </TextBlock>
-            <TextBox Name="TextBoxTemplateName" Watermark="Template Name" Text="{Binding TemplateName}" />
+            <TextBox Name="TextBoxTemplateName" Watermark="Template Name"
+                     Text="{Binding TemplateConfigDataContext.Name}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Version: </TextBlock>
-            <TextBox Name="TextBoxTemplateVersion" Watermark="Template Version" Text="{Binding TemplateVersion}" />
+            <TextBox Name="TextBoxTemplateVersion" Watermark="Template Version"
+                     Text="{Binding TemplateConfigDataContext.Version}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Description: </TextBlock>
             <TextBox Name="TextBoxTemplateDescription" Watermark="Template Description"
-                     Text="{Binding TemplateDescription}" />
+                     Text="{Binding TemplateConfigDataContext.Description}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Author: </TextBlock>
             <TextBox Name="TextBoxTemplateAuthor" Watermark="Template Author"
-                     Text="{Binding TemplateAuthor}" />
+                     Text="{Binding TemplateConfigDataContext.Author}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Rename Only Paths: </TextBlock>
             <TextBox Name="TextBoxTemplateRenameOnlyPaths" Watermark="Template Rename Only Paths (new-line-separated)"
                      AcceptsReturn="True"
-                     Text="{Binding TemplateRenameOnlyPaths}" />
+                     Text="{Binding TemplateConfigDataContext.RenameOnlyPaths}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Paths To Remove: </TextBlock>
             <TextBox Name="TextBoxTemplatePathsToRemove" Watermark="Template Paths To Remove (new-line-separated)"
-                     AcceptsReturn="True" Text="{Binding TemplatePathsToRemove}" />
+                     AcceptsReturn="True" Text="{Binding TemplateConfigDataContext.PathsToRemove}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Paths Excluded From Template: </TextBlock>
             <TextBox Name="TextBoxTemplatePrepareExcludedPaths"
                      Watermark="Paths Excluded From Template (new-line-separated)" AcceptsReturn="True"
-                     Text="{Binding TemplatePrepareExcludedPaths}" />
+                     Text="{Binding TemplateConfigDataContext.PrepareExcludedPaths}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Python Script Paths: </TextBlock>
             <TextBox Name="TextBoxTemplatePythonScriptPaths" Watermark="Python Script Paths (new-line-separated)"
-                     AcceptsReturn="True" Text="{Binding TemplatePythonScriptPaths}" />
+                     AcceptsReturn="True" Text="{Binding TemplateConfigDataContext.PythonScriptPaths}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>User Instructions: </TextBlock>
             <TextBox Name="TextBoxTemplateInstructions" Watermark="User Instructions (new-line-separated)"
-                     AcceptsReturn="True" Text="{Binding TemplateInstructions}" />
+                     AcceptsReturn="True" Text="{Binding TemplateConfigDataContext.Instructions}" />
         </WrapPanel>
-
-        <Button Content="Set Template Settings" Name="ButtonSaveTemplateSettings" HorizontalAlignment="Stretch"
-                Click="ButtonSaveTemplateSettings_OnClick" />
     </StackPanel>
 
 </UserControl>

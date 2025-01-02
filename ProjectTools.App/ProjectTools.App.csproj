@@ -33,4 +33,11 @@
     <ItemGroup>
         <ProjectReference Include="..\ProjectTools.Core\ProjectTools.Core.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\GenerateTemplate.axaml"/>
+        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\PreprocessConfiguration.axaml"/>
+        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\SlugConfiguration.axaml"/>
+        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\TemplateConfiguration.axaml"/>
+    </ItemGroup>
 </Project>
