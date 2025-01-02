@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ProjectTools.App.DataContexts;
@@ -31,31 +32,26 @@ public partial class SlugConfigurationControl : UserControl
 
     private void ButtonGenerateTemplate_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void ButtonDeleteSlug_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
-    }
-
-    private void ButtonSaveSlug_OnClick(object? sender, RoutedEventArgs e)
-    {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void ComboBoxBoxSlugType_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void ButtonAddSlug_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void ComboBoxSlugs_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        this.Context.PrepareTemplateSlugDataContext.UpdateContext();
     }
 }

@@ -104,7 +104,13 @@ public class PrepareTemplateDataContext : ReactiveObject
         var options = availableTemplateBuilders.Select(x => x.Name).ToList();
         options.Insert(0, "auto");
         this._availableTemplateBuilders = options;
+        this.PrepareTemplateSlugDataContext = new PrepareTemplateSlugDataContext(this);
     }
+
+    /// <summary>
+    ///     The slug data.
+    /// </summary>
+    public PrepareTemplateSlugDataContext PrepareTemplateSlugDataContext { get; }
 
     /// <summary>
     ///     The template settings file.
@@ -491,6 +497,7 @@ public class PrepareTemplateDataContext : ReactiveObject
 
     private void EnabledSlugConfigurationData()
     {
+        this.PrepareTemplateSlugDataContext.SetContext();
     }
 
     /// <summary>
@@ -533,5 +540,6 @@ public class PrepareTemplateDataContext : ReactiveObject
     /// </summary>
     private void ResetSlugConfigurationData()
     {
+        this.PrepareTemplateSlugDataContext.ClearContext();
     }
 }

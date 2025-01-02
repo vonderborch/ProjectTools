@@ -11,7 +11,7 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <dataContexts:PrepareTemplateDataContext />
     </Design.DataContext>
-    
+
     <StackPanel Orientation="Vertical" x:CompileBindings="False" IsEnabled="{Binding SlugConfigurationEnabled}">
         <TextBlock>SLUG CONFIGURATION</TextBlock>
         <Grid>
@@ -21,13 +21,18 @@
             </Grid.ColumnDefinitions>
 
             <WrapPanel Orientation="Vertical" Grid.Column="0">
-                <ComboBox Name="ComboBoxSlugs" SelectionChanged="ComboBoxSlugs_OnSelectionChanged" />
-                <Button Content="Add Slug" Name="ButtonAddSlug" Click="ButtonAddSlug_OnClick" />
+                <ComboBox Name="ComboBoxSlugs" SelectionChanged="ComboBoxSlugs_OnSelectionChanged"
+                          ItemsSource="{Binding PrepareTemplateSlugDataContext.TemplateSlugNames}"
+                          SelectedItem="{Binding PrepareTemplateSlugDataContext.CurrentlyEditingSlug}" />
+                <WrapPanel Orientation="Horizontal">
+                    <Button Content="Add Slug" Name="ButtonAddSlug" Click="ButtonAddSlug_OnClick" />
+                    <Button Content="Delete Slug" Name="ButtonDeleteSlug" Click="ButtonDeleteSlug_OnClick" />
+                </WrapPanel>
             </WrapPanel>
             <WrapPanel Orientation="Vertical" Grid.Column="1">
                 <WrapPanel>
                     <TextBlock>Display Name: </TextBlock>
-                    <TextBox Name="TextBoxDisplayName" Watermark="Display Name" />
+                    <TextBox Name="TextBoxDisplayName" Watermark="Display Name" Text="{Binding PrepareTemplateSlugDataContext.CurrentEditingSlugDisplayName}" />
                 </WrapPanel>
 
                 <WrapPanel>
@@ -37,7 +42,9 @@
 
                 <WrapPanel Name="PanelSlugType" IsEnabled="False">
                     <TextBlock>Slug Type: </TextBlock>
-                    <ComboBox Name="ComboBoxBoxSlugType" SelectionChanged="ComboBoxBoxSlugType_OnSelectionChanged" />
+                    <ComboBox Name="ComboBoxBoxSlugType"
+                              ItemsSource="{Binding PrepareTemplateSlugDataContext.SlugTypes}"
+                              SelectionChanged="ComboBoxBoxSlugType_OnSelectionChanged" />
                 </WrapPanel>
 
                 <WrapPanel>
@@ -71,15 +78,11 @@
 
                     <CheckBox Name="CheckBoxRequiresUserInput">Requires User Input</CheckBox>
                 </WrapPanel>
-                <WrapPanel Orientation="Horizontal">
-                    <Button Content="Save Slug" Name="ButtonSaveSlug" Click="ButtonSaveSlug_OnClick" />
-                    <Button Content="Delete Slug" Name="ButtonDeleteSlug" Click="ButtonDeleteSlug_OnClick" />
-                </WrapPanel>
             </WrapPanel>
         </Grid>
 
         <Button Content="Generate Template" Name="ButtonGenerateTemplate"
                 Click="ButtonGenerateTemplate_OnClick" HorizontalAlignment="Stretch" />
     </StackPanel>
-    
+
 </UserControl>

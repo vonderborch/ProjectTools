@@ -61,7 +61,7 @@
                      AcceptsReturn="True" Text="{Binding TemplateInstructions}" />
         </WrapPanel>
 
-        <Button Content="Save Template Settings" Name="ButtonSaveTemplateSettings" HorizontalAlignment="Stretch"
+        <Button Content="Set Template Settings" Name="ButtonSaveTemplateSettings" HorizontalAlignment="Stretch"
                 Click="ButtonSaveTemplateSettings_OnClick" />
     </StackPanel>
 
