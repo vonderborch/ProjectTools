@@ -14,7 +14,7 @@
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top" x:CompileBindings="False"
                 IsEnabled="{Binding TemplateConfigurationEnabled}">
-        <TextBlock>TEMPLATE CONFIGURATION</TextBlock>
+        <TextBlock HorizontalAlignment="Center">TEMPLATE CONFIGURATION</TextBlock>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Name: </TextBlock>
             <TextBox Name="TextBoxTemplateName" Watermark="Template Name"

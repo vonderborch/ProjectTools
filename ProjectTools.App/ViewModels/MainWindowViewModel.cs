@@ -1,5 +1,11 @@
-﻿namespace ProjectTools.App.ViewModels;
+﻿#region
 
-public class MainWindowViewModel : ViewModelBase
+using CommunityToolkit.Mvvm.ComponentModel;
+
+#endregion
+
+namespace ProjectTools.App.ViewModels;
+
+public class MainWindowViewModel : ObservableObject
 {
 }

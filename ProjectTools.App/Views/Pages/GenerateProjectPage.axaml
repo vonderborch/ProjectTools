@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectTools.App.Views.Pages.GenerateProjectPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <UniformGrid Grid.Row="0" Columns="3" Rows="1">
+            <ScrollViewer Name="ViewerTemplateSelection" />
+            <ScrollViewer Name="ViewerCoreConfig" />
+            <ScrollViewer Name="ViewerSlugConfig" />
+        </UniformGrid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="9*" />
+            </Grid.RowDefinitions>
+            <UniformGrid Grid.Row="1" Columns="3">
+                <TextBlock Text="CORE LOG" HorizontalAlignment="Center" />
+                <TextBlock Text="SCRIPT LOG" HorizontalAlignment="Center" />
+                <TextBlock Text="INSTRUCTION LOG" HorizontalAlignment="Center" />
+            </UniformGrid>
+            <UniformGrid Grid.Row="1" Columns="3">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                    <SelectableTextBlock IsEnabled="False" Name="SelectableTextBlockCoreLog" />
+                </ScrollViewer>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                    <SelectableTextBlock IsEnabled="False" Name="SelectableTextBlockScriptLog" />
+                </ScrollViewer>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                    <SelectableTextBlock IsEnabled="False" Name="SelectableTextBlockInstructionLog" />
+                </ScrollViewer>
+            </UniformGrid>
+        </Grid>
+    </Grid>
+</UserControl>

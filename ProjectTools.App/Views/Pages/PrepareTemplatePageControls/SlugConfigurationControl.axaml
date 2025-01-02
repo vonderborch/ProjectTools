@@ -13,7 +13,7 @@
     </Design.DataContext>
 
     <StackPanel Orientation="Vertical" x:CompileBindings="False" IsEnabled="{Binding SlugConfigurationEnabled}">
-        <TextBlock>SLUG CONFIGURATION</TextBlock>
+        <TextBlock HorizontalAlignment="Center">SLUG CONFIGURATION</TextBlock>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

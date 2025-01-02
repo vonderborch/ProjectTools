@@ -1,12 +1,15 @@
+#region
+
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using ProjectTools.App.DataContexts;
-using ProjectTools.App.Dialogs.YesNoDialogBox;
+using ProjectTools.App.Helpers;
 using ProjectTools.App.PageRegistrationLogic;
-using ProjectTools.Core;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
+
+#endregion
 
 namespace ProjectTools.App.Views;
 
@@ -110,27 +113,8 @@ public partial class ControlPanel : UserControl
     /// </summary>
     /// <param name="sender">The sender.</param>
     /// <param name="args">The args.</param>
-    public async void ButtonUpdateCheck_Click(object sender, RoutedEventArgs args)
+    public void ButtonUpdateCheck_Click(object sender, RoutedEventArgs args)
     {
-        AppUpdator updator = new();
-        var (newVersion, hasUpdate) = updator.CheckForUpdates(AppConstants.AppNameGui, true);
-
-        var hasUpdateText = hasUpdate ? $"There is an update available (v{newVersion})!" : "You are up to date!";
-
-        var doUpdate = await YesNoDialogBox.Open(
-            this,
-            "Update Check Result",
-            hasUpdateText,
-            300,
-            150,
-            yesButtonText: "OK",
-            showNoButton: false
-        );
-
-        if (hasUpdate && doUpdate)
-        {
-            UrlHelpers.OpenUrl(AppConstants.RepoLatestReleaseUrl,
-                $"Please go to {AppConstants.RepoLatestReleaseUrl} to download the latest release!");
-        }
+        UpdateHelper.CheckForUpdates(this, true);
     }
 }

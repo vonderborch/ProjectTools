@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dataContexts="clr-namespace:ProjectTools.App.DataContexts"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectTools.App.Views.Pages.GenerateProjectControls.TemplateSelectionControl">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <dataContexts:GenerateProjectDataContext />
+    </Design.DataContext>
+
+    <StackPanel x:CompileBindings="False">
+        <TextBlock Text="AVAILABLE TEMPLATES" />
+        <Button Content="Update Templates" Name="ButtonUpdateTemplates" Click="ButtonUpdateTemplates_OnClick"
+                HorizontalAlignment="Stretch" />
+        <ListBox Name="ListBoxAvailableTemplates" SelectionMode="Single" MaxHeight="600"
+                 ItemsSource="{Binding TemplateSelectionContext.AvailableTemplateNames}"
+                 SelectedItem="{Binding TemplateSelectionContext.SelectedTemplateName} " />
+        <UniformGrid Columns="2">
+            <TextBlock Text="Template Name: " />
+            <TextBlock Text="{Binding TemplateSelectionContext.SelectedTemplateName}" />
+        </UniformGrid>
+        <UniformGrid Columns="2">
+            <TextBlock Text="Template Author: " />
+            <TextBlock Text="{Binding TemplateSelectionContext.SelectedTemplateAuthor}" />
+        </UniformGrid>
+        <UniformGrid Columns="2">
+            <TextBlock Text="Template Version: " />
+            <TextBlock Text="{Binding TemplateSelectionContext.SelectedTemplateVersion}" />
+        </UniformGrid>
+        <UniformGrid Columns="2">
+            <TextBlock Text="Template Source: " />
+            <TextBlock Text="{Binding TemplateSelectionContext.SelectedTemplateSource}" />
+        </UniformGrid>
+        <UniformGrid Columns="2">
+            <TextBlock Text="Template Description: " />
+            <TextBlock Text="{Binding TemplateSelectionContext.SelectedTemplateDescription}" TextWrapping="Wrap" />
+        </UniformGrid>
+        <Button Content="Use Selected Template" Name="ButtonUseSelectedTemplate" Click="ButtonUseSelectedTemplate_OnClick"
+                HorizontalAlignment="Stretch" />
+    </StackPanel>
+</UserControl>

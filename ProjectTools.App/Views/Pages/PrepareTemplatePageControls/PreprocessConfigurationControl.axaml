@@ -13,7 +13,7 @@
     </Design.DataContext>
 
     <StackPanel Orientation="Vertical" x:CompileBindings="False" IsEnabled="{Binding PreprocessConfigurationEnabled}">
-        <TextBlock>PREPROCESS CONFIGURATION</TextBlock>
+        <TextBlock HorizontalAlignment="Center">PREPROCESS CONFIGURATION</TextBlock>
         <WrapPanel>
             <TextBox Name="TextBoxTemplateDirectory" Watermark="Template Directory"
                      TextChanged="TextBoxTemplateDirectory_OnTextChanged"
