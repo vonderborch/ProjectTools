@@ -12,18 +12,18 @@
         <dataContexts:PrepareTemplateDataContext />
     </Design.DataContext>
 
-    <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical" x:CompileBindings="False" IsEnabled="{Binding PreprocessConfigurationEnabled}">
         <TextBlock>PREPROCESS CONFIGURATION</TextBlock>
         <WrapPanel>
             <TextBox Name="TextBoxTemplateDirectory" Watermark="Template Directory"
-                     TextChanged="TextBoxTemplateDirectory_OnTextChanged" x:CompileBindings="False"
+                     TextChanged="TextBoxTemplateDirectory_OnTextChanged"
                      Text="{Binding TemplateDirectory}" />
             <Button Content="Template Directory" Name="ButtonTemplateDirectory"
                     Click="ButtonTemplateDirectory_OnClick" />
         </WrapPanel>
 
         <WrapPanel Orientation="Horizontal">
-            <TextBox Name="TextBoxOutputDirectory" Watermark="Output Directory" x:CompileBindings="False"
+            <TextBox Name="TextBoxOutputDirectory" Watermark="Output Directory"
                      Text="{Binding OutputDirectory}" />
             <Button Content="Output Directory" Name="ButtonOutputDirectory" Click="ButtonOutputDirectory_OnClick" />
         </WrapPanel>
@@ -32,12 +32,14 @@
             <TextBlock Name="TextBoxTemplateBuilder" RelativePanel.AlignLeftWithPanel="True">Template Builder: </TextBlock>
             <ComboBox Name="ComboBoxTemplateBuilders" RelativePanel.RightOf="TextTemplateBuilder"
                       RelativePanel.AlignRightWithPanel="True"
-                      SelectionChanged="ComboBoxTemplateBuilders_OnSelectionChanged" />
+                      SelectionChanged="ComboBoxTemplateBuilders_OnSelectionChanged"
+                      ItemsSource="{Binding AvailableTemplateBuilders}"
+                      SelectedIndex="{Binding SelectedTemplateBuilderIndex}" />
         </RelativePanel>
 
-        <CheckBox IsChecked="False" Name="CheckBoxSkipCleaning">Skip Cleaning</CheckBox>
-        <CheckBox IsChecked="False" Name="CheckBoxForce">Force Override Existing Template</CheckBox>
-        <CheckBox IsChecked="False" Name="CheckBoxWhatIf">What If</CheckBox>
+        <CheckBox IsChecked="{Binding SkipCleaning}" Name="CheckBoxSkipCleaning">Skip Cleaning</CheckBox>
+        <CheckBox IsChecked="{Binding ForceOverwrite}" Name="CheckBoxForce">Force Override Existing Template</CheckBox>
+        <CheckBox IsChecked="{Binding WhatIf}" Name="CheckBoxWhatIf">What If</CheckBox>
 
         <Button Content="Pre-Process Directory" Name="ButtonPreProcess" Click="ButtonPreProcess_OnClick"
                 HorizontalAlignment="Stretch" />

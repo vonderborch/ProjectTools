@@ -17,16 +17,19 @@ public partial class PrepareTemplatePage : UserControl
     {
         InitializeComponent();
 
-        PreprocessConfigurationControl preprocessConfigurationControl = new(this);
-        TemplateConfigurationControl templateConfigurationControl = new(this);
-        SlugConfigurationControl slugConfigurationControl = new(this);
-
-        this.Context = new PrepareTemplateDataContext(this, preprocessConfigurationControl, slugConfigurationControl,
-            templateConfigurationControl);
-
-        preprocessConfigurationControl.DataContext = this.Context;
-        templateConfigurationControl.DataContext = this.Context;
-        slugConfigurationControl.DataContext = this.Context;
+        this.Context = new PrepareTemplateDataContext(this.SelectableTextBlockLog);
+        PreprocessConfigurationControl preprocessConfigurationControl = new(this)
+        {
+            DataContext = this.Context
+        };
+        TemplateConfigurationControl templateConfigurationControl = new(this)
+        {
+            DataContext = this.Context
+        };
+        SlugConfigurationControl slugConfigurationControl = new(this)
+        {
+            DataContext = this.Context
+        };
 
         this.ViewerPreprocessConfig.Content = preprocessConfigurationControl;
         this.ViewerSlugConfig.Content = slugConfigurationControl;
