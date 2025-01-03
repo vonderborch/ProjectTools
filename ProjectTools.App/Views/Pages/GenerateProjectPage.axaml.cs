@@ -18,7 +18,8 @@ public partial class GenerateProjectPage : UserControl
     {
         InitializeComponent();
 
-        this.Context = new GenerateProjectDataContext();
+        this.Context = new GenerateProjectDataContext(this.SelectableTextBlockCoreLog,
+            this.SelectableTextBlockScriptLog, this.SelectableTextBlockInstructionLog);
         TemplateSelectionControl templateSelection = new(this)
         {
             DataContext = this.Context

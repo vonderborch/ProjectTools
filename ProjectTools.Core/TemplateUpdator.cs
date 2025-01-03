@@ -18,6 +18,20 @@ public static class TemplateUpdater
     /// <param name="forceCheck">True to force check for updates, False otherwise.</param>
     /// <param name="forceRedownload">True to force mark local templates as needing updates, False otherwise.</param>
     /// <returns>The update check results.</returns>
+    public static async Task<TemplateUpdateCheckResult> AsyncCheckForTemplateUpdates(AppSettings? appSettings = null,
+        bool forceCheck = false, bool forceRedownload = false)
+    {
+        var task = await Task.Run(() => CheckForTemplateUpdates(appSettings, forceCheck, forceRedownload));
+        return task;
+    }
+
+    /// <summary>
+    ///     A method to check for template updates.
+    /// </summary>
+    /// <param name="appSettings">The application settings.</param>
+    /// <param name="forceCheck">True to force check for updates, False otherwise.</param>
+    /// <param name="forceRedownload">True to force mark local templates as needing updates, False otherwise.</param>
+    /// <returns>The update check results.</returns>
     public static TemplateUpdateCheckResult CheckForTemplateUpdates(AppSettings? appSettings = null,
         bool forceCheck = false, bool forceRedownload = false)
     {
@@ -94,6 +108,10 @@ public static class TemplateUpdater
                 }
 
                 IOHelpers.DeleteFileIfExists(filePath);
+                if (newLocalTemplateInfo.Select(x => x.Name).Contains(templateMetadata.Name))
+                {
+                    newLocalTemplateInfo.Remove(newLocalTemplateInfo.First(x => x.Name == templateMetadata.Name));
+                }
             }
 
             // Step 2b - Download the remote copy of the template...

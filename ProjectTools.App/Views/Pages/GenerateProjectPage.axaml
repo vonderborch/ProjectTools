@@ -20,10 +20,10 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="9*" />
             </Grid.RowDefinitions>
-            <UniformGrid Grid.Row="1" Columns="3">
-                <TextBlock Text="CORE LOG" HorizontalAlignment="Center" />
-                <TextBlock Text="SCRIPT LOG" HorizontalAlignment="Center" />
-                <TextBlock Text="INSTRUCTION LOG" HorizontalAlignment="Center" />
+            <UniformGrid Grid.Row="0" Columns="3">
+                <SelectableTextBlock Text="CORE LOG" HorizontalAlignment="Center" />
+                <SelectableTextBlock Text="SCRIPT LOG" HorizontalAlignment="Center" />
+                <SelectableTextBlock Text="INSTRUCTION LOG" HorizontalAlignment="Center" />
             </UniformGrid>
             <UniformGrid Grid.Row="1" Columns="3">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">

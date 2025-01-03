@@ -16,11 +16,6 @@ namespace ProjectTools.App.DataContexts.GenerateProjectSubContexts;
 public class TemplateSelectionDataContext : ReactiveObject
 {
     /// <summary>
-    ///     The map of the available templates.
-    /// </summary>
-    private readonly Dictionary<string, LocalTemplateInfo> _availableTemplates;
-
-    /// <summary>
     ///     A list of properties to update when the selected template changes.
     /// </summary>
     private readonly string[] PropertiesToUpdate = new[]
@@ -35,6 +30,11 @@ public class TemplateSelectionDataContext : ReactiveObject
     ///     The available templates.
     /// </summary>
     private List<string> _availableTemplateNamesNames;
+
+    /// <summary>
+    ///     The map of the available templates.
+    /// </summary>
+    private Dictionary<string, LocalTemplateInfo> _availableTemplates;
 
     /// <summary>
     ///     The selected template.
@@ -122,6 +122,15 @@ public class TemplateSelectionDataContext : ReactiveObject
 
             UpdateProperties();
         }
+    }
+
+    public void Refresh()
+    {
+        var localTemplates = new LocalTemplates();
+        this._availableTemplates = localTemplates.Templates.ToDictionary(x => x.Name);
+        this.AvailableTemplateNames = this._availableTemplates.Keys.Order().ToList();
+        this.SelectedTemplateName = this.AvailableTemplateNames.FirstOrDefault() ?? string.Empty;
+        UpdateProperties();
     }
 
     /// <summary>
