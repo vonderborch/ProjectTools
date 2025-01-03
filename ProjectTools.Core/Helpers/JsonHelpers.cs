@@ -50,9 +50,11 @@ public static class JsonHelpers
     /// </summary>
     /// <param name="contents">The contents to deserialize.</param>
     /// <param name="options">Options to use when deserializing the file.</param>
+    /// <param name="raiseError">Whether to raise an error if the deserialization fails.</param>
     /// <typeparam name="TValue">The expected type.</typeparam>
     /// <returns>The type, or the default for the type.</returns>
-    public static TValue? DeserializeString<TValue>(string contents, JsonSerializerOptions? options = null)
+    public static TValue? DeserializeString<TValue>(string contents, JsonSerializerOptions? options = null,
+        bool raiseError = false)
     {
         if (string.IsNullOrWhiteSpace(contents))
         {
@@ -67,6 +69,11 @@ public static class JsonHelpers
         }
         catch
         {
+            if (raiseError)
+            {
+                throw;
+            }
+
             return default;
         }
     }

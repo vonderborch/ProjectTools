@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectTools.App.Views.Pages.ConfigurationPage">
+
+    <StackPanel Orientation="Vertical" Margin="2">
+        <Button Content="Save Settings" Name="ButtonSaveSettings" Click="ButtonSaveSettings_OnClick" />
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Git Sources and Access Tokens: </TextBlock>
+            <TextBox Name="TextBoxGitSources" AcceptsReturn="True" Watermark="Git Sources" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Git Repositories and Sources: </TextBlock>
+            <TextBox Name="TextBoxRepos" AcceptsReturn="True" Watermark="Git Repos" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Seconds Between App Update Checks: </TextBlock>
+            <TextBox Name="TextBoxSecondsBetweenAppUpdateChecks" AcceptsReturn="false" Watermark="Seconds" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Seconds Between Template Update Checks: </TextBlock>
+            <TextBox Name="TextBoxSecondsBetweenTemplateUpdateChecks" AcceptsReturn="false" Watermark="Seconds" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Last App (GUI) Update Check: </TextBlock>
+            <TextBlock Name="TextBlockLastGuiUpdate" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Last App (CL) Update Check: </TextBlock>
+            <TextBlock Name="TextBlockLastClUpdate" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Last Templates Update Check: </TextBlock>
+            <TextBlock Name="TextBlockLastTemplatesUpdateCheck" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Python Scripting Version: </TextBlock>
+            <TextBlock Name="TextBlockPythonVersion" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Settings Version: </TextBlock>
+            <TextBlock Name="TextBlockSettingsFileVersion" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

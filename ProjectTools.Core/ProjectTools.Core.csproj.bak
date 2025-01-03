@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyVersion>2.2.0</AssemblyVersion>
+        <FileVersion>2.2.0</FileVersion>
+        <LangVersion>latestmajor</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <OutputPath>..\debug\core\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>..\release\core\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Octokit" Version="13.0.1"/>
+        <PackageReference Include="SharpZipLib" Version="1.4.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Scripting\cpython-3.12.8+20241206-aarch64-apple-darwin-install_only.tar.gz"/>
+        <EmbeddedResource Include="Scripting\cpython-3.12.8+20241206-x86_64-apple-darwin-install_only.tar.gz"/>
+        <EmbeddedResource Include="Scripting\cpython-3.12.8+20241206-x86_64-pc-windows-msvc-shared-install_only.tar.gz"/>
+        <EmbeddedResource Include="Scripting\cpython-3.12.8+20241206-x86_64_v2-unknown-linux-gnu-install_only.tar.gz"/>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-aarch64-apple-darwin-install_only.tar.gz"/>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64-apple-darwin-install_only.tar.gz"/>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64-pc-windows-msvc-shared-install_only.tar.gz"/>
+        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64_v2-unknown-linux-gnu-install_only.tar.gz"/>
+    </ItemGroup>
+
+</Project>

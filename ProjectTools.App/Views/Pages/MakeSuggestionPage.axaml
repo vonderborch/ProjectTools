@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectTools.App.Views.Pages.MakeSuggestionPage">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="9*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="9*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0">Suggestion Title:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" Name="TextBoxTitle" AcceptsReturn="False"
+                     Watermark="My Suggestion Title" TextWrapping="NoWrap" HorizontalAlignment="Stretch" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0">Suggestion Description:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="TextBoxDescription"
+                     AcceptsReturn="True"
+                     Watermark="My Suggestion Description" TextWrapping="Wrap" HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch" MinHeight="150" />
+        </Grid>
+        <Button Content="Make Suggestion" Name="ButtonSubmit" Click="ButtonSubmit_OnClick"
+                HorizontalAlignment="Stretch" />
+    </StackPanel>
+</UserControl>

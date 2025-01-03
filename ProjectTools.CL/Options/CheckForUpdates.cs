@@ -1,8 +1,8 @@
 using CommandLine;
-using ProjectTools.CL.Helpers;
 using ProjectTools.CL.MenuSystem;
 using ProjectTools.Core;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 
 namespace ProjectTools.CL.Options;
 
@@ -27,11 +27,11 @@ public class CheckForUpdates : AbstractOption
     public override string Execute()
     {
         AppUpdator updator = new();
-        var hasUpdate = updator.CheckForUpdates(AppConstants.AppNameCommandLine, this.ForceCheck);
+        var (newVersion, hasUpdate) = updator.CheckForUpdates(AppConstants.AppNameCommandLine, this.ForceCheck);
 
         if (hasUpdate)
         {
-            LogMessage("An update is available, opening browser to latest release...");
+            LogMessage($"An update is available (v{newVersion}), opening browser to latest release...");
             UrlHelpers.OpenUrl(AppConstants.RepoLatestReleaseUrl,
                 $"Please go to {AppConstants.RepoLatestReleaseUrl} to download the latest release!");
         }

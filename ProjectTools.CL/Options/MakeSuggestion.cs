@@ -4,12 +4,13 @@ using ProjectTools.CL.Helpers;
 using ProjectTools.CL.MenuSystem;
 using ProjectTools.CL.Options;
 using ProjectTools.Core.Constants;
+using ProjectTools.Core.Helpers;
 
 /// <summary>
 ///     A command to make a suggestion for the program with.
 /// </summary>
 [Verb("suggestion", HelpText = "Make a suggestion for the program.")]
-[MenuMetadata(2)]
+[MenuMetadata(3)]
 public class MakeSuggestion : SilenceAbleAbstractOption
 {
     /// <summary>

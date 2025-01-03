@@ -165,7 +165,15 @@ public abstract class AbstractSettings
     /// </summary>
     public void Save()
     {
+        ValidateSettings();
         JsonHelpers.SerializeToFile(AppSettingsConstants.SettingsFilePath, this);
+    }
+
+    /// <summary>
+    ///     A method to validate the settings.
+    /// </summary>
+    protected virtual void ValidateSettings()
+    {
     }
 
     /// <summary>
