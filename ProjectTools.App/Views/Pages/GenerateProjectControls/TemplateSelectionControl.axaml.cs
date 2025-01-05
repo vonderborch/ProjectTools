@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ProjectTools.App.DataContexts;
@@ -70,10 +71,40 @@ public partial class TemplateSelectionControl : UserControl
         TemplateUpdater.DownloadTemplates(totalTemplatesToDownload, true);
         this.Context.LogToCore("Downloaded new/updated templates!");
         this.Context.TemplateSelectionContext.Refresh();
+        this.Context.TemplateSelectionContext.Refresh();
+        this.Context.TemplateInfo = null;
     }
 
     private void ButtonUseSelectedTemplate_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        this.Context.TemplateInfo = null;
+        var localTemplates = new LocalTemplates();
+        var availableTemplates = localTemplates.Templates;
+
+        if (availableTemplates.Count == 0)
+        {
+            throw new Exception("No templates available to use!");
+        }
+
+        var templateNames = localTemplates.TemplateNames;
+        if (!templateNames.Contains(this.Context.TemplateSelectionContext.SelectedTemplateName))
+        {
+            throw new Exception(
+                $"Template '{this.Context.TemplateSelectionContext.SelectedTemplateName}' not found, please run list-templates to see available templates.");
+        }
+
+        var templateToUse =
+            availableTemplates.First(t => t.Name == this.Context.TemplateSelectionContext.SelectedTemplateName);
+        this.Context.LogToCore(
+            $"Using Template {templateToUse.Name} (Version {templateToUse.Template.Version}) to Generate Project");
+        this.Context.TemplateInfo = templateToUse;
+
+        this.Context.CoreConfigurationEnabled = true;
+    }
+
+    private void ListBoxAvailableTemplates_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        this.Context.TemplateInfo = null;
+        this.Context.CoreConfigurationEnabled = false;
     }
 }

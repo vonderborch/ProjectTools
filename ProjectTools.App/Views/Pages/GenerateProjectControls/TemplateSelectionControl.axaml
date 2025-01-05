@@ -18,7 +18,8 @@
                 HorizontalAlignment="Stretch" />
         <ListBox Name="ListBoxAvailableTemplates" SelectionMode="Single" MaxHeight="600"
                  ItemsSource="{Binding TemplateSelectionContext.AvailableTemplateNames}"
-                 SelectedItem="{Binding TemplateSelectionContext.SelectedTemplateName} " />
+                 SelectedItem="{Binding TemplateSelectionContext.SelectedTemplateName}"
+                 SelectionChanged="ListBoxAvailableTemplates_OnSelectionChanged" />
         <UniformGrid Columns="2">
             <TextBlock Text="Template Name: " />
             <TextBlock Text="{Binding TemplateSelectionContext.SelectedTemplateName}" TextWrapping="Wrap" />

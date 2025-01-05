@@ -24,7 +24,17 @@ public partial class GenerateProjectPage : UserControl
         {
             DataContext = this.Context
         };
+        CoreConfigurationControl coreConfiguration = new(this)
+        {
+            DataContext = this.Context
+        };
+        SlugConfigurationControl slugConfiguration = new(this)
+        {
+            DataContext = this.Context
+        };
 
         this.ViewerTemplateSelection.Content = templateSelection;
+        this.ViewerCoreConfig.Content = coreConfiguration;
+        this.ViewerSlugConfig.Content = slugConfiguration;
     }
 }

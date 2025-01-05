@@ -2,7 +2,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dataContexts="clr-namespace:ProjectTools.App.DataContexts"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ProjectTools.App.Views.Pages.GenerateProjectControls.CoreConfigurationControl">
-    Welcome to Avalonia!
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <dataContexts:GenerateProjectDataContext />
+    </Design.DataContext>
+
+    <StackPanel Orientation="Vertical" x:CompileBindings="False" IsEnabled="{Binding CoreConfigurationEnabled}">
+        <TextBlock Text="CORE CONFIGURATION" />
+
+        <WrapPanel>
+            <TextBlock Text="Project Name: " />
+            <TextBox Name="TextBoxProjectName" Text="{Binding CoreConfigurationContext.ProjectName}"
+                     Watermark="The name of the project" TextChanged="TextBoxProjectName_OnTextChanged" />
+        </WrapPanel>
+
+        <WrapPanel>
+            <TextBlock Text="Parent Output Directory: " />
+            <TextBox Name="TextBoxParentOutputDirectory"
+                     Text="{Binding CoreConfigurationContext.ParentOutputDirectory}"
+                     Watermark="The parent folder of the output directory"
+                     TextChanged="TextBoxParentOutputDirectory_OnTextChanged" />
+            <Button Content="Browse" Name="ButtonBrowse" Click="ButtonBrowse_OnClick" />
+        </WrapPanel>
+
+        <CheckBox Content="Force Overwrite" IsChecked="{Binding CoreConfigurationContext.ForceOverwrite}" />
+        <CheckBox Content="What-If" IsChecked="{Binding CoreConfigurationContext.WhatIf}" />
+        <Button Name="ButtonSetCoreConfig" Content="Set Core Config" Click="ButtonSetCoreConfig_OnClick" HorizontalAlignment="Stretch" />
+    </StackPanel>
 </UserControl>

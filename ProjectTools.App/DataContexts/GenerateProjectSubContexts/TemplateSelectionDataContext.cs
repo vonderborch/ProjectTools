@@ -49,8 +49,11 @@ public class TemplateSelectionDataContext : ReactiveObject
     /// <summary>
     ///     Initializes a new instance of the <see cref="TemplateSelectionDataContext" /> class.
     /// </summary>
-    public TemplateSelectionDataContext()
+    /// <param name="parentContext">The parent context.</param>
+    public TemplateSelectionDataContext(GenerateProjectDataContext parentContext)
     {
+        this.ParentContext = parentContext;
+
         this._availableTemplateNamesNames = new List<string>();
         this._selectedTemplateName = string.Empty;
 
@@ -59,6 +62,11 @@ public class TemplateSelectionDataContext : ReactiveObject
         this.AvailableTemplateNames = this._availableTemplates.Keys.Order().ToList();
         this.SelectedTemplateName = this.AvailableTemplateNames.FirstOrDefault() ?? string.Empty;
     }
+
+    /// <summary>
+    ///     The parent context.
+    /// </summary>
+    public GenerateProjectDataContext ParentContext { get; }
 
     /// <summary>
     ///     The author of the selected template.

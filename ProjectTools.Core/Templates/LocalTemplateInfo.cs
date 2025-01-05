@@ -1,10 +1,19 @@
+#region
+
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.TemplateRepositories;
 
+#endregion
+
 namespace ProjectTools.Core.Templates;
 
+/// <summary>
+///     Information about a local template.
+/// </summary>
+[DebuggerDisplay("Name = {Name}, LocalPath = {LocalPath}")]
 public struct LocalTemplateInfo
 {
     /// <summary>

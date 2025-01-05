@@ -15,17 +15,18 @@
     <StackPanel Orientation="Vertical" x:CompileBindings="False" IsEnabled="{Binding PreprocessConfigurationEnabled}">
         <TextBlock HorizontalAlignment="Center">PREPROCESS CONFIGURATION</TextBlock>
         <WrapPanel>
+            <TextBlock Text="Template Directory:" />
             <TextBox Name="TextBoxTemplateDirectory" Watermark="Template Directory"
                      TextChanged="TextBoxTemplateDirectory_OnTextChanged"
                      Text="{Binding PreprocessDataContext.Directory}" />
-            <Button Content="Template Directory" Name="ButtonTemplateDirectory"
-                    Click="ButtonTemplateDirectory_OnClick" />
+            <Button Content="Browse" Name="ButtonTemplateDirectory" Click="ButtonTemplateDirectory_OnClick" />
         </WrapPanel>
 
         <WrapPanel Orientation="Horizontal">
+            <TextBlock Text="Output Directory:" />
             <TextBox Name="TextBoxOutputDirectory" Watermark="Output Directory"
                      Text="{Binding PreprocessDataContext.OutputDirectory}" />
-            <Button Content="Output Directory" Name="ButtonOutputDirectory" Click="ButtonOutputDirectory_OnClick" />
+            <Button Content="Browse" Name="ButtonOutputDirectory" Click="ButtonOutputDirectory_OnClick" />
         </WrapPanel>
 
         <RelativePanel>
