@@ -13,11 +13,19 @@ namespace ProjectTools.App.Views.Pages;
 [PageRegistration("Report Issue", Page.ReportIssue)]
 public partial class ReportIssuePage : UserControl
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReportIssuePage"/> class.
+    /// </summary>
     public ReportIssuePage()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// Submits the issue.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
     private void ButtonSubmit_OnClick(object? sender, RoutedEventArgs e)
     {
         // Construct Urls

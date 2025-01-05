@@ -35,19 +35,36 @@ public partial class SlugConfigurationControl : UserControl
     /// </summary>
     public PrepareTemplateDataContext Context => this._parentPage.Context;
 
+    /// <summary>
+    ///     Event handler for when the button to add the slug is clicked.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
     private void ButtonAddSlug_OnClick(object? sender, RoutedEventArgs e)
     {
         var newSlugName = this.Context.SlugDataContext.AddSlug();
         this.ComboBoxSlugs.SelectedItem = newSlugName;
     }
 
+    /// <summary>
+    ///     Event handler for when the button to delete the slug is clicked.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
     private void ButtonDeleteSlug_OnClick(object? sender, RoutedEventArgs e)
     {
         this.Context.SlugDataContext.DeleteCurrentSlug();
     }
 
+    /// <summary>
+    ///     Event handler for when the button to generate the template is clicked.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
+    /// <exception cref="InvalidOperationException">Raised in a bad scenario.</exception>
     private void ButtonGenerateTemplate_OnClick(object? sender, RoutedEventArgs e)
     {
+        this.Context.ClearLog();
         if (this.Context.PreparationTemplate is null)
         {
             throw new InvalidOperationException("Preparation template is null.");
@@ -74,6 +91,11 @@ public partial class SlugConfigurationControl : UserControl
         }
     }
 
+    /// <summary>
+    ///     Event handler for when the button to generate the project is clicked.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
     private void ComboBoxSlugs_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (e.AddedItems.Count > 0)

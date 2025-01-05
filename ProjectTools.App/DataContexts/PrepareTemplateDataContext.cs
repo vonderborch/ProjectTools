@@ -204,7 +204,7 @@ public class PrepareTemplateDataContext : ReactiveObject
             return false;
         }
 
-        this._consoleLog.Text = $"{message}{Environment.NewLine}{this._consoleLog.Text}";
+        this._consoleLog.Text = $"{this._consoleLog.Text}{Environment.NewLine}{message}";
         return true;
     }
 }

@@ -132,6 +132,9 @@ public class TemplateSelectionDataContext : ReactiveObject
         }
     }
 
+    /// <summary>
+    ///     Refreshes the available templates.
+    /// </summary>
     public void Refresh()
     {
         var localTemplates = new LocalTemplates();

@@ -10,6 +10,9 @@ using ReactiveUI;
 
 namespace ProjectTools.App.DataContexts;
 
+/// <summary>
+///     The data context for the Generate Project control.
+/// </summary>
 public class GenerateProjectDataContext : ReactiveObject
 {
     /// <summary>
@@ -173,7 +176,7 @@ public class GenerateProjectDataContext : ReactiveObject
             return false;
         }
 
-        this._coreLog.Text = $"{message}{Environment.NewLine}{this._coreLog.Text}";
+        this._coreLog.Text = $"{this._coreLog.Text}{Environment.NewLine}{message}";
         return true;
     }
 

@@ -102,6 +102,11 @@ public partial class TemplateSelectionControl : UserControl
         this.Context.CoreConfigurationEnabled = true;
     }
 
+    /// <summary>
+    /// The event handler for when the list box selection changes.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
     private void ListBoxAvailableTemplates_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         this.Context.TemplateInfo = null;

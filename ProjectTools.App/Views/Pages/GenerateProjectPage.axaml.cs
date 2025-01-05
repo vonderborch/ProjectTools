@@ -9,11 +9,20 @@ using ProjectTools.App.Views.Pages.GenerateProjectControls;
 
 namespace ProjectTools.App.Views.Pages;
 
+/// <summary>
+/// The generate project page.
+/// </summary>
 [PageRegistration("Generate Project", Page.GenerateProject)]
 public partial class GenerateProjectPage : UserControl
 {
+    /// <summary>
+    /// The data context.
+    /// </summary>
     public GenerateProjectDataContext Context;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GenerateProjectPage"/> class.
+    /// </summary>
     public GenerateProjectPage()
     {
         InitializeComponent();

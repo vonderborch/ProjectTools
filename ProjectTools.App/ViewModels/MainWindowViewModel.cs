@@ -6,6 +6,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ProjectTools.App.ViewModels;
 
+/// <summary>
+///     The view model for the main window.
+/// </summary>
 public class MainWindowViewModel : ObservableObject
 {
 }

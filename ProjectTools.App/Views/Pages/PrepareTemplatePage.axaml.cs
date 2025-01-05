@@ -5,6 +5,9 @@ using ProjectTools.App.Views.Pages.PrepareTemplatePageControls;
 
 namespace ProjectTools.App.Views.Pages;
 
+/// <summary>
+/// The prepare template page.
+/// </summary>
 [PageRegistration("Prepare Template", Page.PrepareTemplate)]
 public partial class PrepareTemplatePage : UserControl
 {
@@ -13,6 +16,9 @@ public partial class PrepareTemplatePage : UserControl
     /// </summary>
     public PrepareTemplateDataContext Context;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrepareTemplatePage"/> class.
+    /// </summary>
     public PrepareTemplatePage()
     {
         InitializeComponent();
