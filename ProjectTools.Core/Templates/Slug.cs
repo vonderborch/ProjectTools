@@ -1,5 +1,9 @@
+#region
+
 using System.Diagnostics;
 using System.Text.Json.Serialization;
+
+#endregion
 
 namespace ProjectTools.Core.Templates;
 
@@ -17,12 +21,12 @@ public class Slug
     /// <summary>
     ///     The current value for the slug.
     /// </summary>
-    [JsonIgnore] public object? CurrentValue = null;
+    [JsonIgnore] public object? CurrentValue;
 
     /// <summary>
     ///     The default value for the slug.
     /// </summary>
-    public object? DefaultValue = null;
+    public object? DefaultValue;
 
     /// <summary>
     ///     The disallowed values for the slug.
@@ -37,7 +41,7 @@ public class Slug
     /// <summary>
     ///     True if the slug requires user input, false otherwise.
     /// </summary>
-    public bool RequiresUserInput = false;
+    public bool RequiresUserInput;
 
     /// <summary>
     ///     The key used to identify where to replace the slug with the current value for the slug.
@@ -54,4 +58,24 @@ public class Slug
     /// </summary>
     [JsonIgnore]
     public string ActualSlugKey => $"[[{this.SlugKey}]]";
+
+    /// <summary>
+    ///     Copies the slug.
+    /// </summary>
+    /// <returns>The copied slug.</returns>
+    public Slug CopySlug()
+    {
+        var newSlug = new Slug
+        {
+            AllowedValues = this.AllowedValues,
+            CurrentValue = this.CurrentValue,
+            DefaultValue = this.DefaultValue,
+            DisallowedValues = this.DisallowedValues,
+            DisplayName = this.DisplayName,
+            RequiresUserInput = this.RequiresUserInput,
+            SlugKey = this.SlugKey,
+            Type = this.Type
+        };
+        return newSlug;
+    }
 }

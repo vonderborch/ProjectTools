@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dataContexts="clr-namespace:ProjectTools.App.DataContexts"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectTools.App.Views.Pages.PrepareTemplatePageControls.PreprocessConfigurationControl">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <dataContexts:PrepareTemplateDataContext />
+    </Design.DataContext>
+
+    <StackPanel Orientation="Vertical" x:CompileBindings="False" IsEnabled="{Binding PreprocessConfigurationEnabled}">
+        <TextBlock HorizontalAlignment="Center">PREPROCESS CONFIGURATION</TextBlock>
+        <WrapPanel>
+            <TextBlock Text="Template Directory:" />
+            <TextBox Name="TextBoxTemplateDirectory" Watermark="Template Directory"
+                     TextChanged="TextBoxTemplateDirectory_OnTextChanged"
+                     Text="{Binding PreprocessDataContext.Directory}" />
+            <Button Content="Browse" Name="ButtonTemplateDirectory" Click="ButtonTemplateDirectory_OnClick" />
+        </WrapPanel>
+
+        <WrapPanel Orientation="Horizontal">
+            <TextBlock Text="Output Directory:" />
+            <TextBox Name="TextBoxOutputDirectory" Watermark="Output Directory"
+                     Text="{Binding PreprocessDataContext.OutputDirectory}" />
+            <Button Content="Browse" Name="ButtonOutputDirectory" Click="ButtonOutputDirectory_OnClick" />
+        </WrapPanel>
+
+        <RelativePanel>
+            <TextBlock Name="TextBoxTemplateBuilder" RelativePanel.AlignLeftWithPanel="True">Template Builder: </TextBlock>
+            <ComboBox Name="ComboBoxTemplateBuilders" RelativePanel.RightOf="TextTemplateBuilder"
+                      RelativePanel.AlignRightWithPanel="True"
+                      SelectionChanged="ComboBoxTemplateBuilders_OnSelectionChanged"
+                      ItemsSource="{Binding PreprocessDataContext.AvailableTemplateBuilders}"
+                      SelectedIndex="{Binding PreprocessDataContext.SelectedTemplateBuilderIndex}" />
+        </RelativePanel>
+
+        <CheckBox IsChecked="{Binding PreprocessDataContext.SkipCleaning}" Name="CheckBoxSkipCleaning">Skip Cleaning</CheckBox>
+        <CheckBox IsChecked="{Binding PreprocessDataContext.ForceOverwrite}" Name="CheckBoxForce">Force Override Existing Template</CheckBox>
+        <CheckBox IsChecked="{Binding PreprocessDataContext.WhatIf}" Name="CheckBoxWhatIf">What If</CheckBox>
+
+        <Button Content="Pre-Process Directory" Name="ButtonPreProcess" Click="ButtonPreProcess_OnClick"
+                HorizontalAlignment="Stretch" />
+    </StackPanel>
+</UserControl>

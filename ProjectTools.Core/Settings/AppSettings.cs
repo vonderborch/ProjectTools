@@ -101,6 +101,18 @@ public class AppSettings : AbstractSettings
     }
 
     /// <summary>
+    ///     A method to validate the settings.
+    /// </summary>
+    protected override void ValidateSettings()
+    {
+        base.ValidateSettings();
+        if (!this.GitSourcesAndAccessTokens.TryGetValue("https://github.com/", out _))
+        {
+            throw new Exception("Error: No GitHub access token found!");
+        }
+    }
+
+    /// <summary>
     ///     A method to convert the settings to the next version.
     /// </summary>
     /// <returns>The updated settings.</returns>

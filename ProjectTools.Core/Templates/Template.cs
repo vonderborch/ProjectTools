@@ -1,8 +1,13 @@
+#region
+
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Scripting;
 using ProjectTools.Core.Settings;
+
+#endregion
 
 namespace ProjectTools.Core.Templates;
 
@@ -21,6 +26,26 @@ public class Template : AbstractTemplate
     ///     Information on slugs for this template, used to replace instances of the slug with the value of the slug.
     /// </summary>
     public List<Slug> Slugs = [];
+
+    /// <summary>
+    ///     Generates a project using the template.
+    /// </summary>
+    /// <param name="parentOutputDirectory">The output directory.</param>
+    /// <param name="name">The name of the project.</param>
+    /// <param name="pathToTemplate">The path to the template.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="instructionLogger">The instruction logger.</param>
+    /// <param name="commandLogger">The command logger.</param>
+    /// <param name="overrideExisting">True to override the existing directory.</param>
+    /// <returns>The results.</returns>
+    public async Task<string> AsyncGenerateProject(string parentOutputDirectory, string name, string pathToTemplate,
+        Logger logger,
+        Logger instructionLogger,
+        Logger commandLogger, bool overrideExisting = false)
+    {
+        return GenerateProject(parentOutputDirectory, name, pathToTemplate, logger, instructionLogger, commandLogger,
+            overrideExisting);
+    }
 
     /// <summary>
     ///     Generates a project using the template.
@@ -69,27 +94,38 @@ public class Template : AbstractTemplate
         List<string> instructions = new();
         if (this.PythonScriptPaths.Count > 0)
         {
-            foreach (var scriptPath in this.PythonScriptPaths)
+            foreach (var scriptPath in this.PythonScriptPaths.Where(x => !string.IsNullOrWhiteSpace(x)))
             {
                 var script = Path.Combine(outputDirectory, scriptPath);
                 try
                 {
                     commandLogger.Log($"Executing Script {scriptPath}...", 2);
-                    ProcessStartInfo startInfo = new()
-                    {
-                        FileName = PythonManager.Manager.PythonExecutable,
-                        Arguments = $""""{script}"""",
-                        WorkingDirectory = outputDirectory,
-                        UseShellExecute = true,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true
-                    };
-                    Process proc = new()
-                    {
-                        StartInfo = startInfo
-                    };
+                    var startInfo = GetProcessStartInfo(PythonManager.Manager.PythonExecutable, $"{script}",
+                        outputDirectory);
+                    using Process proc = new();
+                    proc.StartInfo = startInfo;
                     proc.Start();
                     proc.WaitForExit();
+
+                    using var outputStream = proc.StandardOutput;
+                    commandLogger.Log("Output Stream:", 4);
+                    var line = outputStream.ReadLine();
+                    while (line != null)
+                    {
+                        commandLogger.Log(line, 6);
+                        line = outputStream.ReadLine();
+                    }
+
+                    using var errorStream = proc.StandardError;
+                    commandLogger.Log("Output Error Stream:", 4);
+                    line = errorStream.ReadLine();
+                    while (line != null)
+                    {
+                        commandLogger.Log(line, 6);
+                        line = errorStream.ReadLine();
+                    }
+
+                    commandLogger.Log("Script Executed!", 4);
                 }
                 catch (Exception e)
                 {
@@ -108,7 +144,7 @@ public class Template : AbstractTemplate
         instructions = instructions.CombineLists(this.Instructions);
         if (instructions.Count > 0)
         {
-            foreach (var instruction in instructions)
+            foreach (var instruction in instructions.Where(x => !string.IsNullOrWhiteSpace(x)))
             {
                 instructionLogger.Log(instruction);
             }
@@ -123,6 +159,54 @@ public class Template : AbstractTemplate
         var totalTime = DateTime.Now - startTime;
         return
             $"Successfully prepared created the solution in {totalTime.TotalSeconds:0.00} second(s): {outputDirectory}";
+    }
+
+    /// <summary>
+    ///     Gets the process start info.
+    /// </summary>
+    /// <param name="fileName">The executable's file name.</param>
+    /// <param name="script">The script to execute.</param>
+    /// <param name="workingDirectory">The working directory.</param>
+    /// <returns>The start info.</returns>
+    public ProcessStartInfo GetProcessStartInfo(string fileName, string script, string workingDirectory)
+    {
+        if (EnvironmentHelpers.OS == OSPlatform.Windows)
+        {
+            return new ProcessStartInfo
+            {
+                FileName = fileName,
+                Arguments = $"\"{script}\"",
+                WorkingDirectory = workingDirectory,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+        }
+
+        return new ProcessStartInfo
+        {
+            FileName = fileName,
+            Arguments = $"\"{script}\"",
+            WorkingDirectory = workingDirectory,
+            UseShellExecute = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
+    }
+
+    /// <summary>
+    ///     Gets the slug key -> value mapping dictionary.
+    /// </summary>
+    /// <returns>The mapping dictionary.</returns>
+    private Dictionary<string, string> SlugsToValues()
+    {
+        if (this._slugValuesCache == null)
+        {
+            this._slugValuesCache =
+                this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.Type.ObjectToString(s.CurrentValue));
+        }
+
+        return this._slugValuesCache;
     }
 
     /// <summary>
@@ -143,7 +227,7 @@ public class Template : AbstractTemplate
             }
 
             var isRenameOnly = PathHelpers.PathIsInList(entry, rootDirectory, this.RenameOnlyPaths, true, true);
-            isRenameOnlyPath = isRenameOnlyPath || isRenameOnly;
+            var isRenameOnlyPathForEntry = isRenameOnlyPath || isRenameOnly;
             var newEntryPath = UpdateText(entry);
 
             // Update directory naming...
@@ -159,7 +243,7 @@ public class Template : AbstractTemplate
                 // update inner files if and only if we should
                 if (!isRenameOnly)
                 {
-                    UpdateFiles(path, rootDirectory, isRenameOnlyPath);
+                    UpdateFiles(path, rootDirectory, isRenameOnlyPathForEntry);
                 }
             }
             // Otherwise, update the files as needed
@@ -175,7 +259,7 @@ public class Template : AbstractTemplate
                     File.Move(entry, newEntryPath);
                 }
 
-                if (!isRenameOnlyPath)
+                if (!isRenameOnlyPathForEntry)
                 {
                     var text = File.ReadAllText(newEntryPath);
                     text = UpdateText(text);
@@ -192,26 +276,12 @@ public class Template : AbstractTemplate
     /// <returns>The updated text.</returns>
     private string UpdateText(string value)
     {
+        var originalValue = value;
         foreach (var (toBeReplaced, replacedValue) in SlugsToValues())
         {
             value = value.Replace(toBeReplaced, replacedValue);
         }
 
         return value;
-    }
-
-    /// <summary>
-    ///     Gets the slug key -> value mapping dictionary.
-    /// </summary>
-    /// <returns>The mapping dictionary.</returns>
-    private Dictionary<string, string> SlugsToValues()
-    {
-        if (this._slugValuesCache == null)
-        {
-            this._slugValuesCache =
-                this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.Type.ObjectToString(s.CurrentValue));
-        }
-
-        return this._slugValuesCache;
     }
 }

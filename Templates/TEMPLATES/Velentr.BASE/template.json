@@ -1,136 +1,105 @@
 {
   "Slugs": [
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "BD43E58E-48C2-45A0-A593-1626B877E3E5"
+        "08D32A2A-6F8A-4B7E-82A2-0D97ADBC65FE"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID00",
+      "DisplayName": "GUID0",
       "RequiresUserInput": false,
-      "SlugKey": "GUID00",
+      "SlugKey": "GUID0",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "A852B73A-1824-4C6A-8BE4-E6DD44B26492"
+        "95281D6C-C4A9-4358-BBC0-7C2F49A39B50"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID01",
+      "DisplayName": "GUID1",
       "RequiresUserInput": false,
-      "SlugKey": "GUID01",
+      "SlugKey": "GUID1",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "E4EEEFDB-45D3-41E9-9FE4-62DFE6698F70"
+        "044E9E86-DB5E-47DF-87CE-191F98E75C1C"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID02",
+      "DisplayName": "GUID2",
       "RequiresUserInput": false,
-      "SlugKey": "GUID02",
+      "SlugKey": "GUID2",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "C7F6AB0B-00E8-495B-9285-270711E05419"
+        "CA6B3A34-E7E1-46D2-A15B-4CC7BCABEE70"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID03",
+      "DisplayName": "GUID3",
       "RequiresUserInput": false,
-      "SlugKey": "GUID03",
+      "SlugKey": "GUID3",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "BD106A2B-F285-4A23-95FD-D4F96666732B"
+        "6C4CEE18-9A79-4B90-9719-BCFFD642603A"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID04",
+      "DisplayName": "GUID4",
       "RequiresUserInput": false,
-      "SlugKey": "GUID04",
+      "SlugKey": "GUID4",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "E02E054E-3E8C-4207-A92C-A52EAC013DB4"
+        "ED1CA538-1283-49E0-8F24-52A3187AB4F1"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID05",
+      "DisplayName": "GUID5",
       "RequiresUserInput": false,
-      "SlugKey": "GUID05",
+      "SlugKey": "GUID5",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "2F24BA50-02C7-4C79-A2F3-C6216A5E2508"
+        "22E970F8-78B2-4E62-BBFE-E685B9511654"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID06",
+      "DisplayName": "GUID6",
       "RequiresUserInput": false,
-      "SlugKey": "GUID06",
+      "SlugKey": "GUID6",
       "Type": "RandomGuid"
     },
     {
-      "RequiresAnyInput": false,
-      "SearchStrings": [
-        "508DA6EF-FC5A-4CCE-B3EA-1EAA51C72117"
-      ],
-      "AllowedValues": [],
-      "DefaultValue": null,
-      "DisallowedValues": [],
-      "DisplayName": "GUID07",
-      "RequiresUserInput": false,
-      "SlugKey": "GUID07",
-      "Type": "RandomGuid"
-    },
-    {
-      "RequiresAnyInput": false,
-      "SearchStrings": [
-        "67073604-A543-47B0-BFA4-0758A2C1F2C5"
-      ],
-      "AllowedValues": [],
-      "DefaultValue": null,
-      "DisallowedValues": [],
-      "DisplayName": "GUID08",
-      "RequiresUserInput": false,
-      "SlugKey": "GUID08",
-      "Type": "RandomGuid"
-    },
-    {
-      "RequiresAnyInput": false,
-      "SearchStrings": [
-        "546AB09E-CB96-4064-B3F8-A0738E21E3DF"
-      ],
-      "AllowedValues": [],
-      "DefaultValue": null,
-      "DisallowedValues": [],
-      "DisplayName": "GUID09",
-      "RequiresUserInput": false,
-      "SlugKey": "GUID09",
-      "Type": "RandomGuid"
-    },
-    {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
         "227895C9-A4FD-43ED-807B-87AF42D69A34"
@@ -138,28 +107,30 @@
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID10",
+      "DisplayName": "GUID7",
       "RequiresUserInput": false,
-      "SlugKey": "GUID10",
+      "SlugKey": "GUID7",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": false,
       "SearchStrings": [
-        "FDBF53CD-2E17-487C-82FA-B5D109C0F3C7"
+        "943AFDB1-B696-4AF5-B922-67CE6BD3649B"
       ],
       "AllowedValues": [],
       "DefaultValue": null,
       "DisallowedValues": [],
-      "DisplayName": "GUID11",
+      "DisplayName": "GUID8",
       "RequiresUserInput": false,
-      "SlugKey": "GUID11",
+      "SlugKey": "GUID8",
       "Type": "RandomGuid"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
-        "Velentr.DUAL_SUPPORT"
+        "Velentr.BASE"
       ],
       "AllowedValues": [],
       "DefaultValue": "[[ParentDirectoryName]].[[ProjectName]]",
@@ -170,6 +141,7 @@
       "Type": "String"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
         "Christian Webber"
@@ -183,6 +155,7 @@
       "Type": "String"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
         "A library"
@@ -196,6 +169,7 @@
       "Type": "String"
     },
     {
+      "CustomSlug": false,
       "RequiresAnyInput": true,
       "SearchStrings": [
         "1.0.0"
@@ -210,9 +184,9 @@
     }
   ],
   "Author": "Christian Webber",
-  "Description": "A library with individual implementations for FNA and Monogame.",
+  "Description": "A generic library for an FNA/Monogame program that doesn\u0027t require any specific support for FNA or Monogame.",
   "Instructions": [],
-  "Name": "Velentr.DUAL_SUPPORT",
+  "Name": "Velentr.BASE",
   "PathsToRemove": [],
   "PrepareExcludedPaths": [
     "*bin",
@@ -220,21 +194,13 @@
     "*.vs",
     "*.git",
     "*release",
-    "*debug",
-    "*FNA"
+    "*debug"
   ],
-  "PythonScriptPaths": [
-    "install_fna.py"
-  ],
+  "PythonScriptPaths": [],
   "RenameOnlyPaths": [
-    "logo.png",
-    "install_fna.py",
-    "update_fna.py",
-    "*Velentr.DevEnv.FNA",
-    "*Velentr.DevEnv.Monogame",
-    "fna_updater"
+    "logo.png"
   ],
   "TemplateBuilder": ".sln",
   "TemplaterVersion": "1.0.0",
-  "Version": "2024-11-18"
+  "Version": "2025-01-05"
 }

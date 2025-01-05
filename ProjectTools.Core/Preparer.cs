@@ -1,8 +1,12 @@
+#region
+
 using System.Reflection;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.TemplateBuilders;
 using ProjectTools.Core.Templates;
+
+#endregion
 
 namespace ProjectTools.Core;
 
@@ -25,36 +29,6 @@ public class Preparer
     }
 
     /// <summary>
-    ///     Gets all template builders.
-    /// </summary>
-    /// <param name="forceRefresh">True to force refresh, False otherwise.</param>
-    /// <returns>All available template builders.</returns>
-    public List<AbstractTemplateBuilder> GetTemplateBuilders(bool forceRefresh = false)
-    {
-        if (this._availableTemplateBuilders.Count > 0 && !forceRefresh)
-        {
-            return this._availableTemplateBuilders;
-        }
-
-        // Step 1 - Grab built-in template builders
-        var assembly = Assembly.GetExecutingAssembly();
-        var types = assembly.GetTypes();
-
-        var builtInTemplateBuilders =
-            types.Where(t => t is { IsClass: true, IsAbstract: false } && t.BaseType == typeof(AbstractTemplateBuilder))
-                .ToList();
-        foreach (var templater in builtInTemplateBuilders)
-        {
-            this._availableTemplateBuilders.Add((AbstractTemplateBuilder)Activator.CreateInstance(templater));
-        }
-
-        // Step 2 - Grab template builders plugins
-        // TODO: Implement template builders plugins
-
-        return this._availableTemplateBuilders;
-    }
-
-    /// <summary>
     ///     Generates a template from the specified directory.
     /// </summary>
     /// <param name="pathToDirectory">The path to the directory.</param>
@@ -67,7 +41,7 @@ public class Preparer
     public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
         bool forceOverride, PreparationTemplate template, Logger coreLogger)
     {
-        var outputTempDirectory = Path.Combine(outputDirectory, template.SafeName);
+        var outputTempDirectory = Path.Combine(outputDirectory, $"{template.SafeName}_TEMPLATEGEN");
         var outputFile =
             Path.Combine(outputDirectory, $"{template.SafeName}.{TemplateConstants.TemplateFileExtension}");
 
@@ -112,6 +86,81 @@ public class Preparer
     }
 
     /// <summary>
+    ///     Gets the template builder for the specified option and directory.
+    /// </summary>
+    /// <param name="option">The template builder selected, or auto.</param>
+    /// <param name="directory">The directory we want to prepare as a template.</param>
+    /// <returns>The template builder.</returns>
+    /// <exception cref="Exception">Raised if we failed to find a valid template builder.</exception>
+    public AbstractTemplateBuilder GetTemplateBuilderForOption(string option, string directory)
+    {
+        var templateBuilders = GetTemplateBuilders();
+        AbstractTemplateBuilder? templateBuilderForPrep = null;
+        // If template builder is auto, try to detect the correct one
+        if (option == "auto")
+        {
+            foreach (var templateBuilder in templateBuilders)
+            {
+                if (templateBuilder.IsValidDirectoryForBuilder(directory))
+                {
+                    templateBuilderForPrep = templateBuilder;
+                    break;
+                }
+            }
+        }
+        // Otherwise, try to find the template builder by name...
+        else
+        {
+            var templateBuilder = templateBuilders.FirstOrDefault(x => x.NameLowercase == option);
+            if (templateBuilder != null)
+            {
+                if (templateBuilder.IsValidDirectoryForBuilder(directory))
+                {
+                    templateBuilderForPrep = templateBuilder;
+                }
+            }
+        }
+
+        // Raise an exception if we couldn't find a valid template builder, otherwise return the template builder
+        if (templateBuilderForPrep == null)
+        {
+            throw new Exception("Could not detect valid template builder for directory!");
+        }
+
+        return templateBuilderForPrep;
+    }
+
+    /// <summary>
+    ///     Gets all template builders.
+    /// </summary>
+    /// <param name="forceRefresh">True to force refresh, False otherwise.</param>
+    /// <returns>All available template builders.</returns>
+    public List<AbstractTemplateBuilder> GetTemplateBuilders(bool forceRefresh = false)
+    {
+        if (this._availableTemplateBuilders.Count > 0 && !forceRefresh)
+        {
+            return this._availableTemplateBuilders;
+        }
+
+        // Step 1 - Grab built-in template builders
+        var assembly = Assembly.GetExecutingAssembly();
+        var types = assembly.GetTypes();
+
+        var builtInTemplateBuilders =
+            types.Where(t => t is { IsClass: true, IsAbstract: false } && t.BaseType == typeof(AbstractTemplateBuilder))
+                .ToList();
+        foreach (var templater in builtInTemplateBuilders)
+        {
+            this._availableTemplateBuilders.Add((AbstractTemplateBuilder)Activator.CreateInstance(templater));
+        }
+
+        // Step 2 - Grab template builders plugins
+        // TODO: Implement template builders plugins
+
+        return this._availableTemplateBuilders;
+    }
+
+    /// <summary>
     ///     Updates the directory files per the template and replacement text.
     /// </summary>
     /// <param name="directory">The directory to update.</param>
@@ -126,16 +175,12 @@ public class Preparer
         {
             var baseEntryName = Path.GetFileName(entry);
             var entryActualName = UpdateText(baseEntryName, template.ReplacementText);
-            if (entryActualName == "logo.png")
-            {
-                var test = true;
-            }
 
             var actualPath = Path.Combine(Path.GetDirectoryName(entry) ?? string.Empty, entryActualName);
             var entryIsRenameOnlyPath =
                 PathHelpers.PathIsInList(actualPath, rootDirectory, template.RenameOnlyPaths, true, true);
 
-            isRenameOnlyPath = isRenameOnlyPath || entryIsRenameOnlyPath;
+            var isRenameOnlyPathForEntry = isRenameOnlyPath || entryIsRenameOnlyPath;
 
             // Handle directories
             if (Directory.Exists(entry))
@@ -152,7 +197,7 @@ public class Preparer
                 }
 
                 // then we update the sub-directory!
-                UpdateFileSystemEntries(actualPath, rootDirectory, template, isRenameOnlyPath);
+                UpdateFileSystemEntries(actualPath, rootDirectory, template, isRenameOnlyPathForEntry);
             }
             // Handle files
             else
@@ -168,7 +213,7 @@ public class Preparer
                     File.Move(entry, actualPath);
                 }
 
-                if (!isRenameOnlyPath)
+                if (!isRenameOnlyPathForEntry)
                 {
                     var inputLines = File.ReadAllLines(actualPath);
                     List<string> outputLines = new();

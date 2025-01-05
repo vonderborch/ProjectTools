@@ -9,6 +9,11 @@ namespace ProjectTools.Core.Templates;
 public class PreparationSlug : Slug
 {
     /// <summary>
+    ///     True if the slug is a custom one, False otherwise.
+    /// </summary>
+    public bool CustomSlug = false;
+
+    /// <summary>
     ///     True if we need to ask about this preparation slug _at all_, false otherwise.
     /// </summary>
     public bool RequiresAnyInput = true;

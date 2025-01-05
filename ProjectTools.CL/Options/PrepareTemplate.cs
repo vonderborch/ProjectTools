@@ -158,39 +158,7 @@ public class PrepareTemplate : AbstractOption
     /// <exception cref="Exception">Raises if no template builder could be used.</exception>
     private AbstractTemplateBuilder GetTemplateBuilderForPreparation(Preparer preparer)
     {
-        var templateBuilders = preparer.GetTemplateBuilders();
-        AbstractTemplateBuilder? templateBuilderForPrep = null;
-        // If template builder is auto, try to detect the correct one
-        if (this.TemplateBuilder == "auto")
-        {
-            foreach (var templateBuilder in templateBuilders)
-            {
-                if (templateBuilder.IsValidDirectoryForBuilder(this.Directory))
-                {
-                    templateBuilderForPrep = templateBuilder;
-                    break;
-                }
-            }
-        }
-        // Otherwise, try to find the template builder by name...
-        else
-        {
-            var templateBuilder = templateBuilders.FirstOrDefault(x => x.NameLowercase == this.TemplateBuilder);
-            if (templateBuilder != null)
-            {
-                if (templateBuilder.IsValidDirectoryForBuilder(this.Directory))
-                {
-                    templateBuilderForPrep = templateBuilder;
-                }
-            }
-        }
-
-        // Raise an exception if we couldn't find a valid template builder, otherwise return the template builder
-        if (templateBuilderForPrep == null)
-        {
-            throw new Exception("Could not detect valid template builder for directory!");
-        }
-
+        var templateBuilderForPrep = preparer.GetTemplateBuilderForOption(this.TemplateBuilder, this.Directory);
         return templateBuilderForPrep;
     }
 
@@ -281,6 +249,8 @@ public class PrepareTemplate : AbstractOption
         // Get the slugs that don't require any input and those that do
         var slugsWithNoInput = prepSlugs.Where(s => !s.RequiresAnyInput).ToList();
         var slugsWithInput = prepSlugs.Where(s => s.RequiresAnyInput).ToList();
+        var slugsWithInputBuiltIn = prepSlugs.Where(s => s.RequiresAnyInput && !s.CustomSlug).ToList();
+        var slugsWithInputCustom = prepSlugs.Where(s => s.RequiresAnyInput && s.CustomSlug).ToList();
 
         // If we had an existing template file, we may have slug info the user may want to stick with...
         if (hadExistingTemplate)
@@ -292,13 +262,15 @@ public class PrepareTemplate : AbstractOption
         }
 
         // Ask the user for input on the slugs that require it...
-        slugsWithInput = GetBuiltinSlugs(slugsWithInput);
+        slugsWithInputBuiltIn = GetBuiltinSlugs(slugsWithInputBuiltIn);
+        slugsWithInputCustom = GetCustomOldSlugs(slugsWithInputCustom);
 
         // Ask if the user has any additional slugs they want to add...
         var customSlugs = GetCustomSlugs();
 
         // Combine the three lists and return!
-        var slugs = slugsWithNoInput.CombineLists(slugsWithInput).CombineLists(customSlugs);
+        var slugs = slugsWithNoInput.CombineLists(slugsWithInputBuiltIn).CombineLists(slugsWithInputCustom)
+            .CombineLists(customSlugs);
         return slugs;
     }
 
@@ -314,6 +286,26 @@ public class PrepareTemplate : AbstractOption
             for (var i = 0; i < slugs.Count; i++)
             {
                 slugs[i] = GetSlugInfo(slugs[i], false);
+                // PRINT LINE
+                ConsoleHelpers.PrintLine();
+            }
+        } while (ContinueEditingSlugs(slugs, false));
+
+        return slugs;
+    }
+
+    /// <summary>
+    ///     Gets all existing slugs that require input.
+    /// </summary>
+    /// <param name="slugs">The slugs.</param>
+    /// <returns>The slugs.</returns>
+    private List<PreparationSlug> GetCustomOldSlugs(List<PreparationSlug> slugs)
+    {
+        do
+        {
+            for (var i = 0; i < slugs.Count; i++)
+            {
+                slugs[i] = GetSlugInfo(slugs[i], true);
                 // PRINT LINE
                 ConsoleHelpers.PrintLine();
             }

@@ -11,6 +11,7 @@
 | update                 | Checks for updates to the program.                                                          |
 | suggestion             | Make a suggestion for the program.                                                          |
 | report-issue           | Report an issue with the program.                                                           |
+| documentation          | Go to the wiki for documentation on the program.                                            |
 | about                  | Get information about the program.                                                          |
 
 ## Commands
@@ -128,6 +129,14 @@ A command for reporting an issue with the program.
 | description | d          | false       |               | string | The description of the issue.                                                                                                    |
 | silent      | s          | false       | false         | bool   | If flag is provided, all non-necessary user interaction will be skipped and default values will be provided where not available. |
 | title       | t          | false       |               | string | The title of the issue.                                                                                                          |
+
+### documentation
+
+A command for going to the wiki for documentation on the program.
+
+#### Parameters
+
+N/A
 
 ### about
 

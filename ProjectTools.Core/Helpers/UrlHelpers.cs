@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace ProjectTools.CL.Helpers;
+namespace ProjectTools.Core.Helpers;
 
 /// <summary>
 ///     Various helpers for dealing with URLs.
