@@ -14,7 +14,7 @@ ProjectTools.CL is a command-line interface that is designed to be used in a ter
 
 ## ProjectTools.App
 
-Coming soon!
+Documentation coming soon!
 
 ## Program File Location
 

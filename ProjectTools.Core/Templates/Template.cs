@@ -102,13 +102,10 @@ public class Template : AbstractTemplate
                     commandLogger.Log($"Executing Script {scriptPath}...", 2);
                     var startInfo = GetProcessStartInfo(PythonManager.Manager.PythonExecutable, $"{script}",
                         outputDirectory);
-                    Process proc = new()
-                    {
-                        StartInfo = startInfo
-                    };
+                    using Process proc = new();
+                    proc.StartInfo = startInfo;
                     proc.Start();
                     proc.WaitForExit();
-                    var exit = proc.ExitCode;
 
                     using var outputStream = proc.StandardOutput;
                     commandLogger.Log("Output Stream:", 4);

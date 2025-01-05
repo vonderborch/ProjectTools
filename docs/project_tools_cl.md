@@ -132,7 +132,7 @@ A command for reporting an issue with the program.
 
 ### documentation
 
-A command for getting information about the program.
+A command for going to the wiki for documentation on the program.
 
 #### Parameters
 
@@ -140,7 +140,7 @@ N/A
 
 ### about
 
-A command for going to the wiki for documentation on the program.
+A command for getting information about the program.
 
 #### Parameters
 
