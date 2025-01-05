@@ -45,4 +45,8 @@
         <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\SlugConfiguration.axaml"/>
         <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\TemplateConfiguration.axaml"/>
     </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(TargetDir)..\..\ProjectTools.App.zip' -Force)" />
+    </Target>
 </Project>

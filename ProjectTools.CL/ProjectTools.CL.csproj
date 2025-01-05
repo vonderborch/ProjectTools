@@ -26,4 +26,8 @@
         <ProjectReference Include="..\ProjectTools.Core\ProjectTools.Core.csproj"/>
     </ItemGroup>
 
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(TargetDir)..\..\ProjectTools.CL.zip' -Force)" />
+    </Target>
+
 </Project>
