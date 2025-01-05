@@ -255,13 +255,9 @@
   ],
   "Author": "Christian Webber",
   "Description": "A library with individual implementations for FNA and Monogame, and a base implementation.",
-  "Instructions": [
-    ""
-  ],
+  "Instructions": [],
   "Name": "Velentr.DUAL_SUPPORT_WITH_GENERIC",
-  "PathsToRemove": [
-    ""
-  ],
+  "PathsToRemove": [],
   "PrepareExcludedPaths": [
     "*bin",
     "*obj",
@@ -284,5 +280,5 @@
   ],
   "TemplateBuilder": ".sln",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-01-02"
+  "Version": "2025-01-05"
 }

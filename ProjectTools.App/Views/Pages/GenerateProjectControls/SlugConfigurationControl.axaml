@@ -22,28 +22,34 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Vertical">
-                <ListBox Name="ListBoxSlugs" ItemsSource="{Binding SlugConfigurationContext.SlugsToEdit}"
+                <ListBox Name="ListBoxSlugs" ItemsSource="{Binding SlugConfigurationContext.SlugNamesToEdit}"
                          SelectedItem="{Binding SlugConfigurationContext.CurrentSlugName}" />
             </StackPanel>
-            
+
             <StackPanel Grid.Column="1" Orientation="Vertical">
                 <WrapPanel>
                     <TextBlock Text="Slug Value: " />
                     <TextBox Text="{Binding SlugConfigurationContext.CurrentSlugValue}" Watermark="Slug Value" />
                 </WrapPanel>
-                
+
+                <WrapPanel>
+                    <TextBlock Text="Slug Type: " />
+                    <TextBlock Text="{Binding SlugConfigurationContext.CurrentSlugType}" />
+                </WrapPanel>
+
                 <WrapPanel IsVisible="{Binding SlugConfigurationContext.HasAllowedValues}">
                     <TextBlock Text="Allowed Values: " />
                     <SelectableTextBlock Text="{Binding SlugConfigurationContext.AllowedValues}" />
                 </WrapPanel>
-                
+
                 <WrapPanel IsVisible="{Binding SlugConfigurationContext.HasDisallowedValues}">
                     <TextBlock Text="Disallowed Values: " />
                     <SelectableTextBlock Text="{Binding SlugConfigurationContext.DisallowedValues}" />
                 </WrapPanel>
             </StackPanel>
         </Grid>
-        
-        <Button Name="ButtonGenerateProject" Click="ButtonGenerateProject_OnClick" HorizontalAlignment="Stretch" />
+
+        <Button Content="Generate Project" Name="ButtonGenerateProject" Click="ButtonGenerateProject_OnClick"
+                HorizontalAlignment="Stretch" />
     </StackPanel>
 </UserControl>

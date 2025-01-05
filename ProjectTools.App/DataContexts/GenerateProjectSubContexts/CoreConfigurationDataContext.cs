@@ -1,5 +1,6 @@
 #region
 
+using ProjectTools.Core.Constants;
 using ReactiveUI;
 
 #endregion
@@ -11,6 +12,11 @@ namespace ProjectTools.App.DataContexts.GenerateProjectSubContexts;
 /// </summary>
 public class CoreConfigurationDataContext : ReactiveObject
 {
+    /// <summary>
+    ///     Whether advanced options are enabled.
+    /// </summary>
+    private bool _advancedOptionsEnabled;
+
     /// <summary>
     ///     Whether to force overwrite.
     /// </summary>
@@ -27,6 +33,16 @@ public class CoreConfigurationDataContext : ReactiveObject
     private string _projectName;
 
     /// <summary>
+    ///     Whether to remove the existing project generation configuration file.
+    /// </summary>
+    private bool _removeExistingProjectGenerationConfigurationFile = true;
+
+    /// <summary>
+    ///     The specific project generation configuration file.
+    /// </summary>
+    private string _specificProjectGenerationConfigFile;
+
+    /// <summary>
     ///     Whether to run in what-if mode.
     /// </summary>
     private bool _whatIf;
@@ -41,12 +57,22 @@ public class CoreConfigurationDataContext : ReactiveObject
 
         this._projectName = string.Empty;
         this._parentOutputDirectory = string.Empty;
+        this._specificProjectGenerationConfigFile = PathConstants.DefaultProjectGenerationConfigFileName;
     }
 
     /// <summary>
     ///     The parent context.
     /// </summary>
     public GenerateProjectDataContext ParentContext { get; }
+
+    /// <summary>
+    ///     Whether advanced options are enabled.
+    /// </summary>
+    public bool AdvancedOptionsEnabled
+    {
+        get => this._advancedOptionsEnabled;
+        set => this.RaiseAndSetIfChanged(ref this._advancedOptionsEnabled, value);
+    }
 
     /// <summary>
     ///     Whether to force overwrite.
@@ -76,6 +102,24 @@ public class CoreConfigurationDataContext : ReactiveObject
     }
 
     /// <summary>
+    ///     Whether to remove the existing project generation configuration file.
+    /// </summary>
+    public bool RemoveExistingProjectGenerationConfigurationFile
+    {
+        get => this._removeExistingProjectGenerationConfigurationFile;
+        set => this.RaiseAndSetIfChanged(ref this._removeExistingProjectGenerationConfigurationFile, value);
+    }
+
+    /// <summary>
+    ///     The specific project generation configuration file.
+    /// </summary>
+    public string SpecificProjectGenerationConfigFile
+    {
+        get => this._specificProjectGenerationConfigFile;
+        set => this.RaiseAndSetIfChanged(ref this._specificProjectGenerationConfigFile, value);
+    }
+
+    /// <summary>
     ///     Whether to run in what-if mode.
     /// </summary>
     public bool WhatIf
@@ -84,16 +128,25 @@ public class CoreConfigurationDataContext : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref this._whatIf, value);
     }
 
+    /// <summary>
+    ///     Enables the context.
+    /// </summary>
     public void EnableContext()
     {
         ResetContext();
     }
 
+    /// <summary>
+    ///     Resets the context.
+    /// </summary>
     public void ResetContext()
     {
         this.ProjectName = string.Empty;
         this.ParentOutputDirectory = string.Empty;
         this.ForceOverwrite = false;
         this.WhatIf = false;
+        this.AdvancedOptionsEnabled = false;
+        this.SpecificProjectGenerationConfigFile = PathConstants.DefaultProjectGenerationConfigFileName;
+        this.RemoveExistingProjectGenerationConfigurationFile = true;
     }
 }

@@ -27,13 +27,13 @@
             </UniformGrid>
             <UniformGrid Grid.Row="1" Columns="3">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                    <SelectableTextBlock IsEnabled="False" Name="SelectableTextBlockCoreLog" />
+                    <SelectableTextBlock Name="SelectableTextBlockCoreLog" />
                 </ScrollViewer>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                    <SelectableTextBlock IsEnabled="False" Name="SelectableTextBlockScriptLog" />
+                    <SelectableTextBlock Name="SelectableTextBlockScriptLog" />
                 </ScrollViewer>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                    <SelectableTextBlock IsEnabled="False" Name="SelectableTextBlockInstructionLog" />
+                    <SelectableTextBlock Name="SelectableTextBlockInstructionLog" />
                 </ScrollViewer>
             </UniformGrid>
         </Grid>

@@ -1,8 +1,12 @@
+#region
+
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Settings;
 using ProjectTools.Core.TemplateRepositories;
 using ProjectTools.Core.Templates;
+
+#endregion
 
 namespace ProjectTools.Core;
 
@@ -100,6 +104,11 @@ public static class TemplateUpdater
         {
             // Step 2a - Check if we already have the template...
             var filePath = Path.Combine(PathConstants.TemplateDirectory, templateMetadata.SafeName);
+            if (Path.GetExtension(filePath) != TemplateConstants.TemplateFileExtension)
+            {
+                filePath = $"{filePath}.{TemplateConstants.TemplateFileExtension}";
+            }
+
             if (File.Exists(filePath))
             {
                 if (!force)

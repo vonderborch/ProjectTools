@@ -67,6 +67,16 @@ public partial class CoreConfigurationControl : UserControl
     }
 
     /// <summary>
+    ///     Event handler for when the checkbox to remove the existing project generation configuration file is checked.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
+    private void CheckBoxRemoveExistingProjectGenerationConfigFile_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        this.Context.SlugConfigurationEnabled = false;
+    }
+
+    /// <summary>
     ///     Event handler for when the text in the parent output directory textbox changes.
     /// </summary>
     /// <param name="sender">The sender.</param>

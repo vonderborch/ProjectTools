@@ -185,13 +185,9 @@
   ],
   "Author": "Christian Webber",
   "Description": "A generic library for an FNA/Monogame program that doesn\u0027t require any specific support for FNA or Monogame.",
-  "Instructions": [
-    ""
-  ],
+  "Instructions": [],
   "Name": "Velentr.BASE",
-  "PathsToRemove": [
-    ""
-  ],
+  "PathsToRemove": [],
   "PrepareExcludedPaths": [
     "*bin",
     "*obj",
@@ -200,13 +196,11 @@
     "*release",
     "*debug"
   ],
-  "PythonScriptPaths": [
-    ""
-  ],
+  "PythonScriptPaths": [],
   "RenameOnlyPaths": [
     "logo.png"
   ],
   "TemplateBuilder": ".sln",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-01-02"
+  "Version": "2025-01-05"
 }

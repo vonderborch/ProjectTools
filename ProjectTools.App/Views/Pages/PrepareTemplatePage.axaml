@@ -16,7 +16,7 @@
             <ScrollViewer Name="ViewerSlugConfig" />
         </UniformGrid>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto">
-            <SelectableTextBlock IsEnabled="False" Name="SelectableTextBlockLog" />
+            <SelectableTextBlock Name="SelectableTextBlockLog" />
         </ScrollViewer>
     </Grid>
 </UserControl>

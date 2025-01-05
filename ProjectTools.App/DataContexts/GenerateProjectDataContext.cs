@@ -189,7 +189,7 @@ public class GenerateProjectDataContext : ReactiveObject
             return false;
         }
 
-        this._instructionsLog.Text = $"{message}{Environment.NewLine}{this._instructionsLog.Text}";
+        this._instructionsLog.Text = $"{this._instructionsLog.Text}{Environment.NewLine}{message}";
         return true;
     }
 
@@ -205,7 +205,7 @@ public class GenerateProjectDataContext : ReactiveObject
             return false;
         }
 
-        this._scriptLog.Text = $"{message}{Environment.NewLine}{this._scriptLog.Text}";
+        this._scriptLog.Text = $"{this._scriptLog.Text}{Environment.NewLine}{message}";
         return true;
     }
 }

@@ -30,8 +30,25 @@
             <Button Content="Browse" Name="ButtonBrowse" Click="ButtonBrowse_OnClick" />
         </WrapPanel>
 
-        <CheckBox Content="Force Overwrite" IsChecked="{Binding CoreConfigurationContext.ForceOverwrite}" />
-        <CheckBox Content="What-If" IsChecked="{Binding CoreConfigurationContext.WhatIf}" />
-        <Button Name="ButtonSetCoreConfig" Content="Set Core Config" Click="ButtonSetCoreConfig_OnClick" HorizontalAlignment="Stretch" />
+        <CheckBox Content="Show Advanced Options" IsChecked="{Binding CoreConfigurationContext.AdvancedOptionsEnabled}" />
+        <StackPanel IsVisible="{Binding CoreConfigurationContext.AdvancedOptionsEnabled}">
+            <CheckBox Content="Force Overwrite" IsChecked="{Binding CoreConfigurationContext.ForceOverwrite}" />
+
+            <CheckBox Content="What-If" IsChecked="{Binding CoreConfigurationContext.WhatIf}" />
+
+            <CheckBox Content="Remove Existing Project Generation Configuration File"
+                      IsChecked="{Binding CoreConfigurationContext.RemoveExistingProjectGenerationConfigurationFile}"
+                      Name="CheckBoxRemoveExistingProjectGenerationConfigFile"
+                      IsCheckedChanged="CheckBoxRemoveExistingProjectGenerationConfigFile_OnIsCheckedChanged" />
+
+            <WrapPanel>
+                <TextBlock Text="Specific Project Generation Config File" />
+                <TextBox Text="{Binding CoreConfigurationContext.SpecificProjectGenerationConfigFile}"
+                         Watermark="Specific Project Generation Config File" />
+            </WrapPanel>
+        </StackPanel>
+
+        <Button Name="ButtonSetCoreConfig" Content="Set Core Config" Click="ButtonSetCoreConfig_OnClick"
+                HorizontalAlignment="Stretch" />
     </StackPanel>
 </UserControl>

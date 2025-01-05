@@ -1,8 +1,12 @@
+#region
+
 using System.Reflection;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.TemplateBuilders;
 using ProjectTools.Core.Templates;
+
+#endregion
 
 namespace ProjectTools.Core;
 
@@ -22,6 +26,63 @@ public class Preparer
     public Preparer()
     {
         this._availableTemplateBuilders = new List<AbstractTemplateBuilder>();
+    }
+
+    /// <summary>
+    ///     Generates a template from the specified directory.
+    /// </summary>
+    /// <param name="pathToDirectory">The path to the directory.</param>
+    /// <param name="outputDirectory">The output directory.</param>
+    /// <param name="skipCleaning">Whether to skip cleaning or not.</param>
+    /// <param name="forceOverride">Whether to delete any existing template or not.</param>
+    /// <param name="template">The template info.</param>
+    /// <param name="coreLogger">The core logger.</param>
+    /// <returns>The results of the template prep process.</returns>
+    public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
+        bool forceOverride, PreparationTemplate template, Logger coreLogger)
+    {
+        var outputTempDirectory = Path.Combine(outputDirectory, $"{template.SafeName}_TEMPLATEGEN");
+        var outputFile =
+            Path.Combine(outputDirectory, $"{template.SafeName}.{TemplateConstants.TemplateFileExtension}");
+
+        // Step 1 - Cleanup directories/files
+        coreLogger.Log("Step 1/6 - Cleaning existing directories and files...");
+        if (!IOHelpers.CleanDirectory(outputTempDirectory, forceOverride))
+        {
+            return "Directory already exists and force override is not enabled.";
+        }
+
+        if (!IOHelpers.CleanFile(outputFile, forceOverride))
+        {
+            return "Output file already exists and force override is not enabled.";
+        }
+
+        // Step 2 - Copy the directory we are trying to template to the output directory
+        coreLogger.Log("Step 2/6 - Copying directory to temp directory...");
+        IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, template.PrepareExcludedPaths);
+
+        // Step 3 - Go through the slugs and replace all instances of the search terms with the slug key
+        coreLogger.Log("Step 3/6 - Templatizing directory...");
+        UpdateFileSystemEntries(outputTempDirectory, outputTempDirectory, template, false);
+
+        // Step 4 - Create the template info file
+        coreLogger.Log("Step 4/6 - Creating template settings file...");
+        var outputTemplateInfoFile = Path.Combine(outputTempDirectory, TemplateConstants.TemplateSettingsFileName);
+        JsonHelpers.SerializeToFile(outputTemplateInfoFile, template.ToTemplate());
+
+        // Step 5 - Convert the template directory to a zip file
+        coreLogger.Log("Step 5/6 - Archiving directory...");
+        IOHelpers.ArchiveDirectory(outputTempDirectory, outputFile, skipCleaning);
+
+        // Step 6 - DONE
+        coreLogger.Log("Step 6/6 - Cleaning directory...");
+        if (!skipCleaning)
+        {
+            IOHelpers.CleanDirectory(outputTempDirectory, true);
+        }
+
+        coreLogger.Log("Success!");
+        return "";
     }
 
     /// <summary>
@@ -100,63 +161,6 @@ public class Preparer
     }
 
     /// <summary>
-    ///     Generates a template from the specified directory.
-    /// </summary>
-    /// <param name="pathToDirectory">The path to the directory.</param>
-    /// <param name="outputDirectory">The output directory.</param>
-    /// <param name="skipCleaning">Whether to skip cleaning or not.</param>
-    /// <param name="forceOverride">Whether to delete any existing template or not.</param>
-    /// <param name="template">The template info.</param>
-    /// <param name="coreLogger">The core logger.</param>
-    /// <returns>The results of the template prep process.</returns>
-    public string GenerateTemplate(string pathToDirectory, string outputDirectory, bool skipCleaning,
-        bool forceOverride, PreparationTemplate template, Logger coreLogger)
-    {
-        var outputTempDirectory = Path.Combine(outputDirectory, $"{template.SafeName}_TEMPLATEGEN");
-        var outputFile =
-            Path.Combine(outputDirectory, $"{template.SafeName}.{TemplateConstants.TemplateFileExtension}");
-
-        // Step 1 - Cleanup directories/files
-        coreLogger.Log("Step 1/6 - Cleaning existing directories and files...");
-        if (!IOHelpers.CleanDirectory(outputTempDirectory, forceOverride))
-        {
-            return "Directory already exists and force override is not enabled.";
-        }
-
-        if (!IOHelpers.CleanFile(outputFile, forceOverride))
-        {
-            return "Output file already exists and force override is not enabled.";
-        }
-
-        // Step 2 - Copy the directory we are trying to template to the output directory
-        coreLogger.Log("Step 2/6 - Copying directory to temp directory...");
-        IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, template.PrepareExcludedPaths);
-
-        // Step 3 - Go through the slugs and replace all instances of the search terms with the slug key
-        coreLogger.Log("Step 3/6 - Templatizing directory...");
-        UpdateFileSystemEntries(outputTempDirectory, outputTempDirectory, template, false);
-
-        // Step 4 - Create the template info file
-        coreLogger.Log("Step 4/6 - Creating template settings file...");
-        var outputTemplateInfoFile = Path.Combine(outputTempDirectory, TemplateConstants.TemplateSettingsFileName);
-        JsonHelpers.SerializeToFile(outputTemplateInfoFile, template.ToTemplate());
-
-        // Step 5 - Convert the template directory to a zip file
-        coreLogger.Log("Step 5/6 - Archiving directory...");
-        IOHelpers.ArchiveDirectory(outputTempDirectory, outputFile, skipCleaning);
-
-        // Step 6 - DONE
-        coreLogger.Log("Step 6/6 - Cleaning directory...");
-        if (!skipCleaning)
-        {
-            IOHelpers.CleanDirectory(outputTempDirectory, true);
-        }
-
-        coreLogger.Log("Success!");
-        return "";
-    }
-
-    /// <summary>
     ///     Updates the directory files per the template and replacement text.
     /// </summary>
     /// <param name="directory">The directory to update.</param>
@@ -171,16 +175,12 @@ public class Preparer
         {
             var baseEntryName = Path.GetFileName(entry);
             var entryActualName = UpdateText(baseEntryName, template.ReplacementText);
-            if (entryActualName == "logo.png")
-            {
-                var test = true;
-            }
 
             var actualPath = Path.Combine(Path.GetDirectoryName(entry) ?? string.Empty, entryActualName);
             var entryIsRenameOnlyPath =
                 PathHelpers.PathIsInList(actualPath, rootDirectory, template.RenameOnlyPaths, true, true);
 
-            isRenameOnlyPath = isRenameOnlyPath || entryIsRenameOnlyPath;
+            var isRenameOnlyPathForEntry = isRenameOnlyPath || entryIsRenameOnlyPath;
 
             // Handle directories
             if (Directory.Exists(entry))
@@ -197,7 +197,7 @@ public class Preparer
                 }
 
                 // then we update the sub-directory!
-                UpdateFileSystemEntries(actualPath, rootDirectory, template, isRenameOnlyPath);
+                UpdateFileSystemEntries(actualPath, rootDirectory, template, isRenameOnlyPathForEntry);
             }
             // Handle files
             else
@@ -213,7 +213,7 @@ public class Preparer
                     File.Move(entry, actualPath);
                 }
 
-                if (!isRenameOnlyPath)
+                if (!isRenameOnlyPathForEntry)
                 {
                     var inputLines = File.ReadAllLines(actualPath);
                     List<string> outputLines = new();

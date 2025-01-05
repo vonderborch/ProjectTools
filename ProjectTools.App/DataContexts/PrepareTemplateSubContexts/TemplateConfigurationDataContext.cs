@@ -79,7 +79,8 @@ public class TemplateConfigurationDataContext : ReactiveObject
         {
             if (this._parentContext.PreparationTemplate is not null)
             {
-                this._parentContext.PreparationTemplate.Instructions = value.Split(Environment.NewLine).ToList();
+                this._parentContext.PreparationTemplate.Instructions =
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             this.RaisePropertyChanged();
@@ -121,7 +122,8 @@ public class TemplateConfigurationDataContext : ReactiveObject
         {
             if (this._parentContext.PreparationTemplate is not null)
             {
-                this._parentContext.PreparationTemplate.PathsToRemove = value.Split(Environment.NewLine).ToList();
+                this._parentContext.PreparationTemplate.PathsToRemove =
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             this.RaisePropertyChanged();
@@ -172,7 +174,8 @@ public class TemplateConfigurationDataContext : ReactiveObject
         {
             if (this._parentContext.PreparationTemplate is not null)
             {
-                this._parentContext.PreparationTemplate.PythonScriptPaths = value.Split(Environment.NewLine).ToList();
+                this._parentContext.PreparationTemplate.PythonScriptPaths =
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             this.RaisePropertyChanged();
@@ -197,7 +200,8 @@ public class TemplateConfigurationDataContext : ReactiveObject
         {
             if (this._parentContext.PreparationTemplate is not null)
             {
-                this._parentContext.PreparationTemplate.RenameOnlyPaths = value.Split(Environment.NewLine).ToList();
+                this._parentContext.PreparationTemplate.RenameOnlyPaths =
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             this.RaisePropertyChanged();
