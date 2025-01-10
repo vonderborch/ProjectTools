@@ -1,0 +1,17 @@
+﻿<Solution>
+  <Folder Name="/SolutionFiles/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="CODEOWNERS" />
+    <File Path="LICENSE" />
+    <File Path="logo.png" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/source/">
+    <Project Path="source\Velentr.BASE\Velentr.BASE.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/test/" />
+  <Folder Name="/test/automated/">
+    <Project Path="test\automated\Velentr.BASE.Test\Velentr.BASE.Test.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>

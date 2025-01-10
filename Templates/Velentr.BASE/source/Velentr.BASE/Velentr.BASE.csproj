@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>[[Version]]</Version>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>[[Solution Name]]</Title>
+        <Authors>[[Author]]</Authors>
+        <Description>[[Description]]</Description>
+        <Copyright>[[Copyright]]</Copyright>
+        <PackageProjectUrl>https://github.com/vonderborch/Velentr.BASE</PackageProjectUrl>
+        <PackageLicenseUrl>[[License]]</PackageLicenseUrl>
+        <PackageIcon>logo.png</PackageIcon>
+        <RepositoryUrl>https://github.com/vonderborch/Velentr.BASE</RepositoryUrl>
+        <PackageTags>[[Tags]]</PackageTags>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>..\..\debug\core</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>..\..\release\core</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\..\logo.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+        <Link>logo.png</Link>
+      </None>
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(TargetDir)..\..\Velentr.BASE.zip' -Force)" />
+    </Target>
+
+</Project>
