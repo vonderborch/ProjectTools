@@ -160,7 +160,7 @@ public class PrepareTemplateDataContext : ReactiveObject
 
     private void EnabledSlugConfigurationData()
     {
-        this.SlugDataContext.EnableContext();
+        this.SlugDataContext.RefreshContext();
     }
 
     private void EnableTemplateConfigurationData()
@@ -179,7 +179,7 @@ public class PrepareTemplateDataContext : ReactiveObject
     /// </summary>
     private void ResetSlugConfigurationData()
     {
-        this.SlugDataContext.ClearContext();
+        this.SlugDataContext.RefreshContext();
     }
 
     /// <summary>
