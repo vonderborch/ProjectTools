@@ -1,4 +1,16 @@
 ﻿<Solution>
+  <Folder Name="/.build/">
+    <Project Path=".build\post_solution_build.csproj" Type="Classic C#">
+      <BuildDependency Project=".build\pre_solution_build.csproj" />
+      <BuildDependency Project="ProjectTools.App\ProjectTools.App.csproj" />
+      <BuildDependency Project="ProjectTools.CL\ProjectTools.CL.csproj" />
+      <BuildDependency Project="ProjectTools.Core\ProjectTools.Core.csproj" />
+    </Project>
+    <Project Path=".build\pre_solution_build.csproj" Type="Classic C#" />
+    <File Path=".build\version_bump.ps1" />
+    <File Path=".build\version_bump_common.ps1" />
+    <File Path=".build\version_bump_dialog.ps1" />
+  </Folder>
   <Folder Name="/Docs/">
     <File Path="docs\home.md" />
     <File Path="docs\project_tools_app.md" />
@@ -7,9 +19,9 @@
   <Folder Name="/SolutionFiles/">
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
-    <File Path="ConsoleCommands.md" />
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
+    <File Path=".version.json" />
   </Folder>
   <Folder Name="/Templates/">
     <File Path="Templates\TEMPLATES\Velentr.BASE.ptt" />
@@ -18,5 +30,7 @@
   </Folder>
   <Project Path="ProjectTools.App\ProjectTools.App.csproj" Type="Classic C#" />
   <Project Path="ProjectTools.CL\ProjectTools.CL.csproj" Type="Classic C#" />
-  <Project Path="ProjectTools.Core\ProjectTools.Core.csproj" Type="Classic C#" />
+  <Project Path="ProjectTools.Core\ProjectTools.Core.csproj" Type="Classic C#">
+    <BuildDependency Project=".build\pre_solution_build.csproj" />
+  </Project>
 </Solution>

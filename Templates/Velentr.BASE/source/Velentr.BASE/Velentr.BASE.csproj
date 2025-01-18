@@ -4,17 +4,20 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>[[Version]]</Version>
+        <Version>VERSION_HERE</Version>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Title>[[Solution Name]]</Title>
-        <Authors>[[Author]]</Authors>
-        <Description>[[Description]]</Description>
-        <Copyright>[[Copyright]]</Copyright>
-        <PackageProjectUrl>https://github.com/vonderborch/Velentr.BASE</PackageProjectUrl>
-        <PackageLicenseUrl>[[License]]</PackageLicenseUrl>
+        <Title>Velentr.BASE</Title>
+        <Authors>AUTHOR_HERE</Authors>
+        <Description>DESCRIPTION_HERE</Description>
+        <Copyright>COPYRIGHT</Copyright>
+        <PackageProjectUrl>https://github.com/GITHUBUSER_HERE/Velentr.BASE</PackageProjectUrl>
+        <PackageLicenseUrl>LICENSE_HERE</PackageLicenseUrl>
         <PackageIcon>logo.png</PackageIcon>
-        <RepositoryUrl>https://github.com/vonderborch/Velentr.BASE</RepositoryUrl>
-        <PackageTags>[[Tags]]</PackageTags>
+        <RepositoryUrl>https://github.com/GITHUBUSER_HERE/Velentr.BASE</RepositoryUrl>
+        <PackageTags>TAGS_HERE</PackageTags>
+        <AssemblyVersion>VERSION_HERE</AssemblyVersion>
+        <FileVersion>VERSION_HERE</FileVersion>
+        <Company>AUTHOR_HERE</Company>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -34,7 +37,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(TargetDir)..\..\Velentr.BASE.zip' -Force)" />
+      <Exec Command="if $(ConfigurationName) == Release (Powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force)" />
     </Target>
 
 </Project>

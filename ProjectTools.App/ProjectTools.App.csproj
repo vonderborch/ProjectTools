@@ -6,14 +6,16 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <AssemblyVersion>2.2.1</AssemblyVersion>
-        <FileVersion>2.2.1</FileVersion>
+        <AssemblyVersion>2.2.2.60</AssemblyVersion>
+        <FileVersion>2.2.2.60</FileVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>..\debug\app\</OutputPath>
+        <OutputPath>..\debug\app\</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>..\release\app\</OutputPath>
+        <OutputPath>..\release\app\</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -47,6 +49,6 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(TargetDir)..\..\ProjectTools.App.zip' -Force)" />
+        <Exec Command="if $(ConfigurationName) == Release (Powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force)"/>
     </Target>
 </Project>

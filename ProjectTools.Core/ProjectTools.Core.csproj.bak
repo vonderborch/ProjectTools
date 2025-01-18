@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>2.2.0</AssemblyVersion>
-        <FileVersion>2.2.0</FileVersion>
+        <AssemblyVersion>2.1.3.0</AssemblyVersion>
+        <FileVersion>2.1.3.0</FileVersion>
         <LangVersion>latestmajor</LangVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -15,6 +17,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <OutputPath>..\release\core\</OutputPath>
+        <DocumentationFile>..\release\core\ProjectTools.Core.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -32,5 +35,9 @@
         <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64-pc-windows-msvc-shared-install_only.tar.gz"/>
         <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64_v2-unknown-linux-gnu-install_only.tar.gz"/>
     </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+      <Exec Command="PowerShell -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir).scripts\version_bump_dialog.ps1&quot; -Directory $(SolutionDir) - ExcludedDirectories &quot;&quot;&quot;*Templates&quot;&quot;&quot;" />
+    </Target>
 
 </Project>

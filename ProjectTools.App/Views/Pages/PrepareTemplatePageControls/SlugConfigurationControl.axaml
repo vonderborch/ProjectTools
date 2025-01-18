@@ -60,7 +60,7 @@
                            Orientation="Vertical">
                     <WrapPanel>
                         <TextBlock>Slug Type Special Values: </TextBlock>
-                        <SelectableTextBlock Name="TextBoxSpecialValues" IsEnabled="False"
+                        <SelectableTextBlock Name="TextBoxSpecialValues"
                                              Text="{Binding SlugDataContext.SlugTypeSpecialValues}" />
                     </WrapPanel>
 

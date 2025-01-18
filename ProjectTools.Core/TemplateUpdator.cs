@@ -137,7 +137,7 @@ public static class TemplateUpdater
                     TemplateConstants.TemplateSettingsFileName);
             if (templateObj == null)
             {
-                throw new Exception($"The downloaded template {templateMetadata.Name} is invalid!");
+                throw new Exception($"The downloaded template {templateMetadata.DisplayName} is invalid!");
             }
 
             newLocalTemplateInfo.Add(new LocalTemplateInfo(templateMetadata, filePath, templateObj));

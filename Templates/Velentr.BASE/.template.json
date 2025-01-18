@@ -1,0 +1,126 @@
+{
+  "Slugs": [
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "Velentr.BASE"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "[[ParentDirectoryName]].[[ProjectName]]",
+      "DisallowedValues": [],
+      "DisplayName": "Solution Name",
+      "RequiresUserInput": true,
+      "SlugKey": "SolutionName",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "AUTHOR_HERE"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "[[CurrentUserName]]",
+      "DisallowedValues": [],
+      "DisplayName": "Author",
+      "RequiresUserInput": true,
+      "SlugKey": "Author",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "DESCRIPTION_HERE"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "My library",
+      "DisallowedValues": [],
+      "DisplayName": "Description",
+      "RequiresUserInput": true,
+      "SlugKey": "Description",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "VERSION_HERE"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "1.0.0.0",
+      "DisallowedValues": [],
+      "DisplayName": "Version",
+      "RequiresUserInput": true,
+      "SlugKey": "Version",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "COPYRIGHT_HERE"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "(c) [[CurrentYear]]",
+      "DisallowedValues": [],
+      "DisplayName": "Copyright",
+      "RequiresUserInput": true,
+      "SlugKey": "Copyright",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "LICENSE_HERE"
+      ],
+      "AllowedValues": [
+        "AFL-3.0",
+        "Apache-2.0",
+        "Artistic-2.0"
+      ],
+      "DefaultValue": "MIT",
+      "DisallowedValues": [],
+      "DisplayName": "License",
+      "RequiresUserInput": true,
+      "SlugKey": "License",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "TAGS_HERE"
+      ],
+      "AllowedValues": [],
+      "DefaultValue": "[[ParentDirectoryName]]",
+      "DisallowedValues": [],
+      "DisplayName": "Tags",
+      "RequiresUserInput": true,
+      "SlugKey": "Tags",
+      "Type": "String"
+    }
+  ],
+  "Author": "Christian Webber",
+  "Description": "A generic library for an XNA-derived framework that doesn\u0027t require specific support for any in particular.",
+  "Instructions": [],
+  "Name": "Velentr.BASE",
+  "PathsToRemove": [],
+  "PrepareExcludedPaths": [
+    "*bin",
+    "*obj",
+    "*.vs",
+    "*.git",
+    "*release",
+    "*debug"
+  ],
+  "PythonScriptPaths": [],
+  "RenameOnlyPaths": [
+    "logo.png"
+  ],
+  "TemplateBuilder": "",
+  "TemplaterVersion": "1.0.0",
+  "Version": "2025-01-18a"
+}

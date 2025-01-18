@@ -1,8 +1,8 @@
 # Velentr.BASE
 
-![Screenshot](https://github.com/vonderborch/Velentr.BASE/blob/main/logo.png?raw=true)
+![Screenshot](https://github.com/GITHUBUSER_HERE/Velentr.BASE/blob/main/logo.png?raw=true)
 
-[[Description]]
+DESCRIPTION_HERE
 
 ## Installation
 
@@ -31,4 +31,4 @@ Alternatively, you can clone this repo and reference the Velentr.BASE project in
 
 ## Future Plans
 
-See list of issues under the Milestones: https://github.com/vonderborch/Velentr.BASE/milestones
+See list of issues under the Milestones: https://github.com/GITHUBUSER_HERE/Velentr.BASE/milestones

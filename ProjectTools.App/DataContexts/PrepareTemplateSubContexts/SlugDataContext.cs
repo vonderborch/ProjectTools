@@ -300,9 +300,8 @@ public class SlugDataContext : ReactiveObject
         {
             if (this._currentSlug is not null)
             {
-                this._currentSlug.DisallowedValues =
-                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(x => (object?)x)
-                        .ToList();
+                this._currentSlug.SearchStrings =
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             RefreshContext();
@@ -340,6 +339,11 @@ public class SlugDataContext : ReactiveObject
         }
     }
 
+    /// <summary>
+    ///     Adds a new slug.
+    /// </summary>
+    /// <returns>The name of the new slug.</returns>
+    /// <exception cref="Exception">Raised if bad things happen.</exception>
     public string AddSlug()
     {
         if (this.ParentContext.PreparationTemplate is null)
@@ -361,11 +365,14 @@ public class SlugDataContext : ReactiveObject
 
         SelectSlug(newSlug.DisplayName);
 
-        RefreshContext();
-        this.RaisePropertyChanged(nameof(this.TemplateSlugsNames));
+        RefreshContext(refreshSlugNames: true);
         return newSlug.DisplayName;
     }
 
+    /// <summary>
+    ///     Deletes the current slug.
+    /// </summary>
+    /// <exception cref="Exception">Raised if bad things happen.</exception>
     public void DeleteSlug()
     {
         if (this.ParentContext.PreparationTemplate is null)
@@ -385,14 +392,25 @@ public class SlugDataContext : ReactiveObject
     /// <summary>
     ///     Refreshes the context.
     /// </summary>
-    public void RefreshContext()
+    public void RefreshContext(bool refreshSlugNames = false)
     {
         foreach (var property in this._propertiesToUpdate)
         {
             this.RaisePropertyChanged(property);
         }
+
+        if (refreshSlugNames)
+        {
+            this.RaisePropertyChanged(nameof(this.TemplateSlugsNames));
+        }
     }
 
+    /// <summary>
+    ///     Selects a slug.
+    /// </summary>
+    /// <param name="newSlug">The slug to select.</param>
+    /// <returns>The name of the selected slug.</returns>
+    /// <exception cref="Exception">Raised if bad things happen.</exception>
     public string SelectSlug(string newSlug)
     {
         if (this.ParentContext.PreparationTemplate is null)
@@ -412,6 +430,7 @@ public class SlugDataContext : ReactiveObject
             this._currentSlugToEditName = newSlug;
             this._currentSlug = null;
         }
+
         this.RaisePropertyChanged(nameof(this.CurrentSlugToEditName));
         return newSlug;
     }

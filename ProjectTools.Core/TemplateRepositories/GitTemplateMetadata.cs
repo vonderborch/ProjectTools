@@ -1,6 +1,10 @@
+#region
+
 using System.Text.Json.Serialization;
 using Octokit;
 using ProjectTools.Core.Helpers;
+
+#endregion
 
 namespace ProjectTools.Core.TemplateRepositories;
 
@@ -41,7 +45,7 @@ public class GitTemplateMetadata
     /// <param name="repo">The repo the template is located in.</param>
     public GitTemplateMetadata(RepositoryContent info, string repo)
     {
-        this.Name = Path.GetFileNameWithoutExtension(info.Name);
+        this.Name = info.Name;
         this.Sha = info.Sha;
         this.Url = info.DownloadUrl;
         this.Repo = repo;

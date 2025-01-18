@@ -5,9 +5,11 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>2.2.1</AssemblyVersion>
-        <FileVersion>2.2.1</FileVersion>
+        <AssemblyVersion>2.2.2.60</AssemblyVersion>
+        <FileVersion>2.2.2.60</FileVersion>
         <LangVersion>latestmajor</LangVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -27,7 +29,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(TargetDir)..\..\ProjectTools.CL.zip' -Force)" />
+        <Exec Command="if $(ConfigurationName) == Release (Powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force)"/>
     </Target>
 
 </Project>

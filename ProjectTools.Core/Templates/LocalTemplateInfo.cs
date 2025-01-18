@@ -103,4 +103,11 @@ public struct LocalTemplateInfo
         this.Template = template ?? throw new Exception("Invalid template file!");
         return this.Template;
     }
+
+    /// <summary>
+    ///     The display name of the template.
+    /// </summary>
+    public string DisplayName => this.Name.EndsWith(TemplateConstants.TemplateFileExtension)
+        ? Path.GetFileNameWithoutExtension(this.Name)
+        : this.Name;
 }

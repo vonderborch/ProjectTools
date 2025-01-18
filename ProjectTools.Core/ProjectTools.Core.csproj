@@ -4,9 +4,11 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>2.2.1</AssemblyVersion>
-        <FileVersion>2.2.1</FileVersion>
+        <AssemblyVersion>2.2.2.60</AssemblyVersion>
+        <FileVersion>2.2.2.60</FileVersion>
         <LangVersion>latestmajor</LangVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -15,6 +17,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <OutputPath>..\release\core\</OutputPath>
+        <DocumentationFile>..\release\core\ProjectTools.Core.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

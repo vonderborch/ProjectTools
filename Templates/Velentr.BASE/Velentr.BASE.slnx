@@ -1,4 +1,13 @@
 ﻿<Solution>
+  <Folder Name="/.build/">
+    <Project Path=".build\post_solution_build.csproj" Type="Classic C#">
+      <BuildDependency Project="test\automated\Velentr.BASE.Test\Velentr.BASE.Test.csproj" />
+    </Project>
+    <Project Path=".build\pre_solution_build.csproj" Type="Classic C#" />
+    <File Path=".build\version_bump.ps1" />
+    <File Path=".build\version_bump_common.ps1" />
+    <File Path=".build\version_bump_dialog.ps1" />
+  </Folder>
   <Folder Name="/SolutionFiles/">
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
@@ -8,7 +17,9 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/source/">
-    <Project Path="source\Velentr.BASE\Velentr.BASE.csproj" Type="Classic C#" />
+    <Project Path="source\Velentr.BASE\Velentr.BASE.csproj" Type="Classic C#">
+      <BuildDependency Project=".build\pre_solution_build.csproj" />
+    </Project>
   </Folder>
   <Folder Name="/test/" />
   <Folder Name="/test/automated/">

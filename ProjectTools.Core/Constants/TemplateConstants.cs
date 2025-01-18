@@ -8,7 +8,7 @@ public static class TemplateConstants
     /// <summary>
     ///     The name of the template settings file.
     /// </summary>
-    public static string TemplateSettingsFileName = "template.json";
+    public static string TemplateSettingsFileName = ".template.json";
 
     /// <summary>
     ///     The default template repository
