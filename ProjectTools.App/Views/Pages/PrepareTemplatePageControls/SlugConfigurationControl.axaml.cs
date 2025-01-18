@@ -42,8 +42,8 @@ public partial class SlugConfigurationControl : UserControl
     /// <param name="e">The args.</param>
     private void ButtonAddSlug_OnClick(object? sender, RoutedEventArgs e)
     {
-        var newSlugName = this.Context.SlugDataContext.AddSlug();
-        this.ComboBoxSlugs.SelectedItem = newSlugName;
+        var slug = this.Context.SlugDataContext.AddSlug();
+        this.ComboBoxSlugs.SelectedItem = slug;
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public partial class SlugConfigurationControl : UserControl
     /// <param name="e">The args.</param>
     private void ButtonDeleteSlug_OnClick(object? sender, RoutedEventArgs e)
     {
-        this.Context.SlugDataContext.DeleteCurrentSlug();
+        this.Context.SlugDataContext.DeleteSlug();
     }
 
     /// <summary>
@@ -100,11 +100,9 @@ public partial class SlugConfigurationControl : UserControl
     {
         if (e.AddedItems.Count > 0)
         {
-            this.Context.SlugDataContext.SelectSlugContext(e.AddedItems[0].ToString());
-        }
-        else
-        {
-            this.Context.SlugDataContext.ClearContext();
+            var slug = this.Context.SlugDataContext.SelectSlug(e.AddedItems[0].ToString());
+            this.ComboBoxSlugs.SelectedItem = slug;
+            this.Context.SlugDataContext.RefreshContext();
         }
     }
 }
