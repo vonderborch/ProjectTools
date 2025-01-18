@@ -19,21 +19,21 @@ public class SlugDataContext : ReactiveObject
     ///     A list of properties to update when something changes with what slug we are editing.
     /// </summary>
     private readonly string[] _propertiesToUpdate =
-    {
+    [
         nameof(CurrentSlugName),
         nameof(CurrentSlugKey),
+        nameof(CurrentSlugDisallowedValues),
         nameof(CurrentSlugDefaultValue),
         nameof(CurrentSlugAllowedValues),
-        nameof(CurrentSlugDisallowedValues),
-        nameof(CurrentSlugSearchStrings),
         nameof(CurrentSlugRequiresUserInput),
-        nameof(CurrentSlugSelectedType),
-        nameof(SlugTypeSpecialValues),
-        nameof(TemplateSlugsNames),
-        nameof(CurrentEditingSlugName),
         nameof(CurrentSlugEnableSlugTypePanel),
-        nameof(NonGuidOptionsPanelEnabled)
-    };
+        nameof(SlugTypeSpecialValues),
+        nameof(CurrentSlugSearchStrings),
+        nameof(NonGuidOptionsPanelEnabled),
+        nameof(IsEditingSlug),
+        nameof(CurrentSlugSelectedType),
+        nameof(CurrentSlugToEditName)
+    ];
 
     /// <summary>
     ///     A map of slug names by type.
@@ -51,21 +51,14 @@ public class SlugDataContext : ReactiveObject
     private readonly Dictionary<SlugType, string> _specialValuesBySlugType;
 
     /// <summary>
-    ///     The current editing slug name.
-    /// </summary>
-    private string _currentEditingSlugName;
-
-    /// <summary>
-    ///     The current slug we are editing.
+    ///     The current slug.
     /// </summary>
     private PreparationSlug? _currentSlug;
 
-    private string? _currentSlugEditingName;
-
     /// <summary>
-    ///     Whether the slug type panel is enabled.
+    ///     The name of the slug currently being edited.
     /// </summary>
-    private bool _currentSlugEnableSlugTypePanel;
+    private string _currentSlugToEditName = string.Empty;
 
     /// <summary>
     ///     The new slug counter.
@@ -73,29 +66,9 @@ public class SlugDataContext : ReactiveObject
     private ulong _newSlugCounter;
 
     /// <summary>
-    ///     Whether the non-guid options panel is enabled.
-    /// </summary>
-    private bool _nonGuidOptionsPanelEnabled;
-
-    /// <summary>
-    ///     The slug cache.
-    /// </summary>
-    private Dictionary<string, PreparationSlug> _slugCache;
-
-    /// <summary>
     ///     A list of slug types.
     /// </summary>
     private List<string> _slugTypes;
-
-    /// <summary>
-    ///     The special values for the currently selected slug type.
-    /// </summary>
-    private string _slugTypeSpecialValues;
-
-    /// <summary>
-    ///     The slugs for the current template.
-    /// </summary>
-    private List<string> _templateSlugsNames;
 
     /// <summary>
     ///     The parent context.
@@ -110,6 +83,9 @@ public class SlugDataContext : ReactiveObject
     {
         this.ParentContext = parentContext;
 
+        this._newSlugCounter = 0;
+
+        this._slugTypes = Enum.GetNames(typeof(SlugType)).Select(x => x.ToString()).ToList();
         this._slugTypesByName =
             Enum.GetValues(typeof(SlugType)).Cast<SlugType>().ToDictionary(x => x.ToString(), x => x);
         this._slugNamesByType =
@@ -128,13 +104,49 @@ public class SlugDataContext : ReactiveObject
 
             this._specialValuesBySlugType.Add(slugType, messageExtra);
         }
-
-        this._slugTypes = new List<string>();
-        this._slugTypes = Enum.GetNames(typeof(SlugType)).Select(x => x.ToString()).ToList();
-
-        this._templateSlugsNames = new List<string>();
-        this._slugCache = new Dictionary<string, PreparationSlug>();
     }
+
+    /// <summary>
+    ///     The current slug.
+    /// </summary>
+    public PreparationSlug? CurrentSlug => this._currentSlug;
+
+    /// <summary>
+    ///     Whether the slug type panel should be enabled.
+    /// </summary>
+    public bool CurrentSlugEnableSlugTypePanel => this._currentSlug?.CustomSlug == true;
+
+    /// <summary>
+    ///     Whether we are editing a slug.
+    /// </summary>
+    public bool IsEditingSlug => this._currentSlug != null;
+
+    /// <summary>
+    ///     Whether the non-guid options panel should be enabled.
+    /// </summary>
+    public bool NonGuidOptionsPanelEnabled => this._currentSlug?.Type != SlugType.RandomGuid;
+
+    /// <summary>
+    ///     The special values for the current slug type.
+    /// </summary>
+    public string SlugTypeSpecialValues
+    {
+        get
+        {
+            if (this.CurrentSlug is null)
+            {
+                return string.Empty;
+            }
+
+            return this._specialValuesBySlugType[this.CurrentSlug.Type];
+        }
+    }
+
+    /// <summary>
+    ///     The list of possible template slugs to edit or delete.
+    /// </summary>
+    public List<string> TemplateSlugsNames =>
+        this.ParentContext.PreparationTemplate?.Slugs.Select(x => x.DisplayName).ToList() ?? new List<string>();
 
     /// <summary>
     ///     All of the available slug types.
@@ -143,15 +155,6 @@ public class SlugDataContext : ReactiveObject
     {
         get => this._slugTypes;
         set => this.RaiseAndSetIfChanged(ref this._slugTypes, value);
-    }
-
-    /// <summary>
-    ///     The current editing slug name.
-    /// </summary>
-    public string? CurrentEditingSlugName
-    {
-        get => this._currentEditingSlugName;
-        set => this.RaiseAndSetIfChanged(ref this._currentEditingSlugName, value);
     }
 
     /// <summary>
@@ -177,7 +180,7 @@ public class SlugDataContext : ReactiveObject
                         .ToList();
             }
 
-            this.RaisePropertyChanged();
+            RefreshContext();
         }
     }
 
@@ -186,15 +189,14 @@ public class SlugDataContext : ReactiveObject
     /// </summary>
     public string CurrentSlugDefaultValue
     {
-        get => this._currentSlug?.DefaultValue?.ToString() ?? string.Empty;
+        get => this._currentSlug?.DefaultValue.ToString() ?? string.Empty;
         set
         {
-            if (this._currentSlug is not null)
+            if (this._currentSlug != null)
             {
                 this._currentSlug.DefaultValue = value;
+                RefreshContext();
             }
-
-            this.RaisePropertyChanged();
         }
     }
 
@@ -221,50 +223,46 @@ public class SlugDataContext : ReactiveObject
                         .ToList();
             }
 
-            this.RaisePropertyChanged();
+            RefreshContext();
         }
     }
 
     /// <summary>
-    ///     Whether the slug type panel is enabled.
-    /// </summary>
-    public bool CurrentSlugEnableSlugTypePanel
-    {
-        get => this._currentSlugEnableSlugTypePanel;
-        set => this.RaiseAndSetIfChanged(ref this._currentSlugEnableSlugTypePanel, value);
-    }
-
-    /// <summary>
-    ///     The current slug key.
+    ///     The key of the current slug.
     /// </summary>
     public string CurrentSlugKey
     {
         get => this._currentSlug?.SlugKey ?? string.Empty;
         set
         {
-            if (this._currentSlug is not null)
+            if (this._currentSlug != null)
             {
                 this._currentSlug.SlugKey = value;
+                RefreshContext();
             }
-
-            this.RaisePropertyChanged();
         }
     }
 
     /// <summary>
-    ///     The current slug name.
+    ///     The display name of the current slug.
     /// </summary>
     public string CurrentSlugName
     {
         get => this._currentSlug?.DisplayName ?? string.Empty;
         set
         {
-            if (this._currentSlug is not null)
+            if (this._currentSlug != null)
             {
-                this._currentSlug.DisplayName = value;
+                if (value != this._currentSlug.DisplayName)
+                {
+                    this._currentSlug.DisplayName = value;
+                    this.RaisePropertyChanged(nameof(this.TemplateSlugsNames));
+                    this.CurrentSlugToEditName = value;
+                    this.RaisePropertyChanged();
+                    SelectSlug(this._currentSlug.DisplayName);
+                    RefreshContext();
+                }
             }
-
-            this.RaisePropertyChanged();
         }
     }
 
@@ -276,17 +274,16 @@ public class SlugDataContext : ReactiveObject
         get => this._currentSlug?.RequiresUserInput ?? false;
         set
         {
-            if (this._currentSlug is not null)
+            if (this._currentSlug != null)
             {
                 this._currentSlug.RequiresUserInput = value;
+                RefreshContext();
             }
-
-            this.RaisePropertyChanged();
         }
     }
 
     /// <summary>
-    ///     The current slug search strings.
+    ///     The search strings for the current slug.
     /// </summary>
     public string CurrentSlugSearchStrings
     {
@@ -303,71 +300,46 @@ public class SlugDataContext : ReactiveObject
         {
             if (this._currentSlug is not null)
             {
-                this._currentSlug.SearchStrings =
-                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
+                this._currentSlug.DisallowedValues =
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(x => (object?)x)
+                        .ToList();
             }
 
-            this.RaisePropertyChanged();
+            RefreshContext();
         }
     }
 
     /// <summary>
-    ///     The currently selected slug type.
+    ///     The current slug type.
     /// </summary>
     public string CurrentSlugSelectedType
     {
-        get
-        {
-            if (this._currentSlug is null)
-            {
-                return string.Empty;
-            }
-
-            return this._slugNamesByType[this._currentSlug.Type];
-        }
+        get => this._currentSlug?.Type.ToString() ?? string.Empty;
         set
         {
-            if (this._currentSlug is not null)
+            if (this._currentSlug != null && this._slugTypesByName.ContainsKey(value))
             {
                 this._currentSlug.Type = this._slugTypesByName[value];
-                this.NonGuidOptionsPanelEnabled = this._currentSlug.Type != SlugType.RandomGuid;
-                this.SlugTypeSpecialValues = this._specialValuesBySlugType[this._currentSlug.Type];
+                RefreshContext();
             }
-
-            this.RaisePropertyChanged();
         }
     }
 
     /// <summary>
-    ///     Whether the non-guid options panel is enabled.
+    ///     The name of the slug currently being edited.
     /// </summary>
-    public bool NonGuidOptionsPanelEnabled
+    public string CurrentSlugToEditName
     {
-        get => this._nonGuidOptionsPanelEnabled;
-        set => this.RaiseAndSetIfChanged(ref this._nonGuidOptionsPanelEnabled, value);
+        get => this._currentSlugToEditName;
+        set
+        {
+            if (value is not null)
+            {
+                SelectSlug(value);
+            }
+        }
     }
 
-    /// <summary>
-    ///     The slug type special values.
-    /// </summary>
-    public string SlugTypeSpecialValues
-    {
-        get => this._slugTypeSpecialValues;
-        set => this.RaiseAndSetIfChanged(ref this._slugTypeSpecialValues, value);
-    }
-
-    /// <summary>
-    ///     The slugs for the current template.
-    /// </summary>
-    public List<string> TemplateSlugsNames
-    {
-        get => this._templateSlugsNames;
-        set => this.RaiseAndSetIfChanged(ref this._templateSlugsNames, value);
-    }
-
-    /// <summary>
-    ///     Adds a new slug.
-    /// </summary>
     public string AddSlug()
     {
         if (this.ParentContext.PreparationTemplate is null)
@@ -385,33 +357,16 @@ public class SlugDataContext : ReactiveObject
             CustomSlug = true
         };
         this._newSlugCounter++;
+        this.ParentContext.PreparationTemplate?.Slugs.Add(newSlug);
 
-        this.ParentContext.PreparationTemplate.Slugs.Add(newSlug);
-        this._slugCache.Add(newSlug.DisplayName, newSlug);
+        SelectSlug(newSlug.DisplayName);
 
-        UpdateSlugNames();
+        RefreshContext();
+        this.RaisePropertyChanged(nameof(this.TemplateSlugsNames));
         return newSlug.DisplayName;
     }
 
-    /// <summary>
-    ///     Clears the context.
-    /// </summary>
-    public void ClearContext()
-    {
-        this._currentSlug = null;
-        this.NonGuidOptionsPanelEnabled = false;
-        this.CurrentSlugEnableSlugTypePanel = false;
-        this.CurrentEditingSlugName = string.Empty;
-        this._currentSlugEditingName = string.Empty;
-        this._slugCache = new Dictionary<string, PreparationSlug>();
-        UpdateSlugNames();
-        UpdateContext();
-    }
-
-    /// <summary>
-    ///     Deletes the currently edited slug.
-    /// </summary>
-    public void DeleteCurrentSlug()
+    public void DeleteSlug()
     {
         if (this.ParentContext.PreparationTemplate is null)
         {
@@ -420,80 +375,17 @@ public class SlugDataContext : ReactiveObject
 
         if (this._currentSlug is not null)
         {
-            this._slugCache.Remove(this._currentSlug.DisplayName);
-            this.ParentContext.PreparationTemplate.Slugs.Remove(this._currentSlug);
-            UpdateSlugNames();
-            this._currentSlug = null;
-            this.CurrentEditingSlugName = string.Empty;
-            this._currentSlugEditingName = string.Empty;
-            UpdateContext();
+            this.ParentContext.PreparationTemplate?.Slugs.Remove(this._currentSlug);
+            this.CurrentSlugToEditName = string.Empty;
+            RefreshContext();
+            this.RaisePropertyChanged(nameof(this.TemplateSlugsNames));
         }
     }
 
     /// <summary>
-    ///     Enables the context.
+    ///     Refreshes the context.
     /// </summary>
-    /// <exception cref="Exception">Raised if the preparation template is null.</exception>
-    public void EnableContext()
-    {
-        if (this.ParentContext.PreparationTemplate is null)
-        {
-            throw new Exception("PreparationTemplate is null!");
-        }
-
-        this._slugCache = this.ParentContext.PreparationTemplate.Slugs.ToDictionary(x => x.DisplayName, x => x);
-        this.CurrentEditingSlugName = string.Empty;
-
-        UpdateSlugNames();
-
-        UpdateContext();
-    }
-
-    /// <summary>
-    ///     Selects the slug context.
-    /// </summary>
-    /// <param name="slugToEdit">The slug to edit.</param>
-    /// <exception cref="Exception">Raised if the preparation template is null.</exception>
-    public void SelectSlugContext(string slugToEdit)
-    {
-        if (this.ParentContext.PreparationTemplate is null)
-        {
-            throw new Exception("PreparationTemplate is null!");
-        }
-
-        if (!string.IsNullOrEmpty(slugToEdit) && this._currentSlug is not null)
-        {
-            if (this._currentSlugEditingName != this._currentSlug.DisplayName)
-            {
-                this._slugCache.Add(this._currentSlug.DisplayName, this._currentSlug);
-                this._slugCache.Remove(this._currentSlugEditingName);
-
-                this.TemplateSlugsNames = this._slugCache.Where(x => x.Value.RequiresAnyInput)
-                    .Select(x => x.Value.DisplayName).Order()
-                    .ToList();
-            }
-        }
-
-        if (string.IsNullOrEmpty(slugToEdit) || !this._slugCache.TryGetValue(slugToEdit, out var slug))
-        {
-            this._currentEditingSlugName = string.Empty;
-            UpdateContext();
-            return;
-        }
-
-        this._currentSlug = slug;
-        this._currentSlugEditingName = slugToEdit;
-        this._slugTypeSpecialValues = this._specialValuesBySlugType[slug.Type];
-        this.CurrentSlugEnableSlugTypePanel = slug.CustomSlug;
-        this.NonGuidOptionsPanelEnabled = slug.Type != SlugType.RandomGuid;
-
-        UpdateContext();
-    }
-
-    /// <summary>
-    ///     Goes through and marks that each property is updated.
-    /// </summary>
-    private void UpdateContext()
+    public void RefreshContext()
     {
         foreach (var property in this._propertiesToUpdate)
         {
@@ -501,13 +393,26 @@ public class SlugDataContext : ReactiveObject
         }
     }
 
-    /// <summary>
-    ///     Updates the slug names.
-    /// </summary>
-    private void UpdateSlugNames()
+    public string SelectSlug(string newSlug)
     {
-        this.TemplateSlugsNames = this._slugCache.Where(x => x.Value.RequiresAnyInput).Select(x => x.Value.DisplayName)
-            .Order()
-            .ToList();
+        if (this.ParentContext.PreparationTemplate is null)
+        {
+            throw new Exception("PreparationTemplate is null!");
+        }
+
+        var slug = this.ParentContext.PreparationTemplate?.Slugs.Where(x => x.DisplayName == newSlug).FirstOrDefault();
+
+        if (slug is not null)
+        {
+            this._currentSlugToEditName = newSlug;
+            this._currentSlug = slug;
+        }
+        else
+        {
+            this._currentSlugToEditName = newSlug;
+            this._currentSlug = null;
+        }
+        this.RaisePropertyChanged(nameof(this.CurrentSlugToEditName));
+        return newSlug;
     }
 }

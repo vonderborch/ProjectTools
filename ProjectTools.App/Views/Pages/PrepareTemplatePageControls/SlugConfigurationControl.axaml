@@ -23,13 +23,13 @@
             <WrapPanel Orientation="Vertical" Grid.Column="0">
                 <ComboBox Name="ComboBoxSlugs" SelectionChanged="ComboBoxSlugs_OnSelectionChanged"
                           ItemsSource="{Binding SlugDataContext.TemplateSlugsNames}"
-                          SelectedItem="{Binding SlugDataContext.CurrentEditingSlugName}" />
+                          SelectedItem="{Binding SlugDataContext.CurrentSlugToEditName}" />
                 <WrapPanel Orientation="Horizontal">
                     <Button Content="Add Slug" Name="ButtonAddSlug" Click="ButtonAddSlug_OnClick" />
                     <Button Content="Delete Slug" Name="ButtonDeleteSlug" Click="ButtonDeleteSlug_OnClick" />
                 </WrapPanel>
             </WrapPanel>
-            <WrapPanel Orientation="Vertical" Grid.Column="1">
+            <WrapPanel Orientation="Vertical" Grid.Column="1" IsEnabled="{Binding SlugDataContext.IsEditingSlug}">
                 <WrapPanel>
                     <TextBlock>Display Name: </TextBlock>
                     <TextBox Name="TextBoxDisplayName" Watermark="Display Name"
@@ -38,7 +38,8 @@
 
                 <WrapPanel>
                     <TextBlock>Slug Key: </TextBlock>
-                    <TextBox Name="TextBoxSlugKey" Watermark="Slug Key" Text="{Binding SlugDataContext.CurrentSlugKey}" />
+                    <TextBox Name="TextBoxSlugKey" Watermark="Slug Key"
+                             Text="{Binding SlugDataContext.CurrentSlugKey}" />
                 </WrapPanel>
 
                 <WrapPanel Name="PanelSlugType" IsEnabled="{Binding SlugDataContext.CurrentSlugEnableSlugTypePanel}">
@@ -54,7 +55,8 @@
                              AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugSearchStrings}" />
                 </WrapPanel>
 
-                <WrapPanel Name="PanelNonGuidOptions" IsVisible="{Binding SlugDataContext.NonGuidOptionsPanelEnabled}"
+                <WrapPanel Name="PanelNonGuidOptions"
+                           IsVisible="{Binding SlugDataContext.NonGuidOptionsPanelEnabled}"
                            Orientation="Vertical">
                     <WrapPanel>
                         <TextBlock>Slug Type Special Values: </TextBlock>
