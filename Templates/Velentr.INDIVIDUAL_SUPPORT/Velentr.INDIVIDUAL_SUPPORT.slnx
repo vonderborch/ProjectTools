@@ -1,0 +1,34 @@
+﻿<Solution>
+  <Folder Name="/.build/">
+    <Project Path=".build\post_solution_build.csproj" Type="Classic C#">
+      <BuildDependency Project="test\automated\Velentr.INDIVIDUAL_SUPPORT.Test\Velentr.INDIVIDUAL_SUPPORT.Test.csproj" />
+    </Project>
+    <Project Path=".build\pre_solution_build.csproj" Type="Classic C#" />
+    <File Path=".build\version_bump.ps1" />
+    <File Path=".build\version_bump_common.ps1" />
+    <File Path=".build\version_bump_dialog.ps1" />
+  </Folder>
+  <Folder Name="/.fna/" />
+  <Folder Name="/SolutionFiles/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="CODEOWNERS" />
+    <File Path="LICENSE" />
+    <File Path="logo.png" />
+    <File Path="README.md" />
+    <File Path="install_fna.py" />
+    <File Path="update_fna.py" />
+  </Folder>
+  <Folder Name="/source/">
+    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.Monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.csproj" Type="Classic C#" />
+    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.shproj" />
+  </Folder>
+  <Folder Name="/test/" />
+  <Folder Name="/test/automated/">
+    <Project Path="test\automated\Velentr.INDIVIDUAL_SUPPORT.Monogame.Test\Velentr.INDIVIDUAL_SUPPORT.Monogame.Test.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/test/manual/">
+    <Project Path="test\manual\Velentr.INDIVIDUAL_SUPPORT.Monogame.TestApp\Velentr.INDIVIDUAL_SUPPORT.Monogame.TestApp.csproj" Type="Classic C#" />
+    <Project Path="Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.shproj" />
+  </Folder>
+</Solution>

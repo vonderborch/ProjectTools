@@ -59,10 +59,10 @@ public class SpecialValueHandler
             switch (slug.Type)
             {
                 case SlugType.RandomGuid:
-                    slug.DefaultValue = Guid.NewGuid();
+                    slug.DefaultValue = Guid.NewGuid().ToString();
                     break;
                 case SlugType.String:
-                    var strValue = slug.DefaultValue?.ToString() ?? string.Empty;
+                    var strValue = slug.DefaultValue;
                     foreach (var (key, value) in this._specialValues[slug.Type])
                     {
                         strValue = strValue.Replace(key, value);

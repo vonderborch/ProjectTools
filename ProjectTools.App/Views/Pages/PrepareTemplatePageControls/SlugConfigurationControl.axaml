@@ -42,17 +42,17 @@
                              Text="{Binding SlugDataContext.CurrentSlugKey}" />
                 </WrapPanel>
 
+                <WrapPanel>
+                    <TextBlock>Slug Search Strings: </TextBlock>
+                    <TextBox Name="TextBoxSearchStrings" Watermark="Slug Search Strings (new-line-separated)"
+                             AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugSearchStrings}" />
+                </WrapPanel>
+
                 <WrapPanel Name="PanelSlugType" IsEnabled="{Binding SlugDataContext.CurrentSlugEnableSlugTypePanel}">
                     <TextBlock>Slug Type: </TextBlock>
                     <ComboBox Name="ComboBoxBoxSlugType"
                               ItemsSource="{Binding SlugDataContext.AvailableSlugTypes}"
                               SelectedItem="{Binding SlugDataContext.CurrentSlugSelectedType}" />
-                </WrapPanel>
-
-                <WrapPanel>
-                    <TextBlock>Slug Search Strings: </TextBlock>
-                    <TextBox Name="TextBoxSearchStrings" Watermark="Slug Search Strings (new-line-separated)"
-                             AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugSearchStrings}" />
                 </WrapPanel>
 
                 <WrapPanel Name="PanelNonGuidOptions"
@@ -71,15 +71,28 @@
                     </WrapPanel>
 
                     <WrapPanel>
+                        <CheckBox Content="Allow Empty Strings/Values" Name="CheckBoxAllowEmptyValues"
+                                  IsChecked="{Binding SlugDataContext.CurrentSlugAllowEmptyValues}" />
+                    </WrapPanel>
+
+                    <WrapPanel>
                         <TextBlock>Slug Allowed Values: </TextBlock>
                         <TextBox Name="TextBoxAllowedValues" Watermark="Slug Allowed Values (new-line-separated)"
-                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugAllowedValues}" />
+                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugAllowedValues}"
+                                 IsVisible="{Binding SlugDataContext.CurrentSlugIsStringType}" />
                     </WrapPanel>
 
                     <WrapPanel>
                         <TextBlock>Slug Disallowed Values: </TextBlock>
                         <TextBox Name="TextBoxDisallowedValues" Watermark="Slug Disallowed Values (new-line-separated)"
-                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugDisallowedValues}" />
+                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugDisallowedValues}"
+                                 IsVisible="{Binding SlugDataContext.CurrentSlugIsStringType}" />
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <CheckBox Content="Allowed/Disallowed Values Are Case Sensitive" Name="CheckBoxCaseSensitivity"
+                                  IsChecked="{Binding SlugDataContext.CurrentSlugIsCaseSensitive}"
+                                  IsVisible="{Binding SlugDataContext.CurrentSlugIsStringType}" />
                     </WrapPanel>
 
                     <CheckBox Name="CheckBoxRequiresUserInput"

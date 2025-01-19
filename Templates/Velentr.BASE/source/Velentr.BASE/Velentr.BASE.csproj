@@ -4,7 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>VERSION_HERE</Version>
+        <Version>1.0.0.0</Version>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Velentr.BASE</Title>
         <Authors>AUTHOR_HERE</Authors>
@@ -15,8 +15,8 @@
         <PackageIcon>logo.png</PackageIcon>
         <RepositoryUrl>https://github.com/GITHUBUSER_HERE/Velentr.BASE</RepositoryUrl>
         <PackageTags>TAGS_HERE</PackageTags>
-        <AssemblyVersion>VERSION_HERE</AssemblyVersion>
-        <FileVersion>VERSION_HERE</FileVersion>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
         <Company>AUTHOR_HERE</Company>
     </PropertyGroup>
 

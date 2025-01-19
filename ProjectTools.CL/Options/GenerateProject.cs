@@ -196,14 +196,12 @@ public class GenerateProject : AbstractOption
 
         if (slug.AllowedValues.Count > 0)
         {
-            var parts = slug.AllowedValues.Select(x => slug.Type.ObjectToString(x));
-            displayMessage = $"{displayMessage} (allowed values: {string.Join(", ", parts)})";
+            displayMessage = $"{displayMessage} (allowed values: {string.Join(", ", slug.AllowedValues)})";
         }
 
         if (slug.DisallowedValues.Count > 0)
         {
-            var parts = slug.DisallowedValues.Select(x => slug.Type.ObjectToString(x));
-            displayMessage = $"{displayMessage} (disallowed values: {string.Join(", ", parts)})";
+            displayMessage = $"{displayMessage} (disallowed values: {string.Join(", ", slug.DisallowedValues)})";
         }
 
         displayMessage = $"{displayMessage}";
