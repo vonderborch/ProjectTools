@@ -15,6 +15,8 @@ class FnaUpdator:
     This class handles installing, updating, and setting up the environment for FNA.  It includes
     functionality for cloning the FNA repository, installing necessary libraries, and managing
     virtual environments.
+    
+    Based on https://fna-xna.github.io/docs/1%3A-Setting-Up-FNA/#chapter-3-download-and-update-fna
     """
 
     FNA_REPO: str = "https://github.com/FNA-XNA/FNA"
