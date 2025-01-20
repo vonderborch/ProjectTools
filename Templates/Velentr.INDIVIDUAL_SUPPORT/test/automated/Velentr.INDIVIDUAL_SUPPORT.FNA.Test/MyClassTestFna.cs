@@ -1,12 +1,12 @@
 ﻿namespace Velentr.INDIVIDUAL_SUPPORT.Test;
 
-public class MyClassTest
+public class MyClassTestFna
 {
     [Test]
     public void TestMyMethod()
     {
         var myClass = new MyClass();
-        var result = myClass.MyMethod("World");
-        Assert.That(result, Is.EqualTo("Hello, World!"));
+        var result = myClass.MyMethod("FNA");
+        Assert.That(result, Is.EqualTo("Hello, FNA!"));
     }
 }

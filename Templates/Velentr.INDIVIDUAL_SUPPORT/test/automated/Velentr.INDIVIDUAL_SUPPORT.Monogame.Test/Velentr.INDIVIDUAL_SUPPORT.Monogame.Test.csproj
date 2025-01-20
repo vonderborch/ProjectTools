@@ -6,15 +6,17 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Test</AssemblyName>
+        <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Test</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>..\..\..\debug\tests\manual\monogame\</OutputPath>
+      <OutputPath>..\..\..\debug\tests\automated\monogame\</OutputPath>
       <DefineConstants>TRACE;MONOGAME</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>..\..\..\release\tests\manual\monogame\</OutputPath>
+      <OutputPath>..\..\..\release\tests\automated\monogame\</OutputPath>
       <DefineConstants>TRACE;MONOGAME</DefineConstants>
     </PropertyGroup>
 

@@ -10,6 +10,7 @@
     <File Path=".build\version_bump.ps1" />
     <File Path=".build\version_bump_common.ps1" />
     <File Path=".build\version_bump_dialog.ps1" />
+    <File Path=".build\fna_updator.py" />
   </Folder>
   <Folder Name="/.fna/">
     <Project Path=".fna\FNA\FNA.Core.csproj" Type="Classic C#" />
@@ -25,7 +26,10 @@
     <File Path="update_fna.py" />
   </Folder>
   <Folder Name="/source/">
-    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" Type="Classic C#" />
+    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" Type="Classic C#">
+      <Configuration Solution="Debug|Any CPU" Project="Debug|x64" />
+      <Configuration Solution="Release|Any CPU" Project="Release|x64" />
+    </Project>
     <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.Monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.csproj" Type="Classic C#" />
     <Project Path="source\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.shproj">
       <BuildDependency Project=".build\pre_solution_build.csproj" />
@@ -33,12 +37,18 @@
   </Folder>
   <Folder Name="/test/" />
   <Folder Name="/test/automated/">
-    <Project Path="test\automated\Velentr.INDIVIDUAL_SUPPORT.FNA.Test\Velentr.INDIVIDUAL_SUPPORT.FNA.Test.csproj" Type="Classic C#" />
+    <Project Path="test\automated\Velentr.INDIVIDUAL_SUPPORT.FNA.Test\Velentr.INDIVIDUAL_SUPPORT.FNA.Test.csproj" Type="Classic C#">
+      <Configuration Solution="Debug|Any CPU" Project="Debug|x64" />
+      <Configuration Solution="Release|Any CPU" Project="Release|x64" />
+    </Project>
     <Project Path="test\automated\Velentr.INDIVIDUAL_SUPPORT.Monogame.Test\Velentr.INDIVIDUAL_SUPPORT.Monogame.Test.csproj" Type="Classic C#" />
     <Project Path="test\automated\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.shproj" />
   </Folder>
   <Folder Name="/test/manual/">
-    <Project Path="test\manual\Velentr.INDIVIDUAL_SUPPORT.FNA.TestApp\Velentr.INDIVIDUAL_SUPPORT.FNA.TestApp.csproj" Type="Classic C#" />
+    <Project Path="test\manual\Velentr.INDIVIDUAL_SUPPORT.FNA.TestApp\Velentr.INDIVIDUAL_SUPPORT.FNA.TestApp.csproj" Type="Classic C#">
+      <Configuration Solution="Debug|Any CPU" Project="Debug|x64" />
+      <Configuration Solution="Release|Any CPU" Project="Release|x64" />
+    </Project>
     <Project Path="test\manual\Velentr.INDIVIDUAL_SUPPORT.Monogame.TestApp\Velentr.INDIVIDUAL_SUPPORT.Monogame.TestApp.csproj" Type="Classic C#" />
     <Project Path="test\manual\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.shproj" />
   </Folder>

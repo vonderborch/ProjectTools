@@ -81,11 +81,11 @@ class FnaUpdator:
         self._manage_directory(
             directory=self._fna_libs_install_path, delete_directory_if_exists=True, create_directory_if_not_exists=False
         )
-        
+
+        self._install_fna_libs()
+        # If on MacOS, we can also compile the libs for iOS and MacOS!
         if platform.system() == "Darwin":
             self._install_fna_libs_apple()
-        else:
-            self._install_fna_libs()
         
     def _install_fna_libs(self) -> None:
         """Installs the FNA libraries.

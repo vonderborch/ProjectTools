@@ -8,20 +8,28 @@
         <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</AssemblyName>
         <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</RootNamespace>
         <LangVersion>default</LangVersion>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>x64</Platforms>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+      <DefineConstants>TRACE;FNA</DefineConstants>
       <OutputPath>..\..\..\debug\tests\manual\fna\</OutputPath>
-      <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
       <DefineConstants>TRACE;FNA</DefineConstants>
+      <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+	  <Content Include="..\..\..\.fna\fnalibs\**">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
     </ItemGroup>
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.projitems" Label="Shared" />
