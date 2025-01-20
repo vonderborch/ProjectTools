@@ -203,7 +203,7 @@ public class Template : AbstractTemplate
         if (this._slugValuesCache == null)
         {
             this._slugValuesCache =
-                this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.Type.ObjectToString(s.CurrentValue));
+                this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.CurrentValue);
         }
 
         return this._slugValuesCache;

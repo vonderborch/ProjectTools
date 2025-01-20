@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>x64</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+      <OutputPath>..\..\debug\fna\</OutputPath>
+      <DefineConstants>TRACE;FNA</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+      <OutputPath>..\..\release\fna\</OutputPath>
+      <DefineConstants>TRACE;FNA</DefineConstants>
+      <DocumentationFile>..\..\release\fna\Velentr.INDIVIDUAL_SUPPORT.FNA.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\.fna\FNA\FNA.Core.csproj" />
+    </ItemGroup>
+
+    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.projitems" Label="Shared" />
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="if $(ConfigurationName) == Release (Powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force)" />
+    </Target>
+
+</Project>

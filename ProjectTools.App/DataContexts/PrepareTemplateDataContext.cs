@@ -160,7 +160,19 @@ public class PrepareTemplateDataContext : ReactiveObject
 
     private void EnabledSlugConfigurationData()
     {
-        this.SlugDataContext.RefreshContext();
+        this.SlugDataContext.RefreshContext(refreshSlugNames: true);
+        
+        if (this.PreparationTemplate is null)
+        {
+            throw new Exception("PreparationTemplate is null!");
+        }
+
+        var slugToSelect = string.Empty;
+        if (this.PreparationTemplate.Slugs.Count > 0)
+        {
+            slugToSelect = this.PreparationTemplate.Slugs[0].DisplayName;
+        }
+        this.SlugDataContext.SelectSlug(slugToSelect);
     }
 
     private void EnableTemplateConfigurationData()
