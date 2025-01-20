@@ -10,6 +10,7 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <DefineConstants>TRACE;MONOGAME</DefineConstants>
       <OutputPath>..\..\release\monogame\</OutputPath>
+      <DocumentationFile>..\..\release\monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.2.1105">

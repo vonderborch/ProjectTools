@@ -26,6 +26,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <OutputPath>..\..\release\core</OutputPath>
+      <DocumentationFile>..\..\release\core\Velentr.BASE.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

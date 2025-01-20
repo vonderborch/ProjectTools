@@ -9,6 +9,17 @@
         <Platforms>x64</Platforms>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+      <OutputPath>..\..\debug\fna\</OutputPath>
+      <DefineConstants>TRACE;FNA</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+      <OutputPath>..\..\release\fna\</OutputPath>
+      <DefineConstants>TRACE;FNA</DefineConstants>
+      <DocumentationFile>..\..\release\fna\Velentr.INDIVIDUAL_SUPPORT.FNA.xml</DocumentationFile>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\..\.fna\FNA\FNA.Core.csproj" />
     </ItemGroup>
