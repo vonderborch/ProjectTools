@@ -4,7 +4,7 @@
       "CustomSlug": true,
       "RequiresAnyInput": true,
       "SearchStrings": [
-        "Velentr.BASE"
+        "Velentr.INDIVIDUAL_SUPPORT"
       ],
       "AllowedValues": [],
       "AllowEmptyValues": false,
@@ -167,9 +167,9 @@
     }
   ],
   "Author": "Christian Webber",
-  "Description": "A generic library for an XNA-derived framework that doesn\u0027t require specific support for any in particular.",
+  "Description": "A library for an XNA derived framework that requires specific support for particular frameworks (i.e. FNA, Monogame).",
   "Instructions": [],
-  "Name": "Velentr.BASE",
+  "Name": "Velentr.INDIVIDUAL_SUPPORT",
   "PathsToRemove": [],
   "PrepareExcludedPaths": [
     "*bin",
@@ -177,13 +177,18 @@
     "*.vs",
     "*.git",
     "*release",
-    "*debug"
+    "*debug",
+    "*.fna"
   ],
-  "PythonScriptPaths": [],
+  "PythonScriptPaths": [
+    "update_or_install_fna.py"
+  ],
   "RenameOnlyPaths": [
-    "logo.png"
+    "logo.png",
+    "Icon.bmp",
+    "Icon.ico"
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-01-19d"
+  "Version": "2025-01-20c"
 }

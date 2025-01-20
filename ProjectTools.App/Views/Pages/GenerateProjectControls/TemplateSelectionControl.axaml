@@ -16,6 +16,8 @@
         <TextBlock Text="AVAILABLE TEMPLATES" />
         <Button Content="Update Templates" Name="ButtonUpdateTemplates" Click="ButtonUpdateTemplates_OnClick"
                 HorizontalAlignment="Stretch" />
+        <Button Content="Refresh Templates" Name="ButtonRefreshTemplates" Click="ButtonRefreshTemplates_OnClick"
+                HorizontalAlignment="Stretch" />
         <ListBox Name="ListBoxAvailableTemplates" SelectionMode="Single" MaxHeight="600"
                  ItemsSource="{Binding TemplateSelectionContext.AvailableTemplateNames}"
                  SelectedItem="{Binding TemplateSelectionContext.SelectedTemplateName}"

@@ -39,6 +39,20 @@ public partial class TemplateSelectionControl : UserControl
     private GenerateProjectDataContext Context => this._parentPage.Context;
 
     /// <summary>
+    ///     Refreshes the templates.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The args.</param>
+    private void ButtonRefreshTemplates_OnClick(object? sender, RoutedEventArgs e)
+    {
+        this.Context.LogToCore("Refreshing templates...");
+        this.Context.TemplateSelectionContext.Refresh();
+        this.Context.TemplateSelectionContext.Refresh();
+        this.Context.TemplateInfo = null;
+        this.Context.LogToCore("Downloaded new/updated templates!");
+    }
+
+    /// <summary>
     ///     The button to update templates.
     /// </summary>
     /// <param name="sender">The sender.</param>
@@ -103,7 +117,7 @@ public partial class TemplateSelectionControl : UserControl
     }
 
     /// <summary>
-    /// The event handler for when the list box selection changes.
+    ///     The event handler for when the list box selection changes.
     /// </summary>
     /// <param name="sender">The sender.</param>
     /// <param name="e">The args.</param>

@@ -282,9 +282,7 @@ class FnaUpdator:
             subprocess.call([sys.executable, "-m", "pip", "install", package])
 
 # Get arguments
-install_directory = "/Users/christianwebber/Library/CloudStorage/Dropbox/Projects/ProjectTools/Templates/Velentr.INDIVIDUAL_SUPPORT/.fna"  # the directory for the FNA installation
-#install_directory = "C:\\Users\\ricky\\RiderProjects\\ProjectTools\\Templates\\Velentr.INDIVIDUAL_SUPPORT\\.fna"  # the directory for the FNA installation
-#install_directory = sys.argv[1]  # the directory for the FNA installation
+install_directory = sys.argv[1]  # the directory for the FNA installation
 
 updator = FnaUpdator(directory=install_directory)
 updator.execute()
