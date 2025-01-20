@@ -1,18 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
+
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+      <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
+
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+      <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.2.1105">
-            <PrivateAssets>All</PrivateAssets>
-        </PackageReference>
+      <ProjectReference Include="..\..\.fna\FNA\FNA.Core.csproj" />
     </ItemGroup>
+
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.projitems" Label="Shared" />
+
 </Project>

@@ -9,13 +9,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>..\..\..\debug\tests\manual\monogame\</OutputPath>
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+      <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>..\..\..\release\tests\manual\monogame\</OutputPath>
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+      <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -31,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.Monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.csproj" />
+      <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" />
     </ItemGroup>
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared" />

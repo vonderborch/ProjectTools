@@ -25,6 +25,9 @@ class FnaUpdator:
     FNA_LIBS_LINK: str = "https://fna.flibitijibibo.com/archive/fnalibs.tar.bz2"
     """str: The URL for the FNA libs archive."""
     
+    FNA_LIBS_APPLE_REPO: str = "https://github.com/TheSpydog/fnalibs-apple-builder"
+    """str: The URL for the FNA libs Apple repository."""
+    
     def __init__(self, directory: str) -> None:
         """Initializes the FNAUpdater.
         
@@ -44,7 +47,7 @@ class FnaUpdator:
         self._setup_environment()
         self._install_package("GitPython")
     
-    def execute(self, mode: str) -> None:
+    def execute(self) -> None:
         """Executes the FNA update or installation process.
         
         Based on the provided mode, either updates or installs FNA, then installs the required FNA libraries.
@@ -52,14 +55,10 @@ class FnaUpdator:
         Args:
             mode (str): The mode of operation, either "update" or "install".
         """
-        # Step 1: Install or update FNA
-        if mode == "update":
-            self._update_fna()
-        elif mode == "install":
-            self._install_fna()
-        else:
-            print(f"Invalid mode: {mode} (allowed modes: update, install)")
-            sys.exit(1)
+        # Step 1: Install or update the FNA repo
+        self._clone_or_update_repo(
+            repo=self.FNA_REPO, directory=self._fna_repo_install_path, clone_multi_options=["--recursive"]
+        )
             
         # Step 2: Install the FNA libs
         self._install_fna_libs_manager()
@@ -71,8 +70,17 @@ class FnaUpdator:
         
         
     def _install_fna_libs_manager(self) -> None:
+        """Manages the installation of FNA libraries for the current platform.
+        
+        Prepares the installation directory and triggers platform-specific library installation methods.
+        
+        Returns:
+            None
+        """
         # Check if directory already exists
-        self._manage_directory(directory=self._fna_libs_install_path, delete_directory_if_exists=True, create_directory_if_not_exists=False)
+        self._manage_directory(
+            directory=self._fna_libs_install_path, delete_directory_if_exists=True, create_directory_if_not_exists=False
+        )
         
         if platform.system() == "Darwin":
             self._install_fna_libs_apple()
@@ -97,42 +105,90 @@ class FnaUpdator:
         self._remove_file_system_entry(os.path.join(self._base_directory, "fnalibs.tar.bz2"))
     
     def _install_fna_libs_apple(self) -> None:
-        print("Todo!")
+        """Compiles the FNA libraries for Apple platforms.
         
-    def _install_fna(self) -> None:
-        """Installs the FNA repository.
+        Based on: https://github.com/TheSpydog/fnalibs-apple-builder
+        """
+        fna_libs_apple_path = os.path.join(self._base_directory, "fnalibs-apple-builder")
         
-        Clones the FNA repository from the specified remote URL. If the repository already exists locally, it attempts
-        to update it instead.
+        # Step 1: Clone or update the required repository
+        self._clone_or_update_repo(
+            repo=self.FNA_LIBS_APPLE_REPO,
+            directory=fna_libs_apple_path,
+            clone_multi_options=[],
+        )
+        
+        # Step 2: Run the update script
+        print("Running FNA libs Apple update script...")
+        subprocess.call(["/bin/bash", os.path.join(fna_libs_apple_path, "updatelibs.sh")], cwd=fna_libs_apple_path)
+        
+        # Step 3: Execute the build script
+        print("Building FNA libs...")
+        subprocess.call(["/bin/bash", os.path.join(fna_libs_apple_path, "buildlibs.sh"), "macos"], cwd=fna_libs_apple_path)
+        subprocess.call(["/bin/bash", os.path.join(fna_libs_apple_path, "buildlibs.sh"), "ios"], cwd=fna_libs_apple_path)
+        subprocess.call(["/bin/bash", os.path.join(fna_libs_apple_path, "buildlibs.sh"), "ios-sim"], cwd=fna_libs_apple_path)
+        
+        # Step 4: Copy the built libraries to the FNA libs directory
+        print("Copying FNA libs...")
+        shutil.copytree(os.path.join(fna_libs_apple_path, "bin"), self._fna_libs_install_path)
+        
+        # Step 5: Run the cleanup script
+        print("Cleaning up...")
+        subprocess.call(["/bin/bash", os.path.join(fna_libs_apple_path, "buildlibs.sh"), "clean"], cwd=fna_libs_apple_path)
+        
+    def _clone_or_update_repo(self, repo: str, directory: str, clone_multi_options: list[str]) -> None:
+        """Clones or updates a Git repository with specified options.
+        
+        Handles repository management by either cloning a new repository or updating an existing one, including submodule initialization.
+        
+        Args:
+            repo: The URL of the Git repository to clone or update.
+            directory: The local directory path where the repository will be cloned or updated.
+            clone_multi_options: Additional options to use during repository cloning.
+        
+        Returns:
+            None
+        
+        Raises:
+            Exception: If the specified directory is a file instead of a directory.
         """
         from git import Repo
         
-        print("Cloning FNA repo...")
-        try:
-            Repo.clone_from(self.FNA_REPO, self._fna_repo_install_path, multi_options=["--recursive"])
-
-            repo = Repo(self._fna_repo_install_path)
-            for submodule in repo.submodules:
-                submodule.update(init=True, recursive=True)
-        except Exception:
-            print("Repo already exists, attempting to update...")
-            self._update_fna()
-            return
+        # Step 1: Check if we need to clone or update the repo...
+        clone = True
+        update = False
         
-    def _update_fna(self) -> None:
-        """Updates the FNA repository.
+        repoName = os.path.basename(repo)
         
-        Pulls the latest changes from the origin remote of the FNA repository.
-        """
-        from git import Repo
-        print ("Updating FNA repo...")
+        if os.path.exists(directory):
+            if os.path.isfile(directory):
+                raise Exception(f"Directory {directory} already exists and is a file?")
+            if os.path.exists(os.path.join(directory, ".git")):
+                update = True
+                clone = False
         
-        repo = Repo(self._fna_repo_install_path)
-        repo.remotes.origin.pull()
-
+        # Step 2: Clone the repo?
+        if clone:
+            try:
+                print(f"Cloning {repoName}...")
+                Repo.clone_from(repo, directory, multi_options=clone_multi_options)
+            except Exception:
+                print("  Repo already exists, attempting to update...")
+                update = True
+        
+        # Step 3: Update the repo?
+        if update:
+            print(f"  Updating {repoName}...")
+            repo = Repo(directory)
+            repo.remotes.origin.pull()
+        
+        # Step 4: Update the submodules!
+        print("  Updating submodules...")
+        repo = Repo(directory)
         for submodule in repo.submodules:
             submodule.update(init=True, recursive=True)
-        print("All submodules have been updated.")
+        
+        print("  Done!")
     
     @staticmethod
     def _is_virtual_environment() -> bool:
@@ -157,17 +213,26 @@ class FnaUpdator:
             return
         
         # setup virtual environment
-        setupVirtualEnvironment = not self._manage_directory(directory=self._virtual_environment_path, delete_directory_if_exists=True, create_directory_if_not_exists=False)
+        setupVirtualEnvironment = not self._manage_directory(
+            directory=self._virtual_environment_path,
+            delete_directory_if_exists=True,
+            create_directory_if_not_exists=False,
+        )
             
         print("  Setting up virtual environment...")
         if setupVirtualEnvironment:
             subprocess.call([sys.executable, "-m", "virtualenv", self._virtual_environment_path])
         
         print("  Activating virtual environment...")
-        activation_file = os.path.join(self._virtual_environment_path, "Scripts", "activate_this.py")        
+        if platform.system() == "Windows":
+            activation_file = os.path.join(self._virtual_environment_path, "Scripts", "activate_this.py")
+        else:
+            activation_file = os.path.join(self._virtual_environment_path, "bin", "activate_this.py")
         exec(open(activation_file).read(), {'__file__': activation_file})
             
-    def _manage_directory(self, *, directory: str, delete_directory_if_exists: bool, create_directory_if_not_exists: bool) -> bool:
+    def _manage_directory(
+        self, *, directory: str, delete_directory_if_exists: bool, create_directory_if_not_exists: bool
+    ) -> bool:
         """Manages a directory, ensuring it exists and is a directory, not a file.
         
         Args:
@@ -217,8 +282,9 @@ class FnaUpdator:
             subprocess.call([sys.executable, "-m", "pip", "install", package])
 
 # Get arguments
-mode = "install" # sys.argv[1]  # update or install
-install_directory = "C:\\Users\\ricky\\RiderProjects\\ProjectTools\\Templates\\Velentr.INDIVIDUAL_SUPPORT\\.fna" #sys.argv[2]  # the directory for the FNA installation
+install_directory = "/Users/christianwebber/Library/CloudStorage/Dropbox/Projects/ProjectTools/Templates/Velentr.INDIVIDUAL_SUPPORT/.fna"  # the directory for the FNA installation
+#install_directory = "C:\\Users\\ricky\\RiderProjects\\ProjectTools\\Templates\\Velentr.INDIVIDUAL_SUPPORT\\.fna"  # the directory for the FNA installation
+#install_directory = sys.argv[1]  # the directory for the FNA installation
 
 updator = FnaUpdator(directory=install_directory)
-updator.execute(mode=mode)
+updator.execute()

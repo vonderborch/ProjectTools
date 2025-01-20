@@ -1,6 +1,6 @@
 ﻿namespace Velentr.BASE.Test;
 
-public class TestMyClass
+public class MyClassTest
 {
     [Test]
     public void TestMyMethod()
