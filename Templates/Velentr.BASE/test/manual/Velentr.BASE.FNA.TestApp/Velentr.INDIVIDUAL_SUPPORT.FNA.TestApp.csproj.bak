@@ -1,0 +1,134 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</AssemblyName>
+        <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</RootNamespace>
+        <LangVersion>default</LangVersion>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>x64</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+      <OutputPath>..\..\..\debug\tests\manual\fna\</OutputPath>
+      <DefineConstants>TRACE;FNA</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+      <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
+      <DefineConstants>TRACE;FNA</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+	  <Content Include="..\..\..\.fna\fnalibs\**">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="FAudio.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <Link>x64\FAudio.dll</Link>
+	  </Content>
+	  <Content Update="FNA3D.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <Link>x64\FNA3D.dll</Link>
+	  </Content>
+	  <Content Update="libtheorafile.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <Link>x64\libtheorafile.dll</Link>
+	  </Content>
+	  <Content Update="SDL2.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <Link>x64\SDL2.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\README.txt">
+	    <Link>fnalibs\README.txt</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\lib64\libFAudio.so.0">
+	    <Link>fnalibs\lib64\libFAudio.so.0</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\lib64\libFNA3D.so.0">
+	    <Link>fnalibs\lib64\libFNA3D.so.0</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\lib64\libSDL2-2.0.so.0">
+	    <Link>fnalibs\lib64\libSDL2-2.0.so.0</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\lib64\libtheorafile.so">
+	    <Link>fnalibs\lib64\libtheorafile.so</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\libaarch64\libFAudio.so.0">
+	    <Link>fnalibs\libaarch64\libFAudio.so.0</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\libaarch64\libFNA3D.so.0">
+	    <Link>fnalibs\libaarch64\libFNA3D.so.0</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\libaarch64\libSDL2-2.0.so.0">
+	    <Link>fnalibs\libaarch64\libSDL2-2.0.so.0</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\libaarch64\libtheorafile.so">
+	    <Link>fnalibs\libaarch64\libtheorafile.so</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\osx\libFAudio.0.dylib">
+	    <Link>fnalibs\osx\libFAudio.0.dylib</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\osx\libFNA3D.0.dylib">
+	    <Link>fnalibs\osx\libFNA3D.0.dylib</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\osx\libMoltenVK.dylib">
+	    <Link>fnalibs\osx\libMoltenVK.dylib</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\osx\libSDL2-2.0.0.dylib">
+	    <Link>fnalibs\osx\libSDL2-2.0.0.dylib</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\osx\libtheorafile.dylib">
+	    <Link>fnalibs\osx\libtheorafile.dylib</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\osx\libvulkan.1.dylib">
+	    <Link>fnalibs\osx\libvulkan.1.dylib</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\vulkan\icd.d\MoltenVK_icd.json">
+	    <Link>fnalibs\vulkan\icd.d\MoltenVK_icd.json</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x64\FAudio.dll">
+	    <Link>fnalibs\x64\FAudio.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x64\FNA3D.dll">
+	    <Link>fnalibs\x64\FNA3D.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x64\libtheorafile.dll">
+	    <Link>fnalibs\x64\libtheorafile.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x64\SDL2.dll">
+	    <Link>fnalibs\x64\SDL2.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x86\FAudio.dll">
+	    <Link>fnalibs\x86\FAudio.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x86\FNA3D.dll">
+	    <Link>fnalibs\x86\FNA3D.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x86\libtheorafile.dll">
+	    <Link>fnalibs\x86\libtheorafile.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\x86\SDL2.dll">
+	    <Link>fnalibs\x86\SDL2.dll</Link>
+	  </Content>
+	  <Content Update="..\..\..\.fna\fnalibs\vulkan\icd.d\MoltenVK_icd.json">
+	    <Link>Contents\Resources\vulkan\MoltenVK_icd.json</Link>
+	  </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="app.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.projitems" Label="Shared" />
+
+</Project>
