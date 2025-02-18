@@ -9,6 +9,7 @@
     <Import_RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)FnaDependencyHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
   </ItemGroup>

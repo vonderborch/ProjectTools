@@ -8,8 +8,8 @@
         <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</AssemblyName>
         <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</RootNamespace>
         <LangVersion>default</LangVersion>
-        <Configurations>Release;Debug</Configurations>
-        <Platforms>x64</Platforms>
+        <Configurations>Release;Debug;Release-ARM64;Debug-ARM64</Configurations>
+        <Platforms>x64;ARM64;AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
@@ -22,14 +22,35 @@
       <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release-ARM64' ">
+      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
+      <DefineConstants>TRACE;FNA</DefineConstants>
+      <OutputPath>../../../release-arm64/tests/manual/fna/net9.0/</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE;FNA</DefineConstants>
+      <OutputPath>../../../debug/tests/manual/fna/net9.0/</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug-ARM64' ">
+      <DefineConstants>TRACE;FNA</DefineConstants>
+      <OutputPath>../../../debug-arm64/tests/manual/fna/net9.0/</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DefineConstants>TRACE;FNA</DefineConstants>
+      <OutputPath>../../../release/tests/manual/fna/net9.0/</OutputPath>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-	  <Content Include="..\..\..\.fna\fnalibs\**">
-		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+        <Content Include="..\..\..\.fna\fnalibs\**">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.projitems" Label="Shared" />

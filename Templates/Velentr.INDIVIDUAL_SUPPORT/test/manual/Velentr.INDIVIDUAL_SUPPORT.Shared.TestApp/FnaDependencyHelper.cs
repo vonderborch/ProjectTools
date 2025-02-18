@@ -1,0 +1,132 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+
+namespace Velentr.INDIVIDUAL_SUPPORT.FNA;
+
+/// <summary>
+/// A helper for FNA dependencies.
+/// </summary>
+public static class FnaDependencyHelper
+{
+    /// <summary>
+    /// The default platform map.
+    /// </summary>
+    private static Dictionary<Architecture, Dictionary<OSPlatform, string>> DefaultPlatformMap = new()
+    {
+        [Architecture.X64] = new()
+        {
+            [OSPlatform.Windows] = "x64",
+            [OSPlatform.Linux] = "lib64",
+            [OSPlatform.OSX] = "osx"
+        },
+        [Architecture.X86] = new()
+        {
+            [OSPlatform.Windows] = "x86"
+        },
+        [Architecture.Arm64] = new()
+        {
+            [OSPlatform.OSX] = "osx"
+        }
+    };
+    
+    /// <summary>
+    /// Moves the FNA dependencies to the correct location based on the current OS and architecture.
+    /// </summary>
+    /// <param name="platformMap">An optional platform DLL map.</param>
+    /// <param name="vulkanPath">The path to the MoltenVK ICD.</param>
+    /// <exception cref="PlatformNotSupportedException">Raised if the platform is unsupported.</exception>
+    public static void HandleDependencies(Dictionary<Architecture, Dictionary<OSPlatform, string>>? platformMap = null, string vulkanPath = "vulkan")
+    {
+        var map = platformMap ?? DefaultPlatformMap;
+        
+        var architecture = RuntimeInformation.OSArchitecture;
+        if (!map.TryGetValue(architecture, out var operatingSystems))
+        {
+            throw new PlatformNotSupportedException();
+        }
+        
+        foreach (var (os, path) in operatingSystems)
+        {
+            if (RuntimeInformation.IsOSPlatform(os))
+            {
+                MoveDlls(path);
+                if (os == OSPlatform.OSX)
+                {
+                    MacOsSupport(vulkanPath);
+                }
+                return;
+            }
+        }
+        
+        throw new PlatformNotSupportedException();
+    }
+
+    /// <summary>
+    /// Special support for MacOS.
+    /// </summary>
+    /// <param name="vulkanPath">The path to the MoltenVK ICD.</param>
+    private static void MacOsSupport(string vulkanPath)
+    {
+        var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var vulkanIcdPath = Path.Combine(assemblyPath, vulkanPath);
+        var vulkanResourceDirectory = Path.Combine(assemblyPath, "Contents", "Resources", "vulkan");
+        if (Directory.Exists(vulkanResourceDirectory))
+        {
+            Directory.Delete(vulkanResourceDirectory);
+        }
+        
+        CopyDirectory(vulkanIcdPath, vulkanResourceDirectory);
+    }
+    
+    /// <summary>
+    /// Moves the DLLs from the specified path to the executing assembly path.
+    /// </summary>
+    /// <param name="path">The DLL directory path.</param>
+    /// <exception cref="DirectoryNotFoundException">Raised if we can't find the DLL directory.</exception>
+    private static void MoveDlls(string path)
+    {
+        var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        
+        var directory = Path.Combine(assemblyPath, path);
+        if (!Directory.Exists(directory))
+        {
+            throw new DirectoryNotFoundException($"The DLL directory for the platform `{directory}` does not exist.");
+        }
+        
+        foreach (var file in Directory.GetFiles(directory))
+        {
+            var destination = Path.Combine(assemblyPath, Path.GetFileName(file));
+            if (File.Exists(destination))
+            {
+                File.Delete(destination);
+            }
+            
+            File.Copy(file, destination);
+        }
+    }
+    
+    /// <summary>
+    /// Copies a directory from the source to the destination.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="destination">The destination.</param>
+    private static void CopyDirectory(string source, string destination)
+    {
+        Directory.CreateDirectory(destination);
+
+        foreach (var file in Directory.GetFiles(source))
+        {
+            string destFile = Path.Combine(destination, Path.GetFileName(file));
+            File.Copy(file, destFile, true);
+        }
+
+        foreach (var directory in Directory.GetDirectories(source))
+        {
+            string destSubDir = Path.Combine(destination, Path.GetFileName(directory));
+            CopyDirectory(directory, destSubDir);
+        }
+    }
+}

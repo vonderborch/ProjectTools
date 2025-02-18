@@ -6,8 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <Configurations>Release;Debug</Configurations>
-        <Platforms>x64</Platforms>
+        <Configurations>Release;Debug;Debug-ARM64;Release-ARM64</Configurations>
+        <Platforms>x64;ARM64;AnyCPU</Platforms>
         <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Test</AssemblyName>
         <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Test</RootNamespace>
     </PropertyGroup>
@@ -20,6 +20,10 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
       <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
       <DefineConstants>TRACE;FNA</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release-ARM64' ">
+      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
@@ -39,9 +43,9 @@
     </ItemGroup>
 
     <ItemGroup>
-	  <Content Include="..\..\..\.fna\fnalibs\**">
-		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+        <Content Include="..\..\..\.fna\fnalibs\**">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared" />

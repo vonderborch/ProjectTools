@@ -22,6 +22,16 @@ Alternatively, you can clone this repo and reference the Velentr.INDIVIDUAL_SUPP
 
 ## Development
 
+### Requirements
+
+- Some way to build C# projects
+- This project cloned, forked, downloaded, etc.
+- Powershell (for running some build scripts)
+- Python (for running some build scripts)
+  - NOTE: make sure to run `update_or_install_fna.py` to install FNA for the repo
+
+### Instructions
+
 1. Clone or fork the repo
 2. Create a new branch
 3. Code!

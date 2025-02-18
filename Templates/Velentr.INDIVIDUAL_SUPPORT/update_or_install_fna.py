@@ -36,6 +36,6 @@ while ok:
             ok = False
             break
         if key.fileobj is p.stdout:
-            print(f"STDOUT: {line}", end="")
+            print(f"{line}", end="")
         else:
-            print(f"STDERR: {line}", end="", file=sys.stderr)
+            print(f"ERROR: {line}", end="", file=sys.stderr)

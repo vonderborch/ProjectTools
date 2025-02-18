@@ -8,6 +8,8 @@
         <IsPackable>false</IsPackable>
         <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Test</AssemblyName>
         <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Test</RootNamespace>
+        <Configurations>Debug;Release;Release-ARM64;Debug-ARM64</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -18,6 +20,12 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <OutputPath>..\..\..\release\tests\automated\monogame\</OutputPath>
       <DefineConstants>TRACE;MONOGAME</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release-ARM64' ">
+      <OutputPath>..\..\..\release\tests\automated\monogame\</OutputPath>
+      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
     </PropertyGroup>
 
     <ItemGroup>

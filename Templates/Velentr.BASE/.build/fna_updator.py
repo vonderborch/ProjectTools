@@ -66,9 +66,9 @@ class FnaUpdator:
             mode (str): The mode of operation, either "update" or "install".
         """
         # Step 1: Install or update the FNA repo
-        #self._clone_or_update_repo(
-        #    repo=self.FNA_REPO, directory=self._fna_repo_install_path, clone_multi_options=["--recursive"]
-        #)
+        self._clone_or_update_repo(
+            repo=self.FNA_REPO, directory=self._fna_repo_install_path, clone_multi_options=["--recursive"]
+        )
             
         # Step 2: Install the FNA libs
         self._install_fna_libs_manager()
