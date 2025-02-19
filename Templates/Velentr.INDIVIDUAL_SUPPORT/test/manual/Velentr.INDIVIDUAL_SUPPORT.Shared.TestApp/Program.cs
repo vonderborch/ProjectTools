@@ -1,6 +1,6 @@
 ﻿#if FNA
 
-Velentr.INDIVIDUAL_SUPPORT.FNA.FnaDependencyHelper.HandleDependencies();
+Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.FnaDependencyHelper.HandleDependencies();
 
 #endif
 

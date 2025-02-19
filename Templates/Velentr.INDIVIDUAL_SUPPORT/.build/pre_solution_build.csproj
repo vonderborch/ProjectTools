@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <Configurations>Debug;Release;Release-ARM64;Debug-ARM64</Configurations>
+        <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
@@ -17,15 +17,7 @@
         <OutputPath>release\pre\</OutputPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release-ARM64' ">
-      <OutputPath>release\pre\</OutputPath>
-      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
-    </PropertyGroup>
-
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'">
-        <Exec Command="PowerShell -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir).build\version_bump_dialog.ps1&quot; -Directory $(SolutionDir) -ExcludedDirectories *Templates*" />
-    </Target>
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'">
-        <Exec Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir).build\version_bump_dialog.ps1&quot; -Directory $(SolutionDir) -ExcludedDirectories *Templates*" />
+    <Target Name="PreBuild" AfterTargets="PreBuildEvent">
+        <Exec Command="if '$(ConfigurationName)' == 'Release' (&#xA;    if '$(OS)' == 'Windows_NT' (&#xA;        PowerShell -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir).build\version_bump_dialog.ps1&quot; -Directory $(SolutionDir) -ExcludedDirectories *Templates*&#xA;    ) else (&#xA;        pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir).build/version_bump_dialog.ps1&quot; -Directory $(SolutionDir) -ExcludedDirectories *Templates*&#xA;    )&#xA;)" />
     </Target>
 </Project>

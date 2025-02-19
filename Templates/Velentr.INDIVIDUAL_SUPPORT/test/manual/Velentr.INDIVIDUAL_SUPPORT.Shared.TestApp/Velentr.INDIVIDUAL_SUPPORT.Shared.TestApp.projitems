@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)FnaDependencyHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PerformanceMonitoredGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
   </ItemGroup>

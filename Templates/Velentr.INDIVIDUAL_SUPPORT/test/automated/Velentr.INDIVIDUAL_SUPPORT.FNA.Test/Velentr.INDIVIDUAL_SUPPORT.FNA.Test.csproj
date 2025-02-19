@@ -6,24 +6,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <Configurations>Release;Debug;Debug-ARM64;Release-ARM64</Configurations>
-        <Platforms>x64;ARM64;AnyCPU</Platforms>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>AnyCPU</Platforms>
         <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Test</AssemblyName>
         <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Test</RootNamespace>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <OutputPath>..\..\..\debug\tests\manual\fna\</OutputPath>
       <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
       <DefineConstants>TRACE;FNA</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release-ARM64' ">
-      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
@@ -43,9 +38,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\..\..\.fna\fnalibs\**">
+        <None Include="..\..\..\.fna\fnalibs\**">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
+        </None>
     </ItemGroup>
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared" />

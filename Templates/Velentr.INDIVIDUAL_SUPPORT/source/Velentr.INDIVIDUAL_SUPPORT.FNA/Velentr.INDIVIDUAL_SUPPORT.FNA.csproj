@@ -5,37 +5,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
-        <Configurations>Release;Debug;Release-ARM64;Debug-ARM64</Configurations>
-        <Platforms>x64;ARM64;AnyCPU</Platforms>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <OutputPath>..\..\debug\fna\</OutputPath>
       <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <OutputPath>..\..\release\fna\</OutputPath>
       <DefineConstants>TRACE;FNA</DefineConstants>
       <DocumentationFile>..\..\release\fna\Velentr.INDIVIDUAL_SUPPORT.FNA.xml</DocumentationFile>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-ARM64|ARM64' ">
-      <OutputPath>..\..\release\fna\</OutputPath>
-      <DefineConstants>TRACE;FNA</DefineConstants>
-      <DocumentationFile>..\..\release\fna\Velentr.INDIVIDUAL_SUPPORT.FNA.xml</DocumentationFile>
-      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-ARM64|ARM64' ">
-      <OutputPath>..\..\debug\fna\</OutputPath>
-      <DefineConstants>TRACE;FNA</DefineConstants>
-      <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
-      <Optimize Condition=" '$(Optimize)' == '' ">false</Optimize>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release-ARM64' ">
-      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
@@ -44,11 +25,7 @@
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.projitems" Label="Shared" />
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'">
-        <Exec Command="PowerShell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force" />
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="if '$(ConfigurationName)' == 'Release' (&#xA;    if '$(OS)' == 'Windows_NT' (&#xA;        PowerShell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force&#xA;    ) else (&#xA;        pwsh -Command Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release/$(ProjectName).zip' -Force&#xA;    )&#xA;)" />
     </Target>
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'">
-        <Exec Command="pwsh -Command Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force" />
-    </Target>
-
 </Project>

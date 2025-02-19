@@ -9,13 +9,14 @@
         <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp</RootNamespace>
         <LangVersion>default</LangVersion>
         <IsPackable>false</IsPackable>
-        <Configurations>Debug;Release;Release-ARM64;Debug-ARM64</Configurations>
+        <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
     </PropertyGroup>
+    
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <OutputPath>..\..\..\debug\tests\manual\monogame\</OutputPath>
       <DefineConstants>TRACE;MONOGAME</DefineConstants>
@@ -24,11 +25,7 @@
       <OutputPath>..\..\..\release\tests\manual\monogame\</OutputPath>
       <DefineConstants>TRACE;MONOGAME</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release-ARM64' ">
-      <OutputPath>..\..\..\release\tests\manual\monogame\</OutputPath>
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
-      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
-    </PropertyGroup>
+    
     <ItemGroup>
         <None Remove="Icon.ico"/>
         <None Remove="Icon.bmp"/>

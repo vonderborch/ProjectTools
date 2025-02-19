@@ -1,7 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace Velentr.INDIVIDUAL_SUPPORT.FNA;
+namespace Velentr.INDIVIDUAL_SUPPORT.Test;
 
 /// <summary>
 /// A helper for FNA dependencies.
@@ -25,8 +28,7 @@ public static class FnaDependencyHelper
         },
         [Architecture.Arm64] = new()
         {
-            [OSPlatform.Linux] = "libaarch64",
-            [OSPlatform.OSX] = "macos"
+            [OSPlatform.OSX] = "osx"
         }
     };
     

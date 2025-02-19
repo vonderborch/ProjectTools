@@ -1,15 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using System.Reflection;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp;
 
-public class TestGame : Game
+public class TestGame : PerformanceMonitoredGame
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    public TestGame()
+    public TestGame() : base("Velentr.INDIVIDUAL_SUPPORT", FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion)
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
