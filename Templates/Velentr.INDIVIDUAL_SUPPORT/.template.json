@@ -178,7 +178,8 @@
     "*.git",
     "*release",
     "*debug",
-    "*.fna"
+    "*.fna",
+    ".gitpersonalaccesstoken"
   ],
   "PythonScriptPaths": [
     "update_or_install_fna.py"

@@ -10,6 +10,7 @@
         <LangVersion>default</LangVersion>
         <Configurations>Release;Debug</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <ApplicationIcon>..\..\..\logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,6 +31,9 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="app.config">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Content\font.xnb">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

@@ -23,6 +23,7 @@
     <File Path="logo.png" />
     <File Path="README.md" />
     <File Path="update_or_install_fna.py" />
+    <File Path="logo.ico" />
   </Folder>
   <Folder Name="/source/">
     <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" Type="Classic C#" />

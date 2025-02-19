@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp
 {
@@ -220,9 +222,9 @@ namespace Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp
         private const string DECIMALS = "0.00";
 
         /// <summary>
-        /// The title line format.
+        /// The metrics text formats.
         /// </summary>
-        private readonly string titleFormat;
+        private readonly string[] metricsFormats;
         
         /// <summary>
         /// The frame counter.
@@ -240,18 +242,60 @@ namespace Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp
         private readonly ResourceMetrics resourceMetrics;
 
         /// <summary>
+        /// The font.
+        /// </summary>
+        private SpriteFont font;
+
+        /// <summary>
+        /// The font name.
+        /// </summary>
+        private string fontName;
+        
+        /// <summary>
+        /// The position to render the metrics at.
+        /// </summary>
+        private Vector2 metricsPosition;
+
+        /// <summary>
+        /// The font color.
+        /// </summary>
+        private Color fontColor;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PerformanceMonitoredGame"/> class.
         /// </summary>
         /// <param name="title">The title of the game.</param>
         /// <param name="version">The version of the game.</param>
+        /// <param name="framework">The framework the game is running on.</param>
+        /// <param name="font">The font to use for metrics.</param>
+        /// <param name="fontColor">The color of the font to use for metrics.</param>
+        /// <param name="metricsPosition">The position to render the metrics at.</param>
         /// <param name="maximumSamples">The number of samples to keep.</param>
-        public PerformanceMonitoredGame(string title, string version, int maximumSamples = 100) : base()
+        public PerformanceMonitoredGame(string title, string version, string framework, string font, Color fontColor, Vector2 metricsPosition, int maximumSamples = 100) : base()
         {
-            this.titleFormat = $"{title} | {version} | FPS: {{0:{DECIMALS}}} | TPS: {{1:{DECIMALS}}} | CPU: {{2:{DECIMALS}}}% | MEM: {{3:{DECIMALS}}} MB (WS: {{4:{DECIMALS}}} MB)";
+            this.fontName = font;
+            this.fontColor = fontColor;
+            this.metricsPosition = metricsPosition;
+
+            this.Window.Title = $"{title} ({framework}) | {version}";
+            this.metricsFormats =
+            [
+                $"FPS: {{0:{DECIMALS}}} | TPS: {{1:{DECIMALS}}}",
+                $"CPU: {{2:{DECIMALS}}}%",
+                $"GC/WS Mem: {{3:{DECIMALS}}} MB / {{4:{DECIMALS}}} MB"
+            ];
             
             this.frameCounter = new FrameMetric(maximumSamples);
             this.tickCounter = new FrameMetric(maximumSamples);
             this.resourceMetrics = new ResourceMetrics(maximumSamples);
+        }
+        
+        /// <summary>
+        /// Loads the content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            font = Content.Load<SpriteFont>(fontName);
         }
 
         /// <summary>
@@ -269,19 +313,50 @@ namespace Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp
         ///     Draws the given game time.
         /// </summary>
         /// <param name="gameTime"> The game time. </param>
-        protected override void Draw(GameTime gameTime)
+        /// <param name="spriteBatch"> The sprite batch. </param>
+        protected void RenderMetrics(GameTime gameTime, SpriteBatch spriteBatch)
         {
             this.frameCounter.AddFrame(gameTime.ElapsedGameTime);
-            this.Window.Title = string.Format(
-                this.titleFormat,
-                this.frameCounter.AverageFramesPerSecond,
-                this.tickCounter.AverageFramesPerSecond,
-                this.resourceMetrics.AverageCpuPercent,
-                this.resourceMetrics.AverageGcMemoryUsageMb,
-                this.resourceMetrics.AverageMemoryUsageMb
-            );
 
-            base.Draw(gameTime);
+            var startPosition = this.metricsPosition;
+            foreach (var metricFormat in this.metricsFormats)
+            {
+                var text = string.Format(
+                    metricFormat,
+                    this.frameCounter.AverageFramesPerSecond,
+                    this.tickCounter.AverageFramesPerSecond,
+                    this.resourceMetrics.AverageCpuPercent,
+                    this.resourceMetrics.AverageGcMemoryUsageMb,
+                    this.resourceMetrics.AverageMemoryUsageMb
+                );
+                
+                spriteBatch.DrawString(this.font, ToSafeText(text), startPosition, this.fontColor);
+                startPosition.Y += this.font.LineSpacing;
+            }
+        }
+
+        /// <summary>
+        /// Ensures that the text is safe to render.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>The safe text.</returns>
+        private string ToSafeText(string text)
+        {
+            StringBuilder finalString = new();
+            
+            foreach (var c in text)
+            {
+                if (this.font.Characters.Contains(c))
+                {
+                    finalString.Append(c);
+                }
+                else
+                {
+                    finalString.Append('?');
+                }
+            }
+            
+            return finalString.ToString();
         }
 
         /// <summary>
