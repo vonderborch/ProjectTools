@@ -53,32 +53,11 @@ public static class FnaDependencyHelper
             if (RuntimeInformation.IsOSPlatform(os))
             {
                 MoveDlls(path);
-                if (os == OSPlatform.OSX)
-                {
-                    MacOsSupport(vulkanPath);
-                }
                 return;
             }
         }
         
         throw new PlatformNotSupportedException();
-    }
-
-    /// <summary>
-    /// Special support for MacOS.
-    /// </summary>
-    /// <param name="vulkanPath">The path to the MoltenVK ICD.</param>
-    private static void MacOsSupport(string vulkanPath)
-    {
-        var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        var vulkanIcdPath = Path.Combine(assemblyPath, vulkanPath);
-        var vulkanResourceDirectory = Path.Combine(assemblyPath, "Contents", "Resources", "vulkan");
-        if (Directory.Exists(vulkanResourceDirectory))
-        {
-            Directory.Delete(vulkanResourceDirectory);
-        }
-        
-        CopyDirectory(vulkanIcdPath, vulkanResourceDirectory);
     }
     
     /// <summary>

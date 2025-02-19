@@ -217,7 +217,7 @@ namespace Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp
         /// <summary>
         /// The decimals to round to.
         /// </summary>
-        private const string DECIMALS = "0.000";
+        private const string DECIMALS = "0.00";
 
         /// <summary>
         /// The title line format.

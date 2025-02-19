@@ -18,6 +18,7 @@
     </PropertyGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="if '$(ConfigurationName)' == 'Release' (&#xA;    if '$(OS)' == 'Windows_NT' (&#xA;        PowerShell Remove-Item -Path '$(ProjectDir)release' -Recurse -Force&#xA;    ) else (&#xA;        pwsh -Command Remove-Item -Path '$(ProjectDir)release' -Recurse -Force&#xA;    )&#xA;)" />
+        <Exec Command="PowerShell Remove-Item -Path '$(ProjectDir)release' -Recurse -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'" />
+        <Exec Command="pwsh -Command Remove-Item -Path '$(ProjectDir)release' -Recurse -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'" />
     </Target>
 </Project>
