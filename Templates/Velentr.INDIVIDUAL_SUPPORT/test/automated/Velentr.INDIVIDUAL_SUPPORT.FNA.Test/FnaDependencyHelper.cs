@@ -86,26 +86,4 @@ public static class FnaDependencyHelper
             File.Copy(file, destination);
         }
     }
-    
-    /// <summary>
-    /// Copies a directory from the source to the destination.
-    /// </summary>
-    /// <param name="source">The source.</param>
-    /// <param name="destination">The destination.</param>
-    private static void CopyDirectory(string source, string destination)
-    {
-        Directory.CreateDirectory(destination);
-
-        foreach (var file in Directory.GetFiles(source))
-        {
-            string destFile = Path.Combine(destination, Path.GetFileName(file));
-            File.Copy(file, destFile, true);
-        }
-
-        foreach (var directory in Directory.GetDirectories(source))
-        {
-            string destSubDir = Path.Combine(destination, Path.GetFileName(directory));
-            CopyDirectory(directory, destSubDir);
-        }
-    }
 }
