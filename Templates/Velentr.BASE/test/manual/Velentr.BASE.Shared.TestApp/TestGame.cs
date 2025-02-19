@@ -13,7 +13,7 @@ public class TestGame : PerformanceMonitoredGame
     private SpriteBatch _spriteBatch;
 
     public TestGame() : base(
-        "Velentr.INDIVIDUAL_SUPPORT",
+        "Velentr.BASE",
         FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion,
 #if FNA
         "FNA",

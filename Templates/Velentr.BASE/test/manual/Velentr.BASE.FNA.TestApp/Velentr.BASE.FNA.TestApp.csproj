@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.TestApp</AssemblyName>
-        <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.TestApp</RootNamespace>
+        <AssemblyName>Velentr.BASE.TestApp</AssemblyName>
+        <RootNamespace>Velentr.BASE.TestApp</RootNamespace>
         <LangVersion>default</LangVersion>
         <Configurations>Release;Debug</Configurations>
         <Platforms>AnyCPU</Platforms>
@@ -23,10 +22,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <None Include="..\..\..\.fna\fnalibs\**">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -38,6 +33,11 @@
         </None>
     </ItemGroup>
 
-    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.projitems" Label="Shared"/>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\.fna\FNA\FNA.Core.csproj" />
+      <ProjectReference Include="..\..\..\source\Velentr.BASE\Velentr.BASE.csproj" />
+    </ItemGroup>
+
+    <Import Project="..\Velentr.BASE.Shared.TestApp\Velentr.BASE.Shared.TestApp.projitems" Label="Shared"/>
 
 </Project>

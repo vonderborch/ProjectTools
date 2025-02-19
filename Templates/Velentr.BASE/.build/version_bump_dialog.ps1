@@ -66,9 +66,9 @@ function Show-DialogBox
             $dialogReply.Add($hashEntry[0], $hashEntry[1])
         }
 
-        if ( $dialogReply.ContainsKey("text returned"))
+        if ( $dialogReply.Contains("text returned"))
         {
-            return $dialogReply["text returned"]
+            return $dialogReply["text returned"].ToString()
         }
         else
         {

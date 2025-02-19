@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace Velentr.INDIVIDUAL_SUPPORT.TestApp;
+namespace Velentr.INDIVIDUAL_SUPPORT.Test;
 
 /// <summary>
 /// A helper for FNA dependencies.

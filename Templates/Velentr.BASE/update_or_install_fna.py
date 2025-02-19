@@ -24,18 +24,29 @@ fna_install_path = os.path.join(current_file_directory, ".fna")
 fna_updator_path = os.path.join(current_file_directory, ".build", "fna_updator.py")
 command = ["python", fna_updator_path, fna_install_path, token]
 
-p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-sel = selectors.DefaultSelector()
-sel.register(p.stdout, selectors.EVENT_READ)
-sel.register(p.stderr, selectors.EVENT_READ)
-ok = True
-while ok:
-    for key, val1 in sel.select():
-        line = key.fileobj.readline()
-        if not line:
-            ok = False
-            break
-        if key.fileobj is p.stdout:
+if sys.platform == "win32":
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
+    ok = True
+    while ok:
+        for line in p.stdout:
             print(f"{line}", end="")
-        else:
+        for line in p.stderr:
             print(f"ERROR: {line}", end="", file=sys.stderr)
+        if p.poll() is not None:
+            ok = False
+else:
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    sel = selectors.DefaultSelector()
+    sel.register(p.stdout, selectors.EVENT_READ)
+    sel.register(p.stderr, selectors.EVENT_READ)
+    ok = True
+    while ok:
+        for key, val1 in sel.select():
+            line = key.fileobj.readline()
+            if not line:
+                ok = False
+                break
+            if key.fileobj is p.stdout:
+                print(f"{line}", end="")
+            else:
+                print(f"ERROR: {line}", end="", file=sys.stderr)

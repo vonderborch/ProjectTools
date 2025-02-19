@@ -1,4 +1,4 @@
-﻿namespace Velentr.INDIVIDUAL_SUPPORT.Test;
+﻿namespace Velentr.BASE.Test;
 
 public class MyClassTestMonogame
 {

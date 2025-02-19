@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -6,18 +6,20 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Test</AssemblyName>
-        <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Test</RootNamespace>
+        <AssemblyName>Velentr.BASE.Test</AssemblyName>
+        <RootNamespace>Velentr.BASE.Test</RootNamespace>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+        <ApplicationIcon>..\..\..\logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>..\..\..\debug\tests\automated\monogame\</OutputPath>
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+        <OutputPath>..\..\..\debug\tests\automated\monogame\</OutputPath>
+        <DefineConstants>TRACE;MONOGAME</DefineConstants>
     </PropertyGroup>
-
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>..\..\..\release\tests\automated\monogame\</OutputPath>
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+        <OutputPath>..\..\..\release\tests\automated\monogame\</OutputPath>
+        <DefineConstants>TRACE;MONOGAME</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,9 +35,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.Monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.csproj" />
+      <ProjectReference Include="..\..\..\source\Velentr.BASE\Velentr.BASE.csproj" />
     </ItemGroup>
 
-    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared" />
+    <Import Project="..\Velentr.BASE.Shared.Test\Velentr.BASE.Shared.Test.projitems" Label="Shared"/>
 
 </Project>
