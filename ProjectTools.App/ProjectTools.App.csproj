@@ -41,14 +41,10 @@
         <ProjectReference Include="..\ProjectTools.Core\ProjectTools.Core.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\GenerateTemplate.axaml"/>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\PreprocessConfiguration.axaml"/>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\SlugConfiguration.axaml"/>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\TemplateConfiguration.axaml"/>
-    </ItemGroup>
-
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="if $(ConfigurationName) == Release (Powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force)"/>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'">
+        <Exec Command="Powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force"/>
+    </Target>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'">
+        <Exec Command="pwsh -Command Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release/$(ProjectName).zip' -Force"/>
     </Target>
 </Project>
