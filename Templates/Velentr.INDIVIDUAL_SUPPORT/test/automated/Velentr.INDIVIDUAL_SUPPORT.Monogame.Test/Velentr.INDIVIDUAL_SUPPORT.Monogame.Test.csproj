@@ -14,12 +14,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>..\..\..\debug\tests\automated\monogame\</OutputPath>
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+        <OutputPath>..\..\..\debug\tests\automated\monogame\</OutputPath>
+        <DefineConstants>TRACE;MONOGAME</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>..\..\..\release\tests\automated\monogame\</OutputPath>
-      <DefineConstants>TRACE;MONOGAME</DefineConstants>
+        <OutputPath>..\..\..\release\tests\automated\monogame\</OutputPath>
+        <DefineConstants>TRACE;MONOGAME</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,9 +35,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.Monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.csproj" />
+        <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.Monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.csproj"/>
     </ItemGroup>
 
-    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared" />
+    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared"/>
 
 </Project>

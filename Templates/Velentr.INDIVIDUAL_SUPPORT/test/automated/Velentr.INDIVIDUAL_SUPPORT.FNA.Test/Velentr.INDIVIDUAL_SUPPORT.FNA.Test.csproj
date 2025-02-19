@@ -14,12 +14,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-      <OutputPath>..\..\..\debug\tests\manual\fna\</OutputPath>
-      <DefineConstants>TRACE;FNA</DefineConstants>
+        <OutputPath>..\..\..\debug\tests\manual\fna\</OutputPath>
+        <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-      <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
-      <DefineConstants>TRACE;FNA</DefineConstants>
+        <OutputPath>..\..\..\release\tests\manual\fna\</OutputPath>
+        <DefineConstants>TRACE;FNA</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,7 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" />
+        <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -43,10 +43,10 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="app.config">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
-    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared" />
+    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared"/>
 
 </Project>

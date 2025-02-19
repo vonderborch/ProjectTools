@@ -16,38 +16,39 @@ public static class FnaDependencyHelper
     /// </summary>
     private static Dictionary<Architecture, Dictionary<OSPlatform, string>> DefaultPlatformMap = new()
     {
-        [Architecture.X64] = new()
+        [Architecture.X64] = new Dictionary<OSPlatform, string>
         {
             [OSPlatform.Windows] = "x64",
             [OSPlatform.Linux] = "lib64",
             [OSPlatform.OSX] = "osx"
         },
-        [Architecture.X86] = new()
+        [Architecture.X86] = new Dictionary<OSPlatform, string>
         {
             [OSPlatform.Windows] = "x86"
         },
-        [Architecture.Arm64] = new()
+        [Architecture.Arm64] = new Dictionary<OSPlatform, string>
         {
             [OSPlatform.OSX] = "osx"
         }
     };
-    
+
     /// <summary>
     /// Moves the FNA dependencies to the correct location based on the current OS and architecture.
     /// </summary>
     /// <param name="platformMap">An optional platform DLL map.</param>
     /// <param name="vulkanPath">The path to the MoltenVK ICD.</param>
     /// <exception cref="PlatformNotSupportedException">Raised if the platform is unsupported.</exception>
-    public static void HandleDependencies(Dictionary<Architecture, Dictionary<OSPlatform, string>>? platformMap = null, string vulkanPath = "vulkan")
+    public static void HandleDependencies(Dictionary<Architecture, Dictionary<OSPlatform, string>>? platformMap = null,
+        string vulkanPath = "vulkan")
     {
         var map = platformMap ?? DefaultPlatformMap;
-        
+
         var architecture = RuntimeInformation.OSArchitecture;
         if (!map.TryGetValue(architecture, out var operatingSystems))
         {
             throw new PlatformNotSupportedException();
         }
-        
+
         foreach (var (os, path) in operatingSystems)
         {
             if (RuntimeInformation.IsOSPlatform(os))
@@ -56,10 +57,10 @@ public static class FnaDependencyHelper
                 return;
             }
         }
-        
+
         throw new PlatformNotSupportedException();
     }
-    
+
     /// <summary>
     /// Moves the DLLs from the specified path to the executing assembly path.
     /// </summary>
@@ -68,13 +69,13 @@ public static class FnaDependencyHelper
     private static void MoveDlls(string path)
     {
         var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        
+
         var directory = Path.Combine(assemblyPath, path);
         if (!Directory.Exists(directory))
         {
             throw new DirectoryNotFoundException($"The DLL directory for the platform `{directory}` does not exist.");
         }
-        
+
         foreach (var file in Directory.GetFiles(directory))
         {
             var destination = Path.Combine(assemblyPath, Path.GetFileName(file));
@@ -82,7 +83,7 @@ public static class FnaDependencyHelper
             {
                 File.Delete(destination);
             }
-            
+
             File.Copy(file, destination);
         }
     }

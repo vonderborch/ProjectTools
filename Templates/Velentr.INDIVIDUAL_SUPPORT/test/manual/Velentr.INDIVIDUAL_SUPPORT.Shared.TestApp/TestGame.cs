@@ -13,23 +13,23 @@ public class TestGame : PerformanceMonitoredGame
     private SpriteBatch _spriteBatch;
 
     public TestGame() : base(
-        title: "Velentr.INDIVIDUAL_SUPPORT",
-        version: FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion,
+        "Velentr.INDIVIDUAL_SUPPORT",
+        FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion,
 #if FNA
-        framework: "FNA",
+        "FNA",
 #elif MONOGAME
-        framework: "Monogame",
+        "Monogame",
 #else
         framework: "Unknown",
 #endif
-        font: "font",
-        fontColor: Color.Black,
-        metricsPosition: new Vector2(5, 5)
-        )
+        "font",
+        Color.Black,
+        new Vector2(5, 5)
+    )
     {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
+        this._graphics = new GraphicsDeviceManager(this);
+        this.Content.RootDirectory = "Content";
+        this.IsMouseVisible = true;
     }
 
     private void UpdateResolution(int width, int height, bool fullscreen, GraphicsDeviceManager graphics)
@@ -42,8 +42,8 @@ public class TestGame : PerformanceMonitoredGame
 
     protected override void Initialize()
     {
-        UpdateResolution(1280, 768, false, _graphics);
-        
+        UpdateResolution(1280, 768, false, this._graphics);
+
         // TODO: Add your initialization logic here
 
         base.Initialize();
@@ -52,15 +52,18 @@ public class TestGame : PerformanceMonitoredGame
     protected override void LoadContent()
     {
         base.LoadContent();
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        this._spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+            Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
             Exit();
+        }
 
         // TODO: Add your update logic here
 
@@ -69,13 +72,13 @@ public class TestGame : PerformanceMonitoredGame
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-        _spriteBatch.Begin();
+        this.GraphicsDevice.Clear(Color.CornflowerBlue);
+        this._spriteBatch.Begin();
         RenderMetrics(gameTime, this._spriteBatch);
 
         // TODO: Add your drawing code here
 
-        _spriteBatch.End();
+        this._spriteBatch.End();
         base.Draw(gameTime);
     }
 }

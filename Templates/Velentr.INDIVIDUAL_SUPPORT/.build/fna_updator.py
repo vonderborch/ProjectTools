@@ -25,13 +25,13 @@ class FnaUpdator:
 
     FNA_REPO: str = "https://github.com/FNA-XNA/FNA"
     """str: The URL for the FNA repository."""
-    
+
     FNA_LIBS_REPO_FORMAT: str = "https://{pre}github.com/{post}FNA-XNA/fnalibs-dailies"
     """str: The URL for the FNA libs repository."""
-    
+
     FNA_LIBS_REPO_WORKFLOW_NAME: str = "ci.yml"
     """str: The name of the workflow for the FNA libs repository."""
-    
+
     def __init__(self, directory: str, personal_access_token: str) -> None:
         """Initializes the FNAUpdater.
         
@@ -47,16 +47,17 @@ class FnaUpdator:
         self._fna_libs_install_path = os.path.join(directory, "fnalibs")
         self._fna_libs_install_cache_path = os.path.join(directory, "fnalibs_cache")
         self._virtual_environment_path = os.path.join(directory, ".venv")
-        
+
         self._fna_libs_repo = self.FNA_LIBS_REPO_FORMAT.format(pre="", post="")
         self._fna_libs_repo_api = self.FNA_LIBS_REPO_FORMAT.format(pre="api.", post="repos/")
-        
-        self._manage_directory(directory=self._base_directory, delete_directory_if_exists=False, create_directory_if_not_exists=True)
+
+        self._manage_directory(directory=self._base_directory, delete_directory_if_exists=False,
+                               create_directory_if_not_exists=True)
         self._install_package("virtualenv")
         self._setup_environment()
         self._install_package("GitPython")
         self._install_package("requests")
-    
+
     def execute(self) -> None:
         """Executes the FNA update or installation process.
         
@@ -69,10 +70,10 @@ class FnaUpdator:
         self._clone_or_update_repo(
             repo=self.FNA_REPO, directory=self._fna_repo_install_path, clone_multi_options=["--recursive"]
         )
-            
+
         # Step 2: Install the FNA libs
         self._install_fna_libs_manager()
-        
+
         # Step 3: ???
         # Step 4: Done!
         print("Done!")
@@ -86,7 +87,7 @@ class FnaUpdator:
             "Authorization": f"Bearer {self._personal_access_token}",
             "X-GitHub-Api-Version": "2022-11-28",
         }
-    
+
     @staticmethod
     def _is_virtual_environment() -> bool:
         """Checks if the current Python environment is a virtual environment.
@@ -97,7 +98,7 @@ class FnaUpdator:
             bool: True if the current environment is a virtual environment, False otherwise.
         """
         return hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix)
-    
+
     def _setup_environment(self) -> None:
         """Sets up a Python virtual environment if one is not already active.
         
@@ -108,27 +109,27 @@ class FnaUpdator:
         if self._is_virtual_environment():
             print("  Already in virtual environment!")
             return
-        
+
         # setup virtual environment
         setupVirtualEnvironment = not self._manage_directory(
             directory=self._virtual_environment_path,
             delete_directory_if_exists=True,
             create_directory_if_not_exists=False,
         )
-            
+
         print("  Setting up virtual environment...")
         if setupVirtualEnvironment:
             subprocess.call([sys.executable, "-m", "virtualenv", self._virtual_environment_path])
-        
+
         print("  Activating virtual environment...")
         if platform.system() == "Windows":
             activation_file = os.path.join(self._virtual_environment_path, "Scripts", "activate_this.py")
         else:
             activation_file = os.path.join(self._virtual_environment_path, "bin", "activate_this.py")
         exec(open(activation_file).read(), {'__file__': activation_file})
-            
+
     def _manage_directory(
-        self, *, directory: str, delete_directory_if_exists: bool, create_directory_if_not_exists: bool
+            self, *, directory: str, delete_directory_if_exists: bool, create_directory_if_not_exists: bool
     ) -> None:
         """Manages a directory, ensuring it exists and is a directory, not a file.
         
@@ -139,10 +140,10 @@ class FnaUpdator:
         if os.path.exists(directory):
             if os.path.isfile(directory):
                 raise Exception(f"Directory {directory} already exists and is a file?")
-            
+
             if delete_directory_if_exists:
                 self._remove_file_system_entry(directory)
-                
+
         if create_directory_if_not_exists and not os.path.exists(directory):
             os.makedirs(directory)
 
@@ -162,7 +163,7 @@ class FnaUpdator:
             os.remove(path)
         else:
             shutil.rmtree(path)
-    
+
     @staticmethod
     def _install_package(package: str) -> None:
         """Installs a Python package if it is not already installed.
@@ -236,7 +237,8 @@ class FnaUpdator:
         """
         # Check if directory already exists
         self._manage_directory(
-            directory=self._fna_libs_install_cache_path, delete_directory_if_exists=True, create_directory_if_not_exists=True
+            directory=self._fna_libs_install_cache_path, delete_directory_if_exists=True,
+            create_directory_if_not_exists=True
         )
         self._manage_directory(
             directory=self._fna_libs_install_path, delete_directory_if_exists=True, create_directory_if_not_exists=True
@@ -316,7 +318,8 @@ class FnaUpdator:
 
         return [(artifact["name"], artifact["archive_download_url"]) for artifact in data["artifacts"]]
 
-    def _download_and_extract_artifact(self, artifact_name: str, artifact_download_url: str, artifact_num: int, num_artifacts: int) -> None:
+    def _download_and_extract_artifact(self, artifact_name: str, artifact_download_url: str, artifact_num: int,
+                                       num_artifacts: int) -> None:
         """Downloads a specific artifact from a given URL and saves it to a local cache directory.
         
         Retrieves an artifact using a personal access token and saves it as a zip file in the specified cache location. 
@@ -362,7 +365,8 @@ class FnaUpdator:
         """
         import requests
         # Download the artifact
-        response = requests.get(artifact_download_url, headers={'Authorization': f'Bearer {self._personal_access_token}'})
+        response = requests.get(artifact_download_url,
+                                headers={'Authorization': f'Bearer {self._personal_access_token}'})
         # Check if the request was successful
         if response.status_code == 200:
             # Open a file in write-binary mode
@@ -384,13 +388,14 @@ class FnaUpdator:
             bool: True if extraction is successful, False otherwise.
         """
 
-
         try:
-            with zipfile.ZipFile(os.path.join(self._fna_libs_install_cache_path, f"{artifact_name}.zip"), "r") as zip_ref:
+            with zipfile.ZipFile(os.path.join(self._fna_libs_install_cache_path, f"{artifact_name}.zip"),
+                                 "r") as zip_ref:
                 zip_ref.extractall(os.path.join(self._fna_libs_install_cache_path, artifact_name))
         except Exception:
             return False
         return True
+
 
 # Get arguments
 fna_install_path = sys.argv[1]  # the directory for the FNA installation

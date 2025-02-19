@@ -10,16 +10,16 @@
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props"/>
     <PropertyGroup/>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-      <OutputPath>bin\Debug\</OutputPath>
+        <OutputPath>bin\Debug\</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-      <OutputPath>bin\Release\</OutputPath>
+        <OutputPath>bin\Release\</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-ARM64|AnyCPU' ">
-      <OutputPath>bin\Release-ARM64\</OutputPath>
+        <OutputPath>bin\Release-ARM64\</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-ARM64|AnyCPU' ">
-      <OutputPath>bin\Debug-ARM64\</OutputPath>
+        <OutputPath>bin\Debug-ARM64\</OutputPath>
     </PropertyGroup>
     <Import Project="Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared"/>
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets"/>
