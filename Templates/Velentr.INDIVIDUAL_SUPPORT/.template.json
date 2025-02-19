@@ -186,10 +186,9 @@
   ],
   "RenameOnlyPaths": [
     "logo.png",
-    "Icon.bmp",
     "Icon.ico"
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-01-20c"
+  "Version": "2025-02-19"
 }

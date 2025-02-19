@@ -177,13 +177,18 @@
     "*.vs",
     "*.git",
     "*release",
-    "*debug"
+    "*debug",
+    "*.fna",
+    ".gitpersonalaccesstoken"
   ],
-  "PythonScriptPaths": [],
+  "PythonScriptPaths": [
+    "update_or_install_fna.py"
+  ],
   "RenameOnlyPaths": [
-    "logo.png"
+    "logo.png",
+    "logo.ico"
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-01-20a"
+  "Version": "2025-02-19"
 }
