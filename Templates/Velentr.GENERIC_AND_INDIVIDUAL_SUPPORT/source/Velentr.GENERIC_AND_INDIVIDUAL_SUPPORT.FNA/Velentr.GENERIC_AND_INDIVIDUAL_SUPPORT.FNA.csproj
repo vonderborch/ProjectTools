@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <OutputPath>..\..\debug\fna\</OutputPath>
+        <DefineConstants>TRACE;FNA</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <OutputPath>..\..\release\fna\</OutputPath>
+        <DefineConstants>TRACE;FNA</DefineConstants>
+        <DocumentationFile>..\..\release\fna\Velentr.GENERIC_AND_INDIVIDUAL_SUPPORT.FNA.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\.fna\FNA\FNA.Core.csproj"/>
+    </ItemGroup>
+
+    <Import Project="..\Velentr.GENERIC_AND_INDIVIDUAL_SUPPORT\Velentr.GENERIC_AND_INDIVIDUAL_SUPPORT.projitems" Label="Shared"/>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="PowerShell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'"/>
+        <Exec Command="pwsh -Command Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release/$(ProjectName).zip' -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'"/>
+    </Target>
+</Project>
