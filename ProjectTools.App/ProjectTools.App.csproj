@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
@@ -6,14 +6,16 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <AssemblyVersion>2.2.1</AssemblyVersion>
-        <FileVersion>2.2.1</FileVersion>
+        <AssemblyVersion>2.3.0.64</AssemblyVersion>
+        <FileVersion>2.3.0.64</FileVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>..\debug\app\</OutputPath>
+        <OutputPath>..\debug\app\</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>..\release\app\</OutputPath>
+        <OutputPath>..\release\app\</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,13 +23,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.1"/>
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.1"/>
-        <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.1"/>
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1"/>
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1"/>
+        <PackageReference Include="Avalonia" Version="11.2.4" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.4" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.4" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.4" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.4" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.4">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
@@ -39,14 +41,10 @@
         <ProjectReference Include="..\ProjectTools.Core\ProjectTools.Core.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\GenerateTemplate.axaml"/>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\PreprocessConfiguration.axaml"/>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\SlugConfiguration.axaml"/>
-        <UpToDateCheckInput Remove="Views\Pages\PrepareTemplateControls\TemplateConfiguration.axaml"/>
-    </ItemGroup>
-
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(TargetDir)..\..\ProjectTools.App.zip' -Force)" />
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'">
+        <Exec Command="Powershell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force"/>
+    </Target>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'">
+        <Exec Command="pwsh -Command Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release/$(ProjectName).zip' -Force"/>
     </Target>
 </Project>

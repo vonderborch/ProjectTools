@@ -32,7 +32,10 @@ public class SlugDataContext : ReactiveObject
         nameof(NonGuidOptionsPanelEnabled),
         nameof(IsEditingSlug),
         nameof(CurrentSlugSelectedType),
-        nameof(CurrentSlugToEditName)
+        nameof(CurrentSlugToEditName),
+        nameof(CurrentSlugAllowEmptyValues),
+        nameof(CurrentSlugIsCaseSensitive),
+        nameof(CurrentSlugIsStringType)
     ];
 
     /// <summary>
@@ -117,6 +120,11 @@ public class SlugDataContext : ReactiveObject
     public bool CurrentSlugEnableSlugTypePanel => this._currentSlug?.CustomSlug == true;
 
     /// <summary>
+    ///     Whether the current slug is a string type.
+    /// </summary>
+    public bool CurrentSlugIsStringType => this._currentSlug?.Type == SlugType.String;
+
+    /// <summary>
     ///     Whether we are editing a slug.
     /// </summary>
     public bool IsEditingSlug => this._currentSlug != null;
@@ -176,11 +184,26 @@ public class SlugDataContext : ReactiveObject
             if (this._currentSlug is not null)
             {
                 this._currentSlug.AllowedValues =
-                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(x => (object?)x)
-                        .ToList();
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             RefreshContext();
+        }
+    }
+
+    /// <summary>
+    ///     Whether the current slug allows empty values.
+    /// </summary>
+    public bool CurrentSlugAllowEmptyValues
+    {
+        get => this._currentSlug?.AllowEmptyValues ?? false;
+        set
+        {
+            if (this._currentSlug != null)
+            {
+                this._currentSlug.AllowEmptyValues = value;
+                RefreshContext();
+            }
         }
     }
 
@@ -189,7 +212,7 @@ public class SlugDataContext : ReactiveObject
     /// </summary>
     public string CurrentSlugDefaultValue
     {
-        get => this._currentSlug?.DefaultValue.ToString() ?? string.Empty;
+        get => this._currentSlug?.DefaultValue ?? string.Empty;
         set
         {
             if (this._currentSlug != null)
@@ -219,11 +242,26 @@ public class SlugDataContext : ReactiveObject
             if (this._currentSlug is not null)
             {
                 this._currentSlug.DisallowedValues =
-                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(x => (object?)x)
-                        .ToList();
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             RefreshContext();
+        }
+    }
+
+    /// <summary>
+    ///     Whether the current slug is case sensitive.
+    /// </summary>
+    public bool CurrentSlugIsCaseSensitive
+    {
+        get => this._currentSlug?.CaseSensitive ?? false;
+        set
+        {
+            if (this._currentSlug != null)
+            {
+                this._currentSlug.CaseSensitive = value;
+                RefreshContext();
+            }
         }
     }
 
@@ -300,9 +338,8 @@ public class SlugDataContext : ReactiveObject
         {
             if (this._currentSlug is not null)
             {
-                this._currentSlug.DisallowedValues =
-                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(x => (object?)x)
-                        .ToList();
+                this._currentSlug.SearchStrings =
+                    value.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             RefreshContext();
@@ -319,7 +356,16 @@ public class SlugDataContext : ReactiveObject
         {
             if (this._currentSlug != null && this._slugTypesByName.ContainsKey(value))
             {
-                this._currentSlug.Type = this._slugTypesByName[value];
+                var newType = this._slugTypesByName[value];
+
+                if (newType != this._currentSlug.Type && newType != SlugType.String)
+                {
+                    this.CurrentSlugDisallowedValues = string.Empty;
+                    this.CurrentSlugAllowedValues = string.Empty;
+                }
+
+                this._currentSlug.Type = newType;
+
                 RefreshContext();
             }
         }
@@ -340,6 +386,11 @@ public class SlugDataContext : ReactiveObject
         }
     }
 
+    /// <summary>
+    ///     Adds a new slug.
+    /// </summary>
+    /// <returns>The name of the new slug.</returns>
+    /// <exception cref="Exception">Raised if bad things happen.</exception>
     public string AddSlug()
     {
         if (this.ParentContext.PreparationTemplate is null)
@@ -361,11 +412,14 @@ public class SlugDataContext : ReactiveObject
 
         SelectSlug(newSlug.DisplayName);
 
-        RefreshContext();
-        this.RaisePropertyChanged(nameof(this.TemplateSlugsNames));
+        RefreshContext(true);
         return newSlug.DisplayName;
     }
 
+    /// <summary>
+    ///     Deletes the current slug.
+    /// </summary>
+    /// <exception cref="Exception">Raised if bad things happen.</exception>
     public void DeleteSlug()
     {
         if (this.ParentContext.PreparationTemplate is null)
@@ -385,14 +439,25 @@ public class SlugDataContext : ReactiveObject
     /// <summary>
     ///     Refreshes the context.
     /// </summary>
-    public void RefreshContext()
+    public void RefreshContext(bool refreshSlugNames = false)
     {
         foreach (var property in this._propertiesToUpdate)
         {
             this.RaisePropertyChanged(property);
         }
+
+        if (refreshSlugNames)
+        {
+            this.RaisePropertyChanged(nameof(this.TemplateSlugsNames));
+        }
     }
 
+    /// <summary>
+    ///     Selects a slug.
+    /// </summary>
+    /// <param name="newSlug">The slug to select.</param>
+    /// <returns>The name of the selected slug.</returns>
+    /// <exception cref="Exception">Raised if bad things happen.</exception>
     public string SelectSlug(string newSlug)
     {
         if (this.ParentContext.PreparationTemplate is null)
@@ -412,6 +477,7 @@ public class SlugDataContext : ReactiveObject
             this._currentSlugToEditName = newSlug;
             this._currentSlug = null;
         }
+
         this.RaisePropertyChanged(nameof(this.CurrentSlugToEditName));
         return newSlug;
     }

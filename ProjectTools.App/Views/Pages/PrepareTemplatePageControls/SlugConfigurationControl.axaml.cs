@@ -70,6 +70,12 @@ public partial class SlugConfigurationControl : UserControl
             throw new InvalidOperationException("Preparation template is null.");
         }
 
+        var slugsToValidate = this.Context.PreparationTemplate.Slugs;
+        foreach (var slug in slugsToValidate)
+        {
+            slug.Validate();
+        }
+
         IOHelpers.DeleteFileIfExists(this.Context.TemplateSettingsFile);
         JsonHelpers.SerializeToFile(this.Context.TemplateSettingsFile, this.Context.PreparationTemplate);
 

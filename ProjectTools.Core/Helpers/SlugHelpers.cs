@@ -24,7 +24,7 @@ public static class SlugHelpers
             return slugs;
         }
 
-        var slugValues = JsonHelpers.DeserializeFromFile<Dictionary<string, object?>>(projectConfigFile);
+        var slugValues = JsonHelpers.DeserializeFromFile<Dictionary<string, string>>(projectConfigFile);
         if (slugValues == null)
         {
             return slugs;
@@ -47,7 +47,7 @@ public static class SlugHelpers
     /// <param name="slugs">The slugs.</param>
     /// <param name="useSlugKeyOrDisplayName">True to use Slug.SlugKey, False to use Slug.DisplayName.</param>
     /// <returns>A dictionary representing the slugs.</returns>
-    public static Dictionary<string, object?> GetSlugValues(List<Slug> slugs, bool useSlugKeyOrDisplayName)
+    public static Dictionary<string, string> GetSlugValues(List<Slug> slugs, bool useSlugKeyOrDisplayName)
     {
         if (useSlugKeyOrDisplayName)
         {
