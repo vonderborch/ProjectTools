@@ -5,6 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -15,11 +17,8 @@
         <OutputPath>release\post\</OutputPath>
     </PropertyGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'">
-        <Exec Command="Powershell Remove-Item -Path '$(ProjectDir)release' -Recurse -Force"/>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="PowerShell Remove-Item -Path '$(ProjectDir)release' -Recurse -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'"/>
+        <Exec Command="pwsh -Command Remove-Item -Path '$(ProjectDir)release' -Recurse -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'"/>
     </Target>
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'">
-        <Exec Command="pwsh -Command Remove-Item -Path '$(ProjectDir)release' -Recurse -Force"/>
-    </Target>
-
 </Project>
