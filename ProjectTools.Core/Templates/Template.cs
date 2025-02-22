@@ -188,7 +188,7 @@ public class Template : AbstractTemplate
             FileName = fileName,
             Arguments = $"\"{script}\"",
             WorkingDirectory = workingDirectory,
-            UseShellExecute = true,
+            UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true
         };

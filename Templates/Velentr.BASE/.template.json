@@ -185,8 +185,10 @@
     "update_or_install_fna.py"
   ],
   "RenameOnlyPaths": [
-    "logo.png",
-    "logo.ico"
+    "*logo.png",
+    "*logo.ico",
+    "*font.xnb",
+    "*Content.mgcb"
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",

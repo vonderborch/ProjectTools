@@ -38,6 +38,11 @@ public class Slug
     ///     The default value for the slug.
     /// </summary>
     public string DefaultValue;
+    
+    /// <summary>
+    ///     A description of the slug.
+    /// </summary>
+    public string Description = string.Empty;
 
     /// <summary>
     ///     The disallowed values for the slug.

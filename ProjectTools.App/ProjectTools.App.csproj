@@ -8,11 +8,8 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyVersion>2.3.0.64</AssemblyVersion>
         <FileVersion>2.3.0.64</FileVersion>
-        <Configurations>Debug;Release</Configurations>
-        <Platforms>AnyCPU</Platforms>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>..\debug\app\</OutputPath>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>AnyCPU;ARM64</Platforms>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <OutputPath>..\release\app\</OutputPath>

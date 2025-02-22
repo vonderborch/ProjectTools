@@ -224,6 +224,22 @@ public class SlugDataContext : ReactiveObject
     }
 
     /// <summary>
+    ///     The description of the current slug.
+    /// </summary>
+    public string CurrentSlugDescription
+    {
+        get => this._currentSlug?.Description ?? string.Empty;
+        set
+        {
+            if (this._currentSlug != null)
+            {
+                this._currentSlug.Description = value;
+                RefreshContext();
+            }
+        }
+    }
+
+    /// <summary>
     ///     The current slug disallowed values.
     /// </summary>
     public string CurrentSlugDisallowedValues

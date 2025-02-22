@@ -35,6 +35,12 @@
                     <TextBox Name="TextBoxDisplayName" Watermark="Display Name"
                              Text="{Binding SlugDataContext.CurrentSlugName}" />
                 </WrapPanel>
+                
+                <WrapPanel>
+                    <TextBlock>Description: </TextBlock>
+                    <TextBox Name="TextBoxDescription" Watermark="Description"
+                             Text="{Binding SlugDataContext.CurrentSlugDescription}" />
+                </WrapPanel>
 
                 <WrapPanel>
                     <TextBlock>Slug Key: </TextBlock>
