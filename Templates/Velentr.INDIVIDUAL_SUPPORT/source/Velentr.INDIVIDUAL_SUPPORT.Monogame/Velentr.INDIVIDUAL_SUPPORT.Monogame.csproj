@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>1.0.0.0</Version>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Velentr.INDIVIDUAL_SUPPORT.Monogame</Title>
+        <Authors>AUTHOR_HERE</Authors>
+        <Description>DESCRIPTION_HERE</Description>
+        <Copyright>COPYRIGHT</Copyright>
+        <PackageProjectUrl>https://github.com/GITHUBUSER_HERE/Velentr.BASE</PackageProjectUrl>
+        <PackageLicenseUrl>LICENSE_HERE</PackageLicenseUrl>
+        <PackageIcon>logo.png</PackageIcon>
+        <RepositoryUrl>https://github.com/GITHUBUSER_HERE/Velentr.BASE</RepositoryUrl>
+        <PackageTags>TAGS_HERE</PackageTags>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <Company>AUTHOR_HERE</Company>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <OutputPath>..\..\debug\monogame\</OutputPath>
+        <DefineConstants>TRACE;MONOGAME</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>..\..\release\monogame\</OutputPath>
+        <DefineConstants>TRACE;MONOGAME</DefineConstants>
+        <DocumentationFile>..\..\release\monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.2.1105">
+            <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\..\logo.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+        <Link>logo.png</Link>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Velentr.INDIVIDUAL_SUPPORT.Core\Velentr.INDIVIDUAL_SUPPORT.Core.csproj" />
+    </ItemGroup>
+    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.projitems" Label="Shared"/>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="PowerShell Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release\$(ProjectName).zip' -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' == 'Windows_NT'"/>
+        <Exec Command="pwsh -Command Compress-Archive -Path '$(TargetDir)*' -DestinationPath '$(SolutionDir)release/$(ProjectName).zip' -Force" Condition="'$(ConfigurationName)' == 'Release' and '$(OS)' != 'Windows_NT'"/>
+    </Target>
+</Project>

@@ -30,7 +30,8 @@ public class SlugConfigurationDataContext : ReactiveObject
         nameof(AllowedValues),
         nameof(DisallowedValues),
         nameof(HasDisallowedValues),
-        nameof(CurrentSlugType)
+        nameof(CurrentSlugType),
+        nameof(CurrentSlugDescription)
     };
 
     private Slug? _currentSlug;
@@ -83,6 +84,11 @@ public class SlugConfigurationDataContext : ReactiveObject
             return string.Join(Environment.NewLine, this._currentSlug.AllowedValues);
         }
     }
+
+    /// <summary>
+    ///     The current slug description.
+    /// </summary>
+    public string CurrentSlugDescription => this._currentSlug?.Description ?? string.Empty;
 
     /// <summary>
     ///     The current slug type.
@@ -176,7 +182,7 @@ public class SlugConfigurationDataContext : ReactiveObject
                 return string.Empty;
             }
 
-            return this._currentSlug.CurrentValue?.ToString() ?? string.Empty;
+            return this._currentSlug.CurrentValue ?? string.Empty;
         }
         set
         {
@@ -321,19 +327,7 @@ public class SlugConfigurationDataContext : ReactiveObject
         var interactiveSlugs = GetSlugs(true);
         for (var i = 0; i < interactiveSlugs.Count; i++)
         {
-            if (interactiveSlugs[i].AllowedValues.Count > 0 &&
-                !interactiveSlugs[i].AllowedValues.Contains(interactiveSlugs[i].CurrentValue))
-            {
-                throw new Exception(
-                    $"The value for the slug '{interactiveSlugs[i].DisplayName}' is not in the allowed values list.");
-            }
-
-            if (interactiveSlugs[i].DisallowedValues.Count > 0 &&
-                interactiveSlugs[i].DisallowedValues.Contains(interactiveSlugs[i].CurrentValue))
-            {
-                throw new Exception(
-                    $"The value for the slug '{interactiveSlugs[i].DisplayName}' is in the disallowed values list.");
-            }
+            interactiveSlugs[i].Validate();
         }
     }
 }

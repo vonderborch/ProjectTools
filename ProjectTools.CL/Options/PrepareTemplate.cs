@@ -1,3 +1,5 @@
+#region
+
 using CommandLine;
 using ProjectTools.CL.Helpers;
 using ProjectTools.CL.MenuSystem;
@@ -6,6 +8,8 @@ using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.TemplateBuilders;
 using ProjectTools.Core.Templates;
+
+#endregion
 
 namespace ProjectTools.CL.Options;
 
@@ -51,6 +55,13 @@ public class PrepareTemplate : AbstractOption
     public string Directory { get; set; } = string.Empty;
 
     /// <summary>
+    ///     Gets or sets a value indicating whether [force override].
+    /// </summary>
+    [Option('f', "force", Required = false, Default = false,
+        HelpText = "If flag is provided, any existing template will be overriden.")]
+    public bool ForceOverride { get; set; }
+
+    /// <summary>
     ///     Gets or sets the output directory.
     /// </summary>
     [Option('o', "output-directory", Required = true, HelpText = "The output directory to place the template into.")]
@@ -79,25 +90,36 @@ public class PrepareTemplate : AbstractOption
     public bool WhatIf { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether [force override].
+    ///     A helper to determine if we should continue editing a slug or not.
     /// </summary>
-    [Option('f', "force", Required = false, Default = false,
-        HelpText = "If flag is provided, any existing template will be overriden.")]
-    public bool ForceOverride { get; set; }
+    /// <param name="slug">The slug.</param>
+    /// <param name="defaultYes">True to say we want to continue editing the slug, False otherwise.</param>
+    /// <returns>True if we want to edit the slug, False otherwise.</returns>
+    private bool ContinueEditingSlug(PreparationSlug slug, bool defaultYes = true)
+    {
+        var contents = JsonHelpers.SerializeToString(slug);
+        LogMessage($" {Environment.NewLine}SLUG{Environment.NewLine}{contents}");
+        return ConsoleHelpers.GetYesNo("Edit slug?", defaultYes);
+    }
 
     /// <summary>
-    ///     Sets the options.
+    ///     A helper to determine if we should continue editing slugs or not.
     /// </summary>
-    /// <param name="option">The option.</param>
-    protected override void SetOptions(AbstractOption option)
+    /// <param name="slugs">The slugs.</param>
+    /// <param name="defaultYes">True to say we want to continue editing the slugs, False otherwise.</param>
+    /// <returns>True if we want to edit the slugs, False otherwise.</returns>
+    private bool ContinueEditingSlugs(List<PreparationSlug> slugs, bool defaultYes = true)
     {
-        var options = (PrepareTemplate)option;
-        this.Directory = options.Directory;
-        this.OutputDirectory = options.OutputDirectory;
-        this.SkipCleaning = options.SkipCleaning;
-        this.TemplateBuilder = options.TemplateBuilder.ToLowerInvariant();
-        this.WhatIf = options.WhatIf;
-        this.ForceOverride = options.ForceOverride;
+        var contents = JsonHelpers.SerializeToString(slugs);
+        LogMessage($" {Environment.NewLine}SLUGS{Environment.NewLine}{contents}");
+        return ConsoleHelpers.GetYesNo("Edit slugs?", defaultYes);
+    }
+
+    private bool ContinueEditingTemplateSettings(PreparationTemplate template, bool defaultYes = true)
+    {
+        var contents = JsonHelpers.SerializeToString(template.GetTemplateWithoutSlugs());
+        LogMessage($" {Environment.NewLine}TEMPLATE INFORMATION{Environment.NewLine}{contents}");
+        return ConsoleHelpers.GetYesNo("Edit template settings?", defaultYes);
     }
 
     /// <summary>
@@ -136,142 +158,6 @@ public class PrepareTemplate : AbstractOption
         Logger coreLogger = new(LogMessage);
         return templater.GenerateTemplate(this.Directory, this.OutputDirectory, this.SkipCleaning, this.ForceOverride,
             template, coreLogger);
-    }
-
-    /// <summary>
-    ///     Validates the command parameters.
-    /// </summary>
-    /// <exception cref="Exception">Raises if a parameter is invalid.</exception>
-    private void ValidateParameters()
-    {
-        if (!System.IO.Directory.Exists(this.Directory))
-        {
-            throw new Exception("Directory specified does not exist!");
-        }
-    }
-
-    /// <summary>
-    ///     Gets the template builder for the preparation of the directory.
-    /// </summary>
-    /// <param name="preparer">The templater engine.</param>
-    /// <returns>A template builder for use in preparation.</returns>
-    /// <exception cref="Exception">Raises if no template builder could be used.</exception>
-    private AbstractTemplateBuilder GetTemplateBuilderForPreparation(Preparer preparer)
-    {
-        var templateBuilderForPrep = preparer.GetTemplateBuilderForOption(this.TemplateBuilder, this.Directory);
-        return templateBuilderForPrep;
-    }
-
-    private (PreparationTemplate, bool) GetTemplateForDirectory(AbstractTemplateBuilder templateBuilder)
-    {
-        // Get the existing template settings file, if it exists
-        var templateSettingsFile = Path.Combine(this.Directory, TemplateConstants.TemplateSettingsFileName);
-        var template = JsonHelpers.DeserializeFromFile<PreparationTemplate>(templateSettingsFile);
-        if (template != null)
-        {
-            if (template.TemplaterVersion < TemplateConstants.MinSupportedTemplateVersion ||
-                template.TemplaterVersion > TemplateConstants.MaxSupportedTemplateVersion)
-            {
-                LogMessage(
-                    $"Template version {template.TemplaterVersion} is not supported. Current supported versions are {TemplateConstants.MinSupportedTemplateVersion} to {TemplateConstants.MaxSupportedTemplateVersion}");
-                template = null;
-            }
-        }
-
-        var hadExistingSettingsFile = template != null;
-        template ??= new PreparationTemplate();
-        template.TemplaterVersion = TemplateConstants.CurrentTemplateVersion;
-
-        // Populate the template builder if it's not already populated
-        if (string.IsNullOrEmpty(template.TemplateBuilder))
-        {
-            template.TemplateBuilder = templateBuilder.NameLowercase;
-        }
-
-        // if we had an existing template file, ask if the user wants to modify it
-        if (hadExistingSettingsFile)
-        {
-            if (!ContinueEditingTemplateSettings(template, false))
-            {
-                return (template, hadExistingSettingsFile);
-            }
-        }
-
-        // Ask user to inputs!
-        do
-        {
-            // Ask for Name
-            template.Name = ConsoleHelpers.GetInput("Template Name", template.Name);
-
-            // Ask for Version
-            template.Version = ConsoleHelpers.GetInput("Template Version", template.Version);
-
-            // Ask for Description
-            template.Description = ConsoleHelpers.GetInput("Template Description", template.Description);
-
-            // Ask for Author
-            template.Author = ConsoleHelpers.GetInput("Template Author", template.Author);
-
-            // Ask for RenameOnlyPaths
-            template.RenameOnlyPaths = ConsoleHelpers.GetStringListInput("Rename-Only Paths", template.RenameOnlyPaths,
-                ",", "comma-separated");
-
-            // Ask for PathsToRemove
-            template.PathsToRemove =
-                ConsoleHelpers.GetStringListInput("Paths to Remove", template.PathsToRemove, ",", "comma-separated");
-
-            // Ask for PrepareExcludedPaths
-            template.PrepareExcludedPaths =
-                ConsoleHelpers.GetStringListInput("Paths Excluded From Template", template.PrepareExcludedPaths, ",",
-                    "comma-separated");
-
-            // Ask for PythonScriptPaths
-            template.PythonScriptPaths = ConsoleHelpers.GetStringListInput("Python Script Paths",
-                template.PythonScriptPaths, ",", "comma-separated");
-
-            // Ask for Instructions
-            template.Instructions =
-                ConsoleHelpers.GetStringListInput("User Instructions", template.Instructions, ",", "comma-separated");
-        } while (ContinueEditingTemplateSettings(template, false));
-
-        return (template, hadExistingSettingsFile);
-    }
-
-    private bool ContinueEditingTemplateSettings(PreparationTemplate template, bool defaultYes = true)
-    {
-        var contents = JsonHelpers.SerializeToString(template.GetTemplateWithoutSlugs());
-        LogMessage($" {Environment.NewLine}TEMPLATE INFORMATION{Environment.NewLine}{contents}");
-        return ConsoleHelpers.GetYesNo("Edit template settings?", defaultYes);
-    }
-
-    private List<PreparationSlug> GetSlugs(List<PreparationSlug> prepSlugs, bool hadExistingTemplate)
-    {
-        // Get the slugs that don't require any input and those that do
-        var slugsWithNoInput = prepSlugs.Where(s => !s.RequiresAnyInput).ToList();
-        var slugsWithInput = prepSlugs.Where(s => s.RequiresAnyInput).ToList();
-        var slugsWithInputBuiltIn = prepSlugs.Where(s => s.RequiresAnyInput && !s.CustomSlug).ToList();
-        var slugsWithInputCustom = prepSlugs.Where(s => s.RequiresAnyInput && s.CustomSlug).ToList();
-
-        // If we had an existing template file, we may have slug info the user may want to stick with...
-        if (hadExistingTemplate)
-        {
-            if (!ContinueEditingSlugs(slugsWithInput, false))
-            {
-                return slugsWithNoInput.CombineLists(slugsWithInput);
-            }
-        }
-
-        // Ask the user for input on the slugs that require it...
-        slugsWithInputBuiltIn = GetBuiltinSlugs(slugsWithInputBuiltIn);
-        slugsWithInputCustom = GetCustomOldSlugs(slugsWithInputCustom);
-
-        // Ask if the user has any additional slugs they want to add...
-        var customSlugs = GetCustomSlugs();
-
-        // Combine the three lists and return!
-        var slugs = slugsWithNoInput.CombineLists(slugsWithInputBuiltIn).CombineLists(slugsWithInputCustom)
-            .CombineLists(customSlugs);
-        return slugs;
     }
 
     /// <summary>
@@ -341,6 +227,7 @@ public class PrepareTemplate : AbstractOption
     /// <returns>The updated slug.</returns>
     private PreparationSlug GetSlugInfo(PreparationSlug slug, bool allowAdjustSlugType)
     {
+        var isValidReason = string.Empty;
         do
         {
             // Slug Display Name
@@ -370,56 +257,200 @@ public class PrepareTemplate : AbstractOption
             else
             {
                 // Slug Default Value, if any
-                var defaultValueDisplay = slug.DefaultValue?.ToString() ?? string.Empty;
+                var defaultValueDisplay = slug.DefaultValue ?? string.Empty;
                 var messageExtra = this._messageExtras[slug.Type];
 
                 var defaultValue =
                     ConsoleHelpers.GetInput($"Slug Default Value{messageExtra}", defaultValueDisplay);
-                slug.DefaultValue = slug.Type.CorrectedValueType(defaultValue);
+                slug.DefaultValue = defaultValue;
 
-                // Slug Allowed Values, if any
-                var allowedValues = ConsoleHelpers.GetStringListInput("Slug Allowed Values", slug.AllowedValues,
-                    ",", "comma-separated");
-                slug.AllowedValues = slug.Type.CorrectedValueType(allowedValues);
+                slug.Description = ConsoleHelpers.GetInput("Slug Description", slug.Description);
 
-                // Slug Disallowed Values, if any
-                var disallowedValues = ConsoleHelpers.GetStringListInput("Slug Disallowed Values",
-                    slug.DisallowedValues,
-                    ",", "comma-separated");
-                slug.DisallowedValues = slug.Type.CorrectedValueType(disallowedValues);
+                // Whether the slug allows empty values or not
+                slug.AllowEmptyValues = ConsoleHelpers.GetYesNo("Allow empty values?", slug.AllowEmptyValues);
+
+                if (slug.Type == SlugType.String)
+                {
+                    // Slug Allowed Values, if any
+                    var allowedValues = ConsoleHelpers.GetStringListInput("Slug Allowed Values", slug.AllowedValues,
+                        ",", "comma-separated");
+                    slug.AllowedValues = allowedValues;
+
+                    // Whether the slug is case-sensitive or not
+                    slug.CaseSensitive = ConsoleHelpers.GetYesNo("Is the slug case-sensitive?", slug.CaseSensitive);
+
+                    // Slug Disallowed Values, if any
+                    var disallowedValues = ConsoleHelpers.GetStringListInput("Slug Disallowed Values",
+                        slug.DisallowedValues,
+                        ",", "comma-separated");
+                    slug.DisallowedValues = disallowedValues;
+                }
 
                 // Slug Requires User Input
                 slug.RequiresUserInput =
                     ConsoleHelpers.GetYesNo("Does the slug require user input?", slug.RequiresUserInput);
             }
-        } while (ContinueEditingSlug(slug, false));
+
+            try
+            {
+                slug.Validate();
+            }
+            catch (Exception ex)
+            {
+                isValidReason = ex.ToString();
+                LogMessage($"Invalid Slug: {isValidReason}");
+            }
+        } while (ContinueEditingSlug(slug, false) || !string.IsNullOrWhiteSpace(isValidReason));
 
         return slug;
     }
 
-    /// <summary>
-    ///     A helper to determine if we should continue editing a slug or not.
-    /// </summary>
-    /// <param name="slug">The slug.</param>
-    /// <param name="defaultYes">True to say we want to continue editing the slug, False otherwise.</param>
-    /// <returns>True if we want to edit the slug, False otherwise.</returns>
-    private bool ContinueEditingSlug(PreparationSlug slug, bool defaultYes = true)
+    private List<PreparationSlug> GetSlugs(List<PreparationSlug> prepSlugs, bool hadExistingTemplate)
     {
-        var contents = JsonHelpers.SerializeToString(slug);
-        LogMessage($" {Environment.NewLine}SLUG{Environment.NewLine}{contents}");
-        return ConsoleHelpers.GetYesNo("Edit slug?", defaultYes);
+        // Get the slugs that don't require any input and those that do
+        var slugsWithNoInput = prepSlugs.Where(s => !s.RequiresAnyInput).ToList();
+        var slugsWithInput = prepSlugs.Where(s => s.RequiresAnyInput).ToList();
+        var slugsWithInputBuiltIn = prepSlugs.Where(s => s.RequiresAnyInput && !s.CustomSlug).ToList();
+        var slugsWithInputCustom = prepSlugs.Where(s => s.RequiresAnyInput && s.CustomSlug).ToList();
+
+        // If we had an existing template file, we may have slug info the user may want to stick with...
+        if (hadExistingTemplate)
+        {
+            if (!ContinueEditingSlugs(slugsWithInput, false))
+            {
+                return slugsWithNoInput.CombineLists(slugsWithInput);
+            }
+        }
+
+        // Ask the user for input on the slugs that require it...
+        slugsWithInputBuiltIn = GetBuiltinSlugs(slugsWithInputBuiltIn);
+        slugsWithInputCustom = GetCustomOldSlugs(slugsWithInputCustom);
+
+        // Ask if the user has any additional slugs they want to add...
+        var customSlugs = GetCustomSlugs();
+
+        // Combine the three lists and return!
+        var slugs = slugsWithNoInput.CombineLists(slugsWithInputBuiltIn).CombineLists(slugsWithInputCustom)
+            .CombineLists(customSlugs);
+        return slugs;
     }
 
     /// <summary>
-    ///     A helper to determine if we should continue editing slugs or not.
+    ///     Gets the template builder for the preparation of the directory.
     /// </summary>
-    /// <param name="slugs">The slugs.</param>
-    /// <param name="defaultYes">True to say we want to continue editing the slugs, False otherwise.</param>
-    /// <returns>True if we want to edit the slugs, False otherwise.</returns>
-    private bool ContinueEditingSlugs(List<PreparationSlug> slugs, bool defaultYes = true)
+    /// <param name="preparer">The templater engine.</param>
+    /// <returns>A template builder for use in preparation.</returns>
+    /// <exception cref="Exception">Raises if no template builder could be used.</exception>
+    private AbstractTemplateBuilder GetTemplateBuilderForPreparation(Preparer preparer)
     {
-        var contents = JsonHelpers.SerializeToString(slugs);
-        LogMessage($" {Environment.NewLine}SLUGS{Environment.NewLine}{contents}");
-        return ConsoleHelpers.GetYesNo("Edit slugs?", defaultYes);
+        var templateBuilderForPrep = preparer.GetTemplateBuilderForOption(this.TemplateBuilder, this.Directory);
+        return templateBuilderForPrep;
+    }
+
+    private (PreparationTemplate, bool) GetTemplateForDirectory(AbstractTemplateBuilder templateBuilder)
+    {
+        // Get the existing template settings file, if it exists
+        var templateSettingsFile = Path.Combine(this.Directory, TemplateConstants.TemplateSettingsFileName);
+        var template = JsonHelpers.DeserializeFromFile<PreparationTemplate>(templateSettingsFile);
+        if (template != null)
+        {
+            if (template.TemplaterVersion < TemplateConstants.MinSupportedTemplateVersion ||
+                template.TemplaterVersion > TemplateConstants.MaxSupportedTemplateVersion)
+            {
+                LogMessage(
+                    $"Template version {template.TemplaterVersion} is not supported. Current supported versions are {TemplateConstants.MinSupportedTemplateVersion} to {TemplateConstants.MaxSupportedTemplateVersion}");
+                template = null;
+            }
+        }
+
+        var hadExistingSettingsFile = template != null;
+        template ??= new PreparationTemplate();
+        template.TemplaterVersion = TemplateConstants.CurrentTemplateVersion;
+
+        // Populate the template builder if it's not already populated
+        if (string.IsNullOrEmpty(template.TemplateBuilder))
+        {
+            template.TemplateBuilder = templateBuilder.NameLowercase;
+        }
+
+        // if we had an existing template file, ask if the user wants to modify it
+        if (hadExistingSettingsFile)
+        {
+            if (!ContinueEditingTemplateSettings(template, false))
+            {
+                return (template, hadExistingSettingsFile);
+            }
+        }
+
+        // Ask user to inputs!
+        do
+        {
+            // Ask for Name
+            template.Name = ConsoleHelpers.GetInput("Template Name", template.Name);
+
+            // Ask for Version
+            template.Version = ConsoleHelpers.GetInput("Template Version", template.Version);
+
+            // Ask for Description
+            template.Description = ConsoleHelpers.GetInput("Template Description", template.Description);
+
+            // Ask for Author
+            template.Author = ConsoleHelpers.GetInput("Template Author", template.Author);
+
+            // Ask for PrepareScripts
+            template.PrepareScripts = ConsoleHelpers.GetStringListInput("Template Preparation Scripts",
+                template.PrepareScripts,
+                ",", "comma-separated");
+
+            // Ask for RenameOnlyPaths
+            template.RenameOnlyPaths = ConsoleHelpers.GetStringListInput("Rename-Only Paths", template.RenameOnlyPaths,
+                ",", "comma-separated");
+
+            // Ask for PathsToRemove
+            template.PathsToRemove =
+                ConsoleHelpers.GetStringListInput("Paths to Remove", template.PathsToRemove, ",", "comma-separated");
+
+            // Ask for PrepareExcludedPaths
+            template.PrepareExcludedPaths =
+                ConsoleHelpers.GetStringListInput("Paths Excluded From Template", template.PrepareExcludedPaths, ",",
+                    "comma-separated");
+
+            // Ask for PythonScriptPaths
+            template.PythonScriptPaths = ConsoleHelpers.GetStringListInput("Python Script Paths",
+                template.PythonScriptPaths, ",", "comma-separated");
+
+            // Ask for Instructions
+            template.Instructions =
+                ConsoleHelpers.GetStringListInput("User Instructions", template.Instructions, ",", "comma-separated");
+        } while (ContinueEditingTemplateSettings(template, false));
+
+        return (template, hadExistingSettingsFile);
+    }
+
+    /// <summary>
+    ///     Sets the options.
+    /// </summary>
+    /// <param name="option">The option.</param>
+    protected override void SetOptions(AbstractOption option)
+    {
+        var options = (PrepareTemplate)option;
+        this.Directory = options.Directory;
+        this.OutputDirectory = options.OutputDirectory;
+        this.SkipCleaning = options.SkipCleaning;
+        this.TemplateBuilder = options.TemplateBuilder.ToLowerInvariant();
+        this.WhatIf = options.WhatIf;
+        this.ForceOverride = options.ForceOverride;
+    }
+
+    /// <summary>
+    ///     Validates the command parameters.
+    /// </summary>
+    /// <exception cref="Exception">Raises if a parameter is invalid.</exception>
+    private void ValidateParameters()
+    {
+        if (!System.IO.Directory.Exists(this.Directory))
+        {
+            throw new Exception("Directory specified does not exist!");
+        }
     }
 }

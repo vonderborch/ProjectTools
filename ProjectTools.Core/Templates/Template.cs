@@ -1,7 +1,6 @@
 #region
 
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Scripting;
@@ -74,63 +73,39 @@ public class Template : AbstractTemplate
         }
 
         // Step 1 - Create destination directory
-        logger.Log("Step 1/5: Creating directory...");
+        logger.Log("Step 1/6: Creating directory...");
         Directory.CreateDirectory(outputDirectory);
         logger.Log("Directory created.", 2);
 
         // Step 2 - Unzip the template
-        logger.Log($"Step 2/5: Unzipping template {this.SafeName}...");
+        logger.Log($"Step 2/6: Unzipping template {this.SafeName}...");
         IOHelpers.UnzipDirectory(outputDirectory, pathToTemplate, TemplateConstants.GeneratedProjectExcludedFileNames,
             false);
         logger.Log("Template unzipped!", 1);
 
         // Step 3 - Update the files
-        logger.Log("Step 3/5: Updating file system objects...");
+        logger.Log("Step 3/6: Updating file system objects...");
         UpdateFiles(outputDirectory, outputDirectory);
         logger.Log("Files updated!", 2);
 
         // Step 4 - Run scripts (C# SCRIPT TIME!?)
-        logger.Log("Step 4/5: Running scripts...");
+        logger.Log("Step 4/6: Running scripts...");
         List<string> instructions = new();
         if (this.PythonScriptPaths.Count > 0)
         {
             foreach (var scriptPath in this.PythonScriptPaths.Where(x => !string.IsNullOrWhiteSpace(x)))
             {
-                var script = Path.Combine(outputDirectory, scriptPath);
-                try
+                commandLogger.Log($"Executing Script {scriptPath}...", 2);
+                var (success, exception) =
+                    PythonManager.Manager.ExecuteScript(outputDirectory, scriptPath, commandLogger, 2);
+                if (success)
                 {
-                    commandLogger.Log($"Executing Script {scriptPath}...", 2);
-                    var startInfo = GetProcessStartInfo(PythonManager.Manager.PythonExecutable, $"{script}",
-                        outputDirectory);
-                    using Process proc = new();
-                    proc.StartInfo = startInfo;
-                    proc.Start();
-                    proc.WaitForExit();
-
-                    using var outputStream = proc.StandardOutput;
-                    commandLogger.Log("Output Stream:", 4);
-                    var line = outputStream.ReadLine();
-                    while (line != null)
-                    {
-                        commandLogger.Log(line, 6);
-                        line = outputStream.ReadLine();
-                    }
-
-                    using var errorStream = proc.StandardError;
-                    commandLogger.Log("Output Error Stream:", 4);
-                    line = errorStream.ReadLine();
-                    while (line != null)
-                    {
-                        commandLogger.Log(line, 6);
-                        line = errorStream.ReadLine();
-                    }
-
                     commandLogger.Log("Script Executed!", 4);
                 }
-                catch (Exception e)
+                else
                 {
-                    commandLogger.Log($"Error running script {scriptPath}: {e.Message}", 4);
-                    instructions.Add($"Run script: {script}");
+                    commandLogger.Log($"Error running script {scriptPath}: {exception?.Message}", 4);
+                    instructions.Add($"Run script: {Path.Combine(outputDirectory, scriptPath)}");
                 }
             }
         }
@@ -140,7 +115,7 @@ public class Template : AbstractTemplate
         }
 
         // Step 5 - List instructions
-        logger.Log("Step 5/5: Listing instructions...");
+        logger.Log("Step 5/6: Listing instructions...");
         instructions = instructions.CombineLists(this.Instructions);
         if (instructions.Count > 0)
         {
@@ -154,44 +129,30 @@ public class Template : AbstractTemplate
             logger.Log("No instructions to display!", 2);
         }
 
+        // Step 6 - Cleanup
+        logger.Log("Step 6/6: Cleaning template...");
+        if (this.PathsToRemove.Count > 0)
+        {
+            foreach (var path in this.PathsToRemove)
+            {
+                var actualPath = Path.Combine(outputDirectory, path);
+                if (Directory.Exists(actualPath))
+                {
+                    IOHelpers.DeleteDirectoryIfExists(actualPath);
+                }
+                else if (File.Exists(actualPath))
+                {
+                    IOHelpers.DeleteFileIfExists(actualPath);
+                }
+            }
+        }
+        logger.Log("Cleaning complete!", 2);
+
         // DONE!
         logger.Log("Work complete!");
         var totalTime = DateTime.Now - startTime;
         return
             $"Successfully prepared created the solution in {totalTime.TotalSeconds:0.00} second(s): {outputDirectory}";
-    }
-
-    /// <summary>
-    ///     Gets the process start info.
-    /// </summary>
-    /// <param name="fileName">The executable's file name.</param>
-    /// <param name="script">The script to execute.</param>
-    /// <param name="workingDirectory">The working directory.</param>
-    /// <returns>The start info.</returns>
-    public ProcessStartInfo GetProcessStartInfo(string fileName, string script, string workingDirectory)
-    {
-        if (EnvironmentHelpers.OS == OSPlatform.Windows)
-        {
-            return new ProcessStartInfo
-            {
-                FileName = fileName,
-                Arguments = $"\"{script}\"",
-                WorkingDirectory = workingDirectory,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-        }
-
-        return new ProcessStartInfo
-        {
-            FileName = fileName,
-            Arguments = $"\"{script}\"",
-            WorkingDirectory = workingDirectory,
-            UseShellExecute = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
-        };
     }
 
     /// <summary>
@@ -203,7 +164,7 @@ public class Template : AbstractTemplate
         if (this._slugValuesCache == null)
         {
             this._slugValuesCache =
-                this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.Type.ObjectToString(s.CurrentValue));
+                this.Slugs.ToDictionary(s => s.ActualSlugKey, s => s.CurrentValue);
         }
 
         return this._slugValuesCache;

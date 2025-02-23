@@ -1,3 +1,5 @@
+#region
+
 using System.Text;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.GZip;
@@ -6,22 +8,12 @@ using ICSharpCode.SharpZipLib.Zip;
 using ProjectTools.Core.Constants;
 using ZipFile = System.IO.Compression.ZipFile;
 
+#endregion
+
 namespace ProjectTools.Core.Helpers;
 
 public static class IOHelpers
 {
-    public static string GetFileSystemSafeString(string str)
-    {
-        var safeStr = str;
-        safeStr = safeStr.Replace(" ", "_");
-        foreach (var c in Path.GetInvalidFileNameChars())
-        {
-            safeStr = safeStr.Replace(c, '-');
-        }
-
-        return safeStr;
-    }
-
     /// <summary>
     ///     Archives a directory.
     /// </summary>
@@ -65,30 +57,6 @@ public static class IOHelpers
             }
 
             throw new Exception($"Could not delete directory: {directoryToArchive}");
-        }
-    }
-
-    /// <summary>
-    ///     Deletes the file if it exists.
-    /// </summary>
-    /// <param name="file">The file.</param>
-    public static void DeleteFileIfExists(string file)
-    {
-        if (File.Exists(file))
-        {
-            File.Delete(file);
-        }
-    }
-
-    /// <summary>
-    ///     Deletes the directory if it exists.
-    /// </summary>
-    /// <param name="file">The directory.</param>
-    public static void DeleteDirectoryIfExists(string file)
-    {
-        if (Directory.Exists(file))
-        {
-            Directory.Delete(file, true);
         }
     }
 
@@ -140,9 +108,50 @@ public static class IOHelpers
     /// <param name="source">The source.</param>
     /// <param name="destination">The destination.</param>
     /// <param name="excludedDirectories">The excluded directories.</param>
-    public static void CopyDirectory(string source, string destination, List<string> excludedDirectories)
+    /// <param name="excludedFiles">The excluded files.</param>
+    public static void CopyDirectory(string source, string destination, List<string> excludedDirectories,
+        List<string> excludedFiles)
     {
-        CopyDirectoryHelper(source, source, destination, excludedDirectories);
+        CopyDirectoryHelper(source, source, destination, excludedDirectories, excludedFiles);
+    }
+
+    /// <summary>
+    ///     Copies the directory helper.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="rootSource">The root source directory.</param>
+    /// <param name="destination">The destination.</param>
+    /// <param name="excludedDirectories">The excluded directories.</param>
+    /// <param name="excludedFiles">The excluded files.</param>
+    private static void CopyDirectoryHelper(string source, string rootSource, string destination,
+        List<string> excludedDirectories, List<string> excludedFiles)
+    {
+        CreateDirectoryIfNotExists(destination);
+
+        // Copy over items
+        var files = Directory.GetFiles(source)
+            .Where(f => Path.GetFileName(f) != TemplateConstants.TemplateSettingsFileName).ToList();
+        foreach (var file in files)
+        {
+            if (!PathHelpers.PathIsInList(file, rootSource, excludedFiles, true))
+            {
+                var path = Path.Combine(destination, Path.GetFileName(file));
+
+                SafeCopyFile(file, path);
+            }
+        }
+
+        // Copy over sub-directories
+        var directories = Directory.GetDirectories(source);
+        foreach (var directory in directories)
+        {
+            if (!PathHelpers.PathIsInList(directory, rootSource, excludedDirectories, true))
+            {
+                var dirName = Path.GetFileName(directory);
+                var path = Path.Combine(destination, dirName);
+                CopyDirectoryHelper(directory, rootSource, path, excludedDirectories, excludedFiles);
+            }
+        }
     }
 
     /// <summary>
@@ -154,6 +163,47 @@ public static class IOHelpers
         if (!Directory.Exists(directory))
         {
             _ = Directory.CreateDirectory(directory);
+        }
+    }
+
+    /// <summary>
+    ///     Unzips the tar file.
+    /// </summary>
+    /// <param name="archiveFile">The archive file.</param>
+    /// <param name="outputDirectory">The output directory.</param>
+    public static void DecompressTarball(Stream archiveFile, string outputDirectory)
+    {
+        CreateDirectoryIfNotExists(outputDirectory);
+        Stream gzipStream = new GZipInputStream(archiveFile);
+
+        var tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+        tarArchive.ExtractContents(outputDirectory);
+        tarArchive.Close();
+
+        gzipStream.Close();
+    }
+
+    /// <summary>
+    ///     Deletes the directory if it exists.
+    /// </summary>
+    /// <param name="file">The directory.</param>
+    public static void DeleteDirectoryIfExists(string file)
+    {
+        if (Directory.Exists(file))
+        {
+            Directory.Delete(file, true);
+        }
+    }
+
+    /// <summary>
+    ///     Deletes the file if it exists.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    public static void DeleteFileIfExists(string file)
+    {
+        if (File.Exists(file))
+        {
+            File.Delete(file);
         }
     }
 
@@ -189,21 +239,46 @@ public static class IOHelpers
         return contents;
     }
 
-    /// <summary>
-    ///     Unzips the tar file.
-    /// </summary>
-    /// <param name="archiveFile">The archive file.</param>
-    /// <param name="outputDirectory">The output directory.</param>
-    public static void DecompressTarball(Stream archiveFile, string outputDirectory)
+    public static string GetFileSystemSafeString(string str)
     {
-        CreateDirectoryIfNotExists(outputDirectory);
-        Stream gzipStream = new GZipInputStream(archiveFile);
+        var safeStr = str;
+        safeStr = safeStr.Replace(" ", "_");
+        foreach (var c in Path.GetInvalidFileNameChars())
+        {
+            safeStr = safeStr.Replace(c, '-');
+        }
 
-        var tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
-        tarArchive.ExtractContents(outputDirectory);
-        tarArchive.Close();
+        return safeStr;
+    }
 
-        gzipStream.Close();
+    /// <summary>
+    ///     Copies a file with retries.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="destination">The destination.</param>
+    /// <param name="numTries">The number tries.</param>
+    /// <param name="sleepTime">The sleep time.</param>
+    private static void SafeCopyFile(string source, string destination, int numTries = 3, int sleepTime = 500)
+    {
+        if (source == destination)
+        {
+            return;
+        }
+
+        for (var i = 0; i < numTries; i++)
+        {
+            try
+            {
+                File.Copy(source, destination, true);
+                return;
+            }
+            catch
+            {
+                Thread.Sleep(sleepTime);
+            }
+        }
+
+        throw new Exception($"Could not copy directory '{source}' to destination '{destination}'");
     }
 
     /// <summary>
@@ -257,70 +332,5 @@ public static class IOHelpers
                 }
             }
         }
-    }
-
-    /// <summary>
-    ///     Copies the directory helper.
-    /// </summary>
-    /// <param name="source">The source.</param>
-    /// <param name="rootSource">The root source directory.</param>
-    /// <param name="destination">The destination.</param>
-    /// <param name="excludedDirectories">The excluded directories.</param>
-    private static void CopyDirectoryHelper(string source, string rootSource, string destination,
-        List<string> excludedDirectories)
-    {
-        CreateDirectoryIfNotExists(destination);
-
-        // Copy over items
-        var files = Directory.GetFiles(source)
-            .Where(f => Path.GetFileName(f) != TemplateConstants.TemplateSettingsFileName).ToList();
-        foreach (var file in files)
-        {
-            var path = Path.Combine(destination, Path.GetFileName(file));
-
-            SafeCopyFile(file, path);
-        }
-
-        // Copy over sub-directories
-        var directories = Directory.GetDirectories(source);
-        foreach (var directory in directories)
-        {
-            if (!PathHelpers.PathIsInList(directory, rootSource, excludedDirectories, true))
-            {
-                var dirName = Path.GetFileName(directory);
-                var path = Path.Combine(destination, dirName);
-                CopyDirectoryHelper(directory, rootSource, path, excludedDirectories);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Copies a file with retries.
-    /// </summary>
-    /// <param name="source">The source.</param>
-    /// <param name="destination">The destination.</param>
-    /// <param name="numTries">The number tries.</param>
-    /// <param name="sleepTime">The sleep time.</param>
-    private static void SafeCopyFile(string source, string destination, int numTries = 3, int sleepTime = 500)
-    {
-        if (source == destination)
-        {
-            return;
-        }
-
-        for (var i = 0; i < numTries; i++)
-        {
-            try
-            {
-                File.Copy(source, destination, true);
-                return;
-            }
-            catch
-            {
-                Thread.Sleep(sleepTime);
-            }
-        }
-
-        throw new Exception($"Could not copy directory '{source}' to destination '{destination}'");
     }
 }

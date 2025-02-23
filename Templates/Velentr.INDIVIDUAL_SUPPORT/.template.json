@@ -1,0 +1,226 @@
+{
+  "PrepareScripts": [
+    "prepare_template.py"
+  ],
+  "Slugs": [
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "Velentr.INDIVIDUAL_SUPPORT"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "[[ParentDirectoryName]].[[ProjectName]]",
+      "Description": "The name of the solution.",
+      "DisallowedValues": [],
+      "DisplayName": "Solution Name",
+      "RequiresUserInput": true,
+      "SlugKey": "SolutionName",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "AUTHOR_HERE"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "[[CurrentUserName]]",
+      "Description": "The author of the new solution.",
+      "DisallowedValues": [],
+      "DisplayName": "Author",
+      "RequiresUserInput": true,
+      "SlugKey": "Author",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "DESCRIPTION_HERE"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "My library",
+      "Description": "A description of the solution.",
+      "DisallowedValues": [],
+      "DisplayName": "Description",
+      "RequiresUserInput": true,
+      "SlugKey": "Description",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "VERSION_HERE",
+        "1.0.0.0"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "1.0.0.0",
+      "Description": "The starting version of the solution.",
+      "DisallowedValues": [],
+      "DisplayName": "Version",
+      "RequiresUserInput": true,
+      "SlugKey": "Version",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "COPYRIGHT_HERE"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "(c) [[CurrentYear]]",
+      "Description": "The copyright information for the solution.",
+      "DisallowedValues": [],
+      "DisplayName": "Copyright",
+      "RequiresUserInput": true,
+      "SlugKey": "Copyright",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "LICENSE_HERE"
+      ],
+      "AllowedValues": [
+        "AFL-3.0",
+        "Apache-2.0",
+        "Artistic-2.0",
+        "BSL-1.0",
+        "BSD-2-Clause",
+        "BSD-3-Clause",
+        "BSD-3-Clause-Clear",
+        "BSD-4-Clause",
+        "0BSD",
+        "CC",
+        "CC0-1.0",
+        "CC-BY-4.0",
+        "CC-BY-SA-4.0",
+        "WTFPL",
+        "ECL-2.0",
+        "EPL-1.0",
+        "EPL-2.0",
+        "EUPL-1.1",
+        "AGPL-3.0",
+        "GPL",
+        "GPL-2.0",
+        "GPL-3.0",
+        "LGPL",
+        "LGPL-2.1",
+        "LGPL-3.0",
+        "ISC",
+        "LPPL-1.3c",
+        "MS-PL",
+        "MIT",
+        "MPL-2.0",
+        "OSL-3.0",
+        "PostgreSQL",
+        "OFL-1.1",
+        "NCSA",
+        "Unlicense",
+        "Zlib"
+      ],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "MIT",
+      "Description": "The license for the solution.",
+      "DisallowedValues": [],
+      "DisplayName": "License",
+      "RequiresUserInput": true,
+      "SlugKey": "License",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "TAGS_HERE"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "[[ParentDirectoryName]]",
+      "Description": "Tags for the solution\u0027s nuget package.",
+      "DisallowedValues": [],
+      "DisplayName": "Tags",
+      "RequiresUserInput": true,
+      "SlugKey": "Tags",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "GITHUBUSER_HERE"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "[[CurrentUserName]]",
+      "Description": "The github username of the author of the solution.",
+      "DisallowedValues": [],
+      "DisplayName": "Github User",
+      "RequiresUserInput": true,
+      "SlugKey": "GithubUser",
+      "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "GITPERSONALACCESSTOKEN_HERE"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "VALID_ACCESS_TOKEN",
+      "Description": "A Github Personal Access Token with Actions (read) scope.",
+      "DisallowedValues": [],
+      "DisplayName": "Github Personal Access Token",
+      "RequiresUserInput": true,
+      "SlugKey": "GitPersonalAccessToken",
+      "Type": "String"
+    }
+  ],
+  "Author": "Christian Webber",
+  "Description": "A library for an XNA derived framework that requires specific support for particular frameworks (i.e. FNA, Monogame).",
+  "Instructions": [],
+  "Name": "Velentr.INDIVIDUAL_SUPPORT",
+  "PathsToRemove": [
+    "prepare_template.py"
+  ],
+  "PrepareExcludedPaths": [
+    "*bin/",
+    "*obj/",
+    "*.vs/",
+    "*.git/",
+    "*release/",
+    "*debug/",
+    "*.fna/"
+  ],
+  "PythonScriptPaths": [
+    "update_or_install_fna.py"
+  ],
+  "RenameOnlyPaths": [
+    "*logo.png",
+    "*logo.ico",
+    "*font.xnb",
+    "*Content.mgcb"
+  ],
+  "TemplateBuilder": "",
+  "TemplaterVersion": "1.0.0",
+  "Version": "2025-02-23"
+}

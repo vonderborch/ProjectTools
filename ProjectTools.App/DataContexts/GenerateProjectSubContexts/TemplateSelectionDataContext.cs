@@ -58,7 +58,7 @@ public class TemplateSelectionDataContext : ReactiveObject
         this._selectedTemplateName = string.Empty;
 
         var localTemplates = new LocalTemplates();
-        this._availableTemplates = localTemplates.Templates.ToDictionary(x => x.Name);
+        this._availableTemplates = localTemplates.Templates.ToDictionary(x => x.DisplayName);
         this.AvailableTemplateNames = this._availableTemplates.Keys.Order().ToList();
         this.SelectedTemplateName = this.AvailableTemplateNames.FirstOrDefault() ?? string.Empty;
     }
@@ -119,7 +119,7 @@ public class TemplateSelectionDataContext : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref this._selectedTemplateName, value);
-            if (this._availableTemplates.TryGetValue(value, out var templateInfo))
+            if (value is not null && this._availableTemplates.TryGetValue(value, out var templateInfo))
             {
                 this._selectedTemplate = templateInfo;
             }
@@ -138,7 +138,7 @@ public class TemplateSelectionDataContext : ReactiveObject
     public void Refresh()
     {
         var localTemplates = new LocalTemplates();
-        this._availableTemplates = localTemplates.Templates.ToDictionary(x => x.Name);
+        this._availableTemplates = localTemplates.Templates.ToDictionary(x => x.DisplayName);
         this.AvailableTemplateNames = this._availableTemplates.Keys.Order().ToList();
         this.SelectedTemplateName = this.AvailableTemplateNames.FirstOrDefault() ?? string.Empty;
         UpdateProperties();

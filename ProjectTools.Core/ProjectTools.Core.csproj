@@ -4,9 +4,11 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>2.2.1</AssemblyVersion>
-        <FileVersion>2.2.1</FileVersion>
+        <AssemblyVersion>2.3.0.65</AssemblyVersion>
+        <FileVersion>2.3.0.65</FileVersion>
         <LangVersion>latestmajor</LangVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -15,6 +17,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <OutputPath>..\release\core\</OutputPath>
+        <DocumentationFile>..\release\core\ProjectTools.Core.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,10 +30,6 @@
         <EmbeddedResource Include="Scripting\cpython-3.12.8+20241206-x86_64-apple-darwin-install_only.tar.gz"/>
         <EmbeddedResource Include="Scripting\cpython-3.12.8+20241206-x86_64-pc-windows-msvc-shared-install_only.tar.gz"/>
         <EmbeddedResource Include="Scripting\cpython-3.12.8+20241206-x86_64_v2-unknown-linux-gnu-install_only.tar.gz"/>
-        <None Remove="PythonVersions\cpython-3.12.8+20241206-aarch64-apple-darwin-install_only.tar.gz"/>
-        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64-apple-darwin-install_only.tar.gz"/>
-        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64-pc-windows-msvc-shared-install_only.tar.gz"/>
-        <None Remove="PythonVersions\cpython-3.12.8+20241206-x86_64_v2-unknown-linux-gnu-install_only.tar.gz"/>
     </ItemGroup>
 
 </Project>

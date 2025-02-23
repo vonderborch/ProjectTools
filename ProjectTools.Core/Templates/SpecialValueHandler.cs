@@ -42,16 +42,9 @@ public class SpecialValueHandler
 
         // Computer specific special values
         this._specialValues[SlugType.String]["[[CurrentUserName]]"] = Environment.UserName;
-    }
 
-    /// <summary>
-    ///     Get all special keywords for a specific slug type.
-    /// </summary>
-    /// <param name="type">The slug type.</param>
-    /// <returns>The special keywords.</returns>
-    public List<string> GetSpecialKeywords(SlugType type)
-    {
-        return this._specialValues[type].Keys.ToList();
+        // Other special values
+        this._specialValues[SlugType.String]["[[CurrentYear]]"] = DateTime.Now.Year.ToString();
     }
 
     /// <summary>
@@ -66,10 +59,10 @@ public class SpecialValueHandler
             switch (slug.Type)
             {
                 case SlugType.RandomGuid:
-                    slug.DefaultValue = Guid.NewGuid();
+                    slug.DefaultValue = Guid.NewGuid().ToString();
                     break;
                 case SlugType.String:
-                    var strValue = slug.DefaultValue?.ToString() ?? string.Empty;
+                    var strValue = slug.DefaultValue;
                     foreach (var (key, value) in this._specialValues[slug.Type])
                     {
                         strValue = strValue.Replace(key, value);
@@ -83,5 +76,15 @@ public class SpecialValueHandler
         }
 
         return slug;
+    }
+
+    /// <summary>
+    ///     Get all special keywords for a specific slug type.
+    /// </summary>
+    /// <param name="type">The slug type.</param>
+    /// <returns>The special keywords.</returns>
+    public List<string> GetSpecialKeywords(SlugType type)
+    {
+        return this._specialValues[type].Keys.ToList();
     }
 }

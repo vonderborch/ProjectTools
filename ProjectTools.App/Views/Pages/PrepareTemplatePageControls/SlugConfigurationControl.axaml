@@ -35,11 +35,23 @@
                     <TextBox Name="TextBoxDisplayName" Watermark="Display Name"
                              Text="{Binding SlugDataContext.CurrentSlugName}" />
                 </WrapPanel>
+                
+                <WrapPanel>
+                    <TextBlock>Description: </TextBlock>
+                    <TextBox Name="TextBoxDescription" Watermark="Description"
+                             Text="{Binding SlugDataContext.CurrentSlugDescription}" />
+                </WrapPanel>
 
                 <WrapPanel>
                     <TextBlock>Slug Key: </TextBlock>
                     <TextBox Name="TextBoxSlugKey" Watermark="Slug Key"
                              Text="{Binding SlugDataContext.CurrentSlugKey}" />
+                </WrapPanel>
+
+                <WrapPanel>
+                    <TextBlock>Slug Search Strings: </TextBlock>
+                    <TextBox Name="TextBoxSearchStrings" Watermark="Slug Search Strings (new-line-separated)"
+                             AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugSearchStrings}" />
                 </WrapPanel>
 
                 <WrapPanel Name="PanelSlugType" IsEnabled="{Binding SlugDataContext.CurrentSlugEnableSlugTypePanel}">
@@ -49,18 +61,12 @@
                               SelectedItem="{Binding SlugDataContext.CurrentSlugSelectedType}" />
                 </WrapPanel>
 
-                <WrapPanel>
-                    <TextBlock>Slug Search Strings: </TextBlock>
-                    <TextBox Name="TextBoxSearchStrings" Watermark="Slug Search Strings (new-line-separated)"
-                             AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugSearchStrings}" />
-                </WrapPanel>
-
                 <WrapPanel Name="PanelNonGuidOptions"
                            IsVisible="{Binding SlugDataContext.NonGuidOptionsPanelEnabled}"
                            Orientation="Vertical">
                     <WrapPanel>
                         <TextBlock>Slug Type Special Values: </TextBlock>
-                        <SelectableTextBlock Name="TextBoxSpecialValues" IsEnabled="False"
+                        <SelectableTextBlock Name="TextBoxSpecialValues"
                                              Text="{Binding SlugDataContext.SlugTypeSpecialValues}" />
                     </WrapPanel>
 
@@ -71,15 +77,28 @@
                     </WrapPanel>
 
                     <WrapPanel>
+                        <CheckBox Content="Allow Empty Strings/Values" Name="CheckBoxAllowEmptyValues"
+                                  IsChecked="{Binding SlugDataContext.CurrentSlugAllowEmptyValues}" />
+                    </WrapPanel>
+
+                    <WrapPanel>
                         <TextBlock>Slug Allowed Values: </TextBlock>
                         <TextBox Name="TextBoxAllowedValues" Watermark="Slug Allowed Values (new-line-separated)"
-                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugAllowedValues}" />
+                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugAllowedValues}"
+                                 IsVisible="{Binding SlugDataContext.CurrentSlugIsStringType}" />
                     </WrapPanel>
 
                     <WrapPanel>
                         <TextBlock>Slug Disallowed Values: </TextBlock>
                         <TextBox Name="TextBoxDisallowedValues" Watermark="Slug Disallowed Values (new-line-separated)"
-                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugDisallowedValues}" />
+                                 AcceptsReturn="True" Text="{Binding SlugDataContext.CurrentSlugDisallowedValues}"
+                                 IsVisible="{Binding SlugDataContext.CurrentSlugIsStringType}" />
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <CheckBox Content="Allowed/Disallowed Values Are Case Sensitive" Name="CheckBoxCaseSensitivity"
+                                  IsChecked="{Binding SlugDataContext.CurrentSlugIsCaseSensitive}"
+                                  IsVisible="{Binding SlugDataContext.CurrentSlugIsStringType}" />
                     </WrapPanel>
 
                     <CheckBox Name="CheckBoxRequiresUserInput"

@@ -1,4 +1,8 @@
+#region
+
 using ProjectTools.Core.Templates;
+
+#endregion
 
 namespace ProjectTools.CL.Helpers;
 
@@ -7,6 +11,20 @@ namespace ProjectTools.CL.Helpers;
 /// </summary>
 public static class ConsoleHelpers
 {
+    /// <summary>
+    ///     Gets the input for an enum.
+    /// </summary>
+    /// <param name="message">A message to display to the user.</param>
+    /// <param name="defaultValue">The default value, if any.</param>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <returns>The user's selected value.</returns>
+    public static T GetEnumInput<T>(string message, T defaultValue = default) where T : Enum
+    {
+        var allowedValues = Enum.GetNames(typeof(T)).ToList();
+        var input = GetInputWithLimit(message, allowedValues, defaultValue.ToString());
+        return (T)Enum.Parse(typeof(T), input);
+    }
+
     /// <summary>
     ///     Gets the input.
     /// </summary>
@@ -41,11 +59,10 @@ public static class ConsoleHelpers
     /// <param name="defaultValue">The default value.</param>
     /// <param name="displayValue">The display value.</param>
     /// <returns>The user's input.</returns>
-    public static object? GetInput(string message, SlugType slugType, object? defaultValue, string displayValue = "")
+    public static string GetInput(string message, SlugType slugType, string defaultValue, string displayValue = "")
     {
         // determine the message to the user
-        var actualDefaultValue = slugType.ObjectToString(defaultValue);
-        var actualDisplayValue = string.IsNullOrWhiteSpace(displayValue) ? actualDefaultValue : displayValue;
+        var actualDisplayValue = string.IsNullOrWhiteSpace(displayValue) ? defaultValue : displayValue;
 
         if (!string.IsNullOrWhiteSpace(actualDisplayValue))
         {
@@ -58,9 +75,74 @@ public static class ConsoleHelpers
         Console.Write(message);
         var input = Console.ReadLine();
 
-        var output = string.IsNullOrWhiteSpace(input) ? actualDefaultValue : input;
-        var finalOutput = slugType.CorrectedValueType(output);
-        return finalOutput;
+        var output = string.IsNullOrWhiteSpace(input) ? defaultValue : input;
+        return output;
+    }
+
+    /// <summary>
+    ///     Gets the input for an enum.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="allowedValues">The list of allowed values.</param>
+    /// <param name="defaultValue">The default value.</param>
+    /// <param name="displayValue">The display value.</param>
+    /// <returns>The user's input.</returns>
+    public static string GetInputWithLimit(string message, List<string> allowedValues, string defaultValue = "",
+        string displayValue = "")
+    {
+        // determine the message to the user
+        var actualDisplayValue = string.IsNullOrWhiteSpace(displayValue) ? defaultValue : displayValue;
+        if (!string.IsNullOrWhiteSpace(actualDisplayValue))
+        {
+            actualDisplayValue = $" ({actualDisplayValue})";
+        }
+
+        var allowedValuesDisplay = string.Join(", ", allowedValues);
+        message = $"{message} (Allowed Values: {allowedValuesDisplay}){actualDisplayValue}: ";
+
+        // get the user's input for the message
+        string output;
+        do
+        {
+            Console.Write(message);
+            var input = Console.ReadLine();
+
+            output = string.IsNullOrWhiteSpace(input) ? defaultValue : input;
+        } while (!allowedValues.Contains(output));
+
+        return output;
+    }
+
+    /// <summary>
+    ///     Gets the input for a string list.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="defaultValue">The default value.</param>
+    /// <param name="separatorChar">The separator character string.</param>
+    /// <param name="separatorMessage">The separator message.</param>
+    /// <returns>The string list.</returns>
+    public static List<string> GetStringListInput(string message, List<string> defaultValue, string separatorChar,
+        string separatorMessage)
+    {
+        var partsString = string.Join(separatorChar, defaultValue);
+        var outputString = GetInput($"{message} ({separatorMessage})", partsString);
+        return outputString.Split(separatorChar, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .ToList();
+    }
+
+    /// <summary>
+    ///     Gets the input for a string list.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="defaultValue">The default value.</param>
+    /// <param name="separatorChar">The separator character string.</param>
+    /// <param name="separatorMessage">The separator message.</param>
+    /// <returns>The string list.</returns>
+    public static List<string> GetStringListInput(string message, List<object?> defaultValue, string separatorChar,
+        string separatorMessage)
+    {
+        List<string> parts = defaultValue.Select(x => x.ToString()).ToList();
+        return GetStringListInput(message, parts, separatorChar, separatorMessage);
     }
 
     public static Dictionary<string, string> GetStringStringDictionaryInput(string message,
@@ -114,85 +196,6 @@ public static class ConsoleHelpers
         return defaultValue;
     }
 
-    private static string StringStringDictionaryToString(Dictionary<string, string> value, string keyValueSeparator,
-        string itemSeparator)
-    {
-        List<string> partsString = new();
-        foreach (var (k, v) in value)
-        {
-            partsString.Add($"{k}{keyValueSeparator}{v}");
-        }
-
-        var outputString = string.Join(itemSeparator, partsString);
-        return outputString;
-    }
-
-    /// <summary>
-    ///     Gets the input for a string list.
-    /// </summary>
-    /// <param name="message">The message.</param>
-    /// <param name="defaultValue">The default value.</param>
-    /// <param name="separatorChar">The separator character string.</param>
-    /// <param name="separatorMessage">The separator message.</param>
-    /// <returns>The string list.</returns>
-    public static List<string> GetStringListInput(string message, List<string> defaultValue, string separatorChar,
-        string separatorMessage)
-    {
-        var partsString = string.Join(separatorChar, defaultValue);
-        var outputString = GetInput($"{message} ({separatorMessage})", partsString);
-        return outputString.Split(separatorChar, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-            .ToList();
-    }
-
-    /// <summary>
-    ///     Gets the input for a string list.
-    /// </summary>
-    /// <param name="message">The message.</param>
-    /// <param name="defaultValue">The default value.</param>
-    /// <param name="separatorChar">The separator character string.</param>
-    /// <param name="separatorMessage">The separator message.</param>
-    /// <returns>The string list.</returns>
-    public static List<string> GetStringListInput(string message, List<object?> defaultValue, string separatorChar,
-        string separatorMessage)
-    {
-        List<string> parts = defaultValue.Select(x => x.ToString()).ToList();
-        return GetStringListInput(message, parts, separatorChar, separatorMessage);
-    }
-
-    /// <summary>
-    ///     Gets the input for an enum.
-    /// </summary>
-    /// <param name="message">The message.</param>
-    /// <param name="allowedValues">The list of allowed values.</param>
-    /// <param name="defaultValue">The default value.</param>
-    /// <param name="displayValue">The display value.</param>
-    /// <returns>The user's input.</returns>
-    public static string GetInputWithLimit(string message, List<string> allowedValues, string defaultValue = "",
-        string displayValue = "")
-    {
-        // determine the message to the user
-        var actualDisplayValue = string.IsNullOrWhiteSpace(displayValue) ? defaultValue : displayValue;
-        if (!string.IsNullOrWhiteSpace(actualDisplayValue))
-        {
-            actualDisplayValue = $" ({actualDisplayValue})";
-        }
-
-        var allowedValuesDisplay = string.Join(", ", allowedValues);
-        message = $"{message} (Allowed Values: {allowedValuesDisplay}){actualDisplayValue}: ";
-
-        // get the user's input for the message
-        string output;
-        do
-        {
-            Console.Write(message);
-            var input = Console.ReadLine();
-
-            output = string.IsNullOrWhiteSpace(input) ? defaultValue : input;
-        } while (!allowedValues.Contains(output));
-
-        return output;
-    }
-
     /// <summary>
     ///     Gets whether the user agrees or not.
     /// </summary>
@@ -224,20 +227,6 @@ public static class ConsoleHelpers
     }
 
     /// <summary>
-    ///     Gets the input for an enum.
-    /// </summary>
-    /// <param name="message">A message to display to the user.</param>
-    /// <param name="defaultValue">The default value, if any.</param>
-    /// <typeparam name="T">The enum type.</typeparam>
-    /// <returns>The user's selected value.</returns>
-    public static T GetEnumInput<T>(string message, T defaultValue = default) where T : Enum
-    {
-        var allowedValues = Enum.GetNames(typeof(T)).ToList();
-        var input = GetInputWithLimit(message, allowedValues, defaultValue.ToString());
-        return (T)Enum.Parse(typeof(T), input);
-    }
-
-    /// <summary>
     ///     Prints a line to the console.
     /// </summary>
     /// <param name="amount">The amount of lines to print.</param>
@@ -247,5 +236,18 @@ public static class ConsoleHelpers
         {
             Console.WriteLine("----------------------------------------");
         }
+    }
+
+    private static string StringStringDictionaryToString(Dictionary<string, string> value, string keyValueSeparator,
+        string itemSeparator)
+    {
+        List<string> partsString = new();
+        foreach (var (k, v) in value)
+        {
+            partsString.Add($"{k}{keyValueSeparator}{v}");
+        }
+
+        var outputString = string.Join(itemSeparator, partsString);
+        return outputString;
     }
 }

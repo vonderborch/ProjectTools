@@ -16,8 +16,13 @@ public static class PathHelpers
     {
         var relativePath = Path.GetRelativePath(rootPath, path);
 
-        foreach (var pathToCheck in paths)
+        foreach (var originalPathToCheck in paths)
         {
+            var pathToCheck = originalPathToCheck;
+            if (originalPathToCheck.EndsWith("/"))
+            {
+                pathToCheck = originalPathToCheck.Substring(0, originalPathToCheck.Length - 1);
+            }
             if (relativePath == pathToCheck)
             {
                 return true;

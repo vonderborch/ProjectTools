@@ -36,6 +36,11 @@
                      Text="{Binding TemplateConfigDataContext.Author}" />
         </WrapPanel>
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBlock>Template Preparation Scripts: </TextBlock>
+            <TextBox Name="TextBoxTemplatePrepScripts" Watermark="Template Preparation Scripts (new-line-separated)"
+                     AcceptsReturn="True" Text="{Binding TemplateConfigDataContext.PrepareScripts}" />
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
             <TextBlock>Template Rename Only Paths: </TextBlock>
             <TextBox Name="TextBoxTemplateRenameOnlyPaths" Watermark="Template Rename Only Paths (new-line-separated)"
                      AcceptsReturn="True"

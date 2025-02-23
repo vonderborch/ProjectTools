@@ -28,6 +28,11 @@
 
             <StackPanel Grid.Column="1" Orientation="Vertical">
                 <WrapPanel>
+                    <TextBlock Text="Slug Description: " />
+                    <SelectableTextBlock Text="{Binding SlugConfigurationContext.CurrentSlugDescription}" />
+                </WrapPanel>
+
+                <WrapPanel>
                     <TextBlock Text="Slug Value: " />
                     <TextBox Text="{Binding SlugConfigurationContext.CurrentSlugValue}" Watermark="Slug Value" />
                 </WrapPanel>
