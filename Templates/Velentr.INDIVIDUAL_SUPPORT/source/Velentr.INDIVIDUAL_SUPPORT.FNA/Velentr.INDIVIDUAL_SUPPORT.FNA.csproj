@@ -1,12 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>default</LangVersion>
-        <Configurations>Release;Debug</Configurations>
-        <Platforms>AnyCPU</Platforms>
+        <Version>1.0.0.0</Version>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Velentr.INDIVIDUAL_SUPPORT.FNA</Title>
+        <Authors>AUTHOR_HERE</Authors>
+        <Description>DESCRIPTION_HERE</Description>
+        <Copyright>COPYRIGHT</Copyright>
+        <PackageProjectUrl>https://github.com/GITHUBUSER_HERE/Velentr.INDIVIDUAL_SUPPORT</PackageProjectUrl>
+        <PackageLicenseUrl>LICENSE_HERE</PackageLicenseUrl>
+        <PackageIcon>logo.png</PackageIcon>
+        <RepositoryUrl>https://github.com/GITHUBUSER_HERE/Velentr.INDIVIDUAL_SUPPORT</RepositoryUrl>
+        <PackageTags>TAGS_HERE</PackageTags>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <Company>AUTHOR_HERE</Company>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -21,6 +31,15 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\.fna\FNA\FNA.Core.csproj"/>
+        <ProjectReference Include="..\Velentr.INDIVIDUAL_SUPPORT.Core\Velentr.INDIVIDUAL_SUPPORT.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\..\logo.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+        <Link>logo.png</Link>
+      </None>
     </ItemGroup>
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.projitems" Label="Shared"/>

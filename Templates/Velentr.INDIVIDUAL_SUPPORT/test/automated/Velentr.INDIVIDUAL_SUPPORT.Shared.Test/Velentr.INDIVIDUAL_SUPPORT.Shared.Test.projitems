@@ -9,6 +9,6 @@
         <Import_RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Shared.Test</Import_RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="$(MSBuildThisFileDirectory)MyClassTest.cs"/>
+    <Compile Include="$(MSBuildThisFileDirectory)MyCoreClassTest.cs" />
     </ItemGroup>
 </Project>

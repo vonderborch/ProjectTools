@@ -1,6 +1,6 @@
-﻿namespace Velentr.GENERIC_AND_INDIVIDUAL_SUPPORT;
+﻿namespace Velentr.INDIVIDUAL_SUPPORT;
 
-public class MyClass
+public class MyCoreClass
 {
     public string MyMethod(string name)
     {

@@ -19,6 +19,8 @@ public class TestGame : PerformanceMonitoredGame
         "FNA",
 #elif MONOGAME
         "Monogame",
+#elif Core
+        "Core",
 #else
         framework: "Unknown",
 #endif

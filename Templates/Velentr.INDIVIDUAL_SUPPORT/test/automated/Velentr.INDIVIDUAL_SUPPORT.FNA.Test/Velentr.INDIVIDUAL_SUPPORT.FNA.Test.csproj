@@ -11,6 +11,8 @@
         <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.Test</AssemblyName>
         <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.Test</RootNamespace>
         <ApplicationIcon>..\..\..\logo.ico</ApplicationIcon>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -48,5 +50,7 @@
     </ItemGroup>
 
     <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.Test\Velentr.INDIVIDUAL_SUPPORT.Shared.Test.projitems" Label="Shared"/>
+
+    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.SharedSupport.Test\Velentr.INDIVIDUAL_SUPPORT.SharedSupport.Test.projitems" Label="Shared" />
 
 </Project>
