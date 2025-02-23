@@ -192,7 +192,7 @@ public class GenerateProject : AbstractOption
     private Slug UpdateSlugWithUserInput(Slug slug)
     {
         var continueEditingSlug = true;
-        var displayMessage = $"{slug.DisplayName}";
+        var displayMessage = $"{slug.DisplayName} ({slug.Description})";
 
         if (slug.AllowedValues.Count > 0)
         {
@@ -203,8 +203,6 @@ public class GenerateProject : AbstractOption
         {
             displayMessage = $"{displayMessage} (disallowed values: {string.Join(", ", slug.DisallowedValues)})";
         }
-
-        displayMessage = $"{displayMessage}";
 
         do
         {

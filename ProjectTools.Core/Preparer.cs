@@ -59,7 +59,9 @@ public class Preparer
 
         // Step 2 - Copy the directory we are trying to template to the output directory
         coreLogger.Log("Step 2/6 - Copying directory to temp directory...");
-        IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, template.PrepareExcludedPaths);
+        var excludedDirectories = template.PrepareExcludedPaths.Where(x => x.EndsWith("/")).ToList();
+        var excludedFiles = template.PrepareExcludedPaths.Where(x => !x.EndsWith("/")).ToList();
+        IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, excludedDirectories, excludedFiles);
 
         // Step 3 - Go through the slugs and replace all instances of the search terms with the slug key
         coreLogger.Log("Step 3/6 - Templatizing directory...");

@@ -30,7 +30,8 @@ public class SlugConfigurationDataContext : ReactiveObject
         nameof(AllowedValues),
         nameof(DisallowedValues),
         nameof(HasDisallowedValues),
-        nameof(CurrentSlugType)
+        nameof(CurrentSlugType),
+        nameof(CurrentSlugDescription)
     };
 
     private Slug? _currentSlug;
@@ -83,6 +84,11 @@ public class SlugConfigurationDataContext : ReactiveObject
             return string.Join(Environment.NewLine, this._currentSlug.AllowedValues);
         }
     }
+
+    /// <summary>
+    ///     The current slug description.
+    /// </summary>
+    public string CurrentSlugDescription => this._currentSlug?.Description ?? string.Empty;
 
     /// <summary>
     ///     The current slug type.

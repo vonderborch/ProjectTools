@@ -35,7 +35,8 @@ public class SlugDataContext : ReactiveObject
         nameof(CurrentSlugToEditName),
         nameof(CurrentSlugAllowEmptyValues),
         nameof(CurrentSlugIsCaseSensitive),
-        nameof(CurrentSlugIsStringType)
+        nameof(CurrentSlugIsStringType),
+        nameof(CurrentSlugDescription)
     ];
 
     /// <summary>
