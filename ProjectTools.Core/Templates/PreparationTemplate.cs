@@ -1,5 +1,9 @@
+#region
+
 using System.Diagnostics;
 using System.Text.Json.Serialization;
+
+#endregion
 
 namespace ProjectTools.Core.Templates;
 
@@ -13,6 +17,11 @@ public class PreparationTemplate : AbstractTemplate
     ///     The cache of slug replacement values.
     /// </summary>
     [JsonIgnore] private Dictionary<string, string>? _slugReplacementCache;
+
+    /// <summary>
+    ///     Script paths used to help prepare the project.
+    /// </summary>
+    public List<string> PrepareScripts = [];
 
     /// <summary>
     ///     Information on slugs for this template, used to replace instances of the slug with the value of the slug.

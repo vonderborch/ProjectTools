@@ -264,11 +264,11 @@ public class PrepareTemplate : AbstractOption
                     ConsoleHelpers.GetInput($"Slug Default Value{messageExtra}", defaultValueDisplay);
                 slug.DefaultValue = defaultValue;
 
-                slug.Description = ConsoleHelpers.GetInput($"Slug Description", slug.Description);
+                slug.Description = ConsoleHelpers.GetInput("Slug Description", slug.Description);
 
                 // Whether the slug allows empty values or not
                 slug.AllowEmptyValues = ConsoleHelpers.GetYesNo("Allow empty values?", slug.AllowEmptyValues);
-                
+
                 if (slug.Type == SlugType.String)
                 {
                     // Slug Allowed Values, if any
@@ -396,6 +396,11 @@ public class PrepareTemplate : AbstractOption
 
             // Ask for Author
             template.Author = ConsoleHelpers.GetInput("Template Author", template.Author);
+
+            // Ask for PrepareScripts
+            template.PrepareScripts = ConsoleHelpers.GetStringListInput("Template Preparation Scripts",
+                template.PrepareScripts,
+                ",", "comma-separated");
 
             // Ask for RenameOnlyPaths
             template.RenameOnlyPaths = ConsoleHelpers.GetStringListInput("Rename-Only Paths", template.RenameOnlyPaths,

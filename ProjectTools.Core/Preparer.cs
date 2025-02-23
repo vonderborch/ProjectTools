@@ -3,6 +3,7 @@
 using System.Reflection;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
+using ProjectTools.Core.Scripting;
 using ProjectTools.Core.TemplateBuilders;
 using ProjectTools.Core.Templates;
 
@@ -63,21 +64,45 @@ public class Preparer
         var excludedFiles = template.PrepareExcludedPaths.Where(x => !x.EndsWith("/")).ToList();
         IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, excludedDirectories, excludedFiles);
 
-        // Step 3 - Go through the slugs and replace all instances of the search terms with the slug key
-        coreLogger.Log("Step 3/6 - Templatizing directory...");
+        // Step 3 - Run all the prepare scripts
+        coreLogger.Log("Step 3/7 - Executing preparation scripts...");
+        if (template.PrepareScripts.Count > 0)
+        {
+            foreach (var scriptPath in template.PrepareScripts)
+            {
+                coreLogger.Log($"Executing Script {scriptPath}...", 2);
+                var (success, exception) = PythonManager.Manager.ExecuteScript(outputTempDirectory, scriptPath, coreLogger, 2);
+                if (success)
+                {
+                    coreLogger.Log("Script Executed!", 4);
+                }
+                else
+                {
+                    coreLogger.Log($"Error running script {scriptPath}: {exception?.Message}", 4);
+                    throw exception;
+                }
+            }
+        }
+        else
+        {
+            coreLogger.Log("No preparation scripts to execute!", 2);
+        }
+
+        // Step 4 - Go through the slugs and replace all instances of the search terms with the slug key
+        coreLogger.Log("Step 4/7 - Templatizing directory...");
         UpdateFileSystemEntries(outputTempDirectory, outputTempDirectory, template, false);
 
-        // Step 4 - Create the template info file
-        coreLogger.Log("Step 4/6 - Creating template settings file...");
+        // Step 5 - Create the template info file
+        coreLogger.Log("Step 5/7 - Creating template settings file...");
         var outputTemplateInfoFile = Path.Combine(outputTempDirectory, TemplateConstants.TemplateSettingsFileName);
         JsonHelpers.SerializeToFile(outputTemplateInfoFile, template.ToTemplate());
 
-        // Step 5 - Convert the template directory to a zip file
-        coreLogger.Log("Step 5/6 - Archiving directory...");
+        // Step 6 - Convert the template directory to a zip file
+        coreLogger.Log("Step 6/7 - Archiving directory...");
         IOHelpers.ArchiveDirectory(outputTempDirectory, outputFile, skipCleaning);
 
-        // Step 6 - DONE
-        coreLogger.Log("Step 6/6 - Cleaning directory...");
+        // Step 7 - DONE
+        coreLogger.Log("Step 7/7 - Cleaning directory...");
         if (!skipCleaning)
         {
             IOHelpers.CleanDirectory(outputTempDirectory, true);

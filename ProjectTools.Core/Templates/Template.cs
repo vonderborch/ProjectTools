@@ -96,41 +96,16 @@ public class Template : AbstractTemplate
         {
             foreach (var scriptPath in this.PythonScriptPaths.Where(x => !string.IsNullOrWhiteSpace(x)))
             {
-                var script = Path.Combine(outputDirectory, scriptPath);
-                try
+                commandLogger.Log($"Executing Script {scriptPath}...", 2);
+                var (success, exception) = PythonManager.Manager.ExecuteScript(outputDirectory, scriptPath, commandLogger, 2);
+                if (success)
                 {
-                    commandLogger.Log($"Executing Script {scriptPath}...", 2);
-                    var startInfo = GetProcessStartInfo(PythonManager.Manager.PythonExecutable, $"{script}",
-                        outputDirectory);
-                    using Process proc = new();
-                    proc.StartInfo = startInfo;
-                    proc.Start();
-                    proc.WaitForExit();
-
-                    using var outputStream = proc.StandardOutput;
-                    commandLogger.Log("Output Stream:", 4);
-                    var line = outputStream.ReadLine();
-                    while (line != null)
-                    {
-                        commandLogger.Log(line, 6);
-                        line = outputStream.ReadLine();
-                    }
-
-                    using var errorStream = proc.StandardError;
-                    commandLogger.Log("Output Error Stream:", 4);
-                    line = errorStream.ReadLine();
-                    while (line != null)
-                    {
-                        commandLogger.Log(line, 6);
-                        line = errorStream.ReadLine();
-                    }
-
                     commandLogger.Log("Script Executed!", 4);
                 }
-                catch (Exception e)
+                else
                 {
-                    commandLogger.Log($"Error running script {scriptPath}: {e.Message}", 4);
-                    instructions.Add($"Run script: {script}");
+                    commandLogger.Log($"Error running script {scriptPath}: {exception?.Message}", 4);
+                    instructions.Add($"Run script: {Path.Combine(outputDirectory, scriptPath)}");
                 }
             }
         }
@@ -159,39 +134,6 @@ public class Template : AbstractTemplate
         var totalTime = DateTime.Now - startTime;
         return
             $"Successfully prepared created the solution in {totalTime.TotalSeconds:0.00} second(s): {outputDirectory}";
-    }
-
-    /// <summary>
-    ///     Gets the process start info.
-    /// </summary>
-    /// <param name="fileName">The executable's file name.</param>
-    /// <param name="script">The script to execute.</param>
-    /// <param name="workingDirectory">The working directory.</param>
-    /// <returns>The start info.</returns>
-    public ProcessStartInfo GetProcessStartInfo(string fileName, string script, string workingDirectory)
-    {
-        if (EnvironmentHelpers.OS == OSPlatform.Windows)
-        {
-            return new ProcessStartInfo
-            {
-                FileName = fileName,
-                Arguments = $"\"{script}\"",
-                WorkingDirectory = workingDirectory,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-        }
-
-        return new ProcessStartInfo
-        {
-            FileName = fileName,
-            Arguments = $"\"{script}\"",
-            WorkingDirectory = workingDirectory,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
-        };
     }
 
     /// <summary>

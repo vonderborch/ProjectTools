@@ -157,6 +157,32 @@ public class TemplateConfigurationDataContext : ReactiveObject
     }
 
     /// <summary>
+    ///     Scripts used during template preparation.
+    /// </summary>
+    public string PrepareScripts
+    {
+        get
+        {
+            if (this._parentContext.PreparationTemplate is null)
+            {
+                return string.Empty;
+            }
+
+            return string.Join(Environment.NewLine, this._parentContext.PreparationTemplate.PrepareScripts);
+        }
+        set
+        {
+            if (this._parentContext.PreparationTemplate is not null)
+            {
+                this._parentContext.PreparationTemplate.PrepareScripts =
+                    value.Split(Environment.NewLine).ToList();
+            }
+
+            this.RaisePropertyChanged();
+        }
+    }
+
+    /// <summary>
     ///     The template python script paths.
     /// </summary>
     public string PythonScriptPaths

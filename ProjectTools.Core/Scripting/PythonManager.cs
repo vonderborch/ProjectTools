@@ -1,9 +1,13 @@
+#region
+
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Settings;
+
+#endregion
 
 namespace ProjectTools.Core.Scripting;
 
@@ -83,5 +87,84 @@ public sealed class PythonManager
         }
 
         return pythonInfo;
+    }
+
+    /// <summary>
+    ///     Executes a Python script.
+    /// </summary>
+    /// <param name="executionDirectory">The execution directory.</param>
+    /// <param name="scriptPath">The path to the script in the execution directory.</param>
+    /// <param name="outputLogger">The output logger.</param>
+    /// <param name="baseIndent">The base indentation to output logs.</param>
+    /// <returns>boolean (True = success, False = failure) and optionally an exception.</returns>
+    public (bool, Exception?) ExecuteScript(string executionDirectory, string scriptPath, Logger outputLogger,
+        int baseIndent)
+    {
+        var script = Path.Combine(executionDirectory, scriptPath);
+        try
+        {
+            var startInfo = GetProcessStartInfo(Manager.PythonExecutable, $"{script}", executionDirectory);
+            using Process proc = new();
+            proc.StartInfo = startInfo;
+            proc.Start();
+            proc.WaitForExit();
+
+            using var outputStream = proc.StandardOutput;
+            outputLogger.Log("Output Stream:", baseIndent + 2);
+            var line = outputStream.ReadLine();
+            while (line != null)
+            {
+                outputLogger.Log(line, baseIndent + 4);
+                line = outputStream.ReadLine();
+            }
+
+            using var errorStream = proc.StandardError;
+            outputLogger.Log("Output Error Stream:", baseIndent + 2);
+            line = errorStream.ReadLine();
+            while (line != null)
+            {
+                outputLogger.Log(line, baseIndent + 4);
+                line = errorStream.ReadLine();
+            }
+
+            return (true, null);
+        }
+        catch (Exception e)
+        {
+            return (false, e);
+        }
+    }
+
+    /// <summary>
+    ///     Gets the process start info.
+    /// </summary>
+    /// <param name="fileName">The executable's file name.</param>
+    /// <param name="script">The script to execute.</param>
+    /// <param name="workingDirectory">The working directory.</param>
+    /// <returns>The start info.</returns>
+    private ProcessStartInfo GetProcessStartInfo(string fileName, string script, string workingDirectory)
+    {
+        if (EnvironmentHelpers.OS == OSPlatform.Windows)
+        {
+            return new ProcessStartInfo
+            {
+                FileName = fileName,
+                Arguments = $"\"{script}\"",
+                WorkingDirectory = workingDirectory,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+        }
+
+        return new ProcessStartInfo
+        {
+            FileName = fileName,
+            Arguments = $"\"{script}\"",
+            WorkingDirectory = workingDirectory,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
     }
 }

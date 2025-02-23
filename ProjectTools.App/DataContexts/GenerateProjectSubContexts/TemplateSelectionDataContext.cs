@@ -119,7 +119,7 @@ public class TemplateSelectionDataContext : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref this._selectedTemplateName, value);
-            if (this._availableTemplates.TryGetValue(value, out var templateInfo))
+            if (value is not null && this._availableTemplates.TryGetValue(value, out var templateInfo))
             {
                 this._selectedTemplate = templateInfo;
             }
