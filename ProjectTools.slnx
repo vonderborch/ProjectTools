@@ -23,11 +23,6 @@
     <File Path="README.md" />
     <File Path=".version.json" />
   </Folder>
-  <Folder Name="/Templates/">
-    <File Path="Templates\TEMPLATES\Velentr.BASE.ptt" />
-    <File Path="Templates\TEMPLATES\Velentr.DUAL_SUPPORT.ptt" />
-    <File Path="Templates\TEMPLATES\Velentr.DUAL_SUPPORT_WITH_GENERIC.ptt" />
-  </Folder>
   <Project Path="ProjectTools.App\ProjectTools.App.csproj" Type="Classic C#" />
   <Project Path="ProjectTools.CL\ProjectTools.CL.csproj" Type="Classic C#" />
   <Project Path="ProjectTools.Core\ProjectTools.Core.csproj" Type="Classic C#">
