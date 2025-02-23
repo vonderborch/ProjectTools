@@ -282,6 +282,8 @@ public class TemplateConfigurationDataContext : ReactiveObject
         this.Version = this._parentContext.PreparationTemplate.Version;
         this.Description = this._parentContext.PreparationTemplate.Description;
         this.Author = this._parentContext.PreparationTemplate.Author;
+        this.PrepareScripts =
+            string.Join(Environment.NewLine, this._parentContext.PreparationTemplate.PrepareScripts);
         this.RenameOnlyPaths =
             string.Join(Environment.NewLine, this._parentContext.PreparationTemplate.RenameOnlyPaths);
         this.PathsToRemove = string.Join(Environment.NewLine, this._parentContext.PreparationTemplate.PathsToRemove);

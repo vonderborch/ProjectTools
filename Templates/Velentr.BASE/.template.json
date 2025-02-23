@@ -1,4 +1,7 @@
 {
+  "PrepareScripts": [
+    "prepare_template.py"
+  ],
   "Slugs": [
     {
       "CustomSlug": true,
@@ -172,13 +175,32 @@
       "RequiresUserInput": true,
       "SlugKey": "GithubUser",
       "Type": "String"
+    },
+    {
+      "CustomSlug": true,
+      "RequiresAnyInput": true,
+      "SearchStrings": [
+        "GITPERSONALACCESSTOKEN_HERE"
+      ],
+      "AllowedValues": [],
+      "AllowEmptyValues": false,
+      "CaseSensitive": true,
+      "DefaultValue": "VALID_ACCESS_TOKEN",
+      "Description": "A Github Personal Access Token with Actions (read) scope.",
+      "DisallowedValues": [],
+      "DisplayName": "Github Personal Access Token",
+      "RequiresUserInput": true,
+      "SlugKey": "GitPersonalAccessToken",
+      "Type": "String"
     }
   ],
   "Author": "Christian Webber",
   "Description": "A generic library for an XNA-derived framework that doesn\u0027t require specific support for any in particular.",
   "Instructions": [],
   "Name": "Velentr.BASE",
-  "PathsToRemove": [],
+  "PathsToRemove": [
+    "prepare_template.py"
+  ],
   "PrepareExcludedPaths": [
     "*bin/",
     "*obj/",
@@ -186,8 +208,7 @@
     "*.git/",
     "*release/",
     "*debug/",
-    "*.fna/",
-    "*.gitpersonalaccesstoken"
+    "*.fna/"
   ],
   "PythonScriptPaths": [
     "update_or_install_fna.py"
@@ -200,5 +221,5 @@
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-02-20"
+  "Version": "2025-02-22"
 }

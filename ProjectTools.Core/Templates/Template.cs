@@ -1,7 +1,6 @@
 #region
 
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Scripting;
@@ -74,30 +73,31 @@ public class Template : AbstractTemplate
         }
 
         // Step 1 - Create destination directory
-        logger.Log("Step 1/5: Creating directory...");
+        logger.Log("Step 1/6: Creating directory...");
         Directory.CreateDirectory(outputDirectory);
         logger.Log("Directory created.", 2);
 
         // Step 2 - Unzip the template
-        logger.Log($"Step 2/5: Unzipping template {this.SafeName}...");
+        logger.Log($"Step 2/6: Unzipping template {this.SafeName}...");
         IOHelpers.UnzipDirectory(outputDirectory, pathToTemplate, TemplateConstants.GeneratedProjectExcludedFileNames,
             false);
         logger.Log("Template unzipped!", 1);
 
         // Step 3 - Update the files
-        logger.Log("Step 3/5: Updating file system objects...");
+        logger.Log("Step 3/6: Updating file system objects...");
         UpdateFiles(outputDirectory, outputDirectory);
         logger.Log("Files updated!", 2);
 
         // Step 4 - Run scripts (C# SCRIPT TIME!?)
-        logger.Log("Step 4/5: Running scripts...");
+        logger.Log("Step 4/6: Running scripts...");
         List<string> instructions = new();
         if (this.PythonScriptPaths.Count > 0)
         {
             foreach (var scriptPath in this.PythonScriptPaths.Where(x => !string.IsNullOrWhiteSpace(x)))
             {
                 commandLogger.Log($"Executing Script {scriptPath}...", 2);
-                var (success, exception) = PythonManager.Manager.ExecuteScript(outputDirectory, scriptPath, commandLogger, 2);
+                var (success, exception) =
+                    PythonManager.Manager.ExecuteScript(outputDirectory, scriptPath, commandLogger, 2);
                 if (success)
                 {
                     commandLogger.Log("Script Executed!", 4);
@@ -115,7 +115,7 @@ public class Template : AbstractTemplate
         }
 
         // Step 5 - List instructions
-        logger.Log("Step 5/5: Listing instructions...");
+        logger.Log("Step 5/6: Listing instructions...");
         instructions = instructions.CombineLists(this.Instructions);
         if (instructions.Count > 0)
         {
@@ -128,6 +128,25 @@ public class Template : AbstractTemplate
         {
             logger.Log("No instructions to display!", 2);
         }
+
+        // Step 6 - Cleanup
+        logger.Log("Step 6/6: Cleaning template...");
+        if (this.PathsToRemove.Count > 0)
+        {
+            foreach (var path in this.PathsToRemove)
+            {
+                var actualPath = Path.Combine(outputDirectory, path);
+                if (Directory.Exists(actualPath))
+                {
+                    IOHelpers.DeleteDirectoryIfExists(actualPath);
+                }
+                else if (File.Exists(actualPath))
+                {
+                    IOHelpers.DeleteFileIfExists(actualPath);
+                }
+            }
+        }
+        logger.Log("Cleaning complete!", 2);
 
         // DONE!
         logger.Log("Work complete!");

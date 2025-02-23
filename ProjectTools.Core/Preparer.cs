@@ -47,7 +47,7 @@ public class Preparer
             Path.Combine(outputDirectory, $"{template.SafeName}.{TemplateConstants.TemplateFileExtension}");
 
         // Step 1 - Cleanup directories/files
-        coreLogger.Log("Step 1/6 - Cleaning existing directories and files...");
+        coreLogger.Log("Step 1/7 - Cleaning existing directories and files...");
         if (!IOHelpers.CleanDirectory(outputTempDirectory, forceOverride))
         {
             return "Directory already exists and force override is not enabled.";
@@ -59,7 +59,7 @@ public class Preparer
         }
 
         // Step 2 - Copy the directory we are trying to template to the output directory
-        coreLogger.Log("Step 2/6 - Copying directory to temp directory...");
+        coreLogger.Log("Step 2/7 - Copying directory to temp directory...");
         var excludedDirectories = template.PrepareExcludedPaths.Where(x => x.EndsWith("/")).ToList();
         var excludedFiles = template.PrepareExcludedPaths.Where(x => !x.EndsWith("/")).ToList();
         IOHelpers.CopyDirectory(pathToDirectory, outputTempDirectory, excludedDirectories, excludedFiles);
@@ -71,7 +71,8 @@ public class Preparer
             foreach (var scriptPath in template.PrepareScripts)
             {
                 coreLogger.Log($"Executing Script {scriptPath}...", 2);
-                var (success, exception) = PythonManager.Manager.ExecuteScript(outputTempDirectory, scriptPath, coreLogger, 2);
+                var (success, exception) =
+                    PythonManager.Manager.ExecuteScript(outputTempDirectory, scriptPath, coreLogger, 2);
                 if (success)
                 {
                     coreLogger.Log("Script Executed!", 4);
