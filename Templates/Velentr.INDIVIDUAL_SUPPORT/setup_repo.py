@@ -3,24 +3,26 @@ import selectors
 import subprocess
 import sys
 
-# Step 1: Get the Github Personal Access Token with Actions (read) scope
+# Step 1: Get the directory path of the current script
+current_file_directory = os.path.dirname(os.path.realpath(__file__))
+
+# Step 2: Set our install path
+fna_install_path = os.path.join(os.path.dirname(current_file_directory), ".fna")
+
+# Step 3: Check if something exists in the install path. If it does, don't do anything!
+if os.path.exists(fna_install_path):
+    print("FNA already exists in the current directory! Exiting...")
+    sys.exit(0)
+
+# Step 4: Get the Github Personal Access Token with Actions (read) scope
 token: str = ""
 if os.path.exists(".gitpersonalaccesstoken") and os.path.isfile(".gitpersonalaccesstoken"):
     with open(".gitpersonalaccesstoken", "r") as file:
         token = file.read()
 else:
-    print("Please enter your Github Personal Access Token with Actions (read) scope:")
-    token = input()
-    with open(".gitpersonalaccesstoken", "w") as file:
-        file.write(token)
+    raise Exception("Please execute `update_or_install_fna.py`!")
 
-# Step 2: Get the directory path of the current script
-current_file_directory = os.path.dirname(os.path.realpath(__file__))
-
-# Step 3: Set our install path
-fna_install_path = os.path.join(os.path.dirname(current_file_directory), ".fna")
-
-# Step 4: Call fna_updator.py with the install path we want
+# Step 5: Call fna_updator.py with the install path we want
 fna_updator_path = os.path.join(current_file_directory, ".build", "fna_updator.py")
 command = ["python", fna_updator_path, fna_install_path, token]
 

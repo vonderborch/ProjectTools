@@ -10,7 +10,7 @@
     <File Path=".build\fna_updator.py" />
   </Folder>
   <Folder Name="/.fna/">
-    <Project Path=".fna\FNA\FNA.Core.csproj" Type="Classic C#" />
+    <Project Path="..\.fna\FNA\FNA.Core.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/SolutionFiles/">
     <File Path=".gitattributes" />

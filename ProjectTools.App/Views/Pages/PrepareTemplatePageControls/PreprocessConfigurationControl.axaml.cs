@@ -129,7 +129,17 @@ public partial class PreprocessConfigurationControl : UserControl
         if (folders.Count >= 1)
         {
             var folder = folders[0];
-            this.Context.PreprocessDataContext.Directory = folder.TryGetLocalPath();
+            var path = folder.TryGetLocalPath();
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return;
+            }
+
+            if (path.EndsWith(Path.DirectorySeparatorChar) || path.EndsWith(Path.AltDirectorySeparatorChar))
+            {
+                path = path.Remove(path.Length - 1);
+            }
+            this.Context.PreprocessDataContext.Directory = path;
             this.Context.TemplateConfigurationEnabled = false;
         }
     }
