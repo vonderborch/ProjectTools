@@ -13,7 +13,7 @@
     <File Path=".build\fna_updator.py" />
   </Folder>
   <Folder Name="/.fna/">
-    <Project Path=".fna\FNA\FNA.Core.csproj" Type="Classic C#" />
+    <Project Path="..\.fna\FNA\FNA.Core.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/SolutionFiles/">
     <File Path=".gitattributes" />
@@ -24,6 +24,7 @@
     <File Path="README.md" />
     <File Path="update_or_install_fna.py" />
     <File Path="logo.ico" />
+    <File Path="setup_repo.py" />
   </Folder>
   <Folder Name="/source/">
     <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.Core\Velentr.INDIVIDUAL_SUPPORT.Core.csproj" Type="Classic C#" />

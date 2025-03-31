@@ -283,12 +283,11 @@ class FnaUpdator:
         base_url = f"{self._fna_libs_repo_api}/actions/workflows/{self.FNA_LIBS_REPO_WORKFLOW_NAME}/runs?per_page=1&status=completed"
         for i, day in enumerate(dates_to_check):
             day_url = f"{base_url}&created={day}"
-            print(day_url)
             response = requests.get(day_url, headers=self._get_request_headers)
             data = response.json() if response.status_code == 200 else {}
             if not data or not data["workflow_runs"]:
                 if i == max_i:
-                    print("  Failed to get latest workflow run")
+                    print(f"  Failed to get latest workflow run, response code: {response.status_code}")
                     sys.exit(1)
                 continue
             return data["workflow_runs"][0]["id"]
@@ -313,7 +312,7 @@ class FnaUpdator:
         response = requests.get(url, headers=self._get_request_headers)
         data = response.json() if response.status_code == 200 else {}
         if not data or not data["artifacts"]:
-            print("  Failed to get artifacts for workflow run")
+            print(f"  Failed to get artifacts for workflow run, response code: {response.status_code}")
             sys.exit(1)
 
         return [(artifact["name"], artifact["archive_download_url"]) for artifact in data["artifacts"]]

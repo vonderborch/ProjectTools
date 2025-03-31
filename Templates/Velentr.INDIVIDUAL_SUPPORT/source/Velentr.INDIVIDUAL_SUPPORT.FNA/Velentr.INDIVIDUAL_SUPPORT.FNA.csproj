@@ -30,7 +30,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\.fna\FNA\FNA.Core.csproj"/>
+        <ProjectReference Include="..\..\..\.fna\FNA\FNA.Core.csproj" />
         <ProjectReference Include="..\Velentr.INDIVIDUAL_SUPPORT.Core\Velentr.INDIVIDUAL_SUPPORT.Core.csproj" />
     </ItemGroup>
 

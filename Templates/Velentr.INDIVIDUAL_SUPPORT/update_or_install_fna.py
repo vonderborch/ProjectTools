@@ -18,7 +18,7 @@ else:
 current_file_directory = os.path.dirname(os.path.realpath(__file__))
 
 # Step 3: Set our install path
-fna_install_path = os.path.join(current_file_directory, ".fna")
+fna_install_path = os.path.join(os.path.dirname(current_file_directory), ".fna")
 
 # Step 4: Call fna_updator.py with the install path we want
 fna_updator_path = os.path.join(current_file_directory, ".build", "fna_updator.py")
