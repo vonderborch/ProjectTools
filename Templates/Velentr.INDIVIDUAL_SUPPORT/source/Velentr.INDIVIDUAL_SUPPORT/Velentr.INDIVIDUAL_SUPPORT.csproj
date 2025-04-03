@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <Version>1.0.0.0</Version>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Title>Velentr.INDIVIDUAL_SUPPORT.Core</Title>
+        <Title>Velentr.INDIVIDUAL_SUPPORT</Title>
         <Authors>AUTHOR_HERE</Authors>
         <Description>DESCRIPTION_HERE</Description>
         <Copyright>COPYRIGHT</Copyright>
@@ -26,7 +26,7 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <OutputPath>..\..\release\core\</OutputPath>
         <DefineConstants>TRACE;Core</DefineConstants>
-        <DocumentationFile>..\..\release\fna\Velentr.INDIVIDUAL_SUPPORT.Core.xml</DocumentationFile>
+        <DocumentationFile>..\..\release\fna\Velentr.INDIVIDUAL_SUPPORT.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

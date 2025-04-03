@@ -27,12 +27,10 @@
     <File Path="setup_repo.py" />
   </Folder>
   <Folder Name="/source/">
-    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.Core\Velentr.INDIVIDUAL_SUPPORT.Core.csproj" Type="Classic C#" />
     <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj" Type="Classic C#" />
     <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.Monogame\Velentr.INDIVIDUAL_SUPPORT.Monogame.csproj" Type="Classic C#" />
-    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.shproj">
-      <BuildDependency Project=".build\pre_solution_build.csproj" />
-    </Project>
+    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT.Shared\Velentr.INDIVIDUAL_SUPPORT.Shared.shproj" />
+    <Project Path="source\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/test/" />
   <Folder Name="/test/automated/">
