@@ -1,6 +1,6 @@
 # Velentr.INDIVIDUAL_SUPPORT
 
-![Screenshot](https://github.com/GITHUBUSER_HERE/Velentr.INDIVIDUAL_SUPPORT/blob/main/logo.png?raw=true)
+![Logo](https://raw.githubusercontent.com/GITHUBUSER_HERE/Velentr.INDIVIDUAL_SUPPORT/refs/heads/main/logo.png)
 
 DESCRIPTION_HERE
 

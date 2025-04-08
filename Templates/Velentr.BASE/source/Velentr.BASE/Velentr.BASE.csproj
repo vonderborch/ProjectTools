@@ -8,9 +8,10 @@
         <Title>Velentr.BASE</Title>
         <Authors>AUTHOR_HERE</Authors>
         <Description>DESCRIPTION_HERE</Description>
-        <Copyright>COPYRIGHT</Copyright>
+        <Copyright>COPYRIGHT_HERE</Copyright>
         <PackageProjectUrl>https://github.com/GITHUBUSER_HERE/Velentr.BASE</PackageProjectUrl>
-        <PackageLicenseUrl>LICENSE_HERE</PackageLicenseUrl>
+        <PackageLicenseExpression>LICENSE_HERE</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>logo.png</PackageIcon>
         <RepositoryUrl>https://github.com/GITHUBUSER_HERE/Velentr.BASE</RepositoryUrl>
         <PackageTags>TAGS_HERE</PackageTags>
@@ -29,11 +30,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="..\..\logo.png">
-        <Pack>True</Pack>
-        <PackagePath></PackagePath>
-        <Link>logo.png</Link>
-      </None>
+        <None Include="..\..\logo.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+            <Link>logo.png</Link>
+        </None>
+        <None Include="..\..\README.md">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+            <Link>README.md</Link>
+        </None>
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

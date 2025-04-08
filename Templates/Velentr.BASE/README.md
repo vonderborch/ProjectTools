@@ -1,6 +1,6 @@
 # Velentr.BASE
 
-![Screenshot](https://github.com/GITHUBUSER_HERE/Velentr.BASE/blob/main/logo.png?raw=true)
+![Logo](https://raw.githubusercontent.com/GITHUBUSER_HERE/Velentr.BASE/refs/heads/main/logo.png)
 
 DESCRIPTION_HERE
 
