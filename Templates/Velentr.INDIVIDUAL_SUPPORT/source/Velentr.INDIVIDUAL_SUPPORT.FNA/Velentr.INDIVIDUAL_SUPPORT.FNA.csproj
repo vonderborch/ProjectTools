@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\.fna\FNA\FNA.Core.csproj" />
+        <ProjectReference Include="..\..\..\.fna\FNA\FNA.Core.csproj" PrivateAssets="ALL" />
         <ProjectReference Include="..\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.csproj" />
     </ItemGroup>
 

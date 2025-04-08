@@ -25,6 +25,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\.fna\FNA\FNA.Core.csproj" />
         <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT.FNA\Velentr.INDIVIDUAL_SUPPORT.FNA.csproj"/>
     </ItemGroup>
 

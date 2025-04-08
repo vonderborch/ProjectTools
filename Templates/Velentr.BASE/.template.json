@@ -212,7 +212,8 @@
     "*.fna/"
   ],
   "PythonScriptPaths": [
-    "setup_repo.py"
+    "setup_repo.py",
+    "generate_logo.py"
   ],
   "RenameOnlyPaths": [
     "*logo.png",
@@ -222,5 +223,5 @@
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-03-31"
+  "Version": "2025-04-08"
 }

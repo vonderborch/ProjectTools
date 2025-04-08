@@ -2,15 +2,13 @@
 Imports
 -------------------------------------------------------------------- """
 import os
-import platform
 import shutil
-import subprocess
 import sys
 import zipfile
 
 from datetime import datetime, timedelta
 from functools import cached_property
-from importlib import util
+from generate_virtual_environment import VirtualEnvironmentManager
 
 
 class FnaUpdator:
@@ -46,17 +44,17 @@ class FnaUpdator:
         self._fna_repo_install_path = os.path.join(directory, "FNA")
         self._fna_libs_install_path = os.path.join(directory, "fnalibs")
         self._fna_libs_install_cache_path = os.path.join(directory, "fnalibs_cache")
-        self._virtual_environment_path = os.path.join(directory, ".venv")
 
         self._fna_libs_repo = self.FNA_LIBS_REPO_FORMAT.format(pre="", post="")
         self._fna_libs_repo_api = self.FNA_LIBS_REPO_FORMAT.format(pre="api.", post="repos/")
 
         self._manage_directory(directory=self._base_directory, delete_directory_if_exists=False,
                                create_directory_if_not_exists=True)
-        self._install_package("virtualenv")
-        self._setup_environment()
-        self._install_package("GitPython")
-        self._install_package("requests")
+        
+        env_manager = VirtualEnvironmentManager(directory=self._base_directory)
+        env_manager.setup_environment()
+        env_manager.install_package("GitPython")
+        env_manager.install_package("requests")
 
     def execute(self) -> None:
         """Executes the FNA update or installation process.
@@ -87,47 +85,7 @@ class FnaUpdator:
             "Authorization": f"Bearer {self._personal_access_token}",
             "X-GitHub-Api-Version": "2022-11-28",
         }
-
-    @staticmethod
-    def _is_virtual_environment() -> bool:
-        """Checks if the current Python environment is a virtual environment.
-        
-        Determines if the script is running within a virtual environment by examining sys attributes.
-        
-        Returns:
-            bool: True if the current environment is a virtual environment, False otherwise.
-        """
-        return hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix)
-
-    def _setup_environment(self) -> None:
-        """Sets up a Python virtual environment if one is not already active.
-        
-        Checks if already running within a virtual environment. If not, creates and activates a new virtual environment
-        at a predefined path.
-        """
-        print("Setting up environment...")
-        if self._is_virtual_environment():
-            print("  Already in virtual environment!")
-            return
-
-        # setup virtual environment
-        setupVirtualEnvironment = not self._manage_directory(
-            directory=self._virtual_environment_path,
-            delete_directory_if_exists=True,
-            create_directory_if_not_exists=False,
-        )
-
-        print("  Setting up virtual environment...")
-        if setupVirtualEnvironment:
-            subprocess.call([sys.executable, "-m", "virtualenv", self._virtual_environment_path])
-
-        print("  Activating virtual environment...")
-        if platform.system() == "Windows":
-            activation_file = os.path.join(self._virtual_environment_path, "Scripts", "activate_this.py")
-        else:
-            activation_file = os.path.join(self._virtual_environment_path, "bin", "activate_this.py")
-        exec(open(activation_file).read(), {'__file__': activation_file})
-
+    
     def _manage_directory(
             self, *, directory: str, delete_directory_if_exists: bool, create_directory_if_not_exists: bool
     ) -> None:
@@ -163,18 +121,6 @@ class FnaUpdator:
             os.remove(path)
         else:
             shutil.rmtree(path)
-
-    @staticmethod
-    def _install_package(package: str) -> None:
-        """Installs a Python package if it is not already installed.
-
-        Uses pip to install the specified package. If the package is already installed, no action is taken.
-        
-        Args:
-            package (str): The name of the package to install.
-        """
-        if util.find_spec(package) is None:
-            subprocess.call([sys.executable, "-m", "pip", "install", package])
 
     def _clone_or_update_repo(self, repo: str, directory: str, clone_multi_options: list[str]) -> None:
         """Clones or updates a Git repository with specified options.
