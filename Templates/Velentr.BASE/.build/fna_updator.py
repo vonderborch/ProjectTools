@@ -343,8 +343,8 @@ class FnaUpdator:
 
 
 # Get arguments
-fna_install_path = sys.argv[1]  # the directory for the FNA installation
-token = sys.argv[2]  # the Github Personal Access Token
+fna_install_path = sys.argv[1].strip()  # the directory for the FNA installation
+token = sys.argv[2].strip()  # the Github Personal Access Token
 
 updator = FnaUpdator(directory=fna_install_path, personal_access_token=token)
 updator.execute()
