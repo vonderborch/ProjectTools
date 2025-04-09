@@ -7,7 +7,7 @@
       "CustomSlug": true,
       "RequiresAnyInput": true,
       "SearchStrings": [
-        "Velentr.BASE"
+        "Velentr.DUAL_SUPPORT"
       ],
       "AllowedValues": [],
       "AllowEmptyValues": false,
@@ -196,9 +196,9 @@
     }
   ],
   "Author": "Christian Webber",
-  "Description": "A generic library for an XNA-derived framework that doesn\u0027t require specific support for any in particular.",
+  "Description": "A library for an XNA derived framework that requires specific support for particular frameworks (i.e. FNA, Monogame), and have no generic version available.",
   "Instructions": [],
-  "Name": "Velentr.BASE",
+  "Name": "Velentr.DUAL_SUPPORT",
   "PathsToRemove": [
     "prepare_template.py"
   ],

@@ -217,11 +217,12 @@
   ],
   "RenameOnlyPaths": [
     "*logo.png",
+    "*base_logo.png",
     "*logo.ico",
     "*font.xnb",
     "*Content.mgcb"
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-04-08"
+  "Version": "2025-04-08b"
 }

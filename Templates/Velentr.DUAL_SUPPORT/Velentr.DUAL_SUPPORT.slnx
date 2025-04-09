@@ -1,0 +1,53 @@
+<Solution>
+  <Folder Name="/.build/">
+    <Project Path=".build\post_solution_build.csproj" Type="Classic C#">
+      <BuildDependency Project=".build\pre_solution_build.csproj" />
+      <BuildDependency Project="source\Velentr.DUAL_SUPPORT.FNA\Velentr.DUAL_SUPPORT.FNA.csproj" />
+      <BuildDependency Project="source\Velentr.DUAL_SUPPORT.Monogame\Velentr.DUAL_SUPPORT.Monogame.csproj" />
+      <BuildDependency Project="test\automated\Velentr.DUAL_SUPPORT.Test\Velentr.DUAL_SUPPORT.Test.csproj" />
+    </Project>
+    <Project Path=".build\pre_solution_build.csproj" Type="Classic C#" />
+    <File Path=".build\version_bump.ps1" />
+    <File Path=".build\version_bump_common.ps1" />
+    <File Path=".build\version_bump_dialog.ps1" />
+    <File Path=".build\fna_updator.py" />
+    <File Path=".build\base_logo.png" />
+    <File Path=".build\generate_project_logo.py" />
+    <File Path=".build\generate_virtual_environment.py" />
+  </Folder>
+  <Folder Name="/.build/font/">
+    <File Path=".build\font\copperplate_gothic_bold.otf" />
+    <File Path=".build\font\readme.html" />
+  </Folder>
+  <Folder Name="/.fna/">
+    <Project Path="..\.fna\FNA\FNA.Core.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/SolutionFiles/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="CODEOWNERS" />
+    <File Path="LICENSE" />
+    <File Path="logo.png" />
+    <File Path="README.md" />
+    <File Path="update_or_install_fna.py" />
+    <File Path="logo.ico" />
+    <File Path="setup_repo.py" />
+    <File Path="generate_logo.py" />
+  </Folder>
+  <Folder Name="/source/">
+    <Project Path="source\Velentr.DUAL_SUPPORT.FNA\Velentr.DUAL_SUPPORT.FNA.csproj" Type="Classic C#" />
+    <Project Path="source\Velentr.DUAL_SUPPORT.Monogame\Velentr.DUAL_SUPPORT.Monogame.csproj" Type="Classic C#" />
+    <Project Path="source\Velentr.DUAL_SUPPORT.Shared\Velentr.DUAL_SUPPORT.Shared.shproj" />
+  </Folder>
+  <Folder Name="/test/" />
+  <Folder Name="/test/automated/">
+    <Project Path="test\automated\Velentr.DUAL_SUPPORT.FNA.Test\Velentr.DUAL_SUPPORT.FNA.Test.csproj" Type="Classic C#" />
+    <Project Path="test\automated\Velentr.DUAL_SUPPORT.Monogame.Test\Velentr.DUAL_SUPPORT.Monogame.Test.csproj" Type="Classic C#" />
+    <Project Path="test\automated\Velentr.DUAL_SUPPORT.SharedSupport.Test\Velentr.DUAL_SUPPORT.SharedSupport.Test.shproj" />
+  </Folder>
+  <Folder Name="/test/manual/">
+    <Project Path="test\manual\Velentr.DUAL_SUPPORT.FNA.TestApp\Velentr.DUAL_SUPPORT.FNA.TestApp.csproj" Type="Classic C#" />
+    <Project Path="test\manual\Velentr.DUAL_SUPPORT.Monogame.TestApp\Velentr.DUAL_SUPPORT.Monogame.TestApp.csproj" Type="Classic C#" />
+    <Project Path="test\manual\Velentr.DUAL_SUPPORT.Shared.TestApp\Velentr.DUAL_SUPPORT.Shared.TestApp.shproj" />
+  </Folder>
+</Solution>

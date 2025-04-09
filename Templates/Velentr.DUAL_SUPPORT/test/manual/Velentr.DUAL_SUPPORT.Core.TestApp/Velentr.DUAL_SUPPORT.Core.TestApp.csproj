@@ -7,8 +7,8 @@
         <RollForward>Major</RollForward>
         <PublishReadyToRun>false</PublishReadyToRun>
         <TieredCompilation>false</TieredCompilation>
-        <AssemblyName>Velentr.INDIVIDUAL_SUPPORT.TestApp</AssemblyName>
-        <RootNamespace>Velentr.INDIVIDUAL_SUPPORT.TestApp</RootNamespace>
+        <AssemblyName>Velentr.DUAL_SUPPORT.TestApp</AssemblyName>
+        <RootNamespace>Velentr.DUAL_SUPPORT.TestApp</RootNamespace>
         <LangVersion>default</LangVersion>
         <IsPackable>false</IsPackable>
         <Platforms>AnyCPU</Platforms>
@@ -40,11 +40,11 @@
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.2.1105"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\..\source\Velentr.INDIVIDUAL_SUPPORT\Velentr.INDIVIDUAL_SUPPORT.csproj" />
+        <ProjectReference Include="..\..\..\source\Velentr.DUAL_SUPPORT.Core\Velentr.DUAL_SUPPORT.Core.csproj"/>
     </ItemGroup>
     <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
         <Message Text="Restoring dotnet tools" Importance="High"/>
         <Exec Command="dotnet tool restore"/>
     </Target>
-    <Import Project="..\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp\Velentr.INDIVIDUAL_SUPPORT.Shared.TestApp.projitems" Label="Shared"/>
+    <Import Project="..\Velentr.DUAL_SUPPORT.Shared.TestApp\Velentr.DUAL_SUPPORT.Shared.TestApp.projitems" Label="Shared"/>
 </Project>
