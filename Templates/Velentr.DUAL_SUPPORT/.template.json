@@ -220,9 +220,10 @@
     "*base_logo.png",
     "*logo.ico",
     "*font.xnb",
-    "*Content.mgcb"
+    "*Content.mgcb",
+    "*copperplate_gothic_bold.otf"
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-04-08b"
+  "Version": "2025-05-10"
 }

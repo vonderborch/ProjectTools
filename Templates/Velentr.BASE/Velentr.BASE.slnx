@@ -40,6 +40,7 @@
     <Project Path="test\automated\Velentr.BASE.FNA.Test\Velentr.BASE.FNA.Test.csproj" Type="Classic C#" />
     <Project Path="test\automated\Velentr.BASE.Monogame.Test\Velentr.BASE.Monogame.Test.csproj" Type="Classic C#" />
     <Project Path="test\automated\Velentr.BASE.Shared.Test\Velentr.BASE.Shared.Test.shproj" />
+    <Project Path="test\automated\Velentr.BASE.Test\Velentr.BASE.Test.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/test/manual/">
     <Project Path="test\manual\Velentr.BASE.FNA.TestApp\Velentr.BASE.FNA.TestApp.csproj" Type="Classic C#" />
