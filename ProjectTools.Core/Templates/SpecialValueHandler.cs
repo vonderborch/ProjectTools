@@ -28,6 +28,10 @@ public class SpecialValueHandler
         this._specialValues[SlugType.String]["[[ProjectName]]"] = projectName;
 
         // Add special values for parent directories
+        if (parentDirectory.EndsWith("/") || parentDirectory.EndsWith("\\"))
+        {
+            parentDirectory = Path.GetDirectoryName(parentDirectory) ?? string.Empty;
+        }
         this._specialValues[SlugType.String]["[[ParentDirectory]]"] = parentDirectory;
         this._specialValues[SlugType.String]["[[ParentDirectoryName]]"] = Path.GetFileName(parentDirectory);
         this._specialValues[SlugType.String]["[[ParentDirectoryPath]]"] =
@@ -46,6 +50,11 @@ public class SpecialValueHandler
         // Other special values
         this._specialValues[SlugType.String]["[[CurrentYear]]"] = DateTime.Now.Year.ToString();
     }
+
+    /// <summary>
+    /// Gets the dictionary of string-based special values associated with slugs.
+    /// </summary>
+    public IReadOnlyDictionary<string, string> Values => this._specialValues[SlugType.String];
 
     /// <summary>
     ///     Assigns special values to a slug, if possible.

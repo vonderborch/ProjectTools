@@ -1,5 +1,7 @@
 {
-  "PrepareScripts": [],
+  "PrepareScripts": [
+    ""
+  ],
   "Slugs": [
     {
       "CustomSlug": true,
@@ -145,8 +147,7 @@
       "CustomSlug": true,
       "RequiresAnyInput": true,
       "SearchStrings": [
-        "TAGS_HERE",
-        "MIT"
+        "TAGS_HERE"
       ],
       "AllowedValues": [],
       "AllowEmptyValues": false,
@@ -202,5 +203,5 @@
   ],
   "TemplateBuilder": "",
   "TemplaterVersion": "1.0.0",
-  "Version": "2025-06-07"
+  "Version": "2025-06-24"
 }

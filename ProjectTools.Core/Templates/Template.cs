@@ -1,6 +1,7 @@
 #region
 
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 using ProjectTools.Core.Constants;
 using ProjectTools.Core.Helpers;
 using ProjectTools.Core.Scripting;
@@ -62,6 +63,7 @@ public class Template : AbstractTemplate
         Logger instructionLogger,
         Logger commandLogger, bool overrideExisting = false)
     {
+        var specialValueHandler = new SpecialValueHandler(parentOutputDirectory, name, this);
         var startTime = DateTime.Now;
         var appSettings = AbstractSettings.LoadOrThrow();
 
@@ -85,7 +87,7 @@ public class Template : AbstractTemplate
 
         // Step 3 - Update the files
         logger.Log("Step 3/6: Updating file system objects...");
-        UpdateFiles(outputDirectory, outputDirectory);
+        UpdateFiles(outputDirectory, outputDirectory, specialValueHandler);
         logger.Log("Files updated!", 2);
 
         // Step 4 - Run scripts (C# SCRIPT TIME!?)
@@ -175,8 +177,9 @@ public class Template : AbstractTemplate
     /// </summary>
     /// <param name="directory">The directory.</param>
     /// <param name="rootDirectory">The root directory.</param>
+    /// <param name="specialValueHandler">The special value handler.</param>
     /// <param name="isRenameOnlyPath">If the path is a rename-only path or not.</param>
-    private void UpdateFiles(string directory, string rootDirectory, bool isRenameOnlyPath = false)
+    private void UpdateFiles(string directory, string rootDirectory, SpecialValueHandler specialValueHandler, bool isRenameOnlyPath = false)
     {
         var entries = Directory.GetFileSystemEntries(directory);
 
@@ -189,7 +192,7 @@ public class Template : AbstractTemplate
 
             var isRenameOnly = PathHelpers.PathIsInList(entry, rootDirectory, this.RenameOnlyPaths, true, true);
             var isRenameOnlyPathForEntry = isRenameOnlyPath || isRenameOnly;
-            var newEntryPath = UpdateText(entry);
+            var newEntryPath = UpdateText(entry, specialValueHandler);
 
             // Update directory naming...
             if (Directory.Exists(entry))
@@ -204,7 +207,7 @@ public class Template : AbstractTemplate
                 // update inner files if and only if we should
                 if (!isRenameOnly)
                 {
-                    UpdateFiles(path, rootDirectory, isRenameOnlyPathForEntry);
+                    UpdateFiles(path, rootDirectory, specialValueHandler, isRenameOnlyPathForEntry);
                 }
             }
             // Otherwise, update the files as needed
@@ -223,7 +226,7 @@ public class Template : AbstractTemplate
                 if (!isRenameOnlyPathForEntry)
                 {
                     var text = File.ReadAllText(newEntryPath);
-                    text = UpdateText(text);
+                    text = UpdateText(text, specialValueHandler);
                     File.WriteAllText(newEntryPath, text);
                 }
             }
@@ -234,13 +237,19 @@ public class Template : AbstractTemplate
     ///     Updates the provided test with the slug values.
     /// </summary>
     /// <param name="value">The text.</param>
+    /// <param name="specialValueHandler">The special value handler.</param>
     /// <returns>The updated text.</returns>
-    private string UpdateText(string value)
+    private string UpdateText(string value, SpecialValueHandler specialValueHandler)
     {
         var originalValue = value;
         foreach (var (toBeReplaced, replacedValue) in SlugsToValues())
         {
             value = value.Replace(toBeReplaced, replacedValue);
+        }
+
+        foreach (var special in specialValueHandler.Values)
+        {
+            value = value.Replace(special.Key, special.Value);
         }
 
         return value;
